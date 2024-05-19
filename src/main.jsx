@@ -5,6 +5,10 @@ import { BrowserRouter, RouterProvider, createBrowserRouter } from "react-router
 import App from "./App";
 import "./index.css";
 import { router } from "./routes/Routes";
+import { Provider } from "react-redux";
+import { persistor, store } from "./redux/features/store";
+import { PersistGate } from "redux-persist/integration/react";
+import { Toaster } from "sonner";
 // import { router } from "./routes/Routes";
 
 // const router = createBrowserRouter([
@@ -16,6 +20,11 @@ import { router } from "./routes/Routes";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <RouterProvider router={router} />
+      </PersistGate>
+    </Provider>
+    <Toaster/>
   </React.StrictMode>
 );
