@@ -5,8 +5,10 @@ import { useForm } from "react-hook-form";
 import { setUser } from "../redux/features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { verifyToken } from "../utils/verifyToken";
+import { useAppDispatch } from "../redux/features/hooks";
 
 const Login = () => {
+  const dispatch = useAppDispatch();
   let navigate = useNavigate();
   const {
     register,
@@ -46,7 +48,7 @@ const Login = () => {
       //   console.log(res.data.accessToken);
       const user = verifyToken(res.data.accessToken);
       console.log(user);
-    //   dispatch(setUser({ user: user, token: res.data.accessToken }));
+      dispatch(setUser({ user: user, token: res.data.accessToken }));
 
       // console.log("login ");
       toast.success("Logged in", { id: toastId, duration: 2000 });
