@@ -2,12 +2,64 @@ import { useState } from "react";
 import { TagsInput } from "react-tag-input-component";
 import JoditEditor from "jodit-react";
 import { useRef } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const CreateOffer = () => {
   const [inputValue, setInputValue] = useState("");
   const [tags, setTags] = useState(["all"]);
   const editor = useRef(null);
   const [content, setContent] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    const toastId = toast.loading("Logging in");
+
+    try {
+      console.log(data);
+      // const userInfo = {
+      //   id: data.id,
+      //   password: data.password,
+      // };
+      // console.log(userInfo);
+      //   const clientIP = await fetch("https://api64.ipify.org?format=json")
+      //     .then((response) => response.json())
+      //     .then((data) => data.ip);
+
+      //   setClientIP(clientIP);
+
+      //   // Make the login request with device info included in the request body
+      //   const res = await login({
+      //     ...userInfo,
+      //     ip: clientIP,
+      //     deviceInfo,
+      //   }).unwrap();
+
+      //   const user = verifyToken(res.data.accessToken) as TUser;
+      const res = await login({
+        ...userInfo,
+      }).unwrap();
+      //   console.log("login ");
+      // console.log("login ");
+      //   console.log(res.data.accessToken);
+      const user = verifyToken(res.data.accessToken);
+      console.log(user);
+      dispatch(setUser({ user: user, token: res.data.accessToken }));
+
+      // console.log("login ");
+      toast.success("Logged in", { id: toastId, duration: 2000 });
+      //   console.log("Redirecting to home page");
+      // navigate("/");
+      navigate("/dashboard");
+    } catch (error) {
+      toast.error("Something went wrong", { id: toastId, duration: 2000 });
+      //   console.log('err-',error)
+    }
+  };
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -27,7 +79,7 @@ const CreateOffer = () => {
   return (
     <>
       <div className="">
-        <form className="bg-white p-6 rounded-md">
+        <form className="bg-white p-6 rounded-md" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-6 mb-6 md:grid-cols-2">
             <div>
               <label
@@ -42,6 +94,9 @@ const CreateOffer = () => {
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
                 placeholder="First Name"
                 required
+                {...register("fname", {
+                  required: "id is Required",
+                })}
               />
             </div>
             <div>
@@ -57,6 +112,9 @@ const CreateOffer = () => {
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
                 placeholder="Last Name"
                 required
+                {...register("lname", {
+                  required: "id is Required",
+                })}
               />
             </div>
             <div>
@@ -68,14 +126,17 @@ const CreateOffer = () => {
               </label>
               <select
                 defaultValue={""}
+                {...register("country", {
+                  required: "id is Required",
+                })}
                 id="countries"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
               >
                 <option selected>Choose a country</option>
-                <option>United States</option>
-                <option>Canada</option>
-                <option>France</option>
-                <option>Germany</option>
+                <option value={'us'}>United States</option>
+                <option value={'cad'}>Canada</option>
+                <option value={'fr'}>France</option>
+                <option value={'gr'}>Germany</option>
               </select>
             </div>
             <div>
@@ -89,12 +150,14 @@ const CreateOffer = () => {
                 defaultValue={""}
                 id="countries"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
+                {...register("network", {
+                  required: "id is Required",
+                })}
               >
-                <option value={""}>Choose a country</option>
-                <option value="US">United States</option>
-                <option value="CA">Canada</option>
-                <option value="FR">France</option>
-                <option value="DE">Germany</option>
+                <option value={""}>Choose a Network</option>
+                <option value="net1">network 1</option>
+                <option value="net2">network 2</option>
+               
               </select>
             </div>
             <div>
@@ -110,6 +173,9 @@ const CreateOffer = () => {
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
                 placeholder="Flowbite"
                 required
+                {...register("company", {
+                  required: "id is Required",
+                })}
               />
             </div>
             <div>
@@ -126,6 +192,9 @@ const CreateOffer = () => {
                 placeholder="123-45-678"
                 pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
                 required
+                {...register("phone", {
+                  required: "id is Required",
+                })}
               />
             </div>
             <div>
@@ -141,6 +210,9 @@ const CreateOffer = () => {
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
                 placeholder="flowbite.com"
                 required
+                {...register("website", {
+                  required: "id is Required",
+                })}
               />
             </div>
             <div>
@@ -156,6 +228,9 @@ const CreateOffer = () => {
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
                 placeholder=""
                 required
+                {...register("unique", {
+                  required: "id is Required",
+                })}
               />
             </div>
             <div className="mb-6">
@@ -185,6 +260,9 @@ const CreateOffer = () => {
               className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
               placeholder="john.doe@company.com"
               required
+              {...register("email", {
+                required: "id is Required",
+              })}
             />
           </div>
           </div>
