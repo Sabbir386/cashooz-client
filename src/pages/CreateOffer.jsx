@@ -4,60 +4,59 @@ import JoditEditor from "jodit-react";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useCreateOfferMutation } from "./offerApi";
 
 const CreateOffer = () => {
   const [inputValue, setInputValue] = useState("");
   const [tags, setTags] = useState(["all"]);
   const editor = useRef(null);
   const [content, setContent] = useState("");
+  const [CreateOffer] = useCreateOfferMutation();
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
   const onSubmit = async (data) => {
-    const toastId = toast.loading("Logging in");
+    const toastId = toast.loading("Offer Creating....");
 
     try {
-      console.log(data);
-      // const userInfo = {
-      //   id: data.id,
-      //   password: data.password,
-      // };
-      // console.log(userInfo);
-      //   const clientIP = await fetch("https://api64.ipify.org?format=json")
-      //     .then((response) => response.json())
-      //     .then((data) => data.ip);
+      const offerInfo = {
+        name: data.name,
+        network: data.network,
+        category: data.category,
+        device: "Mobile",
+        country: ["usa"],
+        gender: ["male"],
+        age: 30,
+        offerStatus: data.offerStatus,
+        dailyLimit: 100,
+        totalLimit: 500,
+        price: Number(data.price),
+        description: content,
+        step: "A string representing the steps to complete the offe",
+        image: "https://example.com/image.jpg",
+        points: 300,
+        completionLimit: 200,
+        completionWindow: 300,
+        completedCount: 50,
+        startDate: "2023-11-01T00:00:00.000Z",
+        endDate: "2024-01-31T00:00:00.000Z",
+      };
+      console.log(offerInfo);
+      await CreateOffer(offerInfo);
+      // reset();
+      toast.success("Successfully Offer Created", {
+        id: toastId,
+        duration: 2000,
+      });
 
-      //   setClientIP(clientIP);
-
-      //   // Make the login request with device info included in the request body
-      //   const res = await login({
-      //     ...userInfo,
-      //     ip: clientIP,
-      //     deviceInfo,
-      //   }).unwrap();
-
-      //   const user = verifyToken(res.data.accessToken) as TUser;
-      const res = await login({
-        ...userInfo,
-      }).unwrap();
-      //   console.log("login ");
-      // console.log("login ");
-      //   console.log(res.data.accessToken);
-      const user = verifyToken(res.data.accessToken);
-      console.log(user);
-      dispatch(setUser({ user: user, token: res.data.accessToken }));
-
-      // console.log("login ");
-      toast.success("Logged in", { id: toastId, duration: 2000 });
-      //   console.log("Redirecting to home page");
-      // navigate("/");
-      navigate("/dashboard");
+      // navigate("/dashboard");
     } catch (error) {
       toast.error("Something went wrong", { id: toastId, duration: 2000 });
-      //   console.log('err-',error)
+      console.log("err-", error);
     }
   };
 
@@ -79,22 +78,25 @@ const CreateOffer = () => {
   return (
     <>
       <div className="">
-        <form className="bg-white p-6 rounded-md" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="bg-white p-6 rounded-md"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <div className="grid gap-6 mb-6 md:grid-cols-2">
             <div>
               <label
                 htmlFor="first_name"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-                First name
+                Offer Name
               </label>
               <input
                 type="text"
-                id="first_name"
+                id="name"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="First Name"
+                placeholder="name"
                 required
-                {...register("fname", {
+                {...register("name", {
                   required: "id is Required",
                 })}
               />
@@ -104,15 +106,15 @@ const CreateOffer = () => {
                 htmlFor="last_name"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-                Last name
+                Offer Status
               </label>
               <input
                 type="text"
-                id="last_name"
+                id="offerStatus"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="Last Name"
+                placeholder="Offer Status"
                 required
-                {...register("lname", {
+                {...register("offerStatus", {
                   required: "id is Required",
                 })}
               />
@@ -126,38 +128,41 @@ const CreateOffer = () => {
               </label>
               <select
                 defaultValue={""}
-                {...register("country", {
+                {...register("category", {
                   required: "id is Required",
                 })}
-                id="countries"
+                id="category"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
               >
-                <option selected>Choose a country</option>
-                <option value={'us'}>United States</option>
-                <option value={'cad'}>Canada</option>
-                <option value={'fr'}>France</option>
-                <option value={'gr'}>Germany</option>
+                <option selected>Choose a Category</option>
+                <option value={"Referral Rewards"}>Referral Rewards</option>
+                <option value={"First-Time Buyer Offers"}>
+                  First-Time Buyer Offers
+                </option>
+                <option value={"Happy Hour Discounts"}>
+                  Happy Hour Discounts
+                </option>
+                <option value={"Daily Deals"}>Daily Deals</option>
               </select>
             </div>
             <div>
               <label
-                htmlFor="countries"
+                htmlFor="network"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
                 Select Network
               </label>
               <select
                 defaultValue={""}
-                id="countries"
+                id="network"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
                 {...register("network", {
                   required: "id is Required",
                 })}
               >
                 <option value={""}>Choose a Network</option>
-                <option value="net1">network 1</option>
-                <option value="net2">network 2</option>
-               
+                <option value="network 1">network 1</option>
+                <option value="network 2">network 2</option>
               </select>
             </div>
             <div>
@@ -187,30 +192,30 @@ const CreateOffer = () => {
               </label>
               <input
                 type="tel"
-                id="phone"
+                id="contactNo"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
                 placeholder="123-45-678"
                 pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
                 required
-                {...register("phone", {
+                {...register("contactNo", {
                   required: "id is Required",
                 })}
               />
             </div>
             <div>
               <label
-                htmlFor="website"
+                htmlFor="price"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-                Website URL
+                Price
               </label>
               <input
-                type="url"
-                id="website"
+                type="number"
+                id="price"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="flowbite.com"
+                placeholder="123"
                 required
-                {...register("website", {
+                {...register("price", {
                   required: "id is Required",
                 })}
               />
@@ -234,12 +239,12 @@ const CreateOffer = () => {
               />
             </div>
             <div className="mb-6">
-            <label
-              htmlFor="email"
-              className="block mb-2 text-sm font-medium text-gray-900"
-            >
-              Tags
-            </label>
+              <label
+                htmlFor="email"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Tags
+              </label>
               <TagsInput
                 value={tags}
                 onChange={setTags}
@@ -248,28 +253,26 @@ const CreateOffer = () => {
               />
             </div>
             <div className="mb-6">
-            <label
-              htmlFor="email"
-              className="block mb-2 text-sm font-medium text-gray-900"
-            >
-              Email address
-            </label>
-            <input
-              type="email"
-              id="email"
-              className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-              placeholder="john.doe@company.com"
-              required
-              {...register("email", {
-                required: "id is Required",
-              })}
-            />
+              <label
+                htmlFor="email"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Email address
+              </label>
+              <input
+                type="email"
+                id="email"
+                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
+                placeholder="john.doe@company.com"
+                required
+                {...register("email", {
+                  required: "id is Required",
+                })}
+              />
+            </div>
           </div>
-          </div>
-          
 
           <div className="flex items-start mb-6">
-            
             <JoditEditor
               ref={editor}
               value={content}
