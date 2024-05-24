@@ -5,6 +5,7 @@ import CreateOffer from "../pages/CreateOffer";
 import Authentication from "../pages/Authentication";
 import Login from "../auth/Login";
 import Register from "../auth/Register";
+import OfferList from "../pages/OfferList";
 
 export const router = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
             {
                 path: '/dashboard/create-offer',
                 element: <CreateOffer></CreateOffer>
+            },
+            {
+                path: '/dashboard/offer-list',
+                element: <OfferList></OfferList>
             },
             {
                 path: '/dashboard/authentication',

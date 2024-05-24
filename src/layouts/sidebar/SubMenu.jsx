@@ -34,10 +34,10 @@ const SubMenu = ({ data }) => {
           <li key={menu}>
             {/* className="hover:text-blue-600 hover:font-medium" */}
             <NavLink
-              to={`/${data.name}/${menu}`}
+              to={`/dashboard/${menu.path}`}
               className="link !bg-transparent capitalize"
             >
-              {menu}
+              {menu.name}
             </NavLink>
           </li>
         ))}

@@ -21,7 +21,9 @@ const Login = () => {
 
     try {
       const userInfo = {
-        id: data.id,
+        // id: data.id,
+        email: data.email,
+
         password: data.password,
       };
 
@@ -54,12 +56,12 @@ const Login = () => {
             <div className="mb-4">
               <input
                 type="text"
-                placeholder="ID"
-                {...register("id", { required: "ID is required" })}
+                placeholder="Email"
+                {...register("email", { required: "email is required" })}
                 className="w-full p-3 rounded border placeholder-gray-400 focus:outline-none focus:border-blue-600"
               />
-              {errors.id && (
-                <p className="text-red-500 text-sm">{errors.id.message}</p>
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email.message}</p>
               )}
             </div>
             <div className="mb-4">

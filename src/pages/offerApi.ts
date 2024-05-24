@@ -10,7 +10,7 @@ export const createOfferApi = baseApi.injectEndpoints({
     }),
     viewOffer: builder.query({
       query: () => ({
-        url: "/shop",
+        url: "/offer/",
         method: "GET",
       }),
     }),

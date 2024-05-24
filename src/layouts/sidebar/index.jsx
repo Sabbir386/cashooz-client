@@ -73,42 +73,43 @@ const Sidebar = () => {
     {
       name: "Admin's",
       icon: BsPerson ,
-      menus: ["- Create New Admin", "- All Admin List", "- Deleted Admin List"],
+      menus: [{path:'',name:"- Create New Offer"}, {path:'', name:"- All Offer List"}]
     },
     {
       name: "Sub Admin's",
       icon: IoCopyOutline,
-      menus: ["- Create New SubAdmin", "- All SubAdmin List", "- Deleted SubAdmin List"],
+      menus: [{path:'',name:"- Create New Offer"}, {path:'', name:"- All Offer List"}]
     },
     {
       name: "Advertiser's",
       icon: CiBullhorn,
-      menus: ["Create New Advertiser", "All Advertiser List", "Deleted Advertiser List"],
+      menus: [{path:'',name:"- Create New Offer"}, {path:'', name:"- All Offer List"}]
     },
     {
       name: "User's",
       icon: HiOutlineUsers,
-      menus: ["Create New User", "All User List", "Deleted User List"],
+      menus: [{path:'',name:"- Create New Offer"}, {path:'', name:"- All Offer List"}]
     },
     {
       name: "Network",
       icon: HiOutlineUsers,
-      menus: ["- Create Network", "- Network List"],
+      menus: [{path:'',name:"- Create New Offer"}, {path:'', name:"- All Offer List"}]
     },
     {
       name: "Category",
       icon: HiOutlineUsers,
-      menus: ["- Create Category", "- List Category"],
+      menus: [{path:'',name:"- Create New Offer"}, {path:'', name:"- All Offer List"}]
     },
     {
       name: "Offer's",
       icon: HiOutlineUsers,
-      menus: ["- Create Category", "- List Category"],
+      // menus: ["- Create New Offer", "- All Offer List", "- Draft Offer List", "- Deleted Offer List", "- Completed Offer List", "- Non Completed Offer List", "- All Offer Trafic Report", "- Pending offer List", "- Approved Offer List", "- Rejected Offer List"],
+      menus: [{path:'create-offer',name:"- Create New Offer"}, {path:'offer-list', name:"- All Offer List"}]
     },
     {
       name: "Blog's",
       icon: HiOutlineUsers,
-      menus: ["- Create Category", "- List Category"],
+      menus: [{path:'',name:"- Create New Offer"}, {path:'', name:"- All Offer List"}]
     },
   ];
   const location = useLocation();
