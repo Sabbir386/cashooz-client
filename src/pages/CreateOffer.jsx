@@ -25,8 +25,8 @@ const CreateOffer = () => {
     try {
       const offerInfo = {
         name: data.name,
-        network: data.network,
-        category: data.category,
+        network: [data.network],
+        category: [data.category],
         device: "Mobile",
         country: ["usa"],
         gender: ["male"],
