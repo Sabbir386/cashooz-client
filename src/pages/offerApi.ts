@@ -7,12 +7,14 @@ export const createOfferApi = baseApi.injectEndpoints({
         method: "POST",
         body: giftInfo,
       }),
+      invalidatesTags: ["offer"],
     }),
     viewOffer: builder.query({
       query: () => ({
         url: "/offer/",
         method: "GET",
       }),
+      providesTags: ["offer"],
     }),
   }),
 });
