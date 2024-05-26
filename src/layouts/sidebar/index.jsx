@@ -16,13 +16,27 @@ import { TbReportAnalytics } from "react-icons/tb";
 import { RiBuilding3Line } from "react-icons/ri";
 import { useMediaQuery } from "react-responsive";
 import { MdMenu } from "react-icons/md";
-import { Link, NavLink, useLocation, useRoutes } from "react-router-dom";
+import {
+  Link,
+  NavLink,
+  useLocation,
+  useNavigate,
+  useRoutes,
+} from "react-router-dom";
+import { useAppDispatch } from "../../redux/features/hooks";
+import { logOut } from "../../redux/features/auth/authSlice";
 
 const Sidebar = () => {
   let isTabletMid = useMediaQuery({ query: "(max-width: 768px)" });
   const [open, setOpen] = useState(isTabletMid ? false : true);
   const sidebarRef = useRef();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const setLogout = () => {
+    dispatch(logOut());
+    navigate("/login");
+  };
 
   useEffect(() => {
     if (isTabletMid) {
@@ -71,49 +85,64 @@ const Sidebar = () => {
 
   const subMenusList = [
     {
-      name: "Admin's",
-      icon: BsPerson ,
-      menus: [{path:'',name:"- Create New Offer"}, {path:'', name:"- All Offer List"}]
+      name: "Offer's",
+      icon: HiOutlineUsers,
+      // menus: ["- Create New Offer", "- All Offer List", "- Draft Offer List", "- Deleted Offer List", "- Completed Offer List", "- Non Completed Offer List", "- All Offer Trafic Report", "- Pending offer List", "- Approved Offer List", "- Rejected Offer List"],
+      menus: [
+        { path: "create-offer", name: "- Create New Offer" },
+        { path: "offer-list", name: "- All Offer List" },
+      ],
     },
     {
-      name: "Sub Admin's",
-      icon: IoCopyOutline,
-      menus: [{path:'',name:"- Create New Offer"}, {path:'', name:"- All Offer List"}]
+      name: "Admin's",
+      icon: BsPerson,
+      menus: [
+        { path: "", name: "- Create New Offer" },
+        { path: "", name: "- All Offer List" },
+      ],
     },
     {
       name: "Advertiser's",
       icon: CiBullhorn,
-      menus: [{path:'',name:"- Create New Offer"}, {path:'', name:"- All Offer List"}]
+      menus: [
+        { path: "", name: "- Create New Offer" },
+        { path: "", name: "- All Offer List" },
+      ],
     },
     {
       name: "User's",
       icon: HiOutlineUsers,
-      menus: [{path:'',name:"- Create New Offer"}, {path:'', name:"- All Offer List"}]
+      menus: [
+        { path: "", name: "- Create New Offer" },
+        { path: "", name: "- All Offer List" },
+      ],
     },
     {
       name: "Network",
       icon: HiOutlineUsers,
-      menus: [{path:'',name:"- Create New Offer"}, {path:'', name:"- All Offer List"}]
+      menus: [
+        { path: "", name: "- Create New Offer" },
+        { path: "", name: "- All Offer List" },
+      ],
     },
     {
       name: "Category",
       icon: HiOutlineUsers,
-      menus: [{path:'',name:"- Create New Offer"}, {path:'', name:"- All Offer List"}]
-    },
-    {
-      name: "Offer's",
-      icon: HiOutlineUsers,
-      // menus: ["- Create New Offer", "- All Offer List", "- Draft Offer List", "- Deleted Offer List", "- Completed Offer List", "- Non Completed Offer List", "- All Offer Trafic Report", "- Pending offer List", "- Approved Offer List", "- Rejected Offer List"],
-      menus: [{path:'create-offer',name:"- Create New Offer"}, {path:'offer-list', name:"- All Offer List"}]
+      menus: [
+        { path: "", name: "- Create New Offer" },
+        { path: "", name: "- All Offer List" },
+      ],
     },
     {
       name: "Blog's",
       icon: HiOutlineUsers,
-      menus: [{path:'',name:"- Create New Offer"}, {path:'', name:"- All Offer List"}]
+      menus: [
+        { path: "", name: "- Create New Offer" },
+        { path: "", name: "- All Offer List" },
+      ],
     },
   ];
   const location = useLocation();
-
 
   return (
     <div>
@@ -144,26 +173,31 @@ const Sidebar = () => {
         <div className="flex flex-col  h-full">
           <ul className="whitespace-pre px-2.5 text-[0.9rem] py-5 flex flex-col gap-1  font-medium overflow-x-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-100   md:h-[68%] h-[70%]">
             <li>
-              <Link to={"/dashboard"} className={`p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium ${location.pathname === '/dashboard' ? 'bg-blue-600 text-white' : ''}`}>
+              <Link
+                to={"/dashboard"}
+                className={`p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium ${
+                  location.pathname === "/dashboard"
+                    ? "bg-blue-600 text-white"
+                    : ""
+                }`}
+              >
                 <AiOutlineAppstore size={23} className="min-w-max" />
                 Dashboard
               </Link>
             </li>
+
             <li>
-              <Link to={"/dashboard/create-offer"} className={`p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium ${location.pathname === '/dashboard/create-offer' ? 'bg-blue-600 text-white' : ''}`}>
-                <BsPerson size={23} className="min-w-max" />
-                Create Offer
-              </Link>
+              {subMenusList?.map((menu) => (
+                <div key={menu.name} className="flex flex-col gap-1">
+                  <SubMenu data={menu} />
+                </div>
+              ))}
             </li>
             <li>
-                {subMenusList?.map((menu) => (
-                  <div key={menu.name} className="flex flex-col gap-1">
-                    <SubMenu data={menu} />
-                  </div>
-                ))}
-            </li>
-            <li>
-              <Link to={"/stroage"} className="p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium">
+              <Link
+                to={"/stroage"}
+                className="p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium"
+              >
                 <HiOutlineDatabase size={23} className="min-w-max" />
                 Stroage
               </Link>
@@ -176,18 +210,26 @@ const Sidebar = () => {
               </Link>
             </li>
           </ul>
+          <button
+            onClick={setLogout}
+            className="w-5/6 mx-auto my-3 rounded-md py-3 bg-red-400 text-center text-white cursor-pointer hover:bg-red-600 hover:-translate-y-2 duration-200 hover:shadow-lg"
+          >
+            logout
+          </button>
           {open && (
-            <div className="flex-1 text-sm z-50  max-h-48 my-auto  whitespace-pre   w-full  font-medium  ">
-              <div className="flex border-y border-slate-300 p-4 items-center justify-between">
-                <div>
-                  <p>Cashooz</p>
-                  <small>No-cost $0/month</small>
+            <>
+              <div className="flex-1 text-sm z-50  max-h-48 my-auto  whitespace-pre   w-full  font-medium  ">
+                <div className="flex border-y border-slate-300 p-4 items-center justify-between">
+                  <div>
+                    <p>Cashooz</p>
+                    <small>No-cost $0/month</small>
+                  </div>
+                  <p className="text-teal-500 py-1.5 px-3 text-xs bg-teal-50 rounded-xl">
+                    Upgrade
+                  </p>
                 </div>
-                <p className="text-teal-500 py-1.5 px-3 text-xs bg-teal-50 rounded-xl">
-                  Upgrade
-                </p>
               </div>
-            </div>
+            </>
           )}
         </div>
         <motion.div

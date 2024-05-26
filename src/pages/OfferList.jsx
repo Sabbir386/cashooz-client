@@ -117,7 +117,7 @@ const OfferList = () => {
               </td>
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                 <div>
-                  <Link className="py-1 px-2 bg-blue-500 rounded text-white">
+                  <Link to={`/dashboard/edit-offer/${row._id}`} className="py-1 px-2 bg-blue-500 rounded text-white">
                     Edit
                   </Link>
                   <Link className="py-1 px-2 bg-red-500 rounded text-white ml-2">
