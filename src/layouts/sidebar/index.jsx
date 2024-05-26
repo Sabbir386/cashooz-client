@@ -25,6 +25,7 @@ import {
 } from "react-router-dom";
 import { useAppDispatch } from "../../redux/features/hooks";
 import { logOut } from "../../redux/features/auth/authSlice";
+import Swal from "sweetalert2";
 
 const Sidebar = () => {
   let isTabletMid = useMediaQuery({ query: "(max-width: 768px)" });
@@ -34,8 +35,19 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const setLogout = () => {
-    dispatch(logOut());
-    navigate("/login");
+    Swal.fire({
+      title: "Are you sure you want to log out?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, log out!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(logOut());
+        navigate("/login");
+      }
+    });
   };
 
   useEffect(() => {
@@ -97,7 +109,7 @@ const Sidebar = () => {
       name: "Admin's",
       icon: BsPerson,
       menus: [
-        { path: "", name: "- Create New Offer" },
+        { path: "create-admin", name: "- Create Admin" },
         { path: "", name: "- All Offer List" },
       ],
     },
@@ -105,7 +117,7 @@ const Sidebar = () => {
       name: "Advertiser's",
       icon: CiBullhorn,
       menus: [
-        { path: "", name: "- Create New Offer" },
+        { path: "create-advertiser", name: "- Create Advertiser" },
         { path: "", name: "- All Offer List" },
       ],
     },
@@ -113,7 +125,7 @@ const Sidebar = () => {
       name: "User's",
       icon: HiOutlineUsers,
       menus: [
-        { path: "", name: "- Create New Offer" },
+        { path: "create-user", name: "- Create User" },
         { path: "", name: "- All Offer List" },
       ],
     },
