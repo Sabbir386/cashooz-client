@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { TagsInput } from "react-tag-input-component";
 import JoditEditor from "jodit-react";
-import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useCreateOfferMutation } from "./offerApi";
+import { useViewNetworkQuery } from "./NetworkApi";
+import { useViewCategoryQuery } from "./CategoryApi";
 
 const CreateOffer = () => {
   const [inputValue, setInputValue] = useState("");
@@ -19,14 +20,28 @@ const CreateOffer = () => {
     formState: { errors },
   } = useForm();
 
+  // Fetch networks data
+  const {
+    data: networks,
+    isLoading: networksLoading,
+    isError: networksError,
+  } = useViewNetworkQuery();
+  const {
+    data: categories,
+    isLoading: categoriesLoading,
+    isError: categoriesError,
+  } = useViewCategoryQuery();
+
+  console.log(categories); // Add this line to check the fetched categories data in console
+
   const onSubmit = async (data) => {
     const toastId = toast.loading("Offer Creating....");
 
     try {
       const offerInfo = {
         name: data.name,
-        network: [data.network],
-        category: [data.category],
+        network: data.network,
+        category: data.category,
         device: "Mobile",
         country: ["usa"],
         gender: ["male"],
@@ -36,7 +51,7 @@ const CreateOffer = () => {
         totalLimit: 500,
         price: Number(data.price),
         description: content,
-        step: "A string representing the steps to complete the offe",
+        step: "A string representing the steps to complete the offer",
         image: "https://example.com/image.jpg",
         points: 300,
         completionLimit: 200,
@@ -47,16 +62,16 @@ const CreateOffer = () => {
       };
       console.log(offerInfo);
       await CreateOffer(offerInfo);
-      // reset();
       toast.success("Successfully Offer Created", {
         id: toastId,
         duration: 2000,
       });
 
+      reset();
       // navigate("/dashboard");
     } catch (error) {
       toast.error("Something went wrong", { id: toastId, duration: 2000 });
-      console.log("err-", error);
+      console.log("Error:", error);
     }
   };
 
@@ -85,7 +100,7 @@ const CreateOffer = () => {
           <div className="grid gap-6 mb-6 md:grid-cols-2">
             <div>
               <label
-                htmlFor="first_name"
+                htmlFor="name"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
                 Offer Name
@@ -94,16 +109,14 @@ const CreateOffer = () => {
                 type="text"
                 id="name"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="name"
+                placeholder="Name"
                 required
-                {...register("name", {
-                  required: "id is Required",
-                })}
+                {...register("name", { required: "Name is required" })}
               />
             </div>
             <div>
               <label
-                htmlFor="last_name"
+                htmlFor="offerStatus"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
                 Offer Status
@@ -115,34 +128,36 @@ const CreateOffer = () => {
                 placeholder="Offer Status"
                 required
                 {...register("offerStatus", {
-                  required: "id is Required",
+                  required: "Offer Status is required",
                 })}
               />
             </div>
             <div>
               <label
-                htmlFor="countries"
+                htmlFor="category"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
                 Category
               </label>
               <select
                 defaultValue={""}
-                {...register("category", {
-                  required: "id is Required",
-                })}
+                {...register("category", { required: "Category is required" })}
                 id="category"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
               >
-                <option selected>Choose a Category</option>
-                <option value={"Referral Rewards"}>Referral Rewards</option>
-                <option value={"First-Time Buyer Offers"}>
-                  First-Time Buyer Offers
+                <option value="" disabled>
+                  Choose a Category
                 </option>
-                <option value={"Happy Hour Discounts"}>
-                  Happy Hour Discounts
-                </option>
-                <option value={"Daily Deals"}>Daily Deals</option>
+                {!categoriesLoading &&
+                  !categoriesError &&
+                  Array.isArray(categories?.data) &&
+                  categories.data.map((category) => (
+                    <option key={category._id} value={category._id}>
+                      {category.categoryName}
+                    </option>
+                  ))}
+                {categoriesLoading && <option>Loading...</option>}
+                {categoriesError && <option>Error loading categories</option>}
               </select>
             </div>
             <div>
@@ -156,13 +171,21 @@ const CreateOffer = () => {
                 defaultValue={""}
                 id="network"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                {...register("network", {
-                  required: "id is Required",
-                })}
+                {...register("network", { required: "Network is required" })}
               >
-                <option value={""}>Choose a Network</option>
-                <option value="network 1">network 1</option>
-                <option value="network 2">network 2</option>
+                <option value="" disabled>
+                  Choose a Network
+                </option>
+                {!networksLoading &&
+                  !networksError &&
+                  Array.isArray(networks?.data) &&
+                  networks.data.map((network) => (
+                    <option key={network._id} value={network._id}>
+                      {network.networkName}
+                    </option>
+                  ))}
+                {networksLoading && <option>Loading...</option>}
+                {networksError && <option>Error loading networks</option>}
               </select>
             </div>
             <div>
@@ -176,16 +199,14 @@ const CreateOffer = () => {
                 type="text"
                 id="company"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="Flowbite"
+                placeholder="Company"
                 required
-                {...register("company", {
-                  required: "id is Required",
-                })}
+                {...register("company", { required: "Company is required" })}
               />
             </div>
             <div>
               <label
-                htmlFor="phone"
+                htmlFor="contactNo"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
                 Phone number
@@ -198,7 +219,7 @@ const CreateOffer = () => {
                 pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
                 required
                 {...register("contactNo", {
-                  required: "id is Required",
+                  required: "Contact number is required",
                 })}
               />
             </div>
@@ -215,32 +236,30 @@ const CreateOffer = () => {
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
                 placeholder="123"
                 required
-                {...register("price", {
-                  required: "id is Required",
-                })}
+                {...register("price", { required: "Price is required" })}
               />
             </div>
             <div>
               <label
-                htmlFor="visitors"
+                htmlFor="unique"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
                 Unique visitors (per month)
               </label>
               <input
                 type="number"
-                id="visitors"
+                id="unique"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
                 placeholder=""
                 required
                 {...register("unique", {
-                  required: "id is Required",
+                  required: "Unique visitors count is required",
                 })}
               />
             </div>
             <div className="mb-6">
               <label
-                htmlFor="email"
+                htmlFor="tags"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
                 Tags
@@ -249,7 +268,7 @@ const CreateOffer = () => {
                 value={tags}
                 onChange={setTags}
                 name="tag"
-                placeHolder="enter tags"
+                placeHolder="Enter tags"
               />
             </div>
             <div className="mb-6">
@@ -265,9 +284,7 @@ const CreateOffer = () => {
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
                 placeholder="john.doe@company.com"
                 required
-                {...register("email", {
-                  required: "id is Required",
-                })}
+                {...register("email", { required: "Email is required" })}
               />
             </div>
           </div>
@@ -276,8 +293,8 @@ const CreateOffer = () => {
             <JoditEditor
               ref={editor}
               value={content}
-              tabIndex={1} // tabIndex of textarea
-              onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
+              tabIndex={1}
+              onBlur={(newContent) => setContent(newContent)}
               onChange={(newContent) => {}}
             />
           </div>
@@ -313,80 +330,6 @@ const CreateOffer = () => {
           </button>
         </form>
       </div>
-
-      {/* <form
-        action=""
-        className="grid grid-cols-2 gap-4 bg-white p-6 rounded-md"
-      >
-        <div className="mb-3">
-          <label htmlhtmlFor="" className="text-sm ">
-            Name
-          </label>
-          <input
-            type="text"
-            placeholder="Name"
-            className="border border-gray-400 outline-none px-3 py-2 rounded-md w-full focus:border-blue-700 text-sm"
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlhtmlFor="" className="text-sm ">
-            Select Network
-          </label>
-          <select className="border border-gray-400 outline-none px-3 py-2 rounded-md w-full focus:border-blue-700 text-sm">
-            <option value="">Popular Offer</option>
-            <option value="">Trusted Popular Offer</option>
-            <option value="">Exclusive Offer</option>
-          </select>
-        </div>
-        <div className="mb-3">
-          <label htmlhtmlFor="" className="text-sm ">
-            Category
-          </label>
-          <select className="border border-gray-400 outline-none px-3 py-2 rounded-md w-full focus:border-blue-700 text-sm">
-            <option value="">Instaleed Apps</option>
-            <option value="">Play Games</option>
-            <option value="">Surveys</option>
-          </select>
-        </div>
-        <div className="mb-3">
-          <div className="flex flex-wrap gap-2">
-            {tags.map((tag, index) => (
-              <div
-                key={index}
-                className="bg-gray-200 rounded-full px-3 py-1 flex items-center"
-              >
-                <span className="text-sm">{tag}</span>
-                <button
-                  type="button"
-                  onClick={() => removeTag(tag)}
-                  className="ml-2"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-3 w-3 text-gray-600"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 00-2 0v6a1 1 0 102 0V7z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-              </div>
-            ))}
-            <input
-              type="text"
-              placeholder="Enter tags..."
-              value={inputValue}
-              onChange={handleInputChange}
-              onKeyDown={handleInputKeyDown}
-              className="border border-gray-300 rounded px-3 py-1"
-            />
-          </div>
-        </div>
-      </form> */}
     </>
   );
 };

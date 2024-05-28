@@ -110,7 +110,7 @@ const Sidebar = () => {
       icon: BsPerson,
       menus: [
         { path: "create-admin", name: "- Create Admin" },
-        { path: "", name: "- All Offer List" },
+        { path: "view-admin", name: "- All-Admin List" },
       ],
     },
     {
@@ -118,7 +118,7 @@ const Sidebar = () => {
       icon: CiBullhorn,
       menus: [
         { path: "create-advertiser", name: "- Create Advertiser" },
-        { path: "", name: "- All Offer List" },
+        { path: "view-advertiser", name: "- All-Advertiser List" },
       ],
     },
     {
@@ -126,23 +126,23 @@ const Sidebar = () => {
       icon: HiOutlineUsers,
       menus: [
         { path: "create-user", name: "- Create User" },
-        { path: "", name: "- All Offer List" },
+        { path: "view-user", name: "- All-User List" },
       ],
     },
     {
       name: "Network",
       icon: HiOutlineUsers,
       menus: [
-        { path: "", name: "- Create New Offer" },
-        { path: "", name: "- All Offer List" },
+        { path: "create-network", name: "- Create New Offer" },
+        { path: "view-network", name: "- All Offer List" },
       ],
     },
     {
       name: "Category",
       icon: HiOutlineUsers,
       menus: [
-        { path: "", name: "- Create New Offer" },
-        { path: "", name: "- All Offer List" },
+        { path: "create-category", name: "- Create New Offer" },
+        { path: "view-category", name: "- All Offer List" },
       ],
     },
     {

@@ -12,7 +12,7 @@ import { logOut, setUser } from "../features/auth/authSlice";
 import { toast } from "sonner";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://cashooz-server.vercel.app/api/v1", 
+  baseUrl: "https://cashooz-server.vercel.app/api/v1",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
@@ -39,10 +39,13 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     //* Send Refresh
     console.log("Sending refresh token");
 
-    const res = await fetch("https://cashooz-server.vercel.app/api/auth/refresh-token", {
-      method: "POST",
-      credentials: "include",
-    });
+    const res = await fetch(
+      "https://cashooz-server.vercel.app/api/auth/refresh-token",
+      {
+        method: "POST",
+        credentials: "include",
+      }
+    );
 
     const data = await res.json();
 
@@ -68,6 +71,13 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
-  tagTypes:['offer','admin','advertiser','normalUser'],
+  tagTypes: [
+    "offer",
+    "admin",
+    "advertiser",
+    "normalUser",
+    "network",
+    "category",
+  ],
   endpoints: () => ({}),
 });

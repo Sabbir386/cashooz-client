@@ -16,8 +16,20 @@ export const authApi = baseApi.injectEndpoints({
         method: "POST",
         body: normalUser,
       }),
+      invalidatesTags: ["normalUser"],
+    }),
+    viewNormalUsers: builder.query({
+      query: () => ({
+        url: "/normalUsers",
+        method: "GET",
+      }),
+      providesTags: ["normalUser"],
     }),
   }),
 });
 
-export const { useLoginMutation, useRegistrationMutation } = authApi;
+export const {
+  useLoginMutation,
+  useRegistrationMutation,
+  useViewNormalUsersQuery,
+} = authApi;

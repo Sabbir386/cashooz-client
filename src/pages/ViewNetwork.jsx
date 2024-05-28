@@ -2,21 +2,21 @@ import { useState, useEffect } from "react";
 import Product from "../assets/img/cashooz.png";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
-import { useViewOfferQuery } from "./offerApi";
+import { useViewNetworkQuery } from "./networkApi";
 
-const OfferList = () => {
+const ViewNetwork = () => {
   // Use the Redux query hook to fetch data
-  const { data: offers, error, isLoading } = useViewOfferQuery();
+  const { data: networks, error, isLoading } = useViewNetworkQuery();
 
-  console.log(offers);
+  console.log(networks);
   const [data, setData] = useState([]);
 
-  // Update state when offers data is available
+  // Update state when networks data is available
   useEffect(() => {
-    if (offers) {
-      setData(offers.data);
+    if (networks) {
+      setData(networks.data);
     }
-  }, [offers]);
+  }, [networks]);
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(0);
@@ -49,23 +49,9 @@ const OfferList = () => {
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
               ID
             </th>
+
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-              Offer
-            </th>
-            <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-              Category
-            </th>
-            <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-              Network
-            </th>
-            <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-              Price
-            </th>
-            <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-              Publish Status
-            </th>
-            <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-              Action
+              Network Name
             </th>
           </tr>
         </thead>
@@ -75,42 +61,9 @@ const OfferList = () => {
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                 {row._id}
               </td>
+
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                <div className="flex">
-                  <div className="flex-shrink-0 w-10 h-10">
-                    <img
-                      className="w-full h-full rounded-lg object-cover"
-                      src={Product}
-                      alt=""
-                    />
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-gray-900 font-medium whitespace-no-wrap">
-                      {row.name}
-                    </p>
-                    <p className="text-gray-600 whitespace-no-wrap">
-                      {row.date}
-                    </p>
-                  </div>
-                </div>
-              </td>
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                {row.categoryInfo?.categoryName}
-              </td>
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                {row.networkInfo?.networkName}
-              </td>
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                {row.price}
-              </td>
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                <span
-                  className={`py-0.5 px-1.5 font-medium rounded text-white ${
-                    row.offerStatus === "active" ? "bg-green-500" : "bg-red-500"
-                  }`}
-                >
-                  {row.offerStatus}
-                </span>
+                {row.networkName}
               </td>
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                 <div>
@@ -147,4 +100,4 @@ const OfferList = () => {
   );
 };
 
-export default OfferList;
+export default ViewNetwork;

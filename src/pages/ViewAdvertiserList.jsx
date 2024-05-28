@@ -2,21 +2,21 @@ import { useState, useEffect } from "react";
 import Product from "../assets/img/cashooz.png";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
-import { useViewOfferQuery } from "./offerApi";
+import { useViewAdvertiserQuery } from "./advertiserApi";
 
-const OfferList = () => {
+const ViewAdvertiserList = () => {
   // Use the Redux query hook to fetch data
-  const { data: offers, error, isLoading } = useViewOfferQuery();
+  const { data: advertisers, error, isLoading } = useViewAdvertiserQuery();
 
-  console.log(offers);
+  console.log(advertisers);
   const [data, setData] = useState([]);
 
-  // Update state when offers data is available
+  // Update state when advertisers data is available
   useEffect(() => {
-    if (offers) {
-      setData(offers.data);
+    if (advertisers) {
+      setData(advertisers.data);
     }
-  }, [offers]);
+  }, [advertisers]);
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(0);
@@ -50,30 +50,21 @@ const OfferList = () => {
               ID
             </th>
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-              Offer
+              Name
             </th>
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-              Category
+              Gender
             </th>
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-              Network
-            </th>
-            <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-              Price
-            </th>
-            <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-              Publish Status
-            </th>
-            <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-              Action
+              ContactNo
             </th>
           </tr>
         </thead>
         <tbody className="text-gray-700">
           {paginatedData.map((row) => (
-            <tr key={row._id}>
+            <tr key={row.id}>
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                {row._id}
+                {row.id}
               </td>
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                 <div className="flex">
@@ -85,33 +76,22 @@ const OfferList = () => {
                     />
                   </div>
                   <div className="ml-3">
-                    <p className="text-gray-900 font-medium whitespace-no-wrap">
-                      {row.name}
-                    </p>
-                    <p className="text-gray-600 whitespace-no-wrap">
-                      {row.date}
-                    </p>
+                    <p className="text-gray-900 font-medium whitespace-no-wrap"></p>
+                    <p className="text-gray-600 whitespace-no-wrap"></p>
+                    <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                      {row.fullName}
+                    </td>
                   </div>
                 </div>
               </td>
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                {row.categoryInfo?.categoryName}
+                {row.gender}
               </td>
+
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                {row.networkInfo?.networkName}
+                {row.contactNo}
               </td>
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                {row.price}
-              </td>
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                <span
-                  className={`py-0.5 px-1.5 font-medium rounded text-white ${
-                    row.offerStatus === "active" ? "bg-green-500" : "bg-red-500"
-                  }`}
-                >
-                  {row.offerStatus}
-                </span>
-              </td>
+
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                 <div>
                   <Link
@@ -147,4 +127,4 @@ const OfferList = () => {
   );
 };
 
-export default OfferList;
+export default ViewAdvertiserList;
