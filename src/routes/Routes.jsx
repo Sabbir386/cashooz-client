@@ -16,6 +16,7 @@ import ViewNetwork from "../pages/ViewNetwork";
 import ViewAdminList from "../pages/ViewAdminList";
 import ViewAdvertiserList from "../pages/ViewAdvertiserList";
 import ViewUserList from "../pages/ViewUserList";
+import ProtectedRoutes from "../layouts/ProtectedRoutes";
 
 export const router = createBrowserRouter([
   {
@@ -32,7 +33,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <RootLayout></RootLayout>,
+    element: <ProtectedRoutes ><RootLayout></RootLayout></ProtectedRoutes>,
     children: [
       {
         path: "/dashboard/home",

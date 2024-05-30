@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { TagsInput } from "react-tag-input-component";
 import JoditEditor from "jodit-react";
 import { useForm } from "react-hook-form";
@@ -6,13 +6,38 @@ import { toast } from "sonner";
 import { useCreateOfferMutation } from "./offerApi";
 import { useViewNetworkQuery } from "./NetworkApi";
 import { useViewCategoryQuery } from "./CategoryApi";
+import Select from "react-select"; 
 
 const CreateOffer = () => {
   const [inputValue, setInputValue] = useState("");
-  const [tags, setTags] = useState(["all"]);
+  const [tags, setTags] = useState([]); // Update initial state to an empty array
   const editor = useRef(null);
   const [content, setContent] = useState("");
   const [CreateOffer] = useCreateOfferMutation();
+  const [clientIP, setClientIP] = useState("");
+  const [deviceInfo, setDeviceInfo] = useState(""); // State to store device info
+
+  // useEffect(() => {
+  //   // Fetch device info when component mounts
+  //   const getDeviceInfo = async () => {
+  //     const userAgent = navigator.userAgent; // Extract user-agent
+  //     const os =
+  //       /(Windows|Mac|Linux|Android|iOS)/.exec(userAgent)?.[0] || "Unknown OS";
+  //     const deviceType = /(Mobile|Tablet|iPad|iPhone|Android)/.test(userAgent)
+  //       ? "Mobile"
+  //       : "Desktop";
+  //     const browser =
+  //       /(Firefox|Chrome|Safari|Opera|Edge)/.exec(userAgent)?.[0] ||
+  //       "Unknown Browser";
+
+  //     setDeviceInfo(
+  //       `OS: ${os}, Device Type: ${deviceType}, Browser: ${browser}`
+  //     );
+  //   };
+  //   getDeviceInfo();
+  //   console.log("user track", deviceInfo);
+  // }, [deviceInfo]);
+
   const {
     register,
     handleSubmit,
@@ -75,19 +100,8 @@ const CreateOffer = () => {
     }
   };
 
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleInputKeyDown = (e) => {
-    if (e.key === "Enter" && inputValue.trim()) {
-      setTags([...tags, inputValue.trim()]);
-      setInputValue("");
-    }
-  };
-
-  const removeTag = (tagToRemove) => {
-    setTags(tags.filter((tag) => tag !== tagToRemove));
+  const handleInputChange = (selectedOptions) => {
+    setTags(selectedOptions || []);
   };
 
   return (
@@ -264,11 +278,12 @@ const CreateOffer = () => {
               >
                 Tags
               </label>
-              <TagsInput
+              <Select
+                isMulti
                 value={tags}
-                onChange={setTags}
-                name="tag"
-                placeHolder="Enter tags"
+                onChange={handleInputChange}
+                options={tags.map((tag) => ({ value: tag, label: tag }))}
+                className="border border-gray-400 outline-none rounded-md w-full focus:border-blue-700 text-sm"
               />
             </div>
             <div className="mb-6">
