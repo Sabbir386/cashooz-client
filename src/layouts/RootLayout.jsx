@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "./sidebar";
 
 function RootLayout() {
+
   return (
     <div className="flex gap-5">
       <Sidebar />

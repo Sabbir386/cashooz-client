@@ -11,6 +11,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.5",
     "@types/react-router-dom": "^5.3.3",
+    "detect-browser": "^5.3.0",
     "framer-motion": "^9.0.1",
     "jodit-react": "^4.1.2",
     "jwt-decode": "^4.0.0",
@@ -26,7 +27,8 @@
     "react-tag-input-component": "^2.0.2",
     "redux-persist": "^6.0.0",
     "sonner": "^1.4.41",
-    "sweetalert2": "^11.11.0"
+    "sweetalert2": "^11.11.0",
+    "ua-parser-js": "^1.0.38"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",

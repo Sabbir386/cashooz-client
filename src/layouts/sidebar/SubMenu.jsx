@@ -8,7 +8,7 @@ const SubMenu = ({ data }) => {
   const [subMenuOpen, setSubMenuOpen] = useState(false);
   return (
     <>
-      <li
+      <div
         className={`link ${pathname.includes(data.name) && "text-blue-600"}`}
         onClick={() => setSubMenuOpen(!subMenuOpen)}
       >
@@ -17,7 +17,7 @@ const SubMenu = ({ data }) => {
         <IoIosArrowDown
           className={` ${subMenuOpen && "rotate-180"} duration-200 `}
         />
-      </li>
+      </div>
       <motion.ul
         animate={
           subMenuOpen
@@ -31,8 +31,7 @@ const SubMenu = ({ data }) => {
         className="flex h-0 flex-col pl-14 text-[0.8rem] font-normal overflow-hidden"
       >
         {data.menus?.map((menu) => (
-          <li key={menu}>
-            {/* className="hover:text-blue-600 hover:font-medium" */}
+          <li key={menu.id}>
             <NavLink
               to={`/dashboard/${menu.path}`}
               className="link !bg-transparent capitalize"

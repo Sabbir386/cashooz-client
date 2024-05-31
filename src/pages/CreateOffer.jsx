@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { useCreateOfferMutation } from "./offerApi";
 import { useViewNetworkQuery } from "./NetworkApi";
 import { useViewCategoryQuery } from "./CategoryApi";
-import Select from "react-select"; 
+import Select from "react-select";
 
 const CreateOffer = () => {
   const [inputValue, setInputValue] = useState("");
@@ -14,29 +14,6 @@ const CreateOffer = () => {
   const editor = useRef(null);
   const [content, setContent] = useState("");
   const [CreateOffer] = useCreateOfferMutation();
-  const [clientIP, setClientIP] = useState("");
-  const [deviceInfo, setDeviceInfo] = useState(""); // State to store device info
-
-  // useEffect(() => {
-  //   // Fetch device info when component mounts
-  //   const getDeviceInfo = async () => {
-  //     const userAgent = navigator.userAgent; // Extract user-agent
-  //     const os =
-  //       /(Windows|Mac|Linux|Android|iOS)/.exec(userAgent)?.[0] || "Unknown OS";
-  //     const deviceType = /(Mobile|Tablet|iPad|iPhone|Android)/.test(userAgent)
-  //       ? "Mobile"
-  //       : "Desktop";
-  //     const browser =
-  //       /(Firefox|Chrome|Safari|Opera|Edge)/.exec(userAgent)?.[0] ||
-  //       "Unknown Browser";
-
-  //     setDeviceInfo(
-  //       `OS: ${os}, Device Type: ${deviceType}, Browser: ${browser}`
-  //     );
-  //   };
-  //   getDeviceInfo();
-  //   console.log("user track", deviceInfo);
-  // }, [deviceInfo]);
 
   const {
     register,
@@ -68,7 +45,7 @@ const CreateOffer = () => {
         network: data.network,
         category: data.category,
         device: "Mobile",
-        country: ["usa"],
+        country: ["USA"],
         gender: ["male"],
         age: 30,
         offerStatus: data.offerStatus,

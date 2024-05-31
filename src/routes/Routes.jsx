@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <ProtectedRoutes ><RootLayout></RootLayout></ProtectedRoutes>,
+    element:<RootLayout></RootLayout>,
     children: [
       {
         path: "/dashboard/home",
