@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { useViewOfferQuery } from "./offerApi";
 import UAParser from "ua-parser-js";
 import { detect } from "detect-browser";
+import { useCreateCompletedOfferMutation } from "./completedOfferApi";
+import { toast } from "sonner";
 const OfferList = () => {
   // Use the Redux query hook to fetch data
 
@@ -13,6 +15,25 @@ const OfferList = () => {
   const [deviceType, setDeviceType] = useState("");
   const [country, setCountry] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [createCompletedOffer] = useCreateCompletedOfferMutation();
+  const handleCompletedOffer = async (_id) => {
+    const toastId = toast.loading("Completing....");
+    try {
+      const completedOfferInfo = {
+        offerId: _id,
+      };
+      // console.log(completedOfferInfo);
+      await createCompletedOffer(completedOfferInfo);
+
+      toast.success("Offer Successfully Completed", {
+        id: toastId,
+        duration: 2000,
+      });
+    } catch (error) {
+      toast.error("Something went wrong", { id: toastId, duration: 2000 });
+      console.log("err-", error);
+    }
+  };
 
   useEffect(() => {
     const getDeviceInfo = async () => {
@@ -198,15 +219,7 @@ const OfferList = () => {
                   {row.offerStatus}
                 </span>
               </td>
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                <span
-                  className={`py-0.5 px-1.5 font-medium rounded text-white ${
-                    row.offerStatus === "active" ? "bg-green-500" : "bg-red-500"
-                  }`}
-                >
-                  {deviceInfo}
-                </span>
-              </td>
+
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                 <div>
                   <Link
@@ -218,6 +231,18 @@ const OfferList = () => {
                   <Link className="py-1 px-2 bg-red-500 rounded text-white ml-2">
                     Delete
                   </Link>
+                  <button
+                    onClick={() => handleCompletedOffer(row._id)}
+                    style={{
+                      margin: "10px",
+                      padding: "8px 20px",
+                      border: "1px solid #000",
+                      backgroundColor: "blue",
+                      color: "white",
+                    }}
+                  >
+                    Completed
+                  </button>
                 </div>
               </td>
             </tr>

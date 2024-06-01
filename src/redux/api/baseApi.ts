@@ -78,6 +78,7 @@ export const baseApi = createApi({
     "normalUser",
     "network",
     "category",
+    "completedOffer",
   ],
   endpoints: () => ({}),
 });
