@@ -42,7 +42,7 @@ const OfferList = () => {
       const result = parser.getResult();
 
       const os = result.os.name || "Unknown OS";
-      let deviceType = result.device.type || "Desktop";
+      let deviceType = result.device.type || "desktop";
       const browser = result.browser.name || "Unknown Browser";
 
       // Custom function to detect device name

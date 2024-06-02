@@ -44,7 +44,7 @@ const CreateOffer = () => {
         name: data.name,
         network: data.network,
         category: data.category,
-        device: "Mobile",
+        device: "desktop",
         country: ["Bangladesh"],
         gender: ["male"],
         age: 30,
