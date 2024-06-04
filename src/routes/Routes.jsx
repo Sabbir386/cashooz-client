@@ -36,7 +36,7 @@ export const router = createBrowserRouter([
     element:<RootLayout></RootLayout>,
     children: [
       {
-        path: "/dashboard/home",
+        path: "/dashboard",
         element: <AdminDashboard></AdminDashboard>,
       },
       {

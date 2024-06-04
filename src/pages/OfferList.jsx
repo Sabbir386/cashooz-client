@@ -138,9 +138,10 @@ const OfferList = () => {
   return (
     <>
       <div className="container mx-auto">
-        <div className="my-4">
-          <label htmlFor="publish-status">Select Publish Status: </label>
+        <div className="flex justify-between items-center my-4">
+          <h3 className="font-bold text-base">All Offer List</h3>
           <select
+          className="px-2 py-3 border-none rounded text-xs"
             id="publish-status"
             value={offerStatus}
             onChange={handleStatusChange}
