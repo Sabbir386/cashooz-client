@@ -142,15 +142,6 @@ const Sidebar = () => {
           },
         ],
       },
-      {
-        id: "admin-blogs",
-        name: "Blog's",
-        icon: HiOutlineUsers,
-        menus: [
-          { id: "admin-create-blog", path: "", name: "- Create New Offer" },
-          { id: "admin-view-blog", path: "", name: "- All Offer List" },
-        ],
-      },
     ];
   } else if (user?.role === "user") {
     menulist = [
@@ -286,19 +277,6 @@ const Sidebar = () => {
           },
         ],
       },
-      {
-        id: "superadmin-blogs",
-        name: "Blog's",
-        icon: HiOutlineUsers,
-        menus: [
-          {
-            id: "superadmin-create-blog",
-            path: "",
-            name: "- Create New Offer",
-          },
-          { id: "superadmin-view-blog", path: "", name: "- All Offer List" },
-        ],
-      },
     ];
   }
 
@@ -380,33 +358,6 @@ const Sidebar = () => {
                   <SubMenu data={menu} />
                 </div>
               ))}
-            </li>
-            <li>
-              <Link
-                to={"/storage"}
-                className={`p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium ${
-                  location.pathname === "/storage"
-                    ? "bg-blue-600 text-white"
-                    : ""
-                }`}
-              >
-                <HiOutlineDatabase size={23} className="min-w-max" />
-                Storage
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                to={"/settings"}
-                className={`p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium ${
-                  location.pathname === "/settings"
-                    ? "bg-blue-600 text-white"
-                    : ""
-                }`}
-              >
-                <SlSettings size={23} className="min-w-max" />
-                Settings
-              </Link>
             </li>
           </ul>
           <button

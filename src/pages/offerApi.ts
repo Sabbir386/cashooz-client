@@ -11,8 +11,9 @@ export const createOfferApi = baseApi.injectEndpoints({
       invalidatesTags: ["offer"],
     }),
     viewOffer: builder.query({
-      query: ({ device, country }) => {
+      query: ({ offerStatus,device, country }) => {
         const params = new URLSearchParams();
+        if (offerStatus) params.append('offerStatus', offerStatus);
         if (device) params.append('device', device);
         if (country) params.append('country', country);
 
