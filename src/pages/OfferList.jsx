@@ -7,14 +7,37 @@ import UAParser from "ua-parser-js";
 import { detect } from "detect-browser";
 import { useCreateCompletedOfferMutation } from "./completedOfferApi";
 import { toast } from "sonner";
+import { verifyToken } from "../utils/verifyToken";
+import { useAppSelector } from "../redux/features/hooks";
+import { useCurrentToken } from "../redux/features/auth/authSlice";
 
 const OfferList = () => {
   const [data, setData] = useState([]);
   const [deviceInfo, setDeviceInfo] = useState("");
   const [deviceType, setDeviceType] = useState("");
   const [country, setCountry] = useState("");
-  const [offerStatus, setOfferStatus] = useState('');
-  // const [isLoading, setIsLoading] = useState(true);
+  const [offerStatus, setOfferStatus] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+  const [user, setUser] = useState();
+  const token = useAppSelector(useCurrentToken);
+  const pageSize = 5;
+  const offset = currentPage * pageSize;
+  useEffect(() => {
+    if (token) {
+      setUser(verifyToken(token));
+    }
+  }, [token]);
+  console.log(user)
+  if(user?.role==='user'){
+    
+  }
+  const {
+    data: offers,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useViewOfferQuery({ offerStatus, device: deviceType, country });
+
   const [createCompletedOffer] = useCreateCompletedOfferMutation();
 
   const handleCompletedOffer = async (_id) => {
@@ -26,6 +49,7 @@ const OfferList = () => {
         id: toastId,
         duration: 2000,
       });
+      refetch(); // Manually refetch data after completing an offer
     } catch (error) {
       toast.error("Something went wrong", { id: toastId, duration: 2000 });
       console.log("err-", error);
@@ -92,21 +116,19 @@ const OfferList = () => {
         const country = locationData.country_name;
 
         deviceInfo += `, IP: ${ip}, Country: ${country}`;
+        setCountry(country); // Set the country here
       } catch (error) {
         console.error("Error fetching IP information:", error);
       }
 
       setDeviceInfo(deviceInfo);
       setDeviceType(deviceType);
-      setCountry(country);
     };
 
     getDeviceInfo();
   }, []);
 
-  const [currentPage, setCurrentPage] = useState(0);
-  const pageSize = 5;
-  const offset = currentPage * pageSize;
+  console.log(deviceInfo);
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
@@ -114,19 +136,14 @@ const OfferList = () => {
 
   const handleStatusChange = (event) => {
     setOfferStatus(event.target.value);
+    refetch(); // Manually refetch data when status changes
   };
-
-  const {
-    data: offers,
-    isLoading,
-    isFetching,
-  } = useViewOfferQuery({ offerStatus, device: deviceType, country });
 
   useEffect(() => {
     if (offers) {
       setData(offers.data);
-      // setIsLoading(false); // Set loading to false when data is fetched
     }
+    refetch
   }, [offers]);
 
   const paginatedData = data.slice(offset, offset + pageSize);
@@ -141,7 +158,7 @@ const OfferList = () => {
         <div className="flex justify-between items-center my-4">
           <h3 className="font-bold text-base">All Offer List</h3>
           <select
-          className="px-2 py-3 border-none rounded text-xs"
+            className="px-2 py-3 border-none rounded text-xs"
             id="publish-status"
             value={offerStatus}
             onChange={handleStatusChange}

@@ -8,21 +8,21 @@ export const createOfferApi = baseApi.injectEndpoints({
         method: "POST",
         body: giftInfo,
       }),
-      invalidatesTags: ["offer"],
+      invalidatesTags: ['Offer'], // Invalidates the 'Offer' tag on creation
     }),
     viewOffer: builder.query({
-      query: ({ offerStatus,device, country }) => {
+      query: ({ offerStatus, device, country }) => {
         const params = new URLSearchParams();
         if (offerStatus) params.append('offerStatus', offerStatus);
         if (device) params.append('device', device);
         if (country) params.append('country', country);
 
         return {
-          url: `/offer/?${params.toString()}`,
+          url: `/offer?${params.toString()}`,
           method: "GET",
         };
       },
-      providesTags: ["offer"],
+      providesTags: ['Offer'], // Provides the 'Offer' tag for cache invalidation
     }),
   }),
 });
