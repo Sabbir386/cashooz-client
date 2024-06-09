@@ -86,7 +86,7 @@ export const router = createBrowserRouter([
 
       {
         path: "/dashboard/offer-list",
-        element: <ProtectedRoutes><OfferList></OfferList></ProtectedRoutes>,
+        element: <OfferList></OfferList>,
       },
       {
         path: "/dashboard/authentication",

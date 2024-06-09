@@ -1,3 +1,4 @@
+// api.js (updated to include the deleteOffer mutation)
 import { baseApi } from "../redux/api/baseApi";
 
 export const createOfferApi = baseApi.injectEndpoints({
@@ -22,9 +23,16 @@ export const createOfferApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
-      providesTags: ['Offer'], // Provides the 'Offer' tag for cache invalidation
+      providesTags: ['Offer'], 
+    }),
+    deleteOffer: builder.mutation({
+      query: (id) => ({
+        url: `/offer/${id}`, 
+        method: "DELETE",
+      }),
+      invalidatesTags: ['Offer'], 
     }),
   }),
 });
 
-export const { useCreateOfferMutation, useViewOfferQuery } = createOfferApi;
+export const { useCreateOfferMutation, useViewOfferQuery, useDeleteOfferMutation } = createOfferApi;
