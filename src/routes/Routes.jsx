@@ -17,6 +17,9 @@ import ViewAdminList from "../pages/ViewAdminList";
 import ViewAdvertiserList from "../pages/ViewAdvertiserList";
 import ViewUserList from "../pages/ViewUserList";
 import ProtectedRoutes from "../layouts/ProtectedRoutes";
+import EditOffer from "../pages/EditOffer";
+import EditAdmin from "../pages/EditAdmin";
+import EditAdvertiser from "../pages/EditAdvertiser";
 
 export const router = createBrowserRouter([
   {
@@ -33,7 +36,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element:<RootLayout></RootLayout>,
+    element: <RootLayout></RootLayout>,
     children: [
       {
         path: "/dashboard",
@@ -68,12 +71,20 @@ export const router = createBrowserRouter([
         element: <ViewAdminList></ViewAdminList>,
       },
       {
+        path: "/dashboard/edit-admin/:id",
+        element: <EditAdmin></EditAdmin>,
+      },
+      {
         path: "/dashboard/create-advertiser",
         element: <CreateAdvertiser></CreateAdvertiser>,
       },
       {
         path: "/dashboard/view-advertiser",
         element: <ViewAdvertiserList></ViewAdvertiserList>,
+      },
+      {
+        path: "/dashboard/edit-advertiser/:id",
+        element: <EditAdvertiser></EditAdvertiser>,
       },
       {
         path: "/dashboard/create-user",
@@ -87,6 +98,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/offer-list",
         element: <OfferList></OfferList>,
+      },
+      {
+        path: "/dashboard/edit-offer/:id",
+        element: <EditOffer></EditOffer>,
       },
       {
         path: "/dashboard/authentication",

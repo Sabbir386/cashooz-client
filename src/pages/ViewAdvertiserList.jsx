@@ -7,8 +7,6 @@ import { useViewAdvertiserQuery } from "./advertiserApi";
 const ViewAdvertiserList = () => {
   // Use the Redux query hook to fetch data
   const { data: advertisers, error, isLoading } = useViewAdvertiserQuery();
-
-  console.log(advertisers);
   const [data, setData] = useState([]);
 
   // Update state when advertisers data is available
@@ -26,6 +24,12 @@ const ViewAdvertiserList = () => {
   // Handle page click
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
+  };
+
+  // Handle deletion of an advertiser
+  const handleDelete = (id) => {
+    // Implement your logic to delete advertiser with ID 'id'
+    console.log("Delete advertiser with ID:", id);
   };
 
   // If data is still loading
@@ -58,11 +62,14 @@ const ViewAdvertiserList = () => {
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
               ContactNo
             </th>
+            <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody className="text-gray-700">
           {paginatedData.map((row) => (
-            <tr key={row.id}>
+            <tr key={row._id}>
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                 {row.id}
               </td>
@@ -76,11 +83,10 @@ const ViewAdvertiserList = () => {
                     />
                   </div>
                   <div className="ml-3">
-                    <p className="text-gray-900 font-medium whitespace-no-wrap"></p>
-                    <p className="text-gray-600 whitespace-no-wrap"></p>
-                    <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                    <p className="text-gray-900 font-medium whitespace-no-wrap">
                       {row.fullName}
-                    </td>
+                    </p>
+                    <p className="text-gray-600 whitespace-no-wrap"></p>
                   </div>
                 </div>
               </td>
@@ -95,14 +101,17 @@ const ViewAdvertiserList = () => {
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                 <div>
                   <Link
-                    to={`/dashboard/edit-offer/${row._id}`}
+                    to={`/dashboard/edit-advertiser/${row._id}`}
                     className="py-1 px-2 bg-blue-500 rounded text-white"
                   >
                     Edit
                   </Link>
-                  <Link className="py-1 px-2 bg-red-500 rounded text-white ml-2">
+                  <button
+                    onClick={() => handleDelete(row._id)}
+                    className="py-1 px-2 bg-red-500 rounded text-white ml-2"
+                  >
                     Delete
-                  </Link>
+                  </button>
                 </div>
               </td>
             </tr>

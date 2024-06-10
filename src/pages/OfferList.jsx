@@ -27,9 +27,9 @@ const OfferList = () => {
   useEffect(() => {
     if (token) {
       const user = verifyToken(token);
-      console.log(user)
-      setUserRole(user?.role); 
-      console.log('offerlist',user?.role)
+      console.log(user);
+      setUserRole(user?.role);
+      console.log("offerlist", user?.role);
     }
   }, [token]);
   const {
@@ -37,7 +37,12 @@ const OfferList = () => {
     isLoading,
     isFetching,
     refetch,
-  } = useViewOfferQuery({ offerStatus, device: deviceType, country ,role: userRole});
+  } = useViewOfferQuery({
+    offerStatus,
+    device: deviceType,
+    country,
+    role: userRole,
+  });
 
   const [createCompletedOffer] = useCreateCompletedOfferMutation();
   const handleDeleteOffer = async (_id) => {
@@ -58,7 +63,6 @@ const OfferList = () => {
             id: toastId,
             duration: 2000,
           });
-          refetch(); // Manually refetch data after deleting an offer
         } catch (error) {
           toast.error("Something went wrong", {
             id: toastId,
@@ -272,37 +276,37 @@ const OfferList = () => {
                   </span>
                 </td>
                 <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-      <div>
-        {(userRole === 'superAdmin' || userRole === 'admin') && (
-          <>
-            <Link
-              to={`/dashboard/edit-offer/${row._id}`}
-              className="py-1 px-2 bg-blue-500 rounded text-white"
-            >
-              Edit
-            </Link>
-            <button
-              onClick={() => handleDeleteOffer(row._id)}
-              className="py-1 px-2 bg-red-500 rounded text-white ml-2"
-            >
-              Delete
-            </button>
-          </>
-        )}
-        <button
-          onClick={() => handleCompletedOffer(row._id)}
-          style={{
-            margin: "10px",
-            padding: "8px 20px",
-            border: "1px solid #000",
-            backgroundColor: "blue",
-            color: "white",
-          }}
-        >
-          Completed
-        </button>
-      </div>
-    </td>
+                  <div>
+                    {(userRole === "superAdmin" || userRole === "admin") && (
+                      <>
+                        <Link
+                          to={`/dashboard/edit-offer/${row._id}`}
+                          className="py-1 px-2 bg-blue-500 rounded text-white"
+                        >
+                          Edit
+                        </Link>
+                        <button
+                          onClick={() => handleDeleteOffer(row._id)}
+                          className="py-1 px-2 bg-red-500 rounded text-white ml-2"
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
+                    <button
+                      onClick={() => handleCompletedOffer(row._id)}
+                      style={{
+                        margin: "10px",
+                        padding: "8px 20px",
+                        border: "1px solid #000",
+                        backgroundColor: "blue",
+                        color: "white",
+                      }}
+                    >
+                      Completed
+                    </button>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>

@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import Product from "../assets/img/cashooz.png";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
-import { useViewAdminQuery } from "./adminApi";
+import { useDeleteAdminMutation, useViewAdminQuery } from "./adminApi";
+import { toast } from "sonner";
+import Swal from "sweetalert2";
 
 const ViewAdminList = () => {
   // Use the Redux query hook to fetch data
   const { data: admins, error, isLoading } = useViewAdminQuery();
-
+  const [deleteAdmin] = useDeleteAdminMutation();
   console.log(admins);
   const [data, setData] = useState([]);
 
@@ -17,6 +19,35 @@ const ViewAdminList = () => {
       setData(admins.data);
     }
   }, [admins]);
+
+  const handleDeleteAdmin = async (_id) => {
+    console.log(_id);
+    Swal.fire({
+      title: "Are you sure you want to delete this Admin?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const toastId = toast.loading("Deleting...");
+        try {
+          await deleteAdmin(_id).unwrap();
+          toast.success("Admin successfully deleted", {
+            id: toastId,
+            duration: 2000,
+          });
+        } catch (error) {
+          toast.error("Something went wrong", {
+            id: toastId,
+            duration: 2000,
+          });
+          console.log("Error:", error);
+        }
+      }
+    });
+  };
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(0);
@@ -58,6 +89,9 @@ const ViewAdminList = () => {
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
               ContactNo
             </th>
+            <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody className="text-gray-700">
@@ -76,33 +110,32 @@ const ViewAdminList = () => {
                     />
                   </div>
                   <div className="ml-3">
-                    <p className="text-gray-900 font-medium whitespace-no-wrap"></p>
-                    <p className="text-gray-600 whitespace-no-wrap"></p>
-                    <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                    <p className="text-gray-900 font-medium whitespace-no-wrap">
                       {row.fullName}
-                    </td>
+                    </p>
                   </div>
                 </div>
               </td>
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                 {row.gender}
               </td>
-
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                 {row.contactNo}
               </td>
-
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                 <div>
                   <Link
-                    to={`/dashboard/edit-offer/${row._id}`}
+                    to={`/dashboard/edit-admin/${row._id}`}
                     className="py-1 px-2 bg-blue-500 rounded text-white"
                   >
                     Edit
                   </Link>
-                  <Link className="py-1 px-2 bg-red-500 rounded text-white ml-2">
+                  <button
+                    onClick={() => handleDeleteAdmin(row._id)}
+                    className="py-1 px-2 bg-red-500 rounded text-white ml-2"
+                  >
                     Delete
-                  </Link>
+                  </button>
                 </div>
               </td>
             </tr>
