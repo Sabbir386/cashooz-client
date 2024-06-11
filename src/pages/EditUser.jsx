@@ -3,16 +3,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
-import {
-  useSingleAdvertiserQuery,
-  useUpdateAdvertiserMutation,
-} from "./advertiserApi";
 
-const EditAdvertiser = () => {
+import { useSingleNormalUserQuery, useUpdateNormalUserMutation } from "../redux/features/auth/authApi";
+
+const EditUser = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { data: advertiserData, isLoading } = useSingleAdvertiserQuery(id);
-  const [updateAdvertiser] = useUpdateAdvertiserMutation();
+  const { data: userData, isLoading } = useSingleNormalUserQuery(id);
+  const [updateNormalUser] = useUpdateNormalUserMutation();
 
   const {
     register,
@@ -22,22 +20,21 @@ const EditAdvertiser = () => {
   } = useForm();
 
   useEffect(() => {
-    if (advertiserData) {
-      const advertiser = advertiserData.data;
-      if (advertiser) {
-        setValue("firstName", advertiser.name.firstName);
-        setValue("lastName", advertiser.name.lastName);
-        setValue("contactNo", advertiser.contactNo);
-        setValue("email", advertiser.email);
-        setValue("presentAddress", advertiser.presentAddress);
-        setValue("designation", advertiser.designation);
+    if (userData) {
+      const user = userData.data;
+      if (user) {
+        setValue("firstName", user.name.firstName);
+        setValue("lastName", user.name.lastName);
+        setValue("contactNo", user.contactNo);
+        setValue("email", user.email);
+        setValue("presentAddress", user.presentAddress);
       }
     }
-  }, [advertiserData, setValue]);
+  }, [userData, setValue]);
 
   const onSubmit = async (data) => {
     Swal.fire({
-      title: "Are you sure you want to update this Advertiser?",
+      title: "Are you sure you want to update this User?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -47,25 +44,27 @@ const EditAdvertiser = () => {
       if (result.isConfirmed) {
         const toastId = toast.loading("Updating...");
         try {
-          const advertiserInfo = {
-            advertiser: {
+          const userInfo = {
+            password: data.password,
+            normalUser: {
               name: {
                 firstName: data.firstName,
                 lastName: data.lastName,
               },
-              contactNo: data.contactNo,
+              gender: "male", // Assuming gender is available in your data
               email: data.email,
+              contactNo: data.contactNo,
               presentAddress: data.presentAddress,
-              designation: data.designation,
+              // You can add other fields as needed
             },
           };
 
-          await updateAdvertiser({ id, ...advertiserInfo }).unwrap();
-          toast.success("Advertiser successfully updated", {
+          await updateNormalUser({ id, ...userInfo }).unwrap();
+          toast.success("User successfully updated", {
             id: toastId,
             duration: 2000,
           });
-          navigate("/dashboard/view-advertiser");
+          navigate("/dashboard/view-user");
         } catch (error) {
           toast.error("Something went wrong", {
             id: toastId,
@@ -88,12 +87,10 @@ const EditAdvertiser = () => {
           <h1 className="text-2xl">Hello</h1>
           <p className="text-4xl font-extrabold">Welcome!</p>
           <p className="text-4xl font-extrabold">To Cashooz</p>
-          <p className="text-4xl font-extrabold">Advertiser</p>
+          <p className="text-4xl font-extrabold">User</p>
         </div>
         <div className="bg-white w-full md:w-1/2 flex flex-col items-center py-8 px-8 rounded">
-          <h3 className="text-3xl font-bold text-blue-600 mb-4">
-            Edit Advertiser
-          </h3>
+          <h3 className="text-3xl font-bold text-blue-600 mb-4">Edit User</h3>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="w-full flex flex-col justify-center"
@@ -167,19 +164,34 @@ const EditAdvertiser = () => {
               </div>
               <div className="">
                 <label className="block mb-2 text-sm font-medium text-gray-900">
-                  Designation
+                  Password
+                </label>
+                <input
+                  type="password"
+                  {...register("password", {
+                    required: "Password is required",
+                  })}
+                  className="w-full p-2 rounded border placeholder-gray-400 focus:outline-none focus:border-blue-600"
+                />
+                {errors.password && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+              <div className="">
+                <label className="block mb-2 text-sm font-medium text-gray-900">
+                  Role
                 </label>
                 <select
-                  {...register("designation", {
-                    required: "Designation is required",
-                  })}
+                  {...register("role", { required: "Role is required" })}
                   className="w-full p-2 rounded border text-gray-400 focus:outline-none focus:border-blue-600"
                 >
-                  <option value="advertiser">advertiser</option>
+                  <option value="user">user</option>
                 </select>
-                {errors.designation && (
+                {errors.role && (
                   <p className="text-red-500 text-xs mt-1">
-                    {errors.designation.message}
+                    {errors.role.message}
                   </p>
                 )}
               </div>
@@ -210,4 +222,4 @@ const EditAdvertiser = () => {
   );
 };
 
-export default EditAdvertiser;
+export default EditUser;

@@ -2,12 +2,16 @@ import { useState, useEffect } from "react";
 import Product from "../assets/img/cashooz.png";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
-import { useViewAdvertiserQuery } from "./advertiserApi";
+import { useDeleteAdvertiserMutation, useViewAdvertiserQuery } from "./advertiserApi";
+import { toast } from "sonner";
+import Swal from "sweetalert2";
 
 const ViewAdvertiserList = () => {
   // Use the Redux query hook to fetch data
   const { data: advertisers, error, isLoading } = useViewAdvertiserQuery();
   const [data, setData] = useState([]);
+  const [deleteAdvertiser] = useDeleteAdvertiserMutation();
+
 
   // Update state when advertisers data is available
   useEffect(() => {
@@ -27,9 +31,34 @@ const ViewAdvertiserList = () => {
   };
 
   // Handle deletion of an advertiser
-  const handleDelete = (id) => {
+  const handleDelete = (_id) => {
     // Implement your logic to delete advertiser with ID 'id'
-    console.log("Delete advertiser with ID:", id);
+    console.log("Delete advertiser with ID:", _id);
+    Swal.fire({
+      title: "Are you sure you want to delete this Advertiser?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const toastId = toast.loading("Deleting...");
+        try {
+          await deleteAdvertiser(_id).unwrap();
+          toast.success("Advertiser successfully deleted", {
+            id: toastId,
+            duration: 2000,
+          });
+        } catch (error) {
+          toast.error("Something went wrong", {
+            id: toastId,
+            duration: 2000,
+          });
+          console.log("Error:", error);
+        }
+      }
+    })
   };
 
   // If data is still loading

@@ -1,44 +1,66 @@
 import { useState, useEffect } from "react";
-import Product from "../assets/img/cashooz.png";
-import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
-import { useViewCategoryQuery } from "./CategoryApi";
+import ReactPaginate from "react-paginate";
+import { useViewCategoryQuery, useDeleteCategoryMutation } from "./CategoryApi";
+import { toast } from "sonner";
+import Swal from "sweetalert2";
 
 const ViewCategory = () => {
-  // Use the Redux query hook to fetch data
-  const { data: categorys, error, isLoading } = useViewCategoryQuery();
-
-  console.log(categorys);
+  const { data: categories, error, isLoading } = useViewCategoryQuery();
+  const [deleteCategory] = useDeleteCategoryMutation();
   const [data, setData] = useState([]);
 
-  // Update state when categorys data is available
   useEffect(() => {
-    if (categorys) {
-      setData(categorys.data);
+    if (categories) {
+      setData(categories.data);
     }
-  }, [categorys]);
+  }, [categories]);
 
-  // Pagination
   const [currentPage, setCurrentPage] = useState(0);
-  const pageSize = 5; // Number of items per page
+  const pageSize = 5;
   const offset = currentPage * pageSize;
 
-  // Handle page click
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
   };
 
-  // If data is still loading
+  const handleDelete = async (id) => {
+    Swal.fire({
+      title: "Are you sure you want to delete this Category?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const toastId = toast.loading("Deleting...");
+        try {
+          await deleteCategory(id).unwrap();
+          toast.success("Category successfully deleted", {
+            id: toastId,
+            duration: 2000,
+          });
+          setData(data.filter((category) => category._id !== id));
+        } catch (error) {
+          toast.error("Something went wrong", {
+            id: toastId,
+            duration: 2000,
+          });
+          console.log("Error:", error);
+        }
+      }
+    });
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  // If there was an error fetching data
   if (error) {
     return <div>Error: {error.message}</div>;
   }
 
-  // Paginated data
   const paginatedData = data.slice(offset, offset + pageSize);
 
   return (
@@ -49,9 +71,11 @@ const ViewCategory = () => {
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
               ID
             </th>
-
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
               Category Name
+            </th>
+            <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+              Actions
             </th>
           </tr>
         </thead>
@@ -61,21 +85,23 @@ const ViewCategory = () => {
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                 {row._id}
               </td>
-
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                 {row.categoryName}
               </td>
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                 <div>
                   <Link
-                    to={`/dashboard/edit-offer/${row._id}`}
+                    to={`/dashboard/edit-category/${row._id}`}
                     className="py-1 px-2 bg-blue-500 rounded text-white"
                   >
                     Edit
                   </Link>
-                  <Link className="py-1 px-2 bg-red-500 rounded text-white ml-2">
+                  <button
+                    onClick={() => handleDelete(row._id)}
+                    className="py-1 px-2 bg-red-500 rounded text-white ml-2"
+                  >
                     Delete
-                  </Link>
+                  </button>
                 </div>
               </td>
             </tr>

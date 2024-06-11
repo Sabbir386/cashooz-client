@@ -25,6 +25,28 @@ export const authApi = baseApi.injectEndpoints({
       }),
       providesTags: ["normalUser"],
     }),
+    deleteNormalUser: builder.mutation({
+      query: (id) => ({
+        url: `/normalUsers/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["normalUser"],
+    }),
+    singleNormalUser: builder.query({
+      query: (id) => ({
+        url: `/normalUsers/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["normalUser"],
+    }),
+    updateNormalUser: builder.mutation({
+      query: ({ id, ...updatedData }) => ({
+        url: `/normalUsers/${id}`,
+        method: "PATCH",
+        body: updatedData,
+      }),
+      invalidatesTags: ["normalUser"],
+    }),
   }),
 });
 
@@ -32,4 +54,7 @@ export const {
   useLoginMutation,
   useRegistrationMutation,
   useViewNormalUsersQuery,
+  useDeleteNormalUserMutation,
+  useUpdateNormalUserMutation,
+  useSingleNormalUserQuery,
 } = authApi;

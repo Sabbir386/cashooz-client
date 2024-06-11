@@ -1,4 +1,5 @@
 import { baseApi } from "../redux/api/baseApi";
+
 export const createCategoryApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createCategory: builder.mutation({
@@ -16,8 +17,35 @@ export const createCategoryApi = baseApi.injectEndpoints({
       }),
       providesTags: ["category"],
     }),
+    getSingleCategory: builder.query({
+      query: (id) => ({
+        url: `/category/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["category"],
+    }),
+    updateCategory: builder.mutation({
+      query: ({ id, ...categoryInfo }) => ({
+        url: `/category/${id}/`,
+        method: "PUT",
+        body: categoryInfo,
+      }),
+      invalidatesTags: ["category"],
+    }),
+    deleteCategory: builder.mutation({
+      query: (id) => ({
+        url: `/category/${id}/`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["category"],
+    }),
   }),
 });
 
-export const { useCreateCategoryMutation, useViewCategoryQuery } =
-  createCategoryApi;
+export const {
+  useCreateCategoryMutation,
+  useViewCategoryQuery,
+  useGetSingleCategoryQuery,
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
+} = createCategoryApi;

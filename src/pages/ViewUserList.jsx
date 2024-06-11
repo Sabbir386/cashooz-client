@@ -2,15 +2,15 @@ import { useState, useEffect } from "react";
 import Product from "../assets/img/cashooz.png";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
-import { useViewNormalUsersQuery } from "../redux/features/auth/authApi";
-
+import { useViewNormalUsersQuery, useDeleteNormalUserMutation } from "../redux/features/auth/authApi";
+import { toast } from "sonner";
+import Swal from "sweetalert2";
 
 const ViewUserList = () => {
   // Use the Redux query hook to fetch data
   const { data: users, error, isLoading } = useViewNormalUsersQuery();
-
-  console.log(users);
   const [data, setData] = useState([]);
+  const [deleteNormalUser] = useDeleteNormalUserMutation();
 
   // Update state when users data is available
   useEffect(() => {
@@ -27,6 +27,35 @@ const ViewUserList = () => {
   // Handle page click
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
+  };
+
+  // Handle deletion of a normal user
+  const handleDelete = (_id) => {
+    Swal.fire({
+      title: "Are you sure you want to delete this user?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const toastId = toast.loading("Deleting...");
+        try {
+          await deleteNormalUser(_id).unwrap();
+          toast.success("User successfully deleted", {
+            id: toastId,
+            duration: 2000,
+          });
+        } catch (error) {
+          toast.error("Something went wrong", {
+            id: toastId,
+            duration: 2000,
+          });
+          console.log("Error:", error);
+        }
+      }
+    });
   };
 
   // If data is still loading
@@ -59,11 +88,14 @@ const ViewUserList = () => {
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
               ContactNo
             </th>
+            <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody className="text-gray-700">
           {paginatedData.map((row) => (
-            <tr key={row.id}>
+            <tr key={row._id}>
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                 {row.id}
               </td>
@@ -77,11 +109,10 @@ const ViewUserList = () => {
                     />
                   </div>
                   <div className="ml-3">
-                    <p className="text-gray-900 font-medium whitespace-no-wrap"></p>
-                    <p className="text-gray-600 whitespace-no-wrap"></p>
-                    <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                    <p className="text-gray-900 font-medium whitespace-no-wrap">
                       {row.fullName}
-                    </td>
+                    </p>
+                    <p className="text-gray-600 whitespace-no-wrap"></p>
                   </div>
                 </div>
               </td>
@@ -96,14 +127,17 @@ const ViewUserList = () => {
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                 <div>
                   <Link
-                    to={`/dashboard/edit-offer/${row._id}`}
+                    to={`/dashboard/edit-user/${row._id}`}
                     className="py-1 px-2 bg-blue-500 rounded text-white"
                   >
                     Edit
                   </Link>
-                  <Link className="py-1 px-2 bg-red-500 rounded text-white ml-2">
+                  <button
+                    onClick={() => handleDelete(row._id)}
+                    className="py-1 px-2 bg-red-500 rounded text-white ml-2"
+                  >
                     Delete
-                  </Link>
+                  </button>
                 </div>
               </td>
             </tr>

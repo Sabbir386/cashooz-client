@@ -19,7 +19,11 @@ import ViewUserList from "../pages/ViewUserList";
 import ProtectedRoutes from "../layouts/ProtectedRoutes";
 import EditOffer from "../pages/EditOffer";
 import EditAdmin from "../pages/EditAdmin";
+
 import EditAdvertiser from "../pages/EditAdvertiser";
+import EditUser from "../pages/EditUser";
+import EditNetwork from "../pages/EditNetwork";
+import EditCategory from "../pages/EditCategory";
 
 export const router = createBrowserRouter([
   {
@@ -59,8 +63,16 @@ export const router = createBrowserRouter([
         element: <ViewCategory></ViewCategory>,
       },
       {
+        path: "/dashboard/edit-category/:id",
+        element: <EditCategory></EditCategory>,
+      },
+      {
         path: "/dashboard/view-network",
         element: <ViewNetwork></ViewNetwork>,
+      },
+      {
+        path: "/dashboard/edit-network/:id",
+        element: <EditNetwork></EditNetwork>,
       },
       {
         path: "/dashboard/create-admin",
@@ -93,6 +105,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/view-user",
         element: <ViewUserList></ViewUserList>,
+      },
+      {
+        path: "/dashboard/edit-user/:id",
+        element: <EditUser></EditUser>,
       },
 
       {

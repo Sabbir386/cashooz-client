@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useCreateNetworkMutation } from "./networkApi";
+import { useCreateNetworkMutation } from "./NetworkApi";
 
 const CreateNetwork = () => {
   const [CreateNetwork] = useCreateNetworkMutation();
