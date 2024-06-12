@@ -5,8 +5,36 @@ import { setUser } from "../redux/features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { verifyToken } from "../utils/verifyToken";
 import { useAppDispatch } from "../redux/features/hooks";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { app } from "../firebase/firebase.init";
+import { useState } from "react";
 
 const Login = () => {
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+  const [firebaseUser,setFirebaseUser]=useState(null);
+ const handleGoogleSignIn=()=>{
+  signInWithPopup(auth, provider)
+  .then((result) => {
+    
+    // const credential = GoogleAuthProvider.credentialFromResult(result);
+    // const token = credential.accessToken;
+    
+    const loggerUser = result.user;
+    console.log(loggerUser);
+    setFirebaseUser(loggerUser);
+  }).catch((error) => {
+    // Handle Errors here.
+    // const errorCode = error.code;
+    // const errorMessage = error.message;
+    // // The email of the user's account used.
+    // const email = error.customData.email;
+    // // The AuthCredential type that was used.
+    // const credential = GoogleAuthProvider.credentialFromError(error);
+    // ...
+    console.log(error.message)
+  });
+ }
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const {
@@ -81,7 +109,11 @@ const Login = () => {
               Submit
             </button>
           </form>
+          <button onClick={handleGoogleSignIn} className="bg-yellow-500 font-bold text-white focus:outline-none rounded p-3 mt-6">
+              Google Login
+            </button>
         </div>
+        
       </div>
     </div>
   );

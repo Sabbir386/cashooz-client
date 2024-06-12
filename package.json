@@ -12,6 +12,7 @@
     "@reduxjs/toolkit": "^2.2.5",
     "@types/react-router-dom": "^5.3.3",
     "detect-browser": "^5.3.0",
+    "firebase": "^10.12.2",
     "framer-motion": "^9.0.1",
     "jodit-react": "^4.1.2",
     "jwt-decode": "^4.0.0",
