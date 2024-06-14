@@ -39,6 +39,13 @@ export const authApi = baseApi.injectEndpoints({
       }),
       providesTags: ["normalUser"],
     }),
+    findByEmailUser: builder.query({
+      query: (email) => ({
+        url: `/users/find-by-email?email=${email}`,
+        method: "GET",
+      }),
+      providesTags: ["users"],
+    }),
     updateNormalUser: builder.mutation({
       query: ({ id, ...updatedData }) => ({
         url: `/normalUsers/${id}`,
@@ -57,4 +64,5 @@ export const {
   useDeleteNormalUserMutation,
   useUpdateNormalUserMutation,
   useSingleNormalUserQuery,
+  useFindByEmailUserQuery,
 } = authApi;

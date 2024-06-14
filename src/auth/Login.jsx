@@ -1,57 +1,108 @@
-import { toast } from "sonner";
-import { useLoginMutation } from "../redux/features/auth/authApi";
-import { useForm } from "react-hook-form";
-import { setUser } from "../redux/features/auth/authSlice";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import {
+  useLoginMutation,
+  useRegistrationMutation,
+  useFindByEmailUserQuery,
+} from "../redux/features/auth/authApi";
+import { setUser } from "../redux/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../redux/features/hooks";
 import { verifyToken } from "../utils/verifyToken";
-import { useAppDispatch } from "../redux/features/hooks";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase/firebase.init";
-import { useState } from "react";
 
 const Login = () => {
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
-  const [firebaseUser,setFirebaseUser]=useState(null);
- const handleGoogleSignIn=()=>{
-  signInWithPopup(auth, provider)
-  .then((result) => {
-    
-    // const credential = GoogleAuthProvider.credentialFromResult(result);
-    // const token = credential.accessToken;
-    
-    const loggerUser = result.user;
-    console.log(loggerUser);
-    setFirebaseUser(loggerUser);
-  }).catch((error) => {
-    // Handle Errors here.
-    // const errorCode = error.code;
-    // const errorMessage = error.message;
-    // // The email of the user's account used.
-    // const email = error.customData.email;
-    // // The AuthCredential type that was used.
-    // const credential = GoogleAuthProvider.credentialFromError(error);
-    // ...
-    console.log(error.message)
-  });
- }
-  const dispatch = useAppDispatch();
+  const [firebaseUser, setFirebaseUser] = useState(null);
   const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const dispatch = useAppDispatch();
+  const currentUser = useAppSelector((state) => state.auth.user);
+
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const [login] = useLoginMutation();
+  const [registration] = useRegistrationMutation();
+  const { data: userExists, refetch: refetchUser } = useFindByEmailUserQuery(firebaseUser?.email, {
+    skip: !firebaseUser?.email,
+  });
+
+  useEffect(() => {
+    const handleFirebaseLogin = async () => {
+      if (!firebaseUser) return;
+
+      const toastId = toast.loading("Checking user existence...");
+      try {
+        const userCheck = await refetchUser();
+
+        if (userCheck.data) {
+          console.log('User exists:', userCheck.data);
+          const userInfo = {
+            email: firebaseUser.email,
+            password: "normalUser12345",
+          };
+          const res = await login(userInfo).unwrap();
+          const user = verifyToken(res.data.accessToken);
+          dispatch(setUser({ user, token: res.data.accessToken }));
+          toast.success("Logged in", { id: toastId, duration: 2000 });
+          // navigate("/dashboard");
+        } else {
+          console.log('User does not exist, registering new user');
+          const displayName = firebaseUser.displayName
+            ? firebaseUser.displayName.split(" ")
+            : ["", ""];
+          const normalUser = {
+            password: "normalUser12345",
+            normalUser: {
+              name: {
+                firstName: displayName[0] || "Unknown",
+                lastName: displayName[1] || "User",
+              },
+              gender: "male",
+              email: firebaseUser.email,
+              contactNo: "01321341234",
+              presentAddress: "madhupur",
+            },
+          };
+
+          const res = await registration(normalUser).unwrap();
+          const verifiedUser = verifyToken(firebaseUser.accessToken);
+          dispatch(setUser({ user: verifiedUser, token: firebaseUser.accessToken }));
+          toast.success("User registered successfully", { id: toastId, duration: 2000 });
+          // navigate("/dashboard");
+        }
+      } catch (error) {
+        if (error.status === 500 && error.data.message.includes("duplicate key error")) {
+          toast.error("User already exists. Please try logging in.", { id: toastId, duration: 2000 });
+        } else {
+          toast.error("Something went wrong", { id: toastId, duration: 2000 });
+        }
+        console.error("Login/Registration error:", error);
+      }
+    };
+
+    handleFirebaseLogin();
+  }, [firebaseUser, dispatch, navigate, login, registration, refetchUser]);
+
+  const handleGoogleSignIn = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const loggedUser = result.user;
+        loggedUser.accessToken = result._tokenResponse.idToken;
+        setFirebaseUser(loggedUser);
+      })
+      .catch((error) => {
+        console.log("Google Sign-In error:", error.message);
+      });
+  };
 
   const onSubmit = async (data) => {
     const toastId = toast.loading("Logging in");
 
     try {
       const userInfo = {
-        // id: data.id,
         email: data.email,
-
         password: data.password,
       };
 
@@ -66,7 +117,6 @@ const Login = () => {
       console.error("Login error:", error);
     }
   };
-
   return (
     <div className="bg-gradient-to-tr from-purple-300 to-green-600 h-screen w-full flex justify-center items-center">
       <div className="bg-blue-600 w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded">
@@ -109,11 +159,13 @@ const Login = () => {
               Submit
             </button>
           </form>
-          <button onClick={handleGoogleSignIn} className="bg-yellow-500 font-bold text-white focus:outline-none rounded p-3 mt-6">
-              Google Login
-            </button>
+          <button
+            onClick={handleGoogleSignIn}
+            className="bg-yellow-500 font-bold text-white focus:outline-none rounded p-3 mt-6"
+          >
+            Google Login
+          </button>
         </div>
-        
       </div>
     </div>
   );
