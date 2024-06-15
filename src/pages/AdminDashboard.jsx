@@ -28,8 +28,55 @@ import {
   useTotalOfferQuery,
   useTotalUserQuery,
 } from "./dashboardApi";
+import { Link } from "react-router-dom";
+// Import Swiper React components
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
 
 const AdminDashboard = () => {
+  const [campaigns, setCampaigns] = useState([]);
+
+  useEffect(() => {
+    const fetchCampaignData = async () => {
+      const url =
+        "https://www.adworkmedia.com/api/index.php?pubID=160988&apiID=v16ba1my0oaesbdq9cljlhmk9uo1r6hvlc2c1v&campDetails=true";
+      try {
+        const response = await fetch(url);
+        const data = await response.text();
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(data, "application/xml");
+
+        const campaignsArray = Array.from(
+          xml.getElementsByTagName("campDetails")
+        ).map((campDetail) => ({
+          campaignId:
+            campDetail.getElementsByTagName("campaign_id")[0]?.textContent ||
+            "",
+          campaignName:
+            campDetail.getElementsByTagName("campaign_name")[0]?.textContent ||
+            "",
+          campaignDesc:
+            campDetail.getElementsByTagName("campaign_desc")[0]?.textContent ||
+            "",
+          payout:
+            campDetail.getElementsByTagName("payout")[0]?.textContent || "",
+          url: campDetail.getElementsByTagName("url")[0]?.textContent || "",
+        }));
+
+        setCampaigns(campaignsArray);
+      } catch (error) {
+        console.error("Error fetching XML:", error);
+      }
+    };
+
+    fetchCampaignData();
+  }, []);
+  if (campaigns) {
+    console.log(campaigns);
+  }
+
   const [countTotalOffer, setCountTotalOffer] = useState(null);
   const {
     data: totalOffer,
@@ -99,10 +146,8 @@ const AdminDashboard = () => {
     error: errorspecificOfferWiseCompletedOffer,
   } = useSpecificOfferTotalCountsQuery();
   //Per Day Completed Offer
-  const [
-    countPerDayCompletedOffer,
-    setCountPerDayCompletedOffer,
-  ] = useState(null);
+  const [countPerDayCompletedOffer, setCountPerDayCompletedOffer] =
+    useState(null);
   const {
     data: regularCompletedOffer,
     isLoading: isLoadingregularCompletedOffer,
@@ -156,7 +201,7 @@ const AdminDashboard = () => {
     dateAndOfferAnduserWiseCompletedOffer,
     specificUserWiseCompletedOffer,
     regularCompletedOffer,
-    specificOfferWiseCompletedOffer
+    specificOfferWiseCompletedOffer,
   ]);
 
   const data = countSpecificUserWiseCompletedOffer?.data ?? [];
@@ -197,21 +242,35 @@ const AdminDashboard = () => {
     { name: "Page G", uv: 3490, pv: 4300, amt: 2100 },
   ];
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   const RADIAN = Math.PI / 180;
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+  const renderCustomizedLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+    index,
+  }) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
-  
+
     return (
-      <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+      <text
+        x={x}
+        y={y}
+        fill="white"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
         {`${(percent * 100).toFixed(0)}%`}
       </text>
     );
   };
-  
+
   return (
     <div className="container mx-auto">
       <div className="grid gap-4 grid-cols-1 md:grid-cols-4">
@@ -247,7 +306,9 @@ const AdminDashboard = () => {
         </div>
         <div className="bg-gradient-to-r from-indigo-400 to-cyan-400 text-white px-4 py-6 rounded shadow-sm">
           <h4 className="font-bold text-xl">Today Completed Offer</h4>
-          <h5 className="font-semibold text-base">{regularCompletedOffer?.data[0]?.TotalCount}</h5>
+          <h5 className="font-semibold text-base">
+            {regularCompletedOffer?.data[0]?.TotalCount}
+          </h5>
         </div>
       </div>
       <div className="grid gap-4 mt-5 grid-cols-1 md:grid-cols-2">
@@ -275,95 +336,120 @@ const AdminDashboard = () => {
         </div>
         <div className="bg-white px-4 py-6 rounded shadow-sm">
           <ResponsiveContainer width="100%" height={250}>
-          <PieChart width={400} height={400}>
-          <Pie
-            data={data01}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={renderCustomizedLabel}
-            outerRadius={80}
-            fill="#8884d8"
-            dataKey="TotalCount"
-          >
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-          <Tooltip />
-        </PieChart>
+            <PieChart width={400} height={400}>
+              <Pie
+                data={data01}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={renderCustomizedLabel}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="TotalCount"
+              >
+                {data.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
           </ResponsiveContainer>
         </div>
       </div>
-      <div className="bg-white px-4 py-6 rounded shadow-sm mt-5">
-        <div className="grid gap-4 mt-5 grid-cols-1 md:grid-cols-2">
-          <div style={{ width: "100%", height: 300 }}>
-           { console.log('area chart',countDateWiseCompletedOffer?.offerInfo)}
-            <ResponsiveContainer>
-              <AreaChart
-                data={countDateWiseCompletedOffer?.data.offerInfo}
-                margin={{
-                  top: 10,
-                  right: 30,
-                  left: 0,
-                  bottom: 0,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Area
-                  type="monotone"
-                  dataKey="count"
-                  stroke="#8884d8"
-                  fill="#8884d8"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-          <div>
-          <table className="min-w-full bg-white border-collapse border border-gray-300 rounded-lg overflow-hidden">
-          <thead className="bg-gray-100 text-gray-800">
-            <tr className="text-left">
-              <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-                No.
-              </th>
-              <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-                Offer
-              </th>
-              <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-                Completed
-              </th>
-              <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-                Date
-              </th>
-           
-            </tr>
-          </thead>
-          <tbody className="text-gray-700">
-            
-            {countDateandOfferandUserWiseCompletedOffer?.data.slice(0,7).map((row,idx) => (
-              <tr key={idx}>
-                <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                  {idx+1}
-                </td>
-                <td className="px-5 py-2 border-b border-gray-200 bg-white text-xs">
-                  {row.name}
-                </td>
-                <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                {row.count}
-                </td>
-                <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                {row.date}
-                </td>
-                
-              </tr>
-            ))}
-          </tbody>
-        </table>
-          </div>
+      <div className="grid gap-4 mt-5 grid-cols-1 md:grid-cols-2">
+        <div
+          style={{ width: "100%", height: 300 }}
+          className="bg-white px-4 py-6 rounded shadow-sm mt-5"
+        >
+          {console.log("area chart", countDateWiseCompletedOffer?.offerInfo)}
+          <ResponsiveContainer>
+            <AreaChart
+              data={countDateWiseCompletedOffer?.data.offerInfo}
+              margin={{
+                top: 10,
+                right: 30,
+                left: 0,
+                bottom: 0,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Area
+                type="monotone"
+                dataKey="count"
+                stroke="#8884d8"
+                fill="#8884d8"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
         </div>
+        <div className="bg-white px-4 py-6 rounded shadow-sm mt-5">
+          <table className="min-w-full bg-white border-collapse border border-gray-300 rounded-lg overflow-hidden">
+            <thead className="bg-gray-100 text-gray-800">
+              <tr className="text-left">
+                <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+                  No.
+                </th>
+                <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+                  Offer
+                </th>
+                <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+                  Completed
+                </th>
+                <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+                  Date
+                </th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-700">
+              {countDateandOfferandUserWiseCompletedOffer?.data
+                .slice(0, 3)
+                .map((row, idx) => (
+                  <tr key={idx}>
+                    <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                      {idx + 1}
+                    </td>
+                    <td className="px-5 py-2 border-b border-gray-200 bg-white text-xs">
+                      {row.name}
+                    </td>
+                    <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                      {row.count}
+                    </td>
+                    <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                      {row.date}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div className="bg-white px-4 py-6 rounded shadow-sm mt-5">
+        <Swiper
+          spaceBetween={50}
+          slidesPerView={3}
+          onSlideChange={() => console.log("slide change")}
+          onSwiper={(swiper) => console.log(swiper)}
+        >
+
+          {campaigns && campaigns.map(itm => <SwiperSlide key={itm.campaignId}>
+            <div className="border p-3 rounded-md shadow-sm">
+              <h3 className="font-bold text-base">{itm.campaignName}</h3>
+              <p className="text-sm font-semibold">{itm.campaignDesc}</p>
+              <p className="text-xs font-semibold">{itm.payout}</p>
+              <Link to={itm.url} className="text-xs font-medium">
+                see campaign
+              </Link>
+            </div>
+          </SwiperSlide>)}
+          
+       
+        </Swiper>
       </div>
     </div>
   );

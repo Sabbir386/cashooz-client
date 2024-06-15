@@ -12,6 +12,8 @@ import { useAppDispatch, useAppSelector } from "../redux/features/hooks";
 import { verifyToken } from "../utils/verifyToken";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase/firebase.init";
+import { FaGoogle  } from "react-icons/fa";
+
 
 const Login = () => {
   const auth = getAuth(app);
@@ -161,9 +163,12 @@ const Login = () => {
           </form>
           <button
             onClick={handleGoogleSignIn}
-            className="bg-yellow-500 font-bold text-white focus:outline-none rounded p-3 mt-6"
+            className="border w-full h-8 rounded-md mt-6 grid place-items-center text-xs shadow-sm"
           >
-            Google Login
+           <div className="flex gap-3 justify-center items-center">
+           <FaGoogle /> 
+           <span>Continue with Google</span>
+           </div>
           </button>
         </div>
       </div>
