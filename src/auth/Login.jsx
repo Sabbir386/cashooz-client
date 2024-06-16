@@ -48,7 +48,7 @@ const Login = () => {
           const user = verifyToken(res.data.accessToken);
           dispatch(setUser({ user, token: res.data.accessToken }));
           toast.success("Logged in", { id: toastId, duration: 2000 });
-          // navigate("/dashboard");
+          navigate("/dashboard");
         } else {
           console.log('User does not exist, registering new user');
           const displayName = firebaseUser.displayName
@@ -72,7 +72,7 @@ const Login = () => {
           const verifiedUser = verifyToken(firebaseUser.accessToken);
           dispatch(setUser({ user: verifiedUser, token: firebaseUser.accessToken }));
           toast.success("User registered successfully", { id: toastId, duration: 2000 });
-          // navigate("/dashboard");
+          navigate("/dashboard");
         }
       } catch (error) {
         if (error.status === 500 && error.data.message.includes("duplicate key error")) {

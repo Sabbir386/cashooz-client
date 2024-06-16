@@ -40,7 +40,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     console.log("Sending refresh token");
 
     const res = await fetch(
-      "https://cashooz-server.vercel.app/api/auth/refresh-token",
+      "https://cashooz-server.vercel.app/api/v1/auth/refresh-token",
       {
         method: "POST",
         credentials: "include",

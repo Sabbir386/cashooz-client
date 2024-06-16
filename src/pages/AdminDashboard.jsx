@@ -29,12 +29,13 @@ import {
   useTotalUserQuery,
 } from "./dashboardApi";
 import { Link } from "react-router-dom";
-// Import Swiper React components
+
 import { Swiper, SwiperSlide } from "swiper/react";
 
-// Import Swiper styles
 import "swiper/css";
-
+import { useAppSelector } from "../redux/features/hooks";
+import { verifyToken } from "../utils/verifyToken";
+import { logOut, useCurrentToken } from "../redux/features/auth/authSlice";
 const AdminDashboard = () => {
   const [campaigns, setCampaigns] = useState([]);
 
@@ -64,8 +65,9 @@ const AdminDashboard = () => {
             campDetail.getElementsByTagName("payout")[0]?.textContent || "",
           url: campDetail.getElementsByTagName("url")[0]?.textContent || "",
         }));
+        const limitedCampaignsArray = campaignsArray.slice(0, 15);
 
-        setCampaigns(campaignsArray);
+        setCampaigns(limitedCampaignsArray);
       } catch (error) {
         console.error("Error fetching XML:", error);
       }
@@ -76,37 +78,47 @@ const AdminDashboard = () => {
   if (campaigns) {
     console.log(campaigns);
   }
+  const token = useAppSelector(useCurrentToken);
 
+  let userRole;
+  if (token) {
+    const user = verifyToken(token);
+    userRole = user.role;
+  }
+  console.log(userRole);
   const [countTotalOffer, setCountTotalOffer] = useState(null);
   const {
     data: totalOffer,
     isLoading: isLoadingOffer,
     error: errorOffer,
-  } = useTotalOfferQuery();
+  } = useTotalOfferQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
   const [countCompletedOffer, setCountCompletedOffer] = useState(null);
   const {
     data: completedOffer,
     isLoading: isLoadingCompleted,
     error: errorCompleted,
-  } = useCompletedOfferQuery();
+  } = useCompletedOfferQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
   const [countTotalAdmin, setCountTotalAdmin] = useState(null);
   const {
     data: totalAdmins,
     isLoading: isLoadingAdmins,
     error: errorAdmins,
-  } = useTotalAdminQuery();
+  } = useTotalAdminQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
   const [countTotalUser, setCountTotalUser] = useState(null);
   const {
     data: totalUsers,
     isLoading: isLoadingUsers,
     error: errorUsers,
-  } = useTotalUserQuery();
+  } = useTotalUserQuery(
+    {},
+    { skip: !(userRole === "superAdmin" || userRole === "admin") }
+  );
   const [countTotalAdvertiser, setCountTotalAdvertiser] = useState(null);
   const {
     data: totalAdvertisers,
     isLoading: isLoadingAdvertisers,
     error: errorAdvertisers,
-  } = useTotalAdvertiserQuery();
+  } = useTotalAdvertiserQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
   //dateWiseCompletedOfferCount
   const [countDateWiseCompletedOffer, setCountDateWiseCompletedOffer] =
     useState(null);
@@ -114,7 +126,7 @@ const AdminDashboard = () => {
     data: dateWiseCompletedOffer,
     isLoading: isLoadingdateWiseCompletedOffer,
     error: errordateWiseCompletedOffer,
-  } = useDateWiseCompletedOfferQuery();
+  } = useDateWiseCompletedOfferQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
   //date + offer+ user wise completed Offer
   const [
     countDateandOfferandUserWiseCompletedOffer,
@@ -124,7 +136,7 @@ const AdminDashboard = () => {
     data: dateAndOfferAnduserWiseCompletedOffer,
     isLoading: isLoadingdateAndOfferAnduserWiseCompletedOffer,
     error: errordateAndOfferAnduserWiseCompletedOffer,
-  } = useDateAndOfferWiseCompletedOfferQuery();
+  } = useDateAndOfferWiseCompletedOfferQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
   //specific-user-total-offer-counts
   const [
     countSpecificUserWiseCompletedOffer,
@@ -134,7 +146,7 @@ const AdminDashboard = () => {
     data: specificUserWiseCompletedOffer,
     isLoading: isLoadingspecificUserWiseCompletedOffer,
     error: errorspecificUserWiseCompletedOffer,
-  } = useSpecificUserTotalOfferCountsQuery();
+  } = useSpecificUserTotalOfferCountsQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
   //specific-offer-total-counts
   const [
     countSpecificOfferWiseCompletedOffer,
@@ -144,7 +156,7 @@ const AdminDashboard = () => {
     data: specificOfferWiseCompletedOffer,
     isLoading: isLoadingspecificOfferWiseCompletedOffer,
     error: errorspecificOfferWiseCompletedOffer,
-  } = useSpecificOfferTotalCountsQuery();
+  } = useSpecificOfferTotalCountsQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
   //Per Day Completed Offer
   const [countPerDayCompletedOffer, setCountPerDayCompletedOffer] =
     useState(null);
@@ -152,7 +164,7 @@ const AdminDashboard = () => {
     data: regularCompletedOffer,
     isLoading: isLoadingregularCompletedOffer,
     error: errorregularCompletedOffer,
-  } = usePerDayCompletedOfferQuery();
+  } = usePerDayCompletedOfferQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
   useEffect(() => {
     if (totalOffer) {
       setCountTotalOffer(totalOffer.meta.total);
@@ -364,7 +376,6 @@ const AdminDashboard = () => {
           style={{ width: "100%", height: 300 }}
           className="bg-white px-4 py-6 rounded shadow-sm mt-5"
         >
-          {console.log("area chart", countDateWiseCompletedOffer?.offerInfo)}
           <ResponsiveContainer>
             <AreaChart
               data={countDateWiseCompletedOffer?.data.offerInfo}
@@ -436,19 +447,19 @@ const AdminDashboard = () => {
           onSlideChange={() => console.log("slide change")}
           onSwiper={(swiper) => console.log(swiper)}
         >
-
-          {campaigns && campaigns.map(itm => <SwiperSlide key={itm.campaignId}>
-            <div className="border p-3 rounded-md shadow-sm">
-              <h3 className="font-bold text-base">{itm.campaignName}</h3>
-              <p className="text-sm font-semibold">{itm.campaignDesc}</p>
-              <p className="text-xs font-semibold">{itm.payout}</p>
-              <Link to={itm.url} className="text-xs font-medium">
-                see campaign
-              </Link>
-            </div>
-          </SwiperSlide>)}
-          
-       
+          {campaigns &&
+            campaigns.map((itm) => (
+              <SwiperSlide key={itm.campaignId}>
+                <div className="border p-3 rounded-md shadow-sm">
+                  <h3 className="font-bold text-base">{itm.campaignName}</h3>
+                  <p className="text-sm font-semibold">{itm.campaignDesc}</p>
+                  <p className="text-xs font-semibold">{itm.payout}</p>
+                  <Link to={itm.url} className="text-xs font-medium">
+                    see campaign
+                  </Link>
+                </div>
+              </SwiperSlide>
+            ))}
         </Swiper>
       </div>
     </div>
