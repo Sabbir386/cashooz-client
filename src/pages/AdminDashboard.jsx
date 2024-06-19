@@ -20,6 +20,8 @@ import {
   useCompletedOfferQuery,
   useDateAndOfferWiseCompletedOfferQuery,
   useDateWiseCompletedOfferQuery,
+  useLoggedInUserDailycCompletedOfferCountsQuery,
+  useLoggedUserTotalCompletedOfferQuery,
   usePerDayCompletedOfferQuery,
   useSpecificOfferTotalCountsQuery,
   useSpecificUserTotalOfferCountsQuery,
@@ -91,19 +93,28 @@ const AdminDashboard = () => {
     data: totalOffer,
     isLoading: isLoadingOffer,
     error: errorOffer,
-  } = useTotalOfferQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
+  } = useTotalOfferQuery(
+    {},
+    { skip: !(userRole === "superAdmin" || userRole === "admin") }
+  );
   const [countCompletedOffer, setCountCompletedOffer] = useState(null);
   const {
     data: completedOffer,
     isLoading: isLoadingCompleted,
     error: errorCompleted,
-  } = useCompletedOfferQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
+  } = useCompletedOfferQuery(
+    {},
+    { skip: !(userRole === "superAdmin" || userRole === "admin") }
+  );
   const [countTotalAdmin, setCountTotalAdmin] = useState(null);
   const {
     data: totalAdmins,
     isLoading: isLoadingAdmins,
     error: errorAdmins,
-  } = useTotalAdminQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
+  } = useTotalAdminQuery(
+    {},
+    { skip: !(userRole === "superAdmin" || userRole === "admin") }
+  );
   const [countTotalUser, setCountTotalUser] = useState(null);
   const {
     data: totalUsers,
@@ -118,7 +129,10 @@ const AdminDashboard = () => {
     data: totalAdvertisers,
     isLoading: isLoadingAdvertisers,
     error: errorAdvertisers,
-  } = useTotalAdvertiserQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
+  } = useTotalAdvertiserQuery(
+    {},
+    { skip: !(userRole === "superAdmin" || userRole === "admin") }
+  );
   //dateWiseCompletedOfferCount
   const [countDateWiseCompletedOffer, setCountDateWiseCompletedOffer] =
     useState(null);
@@ -126,7 +140,10 @@ const AdminDashboard = () => {
     data: dateWiseCompletedOffer,
     isLoading: isLoadingdateWiseCompletedOffer,
     error: errordateWiseCompletedOffer,
-  } = useDateWiseCompletedOfferQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
+  } = useDateWiseCompletedOfferQuery(
+    {},
+    { skip: !(userRole === "superAdmin" || userRole === "admin") }
+  );
   //date + offer+ user wise completed Offer
   const [
     countDateandOfferandUserWiseCompletedOffer,
@@ -136,7 +153,10 @@ const AdminDashboard = () => {
     data: dateAndOfferAnduserWiseCompletedOffer,
     isLoading: isLoadingdateAndOfferAnduserWiseCompletedOffer,
     error: errordateAndOfferAnduserWiseCompletedOffer,
-  } = useDateAndOfferWiseCompletedOfferQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
+  } = useDateAndOfferWiseCompletedOfferQuery(
+    {},
+    { skip: !(userRole === "superAdmin" || userRole === "admin") }
+  );
   //specific-user-total-offer-counts
   const [
     countSpecificUserWiseCompletedOffer,
@@ -146,7 +166,10 @@ const AdminDashboard = () => {
     data: specificUserWiseCompletedOffer,
     isLoading: isLoadingspecificUserWiseCompletedOffer,
     error: errorspecificUserWiseCompletedOffer,
-  } = useSpecificUserTotalOfferCountsQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
+  } = useSpecificUserTotalOfferCountsQuery(
+    {},
+    { skip: !(userRole === "superAdmin" || userRole === "admin") }
+  );
   //specific-offer-total-counts
   const [
     countSpecificOfferWiseCompletedOffer,
@@ -156,7 +179,10 @@ const AdminDashboard = () => {
     data: specificOfferWiseCompletedOffer,
     isLoading: isLoadingspecificOfferWiseCompletedOffer,
     error: errorspecificOfferWiseCompletedOffer,
-  } = useSpecificOfferTotalCountsQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
+  } = useSpecificOfferTotalCountsQuery(
+    {},
+    { skip: !(userRole === "superAdmin" || userRole === "admin") }
+  );
   //Per Day Completed Offer
   const [countPerDayCompletedOffer, setCountPerDayCompletedOffer] =
     useState(null);
@@ -164,7 +190,36 @@ const AdminDashboard = () => {
     data: regularCompletedOffer,
     isLoading: isLoadingregularCompletedOffer,
     error: errorregularCompletedOffer,
-  } = usePerDayCompletedOfferQuery({}, { skip: !(userRole === 'superAdmin' || userRole === 'admin') });
+  } = usePerDayCompletedOfferQuery(
+    {},
+    { skip: !(userRole === "superAdmin" || userRole === "admin") }
+  );
+
+  //logged User --......>
+  const [CountLoggedUserTotalCompletedOffer, setLoggedUserTotalCompletedOffer] =
+    useState(null);
+  const {
+    data: loggedUserTotalCompletedOffer,
+    isLoading: isLoadingloggedUserTotalCompletedOffer,
+    error: errorloggedUserTotalCompletedOffer,
+  } = useLoggedUserTotalCompletedOfferQuery(
+    {},
+    { skip: !(userRole === "user" || userRole === "advertiser") }
+  );
+  //loggedUser Daily
+  const [
+    CountLoggedInUserDailycCompletedOfferCounts,
+    setLoggedInUserDailycCompletedOfferCounts,
+  ] = useState(null);
+  const {
+    data: loggedInUserDailycCompletedOfferCounts,
+    isLoading: isLoadingloggedInUserDailycCompletedOfferCounts,
+    error: errorloggedInUserDailycCompletedOfferCounts,
+  } = useLoggedInUserDailycCompletedOfferCountsQuery(
+    {},
+    { skip: !(userRole === "user" || userRole === "advertiser") }
+  );
+
   useEffect(() => {
     if (totalOffer) {
       setCountTotalOffer(totalOffer.meta.total);
@@ -203,6 +258,16 @@ const AdminDashboard = () => {
       console.log(specificOfferWiseCompletedOffer);
       setCountSpecificOfferWiseCompletedOffer(specificOfferWiseCompletedOffer);
     }
+    if (loggedUserTotalCompletedOffer) {
+      console.log(loggedUserTotalCompletedOffer);
+      setLoggedUserTotalCompletedOffer(loggedUserTotalCompletedOffer);
+    }
+    if (loggedInUserDailycCompletedOfferCounts) {
+      console.log(loggedInUserDailycCompletedOfferCounts);
+      setLoggedInUserDailycCompletedOfferCounts(
+        loggedInUserDailycCompletedOfferCounts
+      );
+    }
   }, [
     totalOffer,
     completedOffer,
@@ -214,6 +279,8 @@ const AdminDashboard = () => {
     specificUserWiseCompletedOffer,
     regularCompletedOffer,
     specificOfferWiseCompletedOffer,
+    loggedUserTotalCompletedOffer,
+    loggedInUserDailycCompletedOfferCounts,
   ]);
 
   const data = countSpecificUserWiseCompletedOffer?.data ?? [];
@@ -286,67 +353,143 @@ const AdminDashboard = () => {
   return (
     <div className="container mx-auto">
       <div className="grid gap-4 grid-cols-1 md:grid-cols-4">
-        <div className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-4 py-6 rounded shadow-sm">
-          <h4 className="font-bold text-xl">Total Offer</h4>
-          {isLoadingOffer && <p>Loading...</p>}
-          {errorOffer && <p>Error loading offer data</p>}
-          <h5 className="font-semibold text-base">{countTotalOffer}</h5>
-        </div>
-        <div className="bg-gradient-to-r from-amber-200 to-yellow-500 text-white px-4 py-6 rounded shadow-sm">
-          <h4 className="font-bold text-">Completed Offer</h4>
-          {isLoadingCompleted && <p>Loading...</p>}
-          {errorCompleted && <p>Error loading offer data</p>}
-          <h5 className="font-semibold text-base">{countCompletedOffer}</h5>
-        </div>
-        <div className="bg-gradient-to-r from-blue-800 to-indigo-900 text-white px-4 py-6 rounded shadow-sm">
-          <h4 className="font-bold text-xl">Total Admin</h4>
-          {isLoadingAdmins && <p>Loading...</p>}
-          {errorAdmins && <p>Error loading offer data</p>}
-          <h5 className="font-semibold text-base">{countTotalAdmin}</h5>
-        </div>
-        <div className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white px-4 py-6 rounded shadow-sm">
-          <h4 className="font-bold text-">Total User</h4>
-          {isLoadingUsers && <p>Loading...</p>}
-          {errorUsers && <p>Error loading offer data</p>}
-          <h5 className="font-semibold text-base">{countTotalUser}</h5>
-        </div>
-        <div className="bg-gradient-to-r from-emerald-500 to-emerald-900 text-white px-4 py-6 rounded shadow-sm">
-          <h4 className="font-bold text-xl">Total Advertiser</h4>
-          {isLoadingAdvertisers && <p>Loading...</p>}
-          {errorAdvertisers && <p>Error loading offer data</p>}
-          <h5 className="font-semibold text-base">{countTotalAdvertiser}</h5>
-        </div>
-        <div className="bg-gradient-to-r from-indigo-400 to-cyan-400 text-white px-4 py-6 rounded shadow-sm">
-          <h4 className="font-bold text-xl">Today Completed Offer</h4>
-          <h5 className="font-semibold text-base">
-            {regularCompletedOffer?.data[0]?.TotalCount}
-          </h5>
-        </div>
+        {(userRole === "admin" || userRole === "superAdmin") && (
+          <div className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-4 py-6 rounded shadow-sm">
+            <h4 className="font-bold text-xl">Total Offer</h4>
+            {isLoadingOffer && <p>Loading...</p>}
+            {errorOffer && <p>Error loading offer data</p>}
+            <h5 className="font-semibold text-base">{countTotalOffer}</h5>
+          </div>
+        )}
+
+        {(userRole === "admin" || userRole === "superAdmin") && (
+          <div className="bg-gradient-to-r from-amber-200 to-yellow-500 text-white px-4 py-6 rounded shadow-sm">
+            <h4 className="font-bold text-">All Completed Offer</h4>
+            {isLoadingCompleted && <p>Loading...</p>}
+            {errorCompleted && <p>Error loading offer data</p>}
+            <h5 className="font-semibold text-base">{countCompletedOffer}</h5>
+          </div>
+        )}
+        {(userRole === "user" || userRole === "advertiser") && (
+          <div className="bg-gradient-to-r from-amber-200 to-yellow-500 text-white px-4 py-6 rounded shadow-sm">
+            <h4 className="font-bold text-">Total Completed Offer</h4>
+            {isLoadingloggedUserTotalCompletedOffer && <p>Loading...</p>}
+            {errorloggedUserTotalCompletedOffer && (
+              <p>Error loading offer data</p>
+            )}
+            <h5 className="font-semibold text-base">
+              {CountLoggedUserTotalCompletedOffer?.data?.length > 0
+                ? CountLoggedUserTotalCompletedOffer.data[0].TotalCount
+                : "calculating.."}
+            </h5>
+          </div>
+        )}
+
+        {(userRole === "admin" || userRole === "superAdmin") && (
+          <div className="bg-gradient-to-r from-blue-800 to-indigo-900 text-white px-4 py-6 rounded shadow-sm">
+            <h4 className="font-bold text-xl">Total Admin</h4>
+            {isLoadingAdmins && <p>Loading...</p>}
+            {errorAdmins && <p>Error loading offer data</p>}
+            <h5 className="font-semibold text-base">{countTotalAdmin}</h5>
+          </div>
+        )}
+
+        {(userRole === "admin" || userRole === "superAdmin") && (
+          <div className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white px-4 py-6 rounded shadow-sm">
+            <h4 className="font-bold text-">Total User</h4>
+            {isLoadingUsers && <p>Loading...</p>}
+            {errorUsers && <p>Error loading offer data</p>}
+            <h5 className="font-semibold text-base">{countTotalUser}</h5>
+          </div>
+        )}
+
+        {(userRole === "admin" || userRole === "superAdmin") && (
+          <div className="bg-gradient-to-r from-emerald-500 to-emerald-900 text-white px-4 py-6 rounded shadow-sm">
+            <h4 className="font-bold text-xl">Total Advertiser</h4>
+            {isLoadingAdvertisers && <p>Loading...</p>}
+            {errorAdvertisers && <p>Error loading offer data</p>}
+            <h5 className="font-semibold text-base">{countTotalAdvertiser}</h5>
+          </div>
+        )}
+
+        {(userRole === "admin" || userRole === "superAdmin") && (
+          <div className="bg-gradient-to-r from-indigo-400 to-cyan-400 text-white px-4 py-6 rounded shadow-sm">
+            <h4 className="font-bold text-xl">Today Completed Offer</h4>
+            <h5 className="font-semibold text-base">
+              {regularCompletedOffer?.data[0]?.TotalCount}
+            </h5>
+          </div>
+        )}
+        {(userRole === "user" || userRole === "advertiser") && (
+          <div className="bg-gradient-to-r from-indigo-400 to-cyan-400 text-white px-4 py-6 rounded shadow-sm">
+            <h4 className="font-bold text-">Today Completed Offer</h4>
+            {isLoadingloggedInUserDailycCompletedOfferCounts && (
+              <p>Loading...</p>
+            )}
+            {errorloggedInUserDailycCompletedOfferCounts && (
+              <p>Error loading offer data</p>
+            )}
+            <h5 className="font-semibold text-base">
+              {CountLoggedInUserDailycCompletedOfferCounts?.data[0]?.TotalCount}
+            </h5>
+          </div>
+        )}
       </div>
       <div className="grid gap-4 mt-5 grid-cols-1 md:grid-cols-2">
-        <div className="bg-white px-4 py-6 rounded shadow-sm">
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={data}>
-              <XAxis dataKey="id" stroke="#8884d8" />
-              <YAxis />
-              <Tooltip wrapperStyle={{ width: 100, backgroundColor: "#ccc" }} />
-              <Legend
-                width={100}
-                wrapperStyle={{
-                  top: 40,
-                  right: 20,
-                  backgroundColor: "#f5f5f5",
-                  border: "1px solid #d5d5d5",
-                  borderRadius: 3,
-                  lineHeight: "40px",
-                }}
-              />
-              <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-              <Bar dataKey="TotalCount" fill="#8884d8" barSize={30} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="bg-white px-4 py-6 rounded shadow-sm">
+        {(userRole === "admin" || userRole === "superAdmin") && (
+          <div className="bg-white px-4 py-6 rounded shadow-sm">
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={data}>
+                <XAxis dataKey="id" stroke="#8884d8" />
+                <YAxis />
+                <Tooltip
+                  wrapperStyle={{ width: 100, backgroundColor: "#ccc" }}
+                />
+                <Legend
+                  width={100}
+                  wrapperStyle={{
+                    top: 40,
+                    right: 20,
+                    backgroundColor: "#f5f5f5",
+                    border: "1px solid #d5d5d5",
+                    borderRadius: 3,
+                    lineHeight: "40px",
+                  }}
+                />
+                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                <Bar dataKey="TotalCount" fill="#8884d8" barSize={30} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+        {(userRole === "user" || userRole === "advertiser") && (
+          <div className="bg-white px-4 py-6 rounded shadow-sm">
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={data}>
+                <XAxis dataKey="id" stroke="#8884d8" />
+                <YAxis />
+                <Tooltip
+                  wrapperStyle={{ width: 100, backgroundColor: "#ccc" }}
+                />
+                <Legend
+                  width={100}
+                  wrapperStyle={{
+                    top: 40,
+                    right: 20,
+                    backgroundColor: "#f5f5f5",
+                    border: "1px solid #d5d5d5",
+                    borderRadius: 3,
+                    lineHeight: "40px",
+                  }}
+                />
+                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                <Bar dataKey="TotalCount" fill="#8884d8" barSize={30} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+        {(userRole === "admin" || userRole === "superAdmin") && (
+          <div className="bg-white px-4 py-6 rounded shadow-sm">
           <ResponsiveContainer width="100%" height={250}>
             <PieChart width={400} height={400}>
               <Pie
@@ -370,9 +513,39 @@ const AdminDashboard = () => {
             </PieChart>
           </ResponsiveContainer>
         </div>
+        )}
+        {(userRole === "user" || userRole === "advertiser") && (
+          <div className="bg-white px-4 py-6 rounded shadow-sm">
+          <ResponsiveContainer width="100%" height={250}>
+            <PieChart width={400} height={400}>
+              <Pie
+                data={data01}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={renderCustomizedLabel}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="TotalCount"
+              >
+                {data.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        )}
+
+        
       </div>
       <div className="grid gap-4 mt-5 grid-cols-1 md:grid-cols-2">
-        <div
+        {(userRole==='admin' || userRole==='superAdmin') && (
+          <div
           style={{ width: "100%", height: 300 }}
           className="bg-white px-4 py-6 rounded shadow-sm mt-5"
         >
@@ -399,7 +572,9 @@ const AdminDashboard = () => {
             </AreaChart>
           </ResponsiveContainer>
         </div>
-        <div className="bg-white px-4 py-6 rounded shadow-sm mt-5">
+        )}
+        {(userRole==='admin' || userRole==='superAdmin') && (
+          <div className="bg-white px-4 py-6 rounded shadow-sm mt-5">
           <table className="min-w-full bg-white border-collapse border border-gray-300 rounded-lg overflow-hidden">
             <thead className="bg-gray-100 text-gray-800">
               <tr className="text-left">
@@ -439,6 +614,8 @@ const AdminDashboard = () => {
             </tbody>
           </table>
         </div>
+        )}
+        
       </div>
       <div className="bg-white px-4 py-6 rounded shadow-sm mt-5">
         <Swiper

@@ -13,7 +13,13 @@ export const dashboardApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
-    
+    loggedUserTotalCompletedOffer: builder.query({
+      query: () => ({
+        url: "/completedOffer/loggedIn-user-total-offer-counts",
+        method: "GET",
+      }),
+    }),
+
     dateWiseCompletedOffer: builder.query({
       query: () => ({
         url: "/completedOffer/per-day-total-offer-count",
@@ -21,23 +27,23 @@ export const dashboardApi = baseApi.injectEndpoints({
       }),
     }),
     dateAndOfferWiseCompletedOffer: builder.query({
-        query: () => ({
-          url: "/completedOffer/total-offer-counts",
-          method: "GET",
-        }),
+      query: () => ({
+        url: "/completedOffer/total-offer-counts",
+        method: "GET",
       }),
-      specificUserTotalOfferCounts: builder.query({
-        query: () => ({
-          url: "/completedOffer/specific-user-total-offer-counts",
-          method: "GET",
-        }),
-      }) ,
-      specificOfferTotalCounts: builder.query({
-        query: () => ({
-          url: "/completedOffer/specific-offer-total-counts",
-          method: "GET",
-        }),
-      }) ,
+    }),
+    specificUserTotalOfferCounts: builder.query({
+      query: () => ({
+        url: "/completedOffer/specific-user-total-offer-counts",
+        method: "GET",
+      }),
+    }),
+    specificOfferTotalCounts: builder.query({
+      query: () => ({
+        url: "/completedOffer/specific-offer-total-counts",
+        method: "GET",
+      }),
+    }),
     totalAdmin: builder.query({
       query: () => ({
         url: "/admins",
@@ -62,6 +68,12 @@ export const dashboardApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    loggedInUserDailycCompletedOfferCounts: builder.query({
+      query: () => ({
+        url: "/completedOffer/loggedIn-user-daily-completed-offer-counts",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -76,5 +88,6 @@ export const {
   useSpecificUserTotalOfferCountsQuery,
   useSpecificOfferTotalCountsQuery,
   usePerDayCompletedOfferQuery,
-  
+  useLoggedUserTotalCompletedOfferQuery,
+  useLoggedInUserDailycCompletedOfferCountsQuery,
 } = dashboardApi;
