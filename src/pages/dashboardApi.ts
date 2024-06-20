@@ -74,6 +74,12 @@ export const dashboardApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    loggedInUserOfferNameandTotalCounts: builder.query({
+      query: () => ({
+        url: "/completedOffer/loggedIn-user-offer-name-counts",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -90,4 +96,5 @@ export const {
   usePerDayCompletedOfferQuery,
   useLoggedUserTotalCompletedOfferQuery,
   useLoggedInUserDailycCompletedOfferCountsQuery,
+  useLoggedInUserOfferNameandTotalCountsQuery,
 } = dashboardApi;

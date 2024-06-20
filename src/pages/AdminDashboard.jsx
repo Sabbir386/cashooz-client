@@ -21,6 +21,7 @@ import {
   useDateAndOfferWiseCompletedOfferQuery,
   useDateWiseCompletedOfferQuery,
   useLoggedInUserDailycCompletedOfferCountsQuery,
+  useLoggedInUserOfferNameandTotalCountsQuery,
   useLoggedUserTotalCompletedOfferQuery,
   usePerDayCompletedOfferQuery,
   useSpecificOfferTotalCountsQuery,
@@ -220,6 +221,20 @@ const AdminDashboard = () => {
     { skip: !(userRole === "user" || userRole === "advertiser") }
   );
 
+  // loogeduser OfferName And total Counts
+  const [
+    CountLoggedInUserOfferNameandTotalCounts,
+    setLoggedInUserOfferNameandTotalCounts,
+  ] = useState(null);
+  const {
+    data: loggedInUserOfferNameandTotalCounts,
+    isLoading: isLoadingloggedInUserOfferNameandTotalCounts,
+    error: errorloggedInUserOfferNameandTotalCounts,
+  } = useLoggedInUserOfferNameandTotalCountsQuery(
+    {},
+    { skip: !(userRole === "user" || userRole === "advertiser") }
+  );
+
   useEffect(() => {
     if (totalOffer) {
       setCountTotalOffer(totalOffer.meta.total);
@@ -268,6 +283,12 @@ const AdminDashboard = () => {
         loggedInUserDailycCompletedOfferCounts
       );
     }
+    if (loggedInUserOfferNameandTotalCounts) {
+      console.log(loggedInUserOfferNameandTotalCounts);
+      setLoggedInUserOfferNameandTotalCounts(
+        loggedInUserOfferNameandTotalCounts
+      );
+    }
   }, [
     totalOffer,
     completedOffer,
@@ -281,9 +302,21 @@ const AdminDashboard = () => {
     specificOfferWiseCompletedOffer,
     loggedUserTotalCompletedOffer,
     loggedInUserDailycCompletedOfferCounts,
+    loggedInUserOfferNameandTotalCounts,
   ]);
 
   const data = countSpecificUserWiseCompletedOffer?.data ?? [];
+  let LoggedData = [];
+  if (userRole === "user" || userRole === "advertiser") {
+    LoggedData = CountLoggedUserTotalCompletedOffer?.data ?? [];
+    console.log("loged", LoggedData);
+  }
+  const transformedData = LoggedData.flatMap((entry) =>
+    entry.offerInfo.map((info) => ({
+      date: info.date,
+      count: info.count,
+    }))
+  );
 
   const data2 = [
     { name: "Page A", uv: 4000, pv: 2400, amt: 2400 },
@@ -297,6 +330,20 @@ const AdminDashboard = () => {
 
   const data01 = countSpecificOfferWiseCompletedOffer?.data;
 
+  let LoggedDatawithNameAndCount = [];
+if (userRole === "user" || userRole === "advertiser") {
+  LoggedDatawithNameAndCount = CountLoggedInUserOfferNameandTotalCounts?.data ?? [];
+  console.log("logedwithNameData", LoggedDatawithNameAndCount);
+}
+
+// Check if LoggedDatawithNameAndCount.data exists and is an array
+const transformedLoggedDatawithNameAndCount =
+  LoggedDatawithNameAndCount.length > 0 && LoggedDatawithNameAndCount[0]?.offerInfo
+    ? LoggedDatawithNameAndCount[0]?.offerInfo?.map((info) => ({
+        name: info.offerName,
+        value: info.count,
+      }))
+    : [];
   const data02 = [
     { name: "A1", value: 100 },
     { name: "A2", value: 300 },
@@ -465,8 +512,8 @@ const AdminDashboard = () => {
         {(userRole === "user" || userRole === "advertiser") && (
           <div className="bg-white px-4 py-6 rounded shadow-sm">
             <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={data}>
-                <XAxis dataKey="id" stroke="#8884d8" />
+              <BarChart data={transformedData}>
+                <XAxis dataKey="date" stroke="#8884d8" />
                 <YAxis />
                 <Tooltip
                   wrapperStyle={{ width: 100, backgroundColor: "#ccc" }}
@@ -483,139 +530,136 @@ const AdminDashboard = () => {
                   }}
                 />
                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                <Bar dataKey="TotalCount" fill="#8884d8" barSize={30} />
+                <Bar dataKey="count" fill="#8884d8" barSize={30} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         )}
         {(userRole === "admin" || userRole === "superAdmin") && (
           <div className="bg-white px-4 py-6 rounded shadow-sm">
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart width={400} height={400}>
-              <Pie
-                data={data01}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={renderCustomizedLabel}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="TotalCount"
-              >
-                {data.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+            <ResponsiveContainer width="100%" height={250}>
+              <PieChart width={400} height={400}>
+                <Pie
+                  data={data01}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={renderCustomizedLabel}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="TotalCount"
+                >
+                  {data.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         )}
         {(userRole === "user" || userRole === "advertiser") && (
           <div className="bg-white px-4 py-6 rounded shadow-sm">
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart width={400} height={400}>
-              <Pie
-                data={data01}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={renderCustomizedLabel}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="TotalCount"
-              >
-                {data.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+            <ResponsiveContainer width="100%" height={250}>
+              <PieChart width={400} height={400}>
+                <Pie
+                  data={transformedLoggedDatawithNameAndCount}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={renderCustomizedLabel}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {transformedLoggedDatawithNameAndCount.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         )}
-
-        
       </div>
       <div className="grid gap-4 mt-5 grid-cols-1 md:grid-cols-2">
-        {(userRole==='admin' || userRole==='superAdmin') && (
+        {(userRole === "admin" || userRole === "superAdmin") && (
           <div
-          style={{ width: "100%", height: 300 }}
-          className="bg-white px-4 py-6 rounded shadow-sm mt-5"
-        >
-          <ResponsiveContainer>
-            <AreaChart
-              data={countDateWiseCompletedOffer?.data.offerInfo}
-              margin={{
-                top: 10,
-                right: 30,
-                left: 0,
-                bottom: 0,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Area
-                type="monotone"
-                dataKey="count"
-                stroke="#8884d8"
-                fill="#8884d8"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
+            style={{ width: "100%", height: 300 }}
+            className="bg-white px-4 py-6 rounded shadow-sm mt-5"
+          >
+            <ResponsiveContainer>
+              <AreaChart
+                data={countDateWiseCompletedOffer?.data.offerInfo}
+                margin={{
+                  top: 10,
+                  right: 30,
+                  left: 0,
+                  bottom: 0,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Area
+                  type="monotone"
+                  dataKey="count"
+                  stroke="#8884d8"
+                  fill="#8884d8"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
         )}
-        {(userRole==='admin' || userRole==='superAdmin') && (
+        {(userRole === "admin" || userRole === "superAdmin") && (
           <div className="bg-white px-4 py-6 rounded shadow-sm mt-5">
-          <table className="min-w-full bg-white border-collapse border border-gray-300 rounded-lg overflow-hidden">
-            <thead className="bg-gray-100 text-gray-800">
-              <tr className="text-left">
-                <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-                  No.
-                </th>
-                <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-                  Offer
-                </th>
-                <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-                  Completed
-                </th>
-                <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-                  Date
-                </th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-700">
-              {countDateandOfferandUserWiseCompletedOffer?.data
-                .slice(0, 3)
-                .map((row, idx) => (
-                  <tr key={idx}>
-                    <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                      {idx + 1}
-                    </td>
-                    <td className="px-5 py-2 border-b border-gray-200 bg-white text-xs">
-                      {row.name}
-                    </td>
-                    <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                      {row.count}
-                    </td>
-                    <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                      {row.date}
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
+            <table className="min-w-full bg-white border-collapse border border-gray-300 rounded-lg overflow-hidden">
+              <thead className="bg-gray-100 text-gray-800">
+                <tr className="text-left">
+                  <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+                    No.
+                  </th>
+                  <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+                    Offer
+                  </th>
+                  <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+                    Completed
+                  </th>
+                  <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+                    Date
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-700">
+                {countDateandOfferandUserWiseCompletedOffer?.data
+                  .slice(0, 3)
+                  .map((row, idx) => (
+                    <tr key={idx}>
+                      <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                        {idx + 1}
+                      </td>
+                      <td className="px-5 py-2 border-b border-gray-200 bg-white text-xs">
+                        {row.name}
+                      </td>
+                      <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                        {row.count}
+                      </td>
+                      <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                        {row.date}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
         )}
-        
       </div>
       <div className="bg-white px-4 py-6 rounded shadow-sm mt-5">
         <Swiper
