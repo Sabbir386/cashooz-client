@@ -24,6 +24,32 @@ const OfferList = () => {
   const pageSize = 5;
   const [deleteOffer] = useDeleteOfferMutation();
   const offset = currentPage * pageSize;
+  const {
+    data: offersForAdmin,
+    isLoadingOffersForAdmin,
+    isFetchingOffersForAdmin,
+  } = useViewOfferQuery(
+    {
+      offerStatus,
+      country,
+    },
+    { skip: !(userRole === "superAdmin" || userRole === "admin") }
+  );
+  console.log(data);
+  const {
+    data: offers,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useViewOfferQuery(
+    {
+      offerStatus,
+      device: deviceType,
+      country,
+      role: userRole,
+    },
+    { skip: !(userRole === "user" || userRole === "advertiser") }
+  );
   useEffect(() => {
     if (token) {
       const user = verifyToken(token);
@@ -31,66 +57,7 @@ const OfferList = () => {
       setUserRole(user?.role);
       console.log("offerlist", user?.role);
     }
-  }, [token]);
-  const {
-    data: offers,
-    isLoading,
-    isFetching,
-    refetch,
-  } = useViewOfferQuery({
-    offerStatus,
-    device: deviceType,
-    country,
-    role: userRole,
-  });
-
-  const [createCompletedOffer] = useCreateCompletedOfferMutation();
-  const handleDeleteOffer = async (_id) => {
-    console.log(_id);
-    Swal.fire({
-      title: "Are you sure you want to delete this offer?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const toastId = toast.loading("Deleting...");
-        try {
-          await deleteOffer(_id).unwrap();
-          toast.success("Offer successfully deleted", {
-            id: toastId,
-            duration: 2000,
-          });
-        } catch (error) {
-          toast.error("Something went wrong", {
-            id: toastId,
-            duration: 2000,
-          });
-          console.log("Error:", error);
-        }
-      }
-    });
-  };
-
-  const handleCompletedOffer = async (_id) => {
-    const toastId = toast.loading("Completing....");
-    try {
-      const completedOfferInfo = { offerId: _id };
-      await createCompletedOffer(completedOfferInfo);
-      toast.success("Offer Successfully Completed", {
-        id: toastId,
-        duration: 2000,
-      });
-      refetch(); // Manually refetch data after completing an offer
-    } catch (error) {
-      toast.error("Something went wrong", { id: toastId, duration: 2000 });
-      console.log("err-", error);
-    }
-  };
-
-  useEffect(() => {
+    // user Agent
     const getDeviceInfo = async () => {
       const parser = new UAParser();
       const result = parser.getResult();
@@ -159,8 +126,63 @@ const OfferList = () => {
       setDeviceType(deviceType);
     };
 
+    // data
+    if (offersForAdmin) {
+      setData(offersForAdmin.data);
+    }
+    if (offers) {
+      setData(offers.data);
+    }
+
     getDeviceInfo();
-  }, []);
+  }, [token, offersForAdmin, offers]);
+
+  console.log(offers);
+  const [createCompletedOffer] = useCreateCompletedOfferMutation();
+  const handleDeleteOffer = async (_id) => {
+    console.log(_id);
+    Swal.fire({
+      title: "Are you sure you want to delete this offer?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const toastId = toast.loading("Deleting...");
+        try {
+          await deleteOffer(_id).unwrap();
+          toast.success("Offer successfully deleted", {
+            id: toastId,
+            duration: 2000,
+          });
+        } catch (error) {
+          toast.error("Something went wrong", {
+            id: toastId,
+            duration: 2000,
+          });
+          console.log("Error:", error);
+        }
+      }
+    });
+  };
+
+  // const handleCompletedOffer = async (_id) => {
+  //   const toastId = toast.loading("Completing....");
+  //   try {
+  //     const completedOfferInfo = { offerId: _id };
+  //     await createCompletedOffer(completedOfferInfo);
+  //     toast.success("Offer Successfully Completed", {
+  //       id: toastId,
+  //       duration: 2000,
+  //     });
+  //     // refetch(); // Manually refetch data after completing an offer
+  //   } catch (error) {
+  //     toast.error("Something went wrong", { id: toastId, duration: 2000 });
+  //     console.log("err-", error);
+  //   }
+  // };
 
   console.log(deviceInfo);
 
@@ -170,19 +192,17 @@ const OfferList = () => {
 
   const handleStatusChange = (event) => {
     setOfferStatus(event.target.value);
-    refetch(); // Manually refetch data when status changes
+    // refetch(); // Manually refetch data when status changes
   };
 
-  useEffect(() => {
-    if (offers) {
-      setData(offers.data);
-    }
-    // refetch;
-  }, [offers]);
+  useEffect(() => {}, []);
 
   const paginatedData = data.slice(offset, offset + pageSize);
 
   if (isLoading || isFetching) {
+    return <div>Loading...</div>; // Show loading state
+  }
+  if (isLoadingOffersForAdmin || isFetchingOffersForAdmin) {
     return <div>Loading...</div>; // Show loading state
   }
 
@@ -197,6 +217,7 @@ const OfferList = () => {
             value={offerStatus}
             onChange={handleStatusChange}
           >
+            <option value="All">All</option>
             <option value="active">active</option>
             <option value="draft">draft</option>
             <option value="deleted">deleted</option>
@@ -234,7 +255,7 @@ const OfferList = () => {
             {paginatedData.map((row) => (
               <tr key={row._id}>
                 <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                  {row._id}
+                  {/* {row._id} */}
                 </td>
                 <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                   <div className="flex">
@@ -266,7 +287,7 @@ const OfferList = () => {
                 </td>
                 <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                   <span
-                    className={`py-0.5 px-1.5 font-medium rounded text-white ${
+                    className={`py-1 px-2 block w-full text-center rounded text-white ${
                       row.offerStatus === "active"
                         ? "bg-green-500"
                         : "bg-red-500"
@@ -275,7 +296,7 @@ const OfferList = () => {
                     {row.offerStatus}
                   </span>
                 </td>
-                <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                <td className="px-1 py-2 border-b border-gray-200 bg-white text-sm">
                   <div>
                     {(userRole === "superAdmin" || userRole === "admin") && (
                       <>
@@ -293,18 +314,12 @@ const OfferList = () => {
                         </button>
                       </>
                     )}
-                    <button
+                    {/* <button
                       onClick={() => handleCompletedOffer(row._id)}
-                      style={{
-                        margin: "10px",
-                        padding: "8px 20px",
-                        border: "1px solid #000",
-                        backgroundColor: "blue",
-                        color: "white",
-                      }}
+                      className="py-0 px-2 h-7 bg-green-500 rounded text-white ml-2"
                     >
                       Completed
-                    </button>
+                    </button> */}
                   </div>
                 </td>
               </tr>
