@@ -68,15 +68,9 @@ const EditCategory = () => {
   }
 
   return (
-    <div className="bg-blue-600 h-full py-10 w-full flex justify-center items-center">
-      <div className="w-full sm:w-1/0 md:w-12/12 lg:w-1/1 flex flex-col md:flex-row items-center lg:mx-24 mx-5">
-        <div className="w-full md:w-1/2 hidden md:flex flex-col justify-center items-center text-white">
-          <h1 className="text-2xl">Hello</h1>
-          <p className="text-4xl font-extrabold">Welcome!</p>
-          <p className="text-4xl font-extrabold">To Cashooz</p>
-          <p className="text-4xl font-extrabold">Category</p>
-        </div>
-        <div className="bg-white w-full md:w-1/2 flex flex-col items-center py-8 px-8 rounded">
+    <div className="h-full py-5 w-full flex justify-center items-center">
+      <div className="w-full flex flex-col md:flex-row items-center mx-5">
+        <div className="bg-white w-full flex flex-col items-center py-8 px-8 rounded">
           <h3 className="text-3xl font-bold text-blue-600 mb-4">
             Edit Category
           </h3>
@@ -103,7 +97,7 @@ const EditCategory = () => {
                 )}
               </div>
             </div>
-            <button className="bg-blue-600 font-bold text-white focus:outline-none rounded p-2.5">
+            <button className="bg-blue-600 hover:bg-blue-700 font-bold text-sm text-white focus:outline-none rounded p-2.5 w-32 mr-auto">
               Submit
             </button>
           </form>
