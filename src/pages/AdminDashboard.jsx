@@ -41,46 +41,68 @@ import { verifyToken } from "../utils/verifyToken";
 import { logOut, useCurrentToken } from "../redux/features/auth/authSlice";
 const AdminDashboard = () => {
   const [campaigns, setCampaigns] = useState([]);
+  const [cpaOffers, setCpaOffers] = useState([]);
 
   useEffect(() => {
-    const fetchCampaignData = async () => {
-      const url =
-        "https://www.adworkmedia.com/api/index.php?pubID=160988&apiID=v16ba1my0oaesbdq9cljlhmk9uo1r6hvlc2c1v&campDetails=true";
+    const fetchOffers = async () => {
       try {
-        const response = await fetch(url);
-        const data = await response.text();
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(data, "application/xml");
-
-        const campaignsArray = Array.from(
-          xml.getElementsByTagName("campDetails")
-        ).map((campDetail) => ({
-          campaignId:
-            campDetail.getElementsByTagName("campaign_id")[0]?.textContent ||
-            "",
-          campaignName:
-            campDetail.getElementsByTagName("campaign_name")[0]?.textContent ||
-            "",
-          campaignDesc:
-            campDetail.getElementsByTagName("campaign_desc")[0]?.textContent ||
-            "",
-          payout:
-            campDetail.getElementsByTagName("payout")[0]?.textContent || "",
-          url: campDetail.getElementsByTagName("url")[0]?.textContent || "",
-        }));
-        const limitedCampaignsArray = campaignsArray.slice(0, 15);
-
-        setCampaigns(limitedCampaignsArray);
+        const response = await fetch(
+          "https://www.cpalead.com/api/offers?id=2184269&limit=15"
+        );
+        const data = await response.json();
+        console.log("Fetched data:", data);
+        setCpaOffers(data.offers ? data.offers.slice(0, 15) : []); // Adjust according to the actual data structure
       } catch (error) {
-        console.error("Error fetching XML:", error);
+        console.error("Error fetching the offers:", error);
       }
     };
 
-    fetchCampaignData();
+    fetchOffers();
   }, []);
-  if (campaigns) {
-    console.log(campaigns);
-  }
+
+  // if (cpaOffers) {
+  //   console.log(cpaOffers);
+  // }
+
+  // useEffect(() => {
+  //   const fetchCampaignData = async () => {
+  //     const url =
+  //       "https://www.adworkmedia.com/api/index.php?pubID=160988&apiID=v16ba1my0oaesbdq9cljlhmk9uo1r6hvlc2c1v&campDetails=true";
+  //     try {
+  //       const response = await fetch(url);
+  //       const data = await response.text();
+  //       const parser = new DOMParser();
+  //       const xml = parser.parseFromString(data, "application/xml");
+
+  //       const campaignsArray = Array.from(
+  //         xml.getElementsByTagName("campDetails")
+  //       ).map((campDetail) => ({
+  //         campaignId:
+  //           campDetail.getElementsByTagName("campaign_id")[0]?.textContent ||
+  //           "",
+  //         campaignName:
+  //           campDetail.getElementsByTagName("campaign_name")[0]?.textContent ||
+  //           "",
+  //         campaignDesc:
+  //           campDetail.getElementsByTagName("campaign_desc")[0]?.textContent ||
+  //           "",
+  //         payout:
+  //           campDetail.getElementsByTagName("payout")[0]?.textContent || "",
+  //         url: campDetail.getElementsByTagName("url")[0]?.textContent || "",
+  //       }));
+  //       const limitedCampaignsArray = campaignsArray.slice(0, 15);
+
+  //       setCampaigns(limitedCampaignsArray);
+  //     } catch (error) {
+  //       console.error("Error fetching XML:", error);
+  //     }
+  //   };
+
+  //   fetchCampaignData();
+  // }, []);
+  // if (campaigns) {
+  //   console.log(campaigns);
+  // }
   const token = useAppSelector(useCurrentToken);
 
   let userRole;
@@ -331,19 +353,21 @@ const AdminDashboard = () => {
   const data01 = countSpecificOfferWiseCompletedOffer?.data;
 
   let LoggedDatawithNameAndCount = [];
-if (userRole === "user" || userRole === "advertiser") {
-  LoggedDatawithNameAndCount = CountLoggedInUserOfferNameandTotalCounts?.data ?? [];
-  console.log("logedwithNameData", LoggedDatawithNameAndCount);
-}
+  if (userRole === "user" || userRole === "advertiser") {
+    LoggedDatawithNameAndCount =
+      CountLoggedInUserOfferNameandTotalCounts?.data ?? [];
+    console.log("logedwithNameData", LoggedDatawithNameAndCount);
+  }
 
-// Check if LoggedDatawithNameAndCount.data exists and is an array
-const transformedLoggedDatawithNameAndCount =
-  LoggedDatawithNameAndCount.length > 0 && LoggedDatawithNameAndCount[0]?.offerInfo
-    ? LoggedDatawithNameAndCount[0]?.offerInfo?.map((info) => ({
-        name: info.offerName,
-        value: info.count,
-      }))
-    : [];
+  // Check if LoggedDatawithNameAndCount.data exists and is an array
+  const transformedLoggedDatawithNameAndCount =
+    LoggedDatawithNameAndCount.length > 0 &&
+    LoggedDatawithNameAndCount[0]?.offerInfo
+      ? LoggedDatawithNameAndCount[0]?.offerInfo?.map((info) => ({
+          name: info.offerName,
+          value: info.count,
+        }))
+      : [];
   const data02 = [
     { name: "A1", value: 100 },
     { name: "A2", value: 300 },
@@ -668,15 +692,17 @@ const transformedLoggedDatawithNameAndCount =
           onSlideChange={() => console.log("slide change")}
           onSwiper={(swiper) => console.log(swiper)}
         >
-          {campaigns &&
-            campaigns.map((itm) => (
-              <SwiperSlide key={itm.campaignId}>
+          {cpaOffers &&
+            cpaOffers.map((offer, index) => (
+              <SwiperSlide key={index}>
                 <div className="border p-3 rounded-md shadow-sm">
-                  <h3 className="font-bold text-base">{itm.campaignName}</h3>
-                  <p className="text-sm font-semibold">{itm.campaignDesc}</p>
-                  <p className="text-xs font-semibold">{itm.payout}</p>
-                  <Link to={itm.url} className="text-xs font-medium">
-                    see campaign
+                  <h3 className="font-bold text-base">{offer.title}</h3>
+                  <p className="text-sm font-semibold">{offer.description}</p>
+                  <p className="text-xs font-semibold">
+                    {offer.amount} {offer.payout_currency}
+                  </p>
+                  <Link to={offer.link} className="text-xs font-medium">
+                    See campaign
                   </Link>
                 </div>
               </SwiperSlide>
