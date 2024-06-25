@@ -2,7 +2,12 @@ import { useState, useEffect } from "react";
 import Product from "../assets/img/cashooz.png";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
-import { useDeleteOfferMutation, useViewOfferQuery } from "./offerApi";
+import ReactModal from "react-modal";
+import {
+  useDeleteOfferMutation,
+  useSingleOfferQuery,
+  useViewOfferQuery,
+} from "./offerApi";
 import UAParser from "ua-parser-js";
 import { detect } from "detect-browser";
 import { useCreateCompletedOfferMutation } from "./completedOfferApi";
@@ -19,11 +24,23 @@ const OfferList = () => {
   const [country, setCountry] = useState("");
   const [offerStatus, setOfferStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
+  const [selectedOffer, setSelectedOffer] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRole, setUserRole] = useState("");
   const token = useAppSelector(useCurrentToken);
   const pageSize = 5;
   const [deleteOffer] = useDeleteOfferMutation();
   const offset = currentPage * pageSize;
+  const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+    },
+  };
   const {
     data: offersForAdmin,
     isLoadingOffersForAdmin,
@@ -137,8 +154,8 @@ const OfferList = () => {
     getDeviceInfo();
   }, [token, offersForAdmin, offers]);
 
-  console.log(offers);
-  const [createCompletedOffer] = useCreateCompletedOfferMutation();
+  // console.log(offers);
+  // const [createCompletedOffer] = useCreateCompletedOfferMutation();
   const handleDeleteOffer = async (_id) => {
     console.log(_id);
     Swal.fire({
@@ -167,23 +184,32 @@ const OfferList = () => {
       }
     });
   };
+  const [selectedOfferId, setSelectedOfferId] = useState(null);
 
-  // const handleCompletedOffer = async (_id) => {
-  //   const toastId = toast.loading("Completing....");
-  //   try {
-  //     const completedOfferInfo = { offerId: _id };
-  //     await createCompletedOffer(completedOfferInfo);
-  //     toast.success("Offer Successfully Completed", {
-  //       id: toastId,
-  //       duration: 2000,
-  //     });
-  //     // refetch(); // Manually refetch data after completing an offer
-  //   } catch (error) {
-  //     toast.error("Something went wrong", { id: toastId, duration: 2000 });
-  //     console.log("err-", error);
-  //   }
-  // };
+  // Call the hook only if selectedOfferId is set
+  const { data: singleOffer, error } = useSingleOfferQuery(selectedOfferId, {
+    skip: !selectedOfferId,
+  });
 
+  useEffect(() => {
+    if (error) {
+      toast.error("Failed to fetch the offer");
+    }
+  }, [error]);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedOfferId(null);
+  };
+  const handleViewOffer = (_id) => {
+    setSelectedOfferId(_id);
+    setIsModalOpen(true);
+  };
+
+  useEffect(() => {
+    if (singleOffer) {
+      console.log("Single Offer Data:", singleOffer);
+    }
+  }, [singleOffer]);
   console.log(deviceInfo);
 
   const handlePageClick = ({ selected }) => {
@@ -194,8 +220,6 @@ const OfferList = () => {
     setOfferStatus(event.target.value);
     // refetch(); // Manually refetch data when status changes
   };
-
-  useEffect(() => {}, []);
 
   const paginatedData = data.slice(offset, offset + pageSize);
 
@@ -314,12 +338,31 @@ const OfferList = () => {
                         </button>
                       </>
                     )}
-                    {/* <button
-                      onClick={() => handleCompletedOffer(row._id)}
-                      className="py-0 px-2 h-7 bg-green-500 rounded text-white ml-2"
+                    <button
+                      onClick={() => handleViewOffer(row._id)}
+                      className="py-0 px-2 h-7 bg-blue-500 rounded text-white ml-2"
                     >
-                      Completed
-                    </button> */}
+                      View
+                      <ReactModal
+                      isOpen={isModalOpen}
+                      onRequestClose={closeModal}
+                      style={customStyles}
+                      contentLabel="Offer Details Modal"
+                    >
+                      {singleOffer ? (
+                        <div>
+                          <h2>{singleOffer?.title}</h2>
+                          <p>{singleOffer?.description}</p>
+                          {/* Display other offer details */}
+                          <button onClick={closeModal}>Close</button>
+                        </div>
+                      ) : (
+                        <div>Loading...</div>
+                      )}
+                    </ReactModal>
+
+                    </button>
+                    
                   </div>
                 </td>
               </tr>

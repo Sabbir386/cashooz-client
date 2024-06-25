@@ -44,10 +44,10 @@ const CreateOffer = () => {
         name: data.name,
         network: data.network,
         category: data.category,
-        device: "desktop",
+        device: ["desktop"],
         country: ["Bangladesh"],
         gender: ["male"],
-        age: 30,
+        offerLink: data.offerLink,
         offerStatus: data.offerStatus,
         dailyLimit: 100,
         totalLimit: 500,
@@ -69,7 +69,7 @@ const CreateOffer = () => {
         duration: 2000,
       });
 
-      reset();
+      // reset();
       // navigate("/dashboard");
     } catch (error) {
       toast.error("Something went wrong", { id: toastId, duration: 2000 });
@@ -235,17 +235,18 @@ const CreateOffer = () => {
                 htmlFor="unique"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
-                Unique visitors (per month)
+                Offer Link
               </label>
               <input
-                type="number"
+                type="text"
                 id="unique"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
                 placeholder=""
                 required
-                {...register("unique", {
-                  required: "Unique visitors count is required",
+                {...register("offerLink", {
+                  required: "OfferLink is required",
                 })}
+                defaultValue={"https://offer.com?clickId=&offerId=&userId="}
               />
             </div>
             <div className="mb-6">
