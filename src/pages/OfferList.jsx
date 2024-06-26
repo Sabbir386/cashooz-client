@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Product from "../assets/img/cashooz.png";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
-import ReactModal from "react-modal";
+
 import {
   useDeleteOfferMutation,
   useSingleOfferQuery,
@@ -16,6 +16,8 @@ import { verifyToken } from "../utils/verifyToken";
 import { useAppSelector } from "../redux/features/hooks";
 import { useCurrentToken } from "../redux/features/auth/authSlice";
 import Swal from "sweetalert2";
+import ReactModal from "react-modal";
+import "./modal/ModalStyles.css";
 
 const OfferList = () => {
   const [data, setData] = useState([]);
@@ -47,8 +49,7 @@ const OfferList = () => {
     isFetchingOffersForAdmin,
   } = useViewOfferQuery(
     {
-      offerStatus,
-      country,
+      offerStatus
     },
     { skip: !(userRole === "superAdmin" || userRole === "admin") }
   );
@@ -343,26 +344,93 @@ const OfferList = () => {
                       className="py-0 px-2 h-7 bg-blue-500 rounded text-white ml-2"
                     >
                       View
-                      <ReactModal
+                    </button>
+                    <ReactModal
                       isOpen={isModalOpen}
                       onRequestClose={closeModal}
                       style={customStyles}
                       contentLabel="Offer Details Modal"
                     >
-                      {singleOffer ? (
-                        <div>
-                          <h2>{singleOffer?.title}</h2>
-                          <p>{singleOffer?.description}</p>
-                          {/* Display other offer details */}
-                          <button onClick={closeModal}>Close</button>
+                      {isLoading ? (
+                        <div>Loading...</div>
+                      ) : singleOffer?.data ? (
+                        <div className="modal-content">
+                          <div className="modal-header">
+                            {singleOffer.data.image && (
+                              <img
+                                src={singleOffer.data.image}
+                                alt={singleOffer.data.name}
+                              />
+                            )}
+                            <h5>{singleOffer.data.name}</h5>
+                          </div>
+                          <div className="modal-body">
+                            <p>
+                              <span>Age:</span> {singleOffer.data.age}
+                            </p>
+                            <p>
+                              <span>Country:</span>{" "}
+                              {singleOffer.data.country
+                                ?.map((c) => c.label)
+                                .join(", ")}
+                            </p>
+                            <p>
+                              <span>Device:</span>{" "}
+                              {singleOffer.data.device
+                                ?.map((d) => d.label)
+                                .join(", ")}
+                            </p>
+                            <p>
+                              <span>Gender:</span>{" "}
+                              {singleOffer.data.gender?.join(", ")}
+                            </p>
+                            <p>
+                              <span>Points:</span> {singleOffer.data.points}
+                            </p>
+                            <p>
+                              <span>Price:</span> {singleOffer.data.price}
+                            </p>
+                            <p>
+                              <span>Start Date:</span>{" "}
+                              {new Date(
+                                singleOffer.data.startDate
+                              ).toLocaleDateString()}
+                            </p>
+                            <p>
+                              <span>End Date:</span>{" "}
+                              {new Date(
+                                singleOffer.data.endDate
+                              ).toLocaleDateString()}
+                            </p>
+                            <p>
+                              <span>Offer Status:</span>{" "}
+                              {singleOffer.data.offerStatus}
+                            </p>
+                            <p>
+                              <span>Steps:</span> {singleOffer.data.step}
+                            </p>
+                            <p>
+                              <span>Description:</span>{" "}
+                              <span
+                                dangerouslySetInnerHTML={{
+                                  __html: singleOffer.data.description,
+                                }}
+                              ></span>
+                            </p>
+                          </div>
+                          <div className="modal-footer">
+                            <button
+                              className="button-primary"
+                              onClick={closeModal}
+                            >
+                              Close
+                            </button>
+                          </div>
                         </div>
                       ) : (
-                        <div>Loading...</div>
+                        <div>No data found</div>
                       )}
                     </ReactModal>
-
-                    </button>
-                    
                   </div>
                 </td>
               </tr>
