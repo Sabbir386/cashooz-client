@@ -24,6 +24,7 @@ const OfferList = () => {
   const [deviceInfo, setDeviceInfo] = useState("");
   const [deviceType, setDeviceType] = useState("");
   const [country, setCountry] = useState("");
+  const [CountryCode, setCountryCode] = useState("");
   const [offerStatus, setOfferStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedOffer, setSelectedOffer] = useState(null);
@@ -33,6 +34,7 @@ const OfferList = () => {
   const pageSize = 5;
   const [deleteOffer] = useDeleteOfferMutation();
   const offset = currentPage * pageSize;
+  
   const customStyles = {
     content: {
       top: "50%",
@@ -63,7 +65,7 @@ const OfferList = () => {
     {
       offerStatus,
       device: deviceType,
-      country,
+      CountryCode,
       role: userRole,
     },
     { skip: !(userRole === "user" || userRole === "advertiser") }
@@ -75,18 +77,18 @@ const OfferList = () => {
       setUserRole(user?.role);
       console.log("offerlist", user?.role);
     }
-    // user Agent
+  
     const getDeviceInfo = async () => {
       const parser = new UAParser();
       const result = parser.getResult();
-
+  
       const os = result.os.name || "Unknown OS";
       let deviceType = result.device.type || "desktop";
       const browser = result.browser.name || "Unknown Browser";
-
+  
       const userAgent = navigator.userAgent.toLowerCase();
       let deviceName = "Unknown Device";
-
+  
       if (userAgent.includes("iphone")) {
         deviceName = "iPhone";
       } else if (userAgent.includes("ipad")) {
@@ -116,9 +118,9 @@ const OfferList = () => {
       } else if (userAgent.includes("motorola")) {
         deviceName = "Motorola";
       }
-
+  
       let deviceInfo = `OS: ${os}, Device Type: ${deviceType}, Device Name: ${deviceName}, Browser: ${browser}`;
-
+  
       try {
         const ipResponse = await fetch("https://api.ipify.org?format=json");
         if (!ipResponse.ok) {
@@ -126,34 +128,36 @@ const OfferList = () => {
         }
         const ipData = await ipResponse.json();
         const ip = ipData.ip;
-
+  
         const locationResponse = await fetch(`https://ipapi.co/${ip}/json/`);
         if (!locationResponse.ok) {
           throw new Error("Network response was not ok");
         }
         const locationData = await locationResponse.json();
         const country = locationData.country_name;
-
-        deviceInfo += `, IP: ${ip}, Country: ${country}`;
-        setCountry(country); // Set the country here
+        const countryCode = locationData.country_code;
+  
+        deviceInfo += `, IP: ${ip}, Country: ${country}, CountryCode: ${countryCode}`;
+        setCountry(country); 
+        setCountryCode(CountryCode); 
       } catch (error) {
         console.error("Error fetching IP information:", error);
       }
-
+  
       setDeviceInfo(deviceInfo);
       setDeviceType(deviceType);
     };
-
-    // data
+  
     if (offersForAdmin) {
       setData(offersForAdmin.data);
     }
     if (offers) {
       setData(offers.data);
     }
-
+  
     getDeviceInfo();
   }, [token, offersForAdmin, offers]);
+  
 
   // console.log(offers);
   // const [createCompletedOffer] = useCreateCompletedOfferMutation();
