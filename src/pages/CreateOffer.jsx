@@ -261,6 +261,13 @@ const CreateOffer = () => {
     { value: "ZM", label: "ZM" },
     { value: "ZW", label: "ZW" },
   ]); // Update initial state to an empty array
+  const [devices,setDevices] = useState([
+    { value: "ios", label: "ios" },
+    { value: "android", label: "android" },
+    { value: "mobile", label: "mobile" },
+    { value: "desktop", label: "desktop" },
+
+  ])
   const {
     register,
     handleSubmit,
@@ -295,6 +302,7 @@ const CreateOffer = () => {
         category: data.category,
         // device: ["desktop"],
         country: data.country,
+        device: data.devices,
         gender: ["male"],
         offerLink: data.offerLink,
         offerStatus: data.offerStatus,
@@ -312,7 +320,7 @@ const CreateOffer = () => {
         endDate: "2024-01-31T00:00:00.000Z",
       };
       console.log(offerInfo);
-      // await CreateOffer(offerInfo);
+       await CreateOffer(offerInfo);
       toast.success("Successfully Offer Created", {
         id: toastId,
         duration: 2000,
@@ -455,8 +463,8 @@ const CreateOffer = () => {
                 type="tel"
                 id="contactNo"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="123-45-678"
-                pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+                placeholder="+880167904546"
+               
                 required
                 {...register("contactNo", {
                   required: "Contact number is required",
@@ -512,6 +520,34 @@ const CreateOffer = () => {
                 defaultValue={[tags[0], tags[1]]}
                 isMulti
                 options={tags}
+                className="basic-multi-select"
+                classNamePrefix="select"
+                {...field}
+             />}
+              />
+              {/* <Select
+                defaultValue={[tags[0], tags[1]]}
+                isMulti
+                options={tags}
+                className="basic-multi-select"
+                classNamePrefix="select"
+                {...register("country")}
+              /> */}
+            </div>
+  <div className="mb-6">
+              <label
+                htmlFor="tags"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Device
+              </label>
+              <Controller
+                name="devices"
+                control={control}
+                render={({ field }) => <Select
+                defaultValue={[devices[0]]}
+                isMulti
+                options={devices}
                 className="basic-multi-select"
                 classNamePrefix="select"
                 {...field}
