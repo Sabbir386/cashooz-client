@@ -93,7 +93,7 @@ const ViewAdvertiserList = () => {
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
               ContactNo
             </th>
-            <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+            <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300 text-center">
               Actions
             </th>
           </tr>
