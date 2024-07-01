@@ -24,11 +24,12 @@ import EditAdvertiser from "../pages/EditAdvertiser";
 import EditUser from "../pages/EditUser";
 import EditNetwork from "../pages/EditNetwork";
 import EditCategory from "../pages/EditCategory";
+import Landing from "../pages/Landing/Landing";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <h1>Default Route</h1>,
+    element: <Landing></Landing>,
   },
   {
     path: "/login",

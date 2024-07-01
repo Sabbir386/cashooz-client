@@ -34,14 +34,14 @@ const OfferList = () => {
   const pageSize = 5;
   const [deleteOffer] = useDeleteOfferMutation();
   const offset = currentPage * pageSize;
-  
+
   const customStyles = {
     content: {
+      width: "70%",
       top: "50%",
       left: "50%",
       right: "auto",
       bottom: "auto",
-      marginRight: "-50%",
       transform: "translate(-50%, -50%)",
     },
   };
@@ -51,7 +51,7 @@ const OfferList = () => {
     isFetchingOffersForAdmin,
   } = useViewOfferQuery(
     {
-      offerStatus
+      offerStatus,
     },
     { skip: !(userRole === "superAdmin" || userRole === "admin") }
   );
@@ -77,18 +77,18 @@ const OfferList = () => {
       setUserRole(user?.role);
       console.log("offerlist", user?.role);
     }
-  
+
     const getDeviceInfo = async () => {
       const parser = new UAParser();
       const result = parser.getResult();
-  
+
       const os = result.os.name || "Unknown OS";
       let deviceType = result.device.type || "desktop";
       const browser = result.browser.name || "Unknown Browser";
-  
+
       const userAgent = navigator.userAgent.toLowerCase();
       let deviceName = "Unknown Device";
-  
+
       if (userAgent.includes("iphone")) {
         deviceName = "iPhone";
       } else if (userAgent.includes("ipad")) {
@@ -118,9 +118,9 @@ const OfferList = () => {
       } else if (userAgent.includes("motorola")) {
         deviceName = "Motorola";
       }
-  
+
       let deviceInfo = `OS: ${os}, Device Type: ${deviceType}, Device Name: ${deviceName}, Browser: ${browser}`;
-  
+
       try {
         const ipResponse = await fetch("https://api.ipify.org?format=json");
         if (!ipResponse.ok) {
@@ -128,7 +128,7 @@ const OfferList = () => {
         }
         const ipData = await ipResponse.json();
         const ip = ipData.ip;
-  
+
         const locationResponse = await fetch(`https://ipapi.co/${ip}/json/`);
         if (!locationResponse.ok) {
           throw new Error("Network response was not ok");
@@ -136,28 +136,27 @@ const OfferList = () => {
         const locationData = await locationResponse.json();
         const country = locationData.country_name;
         const countryCode = locationData.country_code;
-  
+
         deviceInfo += `, IP: ${ip}, Country: ${country}, CountryCode: ${countryCode}`;
-        setCountry(country); 
-        setCountryCode(CountryCode); 
+        setCountry(country);
+        setCountryCode(CountryCode);
       } catch (error) {
         console.error("Error fetching IP information:", error);
       }
-  
+
       setDeviceInfo(deviceInfo);
       setDeviceType(deviceType);
     };
-  
+
     if (offersForAdmin) {
       setData(offersForAdmin.data);
     }
     if (offers) {
       setData(offers.data);
     }
-  
+
     getDeviceInfo();
   }, [token, offersForAdmin, offers]);
-  
 
   // console.log(offers);
   // const [createCompletedOffer] = useCreateCompletedOfferMutation();
@@ -258,7 +257,7 @@ const OfferList = () => {
           <thead className="bg-gray-100 text-gray-800">
             <tr className="text-left">
               <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-                ID
+                SL.
               </th>
               <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
                 Offer
@@ -281,10 +280,10 @@ const OfferList = () => {
             </tr>
           </thead>
           <tbody className="text-gray-700">
-            {paginatedData.map((row) => (
+            {paginatedData.map((row, i) => (
               <tr key={row._id}>
                 <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                  {/* {row._id} */}
+                  {i + 1}
                 </td>
                 <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                   <div className="flex">
@@ -328,7 +327,7 @@ const OfferList = () => {
                 <td className="px-1 py-2 border-b border-gray-200 bg-white text-sm">
                   <div>
                     {(userRole === "superAdmin" || userRole === "admin") && (
-                      <>
+                      <div className="flex flex-col md:flex-row gap-2 justify-center items-center">
                         <Link
                           to={`/dashboard/edit-offer/${row._id}`}
                           className="py-1 px-2 bg-blue-500 rounded text-white"
@@ -341,7 +340,7 @@ const OfferList = () => {
                         >
                           Delete
                         </button>
-                      </>
+                      </div>
                     )}
                     <button
                       onClick={() => handleViewOffer(row._id)}
@@ -353,6 +352,7 @@ const OfferList = () => {
                       isOpen={isModalOpen}
                       onRequestClose={closeModal}
                       style={customStyles}
+                     
                       contentLabel="Offer Details Modal"
                     >
                       {isLoading ? (
@@ -362,65 +362,95 @@ const OfferList = () => {
                           <div className="modal-header">
                             {singleOffer.data.image && (
                               <img
-                                src={singleOffer.data.image}
+                                src={"https://i.ibb.co/JjrS14H/cashooz.png"}
                                 alt={singleOffer.data.name}
                               />
                             )}
-                            <h5>{singleOffer.data.name}</h5>
+                            <h6 className="text-lg text-blue-600 font-bold uppercase">
+                              {singleOffer.data.name}
+                            </h6>
                           </div>
-                          <div className="modal-body">
-                            <p>
-                              <span>Age:</span> {singleOffer.data.age}
-                            </p>
-                            <p>
-                              <span>Country:</span>{" "}
-                              {singleOffer.data.country
-                                ?.map((c) => c.label)
-                                .join(", ")}
-                            </p>
-                            <p>
-                              <span>Device:</span>{" "}
-                              {singleOffer.data.device
-                                ?.map((d) => d.label)
-                                .join(", ")}
-                            </p>
-                            <p>
-                              <span>Gender:</span>{" "}
-                              {singleOffer.data.gender?.join(", ")}
-                            </p>
-                            <p>
-                              <span>Points:</span> {singleOffer.data.points}
-                            </p>
-                            <p>
-                              <span>Price:</span> {singleOffer.data.price}
-                            </p>
-                            <p>
-                              <span>Start Date:</span>{" "}
-                              {new Date(
-                                singleOffer.data.startDate
-                              ).toLocaleDateString()}
-                            </p>
-                            <p>
-                              <span>End Date:</span>{" "}
-                              {new Date(
-                                singleOffer.data.endDate
-                              ).toLocaleDateString()}
-                            </p>
-                            <p>
-                              <span>Offer Status:</span>{" "}
-                              {singleOffer.data.offerStatus}
-                            </p>
-                            <p>
-                              <span>Steps:</span> {singleOffer.data.step}
-                            </p>
-                            <p>
-                              <span>Description:</span>{" "}
-                              <span
-                                dangerouslySetInnerHTML={{
-                                  __html: singleOffer.data.description,
-                                }}
-                              ></span>
-                            </p>
+                          <div className="modal-body grid grid-cols-1 md:grid-cols-2">
+                            <div>
+                             
+                              <p>
+                                <span>Points:</span> {singleOffer.data.points}
+                              </p>
+                              <p>
+                                <span>Price:</span> {singleOffer.data.price}
+                              </p>
+                              <p>
+                                <span className="text-blue-600 text-sm">Completion Limit:</span> <br />
+                                <span>{singleOffer.data.completionLimit}</span>
+                              </p>
+                              <p>
+                                <span className="text-blue-600 text-sm">Completion Count:</span> <br />
+                                <span>{singleOffer.data.completedCount}</span>
+                              </p>
+                              <p>
+                                <span className="text-blue-600 text-sm">Start Date:</span>{" "} <br />
+                                <span className="text-green-600">{new Date(
+                                  singleOffer.data.startDate
+                                ).toLocaleDateString()}</span>
+                              </p>
+                              <p>
+                                <span className="text-blue-600 text-sm">End Date:</span>{" "} <br />
+                               <span className="text-red-600"> {new Date(
+                                  singleOffer.data.endDate
+                                ).toLocaleDateString()}</span>
+                              </p>
+                            </div>
+                            <div>
+                              <p>
+                                <span className="text-blue-600 text-sm">
+                                  Description:
+                                </span>{" "}
+                                <span
+                                  className="text-gray-600 font-light text-xs text-justify"
+                                  dangerouslySetInnerHTML={{
+                                    __html: singleOffer.data.description,
+                                  }}
+                                ></span>
+                              </p>
+                              <p>
+                                <span className="text-blue-600 text-sm">
+                                  Country:
+                                </span>{" "}
+                                <br />
+                                {singleOffer.data.country?.map((c) => (
+                                  <span className="bg-blue-500 text-white text-xs px-5 py-1 rounded-md">
+                                    {c.label}
+                                  </span>
+                                ))}
+                              </p>
+
+                              <p>
+                                <span className="text-blue-600 text-sm">
+                                  Device:
+                                </span>{" "}
+                                <br />
+                                {singleOffer.data.device?.map((d) => (
+                                  <span className="bg-cyan-500 text-white text-xs px-5 py-1 rounded-md">
+                                    {d.label}
+                                  </span>
+                                ))}
+                              </p>
+
+                              <p>
+                                <span  className="text-blue-600 text-sm">Offer Status:</span> <br />
+                                <span className={`text-xs px-4 py-1 text-white rounded ${singleOffer.data.offerStatus === 'active' ? 'bg-green-600' : 'bg-red-600'}`}>
+                                {singleOffer.data.offerStatus}
+                                  </span>{" "} <br />
+                                
+                              </p>
+                            </div>
+                            <div>
+                              <div>
+                              <span className="font-bold text-sm text-blue-600">Offer Link:</span> <br />
+                              <a href={singleOffer.data.offerLink} target="_blank" className="underline">offer link</a>
+                              </div>
+                            </div>
+                           
                           </div>
                           <div className="modal-footer">
                             <button
@@ -432,7 +462,7 @@ const OfferList = () => {
                           </div>
                         </div>
                       ) : (
-                        <div>No data found</div>
+                        <div>Loading...</div>
                       )}
                     </ReactModal>
                   </div>

@@ -425,7 +425,7 @@ const AdminDashboard = () => {
     <div className="container mx-auto">
       <div className="grid gap-4 grid-cols-1 md:grid-cols-4">
         {(userRole === "admin" || userRole === "superAdmin") && (
-          <div className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-4 py-6 rounded shadow-sm">
+          <div className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-4 py-6 rounded shadow-sm">
             <h4 className="font-bold text-xl">Total Offer</h4>
             {isLoadingOffer && <p>Loading...</p>}
             {errorOffer && <p>Error loading offer data</p>}
@@ -506,7 +506,7 @@ const AdminDashboard = () => {
           </div>
         )}
       </div>
-      <div className="grid gap-4 mt-5 grid-cols-1 md:grid-cols-2">
+     <div className="grid gap-4 mt-5 grid-cols-1 md:grid-cols-2">
         {(userRole === "admin" || userRole === "superAdmin") && (
           <div className="bg-white px-4 py-6 rounded shadow-sm">
             <ResponsiveContainer width="100%" height={200}>
@@ -643,7 +643,7 @@ const AdminDashboard = () => {
           </div>
         )}
         {(userRole === "admin" || userRole === "superAdmin") && (
-          <div className="bg-white px-4 py-6 rounded shadow-sm mt-5">
+          <div className="bg-white px-4 py-6 rounded shadow-sm mt-5 overflow-x-auto">
             <table className="min-w-full bg-white border-collapse border border-gray-300 rounded-lg overflow-hidden">
               <thead className="bg-gray-100 text-gray-800">
                 <tr className="text-left">
@@ -685,17 +685,32 @@ const AdminDashboard = () => {
           </div>
         )}
       </div>
-      <div className="bg-white px-4 py-6 rounded shadow-sm mt-5">
+        
+      <div className="hidden w-full bg-white px-4 py-6 rounded shadow-sm mt-5">
         <Swiper
+          className="w-full"
           spaceBetween={50}
-          slidesPerView={3}
-          onSlideChange={() => console.log("slide change")}
-          onSwiper={(swiper) => console.log(swiper)}
+          breakpoints={{
+            // when window width is >= 640px
+            640: {
+              width: 640,
+              slidesPerView: 1,
+            },
+            // when window width is >= 768px
+            768: {
+              width: 768,
+              slidesPerView: 2,
+            },
+            1024: {
+              width: 768,
+              slidesPerView: 3,
+            },
+          }}
         >
           {cpaOffers &&
             cpaOffers.map((offer, index) => (
-              <SwiperSlide key={index}>
-                <div className="border p-3 rounded-md shadow-sm">
+              <SwiperSlide key={index} className="w-full">
+                <div className="w-full border p-3 rounded-md shadow-sm">
                   <h3 className="font-bold text-base">{offer.title}</h3>
                   <p className="text-sm font-semibold">{offer.description}</p>
                   <p className="text-xs font-semibold">

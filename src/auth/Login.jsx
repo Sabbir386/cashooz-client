@@ -13,6 +13,7 @@ import { verifyToken } from "../utils/verifyToken";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase/firebase.init";
 import { FaGoogle  } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 
 const Login = () => {
@@ -170,6 +171,10 @@ const Login = () => {
            <span>Continue with Google</span>
            </div>
           </button>
+          <div className="w-full flex justify-between my-5">
+              <Link to={'/'} className="text-red-600 font-semibold text-sm">Back to Home</Link>
+              <Link to={'/register'} className="text-blue-600 font-semibold text-sm">Go to Registration</Link>
+          </div>
         </div>
       </div>
     </div>

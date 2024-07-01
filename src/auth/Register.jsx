@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useRegistrationMutation } from "../redux/features/auth/authApi";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ const Register = () => {
   };
   return (
     <>
-      <div className="bg-blue-600 h-full py-10 w-full flex justify-center items-center">
+      <div className="bg-blue-600 h-full md:h-screen py-10 w-full flex justify-center items-center">
         <div className="w-full sm:w-1/0 md:w-12/12 lg:w-1/1 flex flex-col md:flex-row items-center lg:mx-24 mx-5">
           <div className="w-full md:w-1/2 hidden md:flex flex-col justify-center items-center text-white">
             <h1 className="text-2xl">Hello</h1>
@@ -205,9 +206,16 @@ const Register = () => {
               </button>
               <div className=""></div>
             </form>
+            <div className="w-full flex justify-between my-5">
+              <Link to={'/'} className="text-red-600 font-semibold text-sm">Back to Home</Link>
+              <Link to={'/login'} className="text-blue-600 font-semibold text-sm">Go to Login</Link>
           </div>
+          </div>
+          
         </div>
+        
       </div>
+      
     </>
   );
 };
