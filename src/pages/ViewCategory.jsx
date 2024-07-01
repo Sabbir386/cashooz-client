@@ -4,6 +4,7 @@ import ReactPaginate from "react-paginate";
 import { useViewCategoryQuery, useDeleteCategoryMutation } from "./CategoryApi";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
+import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 
 const ViewCategory = () => {
   const { data: categories, error, isLoading } = useViewCategoryQuery();
@@ -64,12 +65,12 @@ const ViewCategory = () => {
   const paginatedData = data.slice(offset, offset + pageSize);
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto overflow-auto">
       <table className="min-w-full bg-white border-collapse border border-gray-300 rounded-lg overflow-hidden">
         <thead className="bg-gray-100 text-gray-800">
           <tr className="text-left">
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-              ID
+              SL.
             </th>
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
               Category Name
@@ -80,27 +81,28 @@ const ViewCategory = () => {
           </tr>
         </thead>
         <tbody className="text-gray-700">
-          {paginatedData.map((row) => (
+          {paginatedData.map((row,i) => (
             <tr key={row._id}>
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                {row._id}
+                {i+1}
               </td>
               <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                 {row.categoryName}
               </td>
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                <div>
+
+              <td className="px-1 py-2 border-b border-gray-200 bg-white text-sm">
+                <div className="flex flex-col md:flex-row gap-1 justify-center items-center">
                   <Link
                     to={`/dashboard/edit-category/${row._id}`}
-                    className="py-1 px-2 bg-blue-500 rounded text-white"
+                    className="w-7 h-7 grid justify-center items-center bg-blue-500 rounded text-white"
                   >
-                    Edit
+                    <FaEdit />
                   </Link>
                   <button
                     onClick={() => handleDelete(row._id)}
-                    className="py-1 px-2 bg-red-500 rounded text-white ml-2"
+                    className="w-7 h-7 grid justify-center items-center bg-red-500 rounded text-white "
                   >
-                    Delete
+                    <FaRegTrashAlt />
                   </button>
                 </div>
               </td>

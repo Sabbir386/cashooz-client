@@ -116,12 +116,12 @@ const Sidebar = () => {
           {
             id: "admin-create-network",
             path: "create-network",
-            name: "- Create New Offer",
+            name: "- Create New Network",
           },
           {
             id: "admin-view-network",
             path: "view-network",
-            name: "- All Offer List",
+            name: "- All Network List",
           },
         ],
       },
@@ -133,12 +133,12 @@ const Sidebar = () => {
           {
             id: "admin-create-category",
             path: "create-category",
-            name: "- Create New Offer",
+            name: "- Create New Category",
           },
           {
             id: "admin-view-category",
             path: "view-category",
-            name: "- All Offer List",
+            name: "- All Category List",
           },
         ],
       },
@@ -251,12 +251,12 @@ const Sidebar = () => {
           {
             id: "superadmin-create-network",
             path: "create-network",
-            name: "- Create New Offer",
+            name: "- Create New Network",
           },
           {
             id: "superadmin-view-network",
             path: "view-network",
-            name: "- All Offer List",
+            name: "- All Network List",
           },
         ],
       },
@@ -268,12 +268,12 @@ const Sidebar = () => {
           {
             id: "superadmin-create-category",
             path: "create-category",
-            name: "- Create New Offer",
+            name: "- Create New Category",
           },
           {
             id: "superadmin-view-category",
             path: "view-category",
-            name: "- All Offer List",
+            name: "- All Category List",
           },
         ],
       },
