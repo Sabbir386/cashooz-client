@@ -45,80 +45,80 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/dashboard",
-        element: <AdminDashboard></AdminDashboard>,
+        element: <ProtectedRoutes><AdminDashboard></AdminDashboard></ProtectedRoutes>,
       },
       {
         path: "/dashboard/create-offer",
-        element: <CreateOffer></CreateOffer>,
+        element: <ProtectedRoutes><CreateOffer></CreateOffer></ProtectedRoutes>,
       },
       {
         path: "/dashboard/create-network",
-        element: <CreateNetwork></CreateNetwork>,
+        element: <ProtectedRoutes><CreateNetwork></CreateNetwork></ProtectedRoutes>,
       },
       {
         path: "/dashboard/create-category",
-        element: <CreateCategory></CreateCategory>,
+        element: <ProtectedRoutes><CreateCategory></CreateCategory></ProtectedRoutes>,
       },
       {
         path: "/dashboard/view-category",
-        element: <ViewCategory></ViewCategory>,
+        element: <ProtectedRoutes><ViewCategory></ViewCategory></ProtectedRoutes>,
       },
       {
         path: "/dashboard/edit-category/:id",
-        element: <EditCategory></EditCategory>,
+        element:<ProtectedRoutes> <EditCategory></EditCategory></ProtectedRoutes>,
       },
       {
         path: "/dashboard/view-network",
-        element: <ViewNetwork></ViewNetwork>,
+        element: <ProtectedRoutes><ViewNetwork></ViewNetwork></ProtectedRoutes>,
       },
       {
         path: "/dashboard/edit-network/:id",
-        element: <EditNetwork></EditNetwork>,
+        element: <ProtectedRoutes><EditNetwork></EditNetwork></ProtectedRoutes>,
       },
       {
         path: "/dashboard/create-admin",
-        element: <CreateAdmin></CreateAdmin>,
+        element: <ProtectedRoutes><CreateAdmin></CreateAdmin></ProtectedRoutes>,
       },
       {
         path: "/dashboard/view-admin",
-        element: <ViewAdminList></ViewAdminList>,
+        element: <ProtectedRoutes><ViewAdminList></ViewAdminList></ProtectedRoutes>,
       },
       {
         path: "/dashboard/edit-admin/:id",
-        element: <EditAdmin></EditAdmin>,
+        element: <ProtectedRoutes><EditAdmin></EditAdmin></ProtectedRoutes>,
       },
       {
         path: "/dashboard/create-advertiser",
-        element: <CreateAdvertiser></CreateAdvertiser>,
+        element: <ProtectedRoutes><CreateAdvertiser></CreateAdvertiser></ProtectedRoutes>,
       },
       {
         path: "/dashboard/view-advertiser",
-        element: <ViewAdvertiserList></ViewAdvertiserList>,
+        element: <ProtectedRoutes><ViewAdvertiserList></ViewAdvertiserList></ProtectedRoutes>,
       },
       {
         path: "/dashboard/edit-advertiser/:id",
-        element: <EditAdvertiser></EditAdvertiser>,
+        element: <ProtectedRoutes><EditAdvertiser></EditAdvertiser></ProtectedRoutes>,
       },
       {
         path: "/dashboard/create-user",
-        element: <CreateUser></CreateUser>,
+        element: <ProtectedRoutes><CreateUser></CreateUser></ProtectedRoutes>,
       },
       {
         path: "/dashboard/view-user",
-        element: <ViewUserList></ViewUserList>,
+        element: <ProtectedRoutes><ViewUserList></ViewUserList></ProtectedRoutes>,
       },
       {
         path: "/dashboard/edit-user/:id",
-        element: <EditUser></EditUser>,
+        element: <ProtectedRoutes><EditUser></EditUser></ProtectedRoutes>,
       },
 
       {
         path: "/dashboard/offer-list",
-        element: <OfferList></OfferList>,
+        element: <ProtectedRoutes><OfferList></OfferList></ProtectedRoutes>,
       },
       {
         path: "/dashboard/edit-offer/:id",
-        element: <EditOffer></EditOffer>,
+        element: <ProtectedRoutes><EditOffer></EditOffer></ProtectedRoutes>,
       },
       {
         path: "/dashboard/authentication",
