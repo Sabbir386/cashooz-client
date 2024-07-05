@@ -23,6 +23,7 @@ const OfferList = () => {
   const [data, setData] = useState([]);
   const [deviceInfo, setDeviceInfo] = useState("");
   const [deviceType, setDeviceType] = useState("");
+  const [OSdeviceType, setOSdeviceType] = useState("");
   const [country, setCountry] = useState("");
   const [CountryCode, setCountryCode] = useState("");
   const [offerStatus, setOfferStatus] = useState("");
@@ -54,7 +55,7 @@ const OfferList = () => {
   } = useViewOfferQuery(
     {
       offerStatus,
-      device: deviceType,
+      device: OSdeviceType,
       CountryCode,
       role: userRole,
     },
@@ -136,6 +137,7 @@ const OfferList = () => {
 
       setDeviceInfo(deviceInfo);
       setDeviceType(deviceType);
+      setOSdeviceType(os);
     };
 
     if (offersForAdmin) {
@@ -148,7 +150,10 @@ const OfferList = () => {
     getDeviceInfo();
   }, [token, offersForAdmin, offers]);
 
-  // console.log(offers);
+   if(deviceInfo){
+    console.log(OSdeviceType)
+
+   }
   // const [createCompletedOffer] = useCreateCompletedOfferMutation();
   const handleDeleteOffer = async (_id) => {
     console.log(_id);

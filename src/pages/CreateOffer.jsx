@@ -262,10 +262,10 @@ const CreateOffer = () => {
     { value: "ZW", label: "ZW" },
   ]); // Update initial state to an empty array
   const [devices,setDevices] = useState([
-    { value: "ios", label: "ios" },
-    { value: "android", label: "android" },
-    { value: "mobile", label: "mobile" },
-    { value: "desktop", label: "desktop" },
+    { value: "iOS", label: "iOS" },
+    { value: "Android", label: "Android" },
+    { value: "Mac OS", label: "Mac OS" },
+    { value: "Windows", label: "Windows" },
 
   ])
   const {
