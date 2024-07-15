@@ -973,7 +973,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
                 <div className="mt-4 text-white">
-                  <h4 className="font-bold text-base">{offer?.name ? offer.name : "Offer Name"}</h4>
+                  <h4 className="font-bold text-base">{offer?.name ? offer.name.slice(0,14) : "Offer Name"}</h4>
                   <h6 className="text-grayColor text-sm">{offer?.categoryName ? offer.categoryName : offer.category }</h6>
                   <h3 className="font-semibold">{offer?.points}</h3>
                 </div>
