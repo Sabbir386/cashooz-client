@@ -14,6 +14,7 @@ const CreateOffer = () => {
   const [content, setContent] = useState("");
   const [CreateOffer] = useCreateOfferMutation();
   const [tags, setTags] = useState([
+    { value: "all", label: "all" },
     { value: "AD", label: "AD" },
     { value: "AE", label: "AE" },
     { value: "AF", label: "AF" },
@@ -261,20 +262,20 @@ const CreateOffer = () => {
     { value: "ZM", label: "ZM" },
     { value: "ZW", label: "ZW" },
   ]); // Update initial state to an empty array
-  const [devices,setDevices] = useState([
+  const [devices, setDevices] = useState([
+    { value: "all", label: "all" },
     { value: "iOS", label: "iOS" },
     { value: "Android", label: "Android" },
     { value: "Mac OS", label: "Mac OS" },
     { value: "Windows", label: "Windows" },
-
-  ])
+  ]);
   const {
     register,
     handleSubmit,
     reset,
     control,
     formState: { errors },
-  } = useForm();
+  } = useForm();
 
   // Fetch networks data
   const {
@@ -288,12 +289,12 @@ const CreateOffer = () => {
     isError: categoriesError,
   } = useViewCategoryQuery();
 
-  console.log(categories); // Add this line to check the fetched categories data in console
+  // console.log(categories); // Add this line to check the fetched categories data in console
 
   const onSubmit = async (data) => {
     const toastId = toast.loading("Offer Creating....");
 
-    // console.log(data);
+    // // console.log(data);
 
     try {
       const offerInfo = {
@@ -319,8 +320,8 @@ const CreateOffer = () => {
         startDate: "2023-11-01T00:00:00.000Z",
         endDate: "2024-01-31T00:00:00.000Z",
       };
-      console.log(offerInfo);
-       await CreateOffer(offerInfo);
+      // console.log(offerInfo);
+      await CreateOffer(offerInfo);
       toast.success("Successfully Offer Created", {
         id: toastId,
         duration: 2000,
@@ -330,7 +331,7 @@ const CreateOffer = () => {
       // navigate("/dashboard");
     } catch (error) {
       toast.error("Something went wrong", { id: toastId, duration: 2000 });
-      console.log("Error:", error);
+      // console.log("Error:", error);
     }
   };
 
@@ -342,14 +343,14 @@ const CreateOffer = () => {
     <>
       <div className="">
         <form
-          className="bg-white p-6 rounded-md"
+          className="bg-secondaryColor p-6 rounded-md"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="grid gap-6 mb-6 md:grid-cols-2">
             <div>
               <label
                 htmlFor="name"
-                className="block mb-2 text-sm font-medium text-gray-900"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Offer Name
               </label>
@@ -365,7 +366,7 @@ const CreateOffer = () => {
             <div>
               <label
                 htmlFor="offerStatus"
-                className="block mb-2 text-sm font-medium text-gray-900"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Offer Status
               </label>
@@ -383,7 +384,7 @@ const CreateOffer = () => {
             <div>
               <label
                 htmlFor="category"
-                className="block mb-2 text-sm font-medium text-gray-900"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Category
               </label>
@@ -411,7 +412,7 @@ const CreateOffer = () => {
             <div>
               <label
                 htmlFor="network"
-                className="block mb-2 text-sm font-medium text-gray-900"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Select Network
               </label>
@@ -439,7 +440,7 @@ const CreateOffer = () => {
             <div>
               <label
                 htmlFor="company"
-                className="block mb-2 text-sm font-medium text-gray-900"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Company
               </label>
@@ -455,7 +456,7 @@ const CreateOffer = () => {
             <div>
               <label
                 htmlFor="contactNo"
-                className="block mb-2 text-sm font-medium text-gray-900"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Phone number
               </label>
@@ -464,7 +465,6 @@ const CreateOffer = () => {
                 id="contactNo"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
                 placeholder="+880167904546"
-               
                 required
                 {...register("contactNo", {
                   required: "Contact number is required",
@@ -474,7 +474,7 @@ const CreateOffer = () => {
             <div>
               <label
                 htmlFor="price"
-                className="block mb-2 text-sm font-medium text-gray-900"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Price
               </label>
@@ -490,7 +490,7 @@ const CreateOffer = () => {
             <div>
               <label
                 htmlFor="unique"
-                className="block mb-2 text-sm font-medium text-gray-900"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Offer Link
               </label>
@@ -509,21 +509,23 @@ const CreateOffer = () => {
             <div className="mb-6">
               <label
                 htmlFor="tags"
-                className="block mb-2 text-sm font-medium text-gray-900"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Country
               </label>
               <Controller
                 name="country"
                 control={control}
-                render={({ field }) => <Select
-                defaultValue={[tags[0], tags[1]]}
-                isMulti
-                options={tags}
-                className="basic-multi-select"
-                classNamePrefix="select"
-                {...field}
-             />}
+                render={({ field }) => (
+                  <Select
+                    defaultValue={tags[0]}
+                    isMulti
+                    options={tags}
+                    className="basic-multi-select"
+                    classNamePrefix="select"
+                    {...field}
+                  />
+                )}
               />
               {/* <Select
                 defaultValue={[tags[0], tags[1]]}
@@ -533,25 +535,28 @@ const CreateOffer = () => {
                 classNamePrefix="select"
                 {...register("country")}
               /> */}
-            </div>
-  <div className="mb-6">
+                        
+            </div>
+            <div className="mb-6">
               <label
                 htmlFor="tags"
-                className="block mb-2 text-sm font-medium text-gray-900"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Device
               </label>
               <Controller
                 name="devices"
                 control={control}
-                render={({ field }) => <Select
-                defaultValue={[devices[0]]}
-                isMulti
-                options={devices}
-                className="basic-multi-select"
-                classNamePrefix="select"
-                {...field}
-             />}
+                render={({ field }) => (
+                  <Select
+                    defaultValue={[devices[0]]}
+                    isMulti
+                    options={devices}
+                    className="basic-multi-select"
+                    classNamePrefix="select"
+                    {...field}
+                  />
+                )}
               />
               {/* <Select
                 defaultValue={[tags[0], tags[1]]}
@@ -561,11 +566,44 @@ const CreateOffer = () => {
                 classNamePrefix="select"
                 {...register("country")}
               /> */}
-            </div>
+                        
+            </div>
             <div className="mb-6">
               <label
                 htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-900"
+                className="block mb-2 text-sm font-medium text-white"
+              >
+                Daily Limit
+              </label>
+              <input
+                type="number"
+                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
+                placeholder="5"
+                required
+                {...register("dailyLimit", {
+                  required: "Daily Limit is required",
+                })}
+              />
+            </div>
+            <div className="mb-6">
+              <label
+                htmlFor="email"
+                className="block mb-2 text-sm font-medium text-white"
+              >
+                Total Limit
+              </label>
+              <input
+                type="number"
+                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
+                placeholder="50"
+                required
+                {...register("email", { required: "Total Limit is required" })}
+              />
+            </div>
+            <div className="mb-6">
+              <label
+                htmlFor="email"
+                className="block mb-2 text-sm font-medium text-white"
               >
                 Email address
               </label>
@@ -601,7 +639,7 @@ const CreateOffer = () => {
             </div>
             <label
               htmlFor="remember"
-              className="block mb-2 ml-2 text-sm font-medium text-gray-900"
+              className="block mb-2 ml-2 text-sm font-medium text-white"
             >
               I agree with the{" "}
               <a
@@ -615,7 +653,7 @@ const CreateOffer = () => {
           </div>
           <button
             type="submit"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="text-white bg-buttonBackground hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-buttonBackground dark:hover:bg-green-500 dark:focus:ring-blue-800"
           >
             Submit
           </button>

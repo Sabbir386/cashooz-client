@@ -7,6 +7,12 @@ export const dashboardApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    offerByNetwork: builder.query({
+      query: () => ({
+        url: "/offer/networks-with-offers/bynetwork",
+        method: "GET",
+      }),
+    }),
     completedOffer: builder.query({
       query: () => ({
         url: "/completedOffer",
@@ -97,4 +103,5 @@ export const {
   useLoggedUserTotalCompletedOfferQuery,
   useLoggedInUserDailycCompletedOfferCountsQuery,
   useLoggedInUserOfferNameandTotalCountsQuery,
+  useOfferByNetworkQuery
 } = dashboardApi;

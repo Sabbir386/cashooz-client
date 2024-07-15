@@ -6,6 +6,7 @@ import { FaEdit, FaRegTrashAlt, FaEye } from "react-icons/fa";
 import {
   useDeleteOfferMutation,
   useSingleOfferQuery,
+  useToggleOfferStatusMutation,
   useViewOfferQuery,
 } from "./offerApi";
 import UAParser from "ua-parser-js";
@@ -34,8 +35,17 @@ const OfferList = () => {
   const token = useAppSelector(useCurrentToken);
   const pageSize = 5;
   const [deleteOffer] = useDeleteOfferMutation();
+  const [toggleOfferStatus] = useToggleOfferStatusMutation();
   const offset = currentPage * pageSize;
 
+  const handleToggle = async (id) => {
+    try {
+      await toggleOfferStatus({ id });
+      // Optionally, handle additional logic after successful mutation
+    } catch (error) {
+      console.error("Failed to toggle offer status:", error);
+    }
+  };
   const {
     data: offersForAdmin,
     isLoadingOffersForAdmin,
@@ -46,7 +56,7 @@ const OfferList = () => {
     },
     { skip: !(userRole === "superAdmin" || userRole === "admin") }
   );
-  console.log(data);
+  // // console.log(data);
   const {
     data: offers,
     isLoading,
@@ -64,9 +74,9 @@ const OfferList = () => {
   useEffect(() => {
     if (token) {
       const user = verifyToken(token);
-      console.log(user);
+      // console.log(user);
       setUserRole(user?.role);
-      console.log("offerlist", user?.role);
+      // console.log("offerlist", user?.role);
     }
 
     const getDeviceInfo = async () => {
@@ -150,13 +160,12 @@ const OfferList = () => {
     getDeviceInfo();
   }, [token, offersForAdmin, offers]);
 
-   if(deviceInfo){
-    console.log(OSdeviceType)
-
-   }
+  if (deviceInfo) {
+    // console.log(OSdeviceType);
+  }
   // const [createCompletedOffer] = useCreateCompletedOfferMutation();
   const handleDeleteOffer = async (_id) => {
-    console.log(_id);
+    // console.log(_id);
     Swal.fire({
       title: "Are you sure you want to delete this offer?",
       icon: "warning",
@@ -178,7 +187,7 @@ const OfferList = () => {
             id: toastId,
             duration: 2000,
           });
-          console.log("Error:", error);
+          // console.log("Error:", error);
         }
       }
     });
@@ -206,10 +215,10 @@ const OfferList = () => {
 
   useEffect(() => {
     if (singleOffer) {
-      console.log("Single Offer Data:", singleOffer);
+      // console.log("Single Offer Data:", singleOffer);
     }
   }, [singleOffer]);
-  console.log(deviceInfo);
+  // console.log(deviceInfo);
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
@@ -230,10 +239,10 @@ const OfferList = () => {
   }
 
   return (
-    <>
+    <div className="min-h-screen">
       <div className="container mx-auto overflow-auto relative">
         <div className="flex justify-between items-center my-4">
-          <h3 className="font-bold text-base">All Offer List</h3>
+          <h3 className="font-bold text-base text-white">All Offer List</h3>
           <select
             className="px-2 py-3 border-none rounded text-xs"
             id="publish-status"
@@ -249,8 +258,8 @@ const OfferList = () => {
           </select>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border-collapse border border-gray-300 rounded-lg overflow-hidden">
-            <thead className="bg-gray-100 text-gray-800">
+          <table className="min-w-full bg-secondaryColor border-collapse border border-gray-300 rounded-lg overflow-hidden">
+            <thead className="bg-secondaryColor text-buttonBackground">
               <tr className="text-left">
                 <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
                   SL.
@@ -268,6 +277,12 @@ const OfferList = () => {
                   Price
                 </th>
                 <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+                  Device
+                </th>
+                <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+                  Country
+                </th>
+                <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
                   Status
                 </th>
                 <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300 text-center">
@@ -277,11 +292,11 @@ const OfferList = () => {
             </thead>
             <tbody className="text-gray-700">
               {paginatedData.map((row, i) => (
-                <tr key={row._id}>
-                  <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                <tr key={row._id} className="bg-secondaryColor">
+                  <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                     {i + 1}
                   </td>
-                  <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                  <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                     <div className="flex">
                       <div className="flex-shrink-0 w-10 h-10">
                         <img
@@ -291,7 +306,10 @@ const OfferList = () => {
                         />
                       </div>
                       <div className="ml-3">
-                        <p className="text-gray-900 font-medium whitespace-no-wrap">
+                        <p
+                          className="text-buttonBackground font-medium whitespace-no-wrap cursor-pointer underline"
+                          onClick={() => handleViewOffer(row._id)}
+                        >
                           {row.name}
                         </p>
                         <p className="text-gray-600 whitespace-no-wrap">
@@ -300,17 +318,24 @@ const OfferList = () => {
                       </div>
                     </div>
                   </td>
-                  <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                  <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                     {row.categoryInfo?.categoryName}
                   </td>
-                  <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                  <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                     {row.networkInfo?.networkName}
                   </td>
-                  <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                  <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                     {row.price}
                   </td>
-                  <td className="w-4 border-b border-gray-200 bg-white text-sm">
-                    <span
+                  <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
+                    {deviceType}
+                  </td>
+                  <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
+                    {country}
+                  </td>
+                  <td className="w-4 border-b border-gray-200 bg-secondaryColor text-white text-sm">
+                    <button
+                      onClick={() => handleToggle(row._id)}
                       className={`py-1 px-2 block w-full text-center rounded text-white ${
                         row.offerStatus === "active"
                           ? "bg-green-500"
@@ -318,16 +343,16 @@ const OfferList = () => {
                       }`}
                     >
                       {row.offerStatus}
-                    </span>
+                    </button>
                   </td>
-                  <td className="px-1 py-2 border-b border-gray-200 bg-white text-sm">
+                  <td className="px-1 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                     <div className="flex flex-col justify-center items-center md:flex-row gap-1">
-                      <button
+                      {/* <button
                         onClick={() => handleViewOffer(row._id)}
                         className="w-7 h-7 grid justify-center items-center bg-purple-500 rounded text-white"
                       >
                         <FaEye />
-                      </button>
+                      </button> */}
                       {(userRole === "superAdmin" || userRole === "admin") && (
                         <div className="flex flex-col md:flex-row gap-1 justify-center items-center">
                           <Link
@@ -353,7 +378,7 @@ const OfferList = () => {
         </div>
 
         <ReactPaginate
-          className="flex mt-5 gap-3"
+          className="flex mt-5 gap-3 text-buttonBackground"
           previousLabel={"Previous"}
           nextLabel={"Next"}
           breakLabel={"..."}
@@ -366,13 +391,16 @@ const OfferList = () => {
           subContainerClassName={"pages pagination"}
           activeClassName={"active"}
         />
-      
+
         <ReactModal
           isOpen={isModalOpen}
           onRequestClose={closeModal}
-          className="absolute w-[70%] h-[80%] md:h-[50%] top-[50%] left-[50%] right-auto bottom-auto translate-x-[-50%] translate-y-[-50%] bg-white px-4"
+          className="modal"
           contentLabel="Offer Details Modal"
         >
+          <button className="button-close" onClick={closeModal}>
+            &times;
+          </button>
           {isLoading ? (
             <div>Loading...</div>
           ) : singleOffer?.data ? (
@@ -423,7 +451,6 @@ const OfferList = () => {
                     <span className="text-blue-600 text-sm">End Date:</span>{" "}
                     <br />
                     <span className="text-red-600">
-                      {" "}
                       {new Date(singleOffer.data.endDate).toLocaleDateString()}
                     </span>
                   </p>
@@ -489,18 +516,13 @@ const OfferList = () => {
                   </div>
                 </div>
               </div>
-              <div className="modal-footer">
-                <button className="button-primary" onClick={closeModal}>
-                  Close
-                </button>
-              </div>
             </div>
           ) : (
             <div>Loading...</div>
           )}
         </ReactModal>
       </div>
-    </>
+    </div>
   );
 };
 

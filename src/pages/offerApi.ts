@@ -8,7 +8,7 @@ export const createOfferApi = baseApi.injectEndpoints({
         method: "POST",
         body: giftInfo,
       }),
-      invalidatesTags: ['Offer'], 
+      invalidatesTags: ['Offer'],
     }),
     viewOffer: builder.query({
       query: ({ offerStatus, device, country }) => {
@@ -22,21 +22,21 @@ export const createOfferApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
-      providesTags: ['Offer'], 
+      providesTags: ['Offer'],
     }),
     deleteOffer: builder.mutation({
       query: (id) => ({
-        url: `/offer/${id}`, 
+        url: `/offer/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ['Offer'], 
+      invalidatesTags: ['Offer'],
     }),
     singleOffer: builder.query({
       query: (id) => ({
-        url: `/offer/${id}`, 
+        url: `/offer/${id}`,
         method: "GET",
       }),
-      providesTags: ['Offer'], 
+      providesTags: ['Offer'],
     }),
     updateOffer: builder.mutation({
       query: ({ id, ...updatedData }) => ({
@@ -46,13 +46,24 @@ export const createOfferApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Offer'],
     }),
+    toggleOfferStatus: builder.mutation({
+      query: ({ id }) => ({
+        url: `/offer/toggle-status/${id}`,
+        method: "PUT",
+        body: {
+        },
+      }),
+      invalidatesTags: ['Offer'],
+    }),
   }),
 });
 
-export const { 
-  useCreateOfferMutation, 
-  useViewOfferQuery, 
+export const {
+  useCreateOfferMutation,
+  useViewOfferQuery,
   useDeleteOfferMutation,
-  useSingleOfferQuery, 
-  useUpdateOfferMutation 
+  useSingleOfferQuery,
+  useUpdateOfferMutation,
+  useToggleOfferStatusMutation,
+
 } = createOfferApi;

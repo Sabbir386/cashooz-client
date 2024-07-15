@@ -56,7 +56,7 @@ const ViewUserList = () => {
             id: toastId,
             duration: 2000,
           });
-          console.log("Error:", error);
+          // console.log("Error:", error);
         }
       }
     });
@@ -76,9 +76,9 @@ const ViewUserList = () => {
   const paginatedData = data.slice(offset, offset + pageSize);
 
   return (
-    <div className="container mx-auto overflow-auto">
-      <table className="min-w-full bg-white border-collapse border border-gray-300 rounded-lg overflow-hidden">
-        <thead className="bg-gray-100 text-gray-800">
+    <div className="container mx-auto overflow-aut min-h-screen">
+      <table className="min-w-full bg-secondaryColor border-collapse border border-gray-300 rounded-lg overflow-hidden">
+        <thead className="bg-secondaryColor text-buttonBackground">
           <tr className="text-left">
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
               SL.
@@ -98,12 +98,12 @@ const ViewUserList = () => {
           </tr>
         </thead>
         <tbody className="text-gray-700">
-          {paginatedData.map((row,i) => (
+          {paginatedData.map((row, i) => (
             <tr key={row._id}>
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                {i+1}
+              <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
+                {i + 1}
               </td>
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+              <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                 <div className="flex">
                   <div className="flex-shrink-0 w-10 h-10">
                     <img
@@ -113,22 +113,22 @@ const ViewUserList = () => {
                     />
                   </div>
                   <div className="ml-3">
-                    <p className="text-gray-900 font-medium whitespace-no-wrap">
+                    <p className="text-white font-medium whitespace-no-wrap">
                       {row.fullName}
                     </p>
                     <p className="text-gray-600 whitespace-no-wrap"></p>
                   </div>
                 </div>
               </td>
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+              <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                 {row.gender}
               </td>
 
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+              <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                 {row.contactNo}
               </td>
 
-              <td className="px-1 py-2 border-b border-gray-200 bg-white text-sm">
+              <td className="px-1 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                 <div className="flex flex-col md:flex-row gap-1 justify-center items-center">
                   <Link
                     to={`/dashboard/edit-user/${row._id}`}
@@ -137,7 +137,7 @@ const ViewUserList = () => {
                     <FaEdit />
                   </Link>
                   <button
-                     onClick={() => handleDelete(row._id)}
+                    onClick={() => handleDelete(row._id)}
                     className="w-7 h-7 grid justify-center items-center bg-red-500 rounded text-white "
                   >
                     <FaRegTrashAlt />
@@ -149,7 +149,7 @@ const ViewUserList = () => {
         </tbody>
       </table>
       <ReactPaginate
-        className="flex mt-5 gap-3"
+        className="flex mt-5 gap-3 text-white"
         previousLabel={"Previous"}
         nextLabel={"Next"}
         breakLabel={"..."}

@@ -12,9 +12,8 @@ import { useAppDispatch, useAppSelector } from "../redux/features/hooks";
 import { verifyToken } from "../utils/verifyToken";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase/firebase.init";
-import { FaGoogle  } from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
 
 const Login = () => {
   const auth = getAuth(app);
@@ -24,12 +23,19 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector((state) => state.auth.user);
 
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [login] = useLoginMutation();
   const [registration] = useRegistrationMutation();
-  const { data: userExists, refetch: refetchUser } = useFindByEmailUserQuery(firebaseUser?.email, {
-    skip: !firebaseUser?.email,
-  });
+  const { data: userExists, refetch: refetchUser } = useFindByEmailUserQuery(
+    firebaseUser?.email,
+    {
+      skip: !firebaseUser?.email,
+    }
+  );
 
   useEffect(() => {
     const handleFirebaseLogin = async () => {
@@ -40,7 +46,7 @@ const Login = () => {
         const userCheck = await refetchUser();
 
         if (userCheck.data) {
-          console.log('User exists:', userCheck.data);
+          // console.log("User exists:", userCheck.data);
           const userInfo = {
             email: firebaseUser.email,
             password: "normalUser12345",
@@ -51,7 +57,7 @@ const Login = () => {
           toast.success("Logged in", { id: toastId, duration: 2000 });
           navigate("/dashboard");
         } else {
-          console.log('User does not exist, registering new user');
+          // console.log("User does not exist, registering new user");
           const displayName = firebaseUser.displayName
             ? firebaseUser.displayName.split(" ")
             : ["", ""];
@@ -71,13 +77,24 @@ const Login = () => {
 
           const res = await registration(normalUser).unwrap();
           const verifiedUser = verifyToken(firebaseUser.accessToken);
-          dispatch(setUser({ user: verifiedUser, token: firebaseUser.accessToken }));
-          toast.success("User registered successfully", { id: toastId, duration: 2000 });
+          dispatch(
+            setUser({ user: verifiedUser, token: firebaseUser.accessToken })
+          );
+          toast.success("User registered successfully", {
+            id: toastId,
+            duration: 2000,
+          });
           navigate("/dashboard");
         }
       } catch (error) {
-        if (error.status === 500 && error.data.message.includes("duplicate key error")) {
-          toast.error("User already exists. Please try logging in.", { id: toastId, duration: 2000 });
+        if (
+          error.status === 500 &&
+          error.data.message.includes("duplicate key error")
+        ) {
+          toast.error("User already exists. Please try logging in.", {
+            id: toastId,
+            duration: 2000,
+          });
         } else {
           toast.error("Something went wrong", { id: toastId, duration: 2000 });
         }
@@ -96,7 +113,7 @@ const Login = () => {
         setFirebaseUser(loggedUser);
       })
       .catch((error) => {
-        console.log("Google Sign-In error:", error.message);
+        // console.log("Google Sign-In error:", error.message);
       });
   };
 
@@ -166,14 +183,21 @@ const Login = () => {
             onClick={handleGoogleSignIn}
             className="border w-full h-8 rounded-md mt-6 grid place-items-center text-xs shadow-sm"
           >
-           <div className="flex gap-3 justify-center items-center">
-           <FaGoogle /> 
-           <span>Continue with Google</span>
-           </div>
+            <div className="flex gap-3 justify-center items-center">
+              <FaGoogle />
+              <span>Continue with Google</span>
+            </div>
           </button>
           <div className="w-full flex justify-between my-5">
-              <Link to={'/'} className="text-red-600 font-semibold text-sm">Back to Home</Link>
-              <Link to={'/register'} className="text-blue-600 font-semibold text-sm">Go to Registration</Link>
+            <Link to={"/"} className="text-red-600 font-semibold text-sm">
+              Back to Home
+            </Link>
+            <Link
+              to={"/register"}
+              className="text-blue-600 font-semibold text-sm"
+            >
+              Go to Registration
+            </Link>
           </div>
         </div>
       </div>

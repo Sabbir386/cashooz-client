@@ -48,7 +48,7 @@ const ViewCategory = () => {
             id: toastId,
             duration: 2000,
           });
-          console.log("Error:", error);
+          // console.log("Error:", error);
         }
       }
     });
@@ -65,9 +65,9 @@ const ViewCategory = () => {
   const paginatedData = data.slice(offset, offset + pageSize);
 
   return (
-    <div className="container mx-auto overflow-auto">
-      <table className="min-w-full bg-white border-collapse border border-gray-300 rounded-lg overflow-hidden">
-        <thead className="bg-gray-100 text-gray-800">
+    <div className="container mx-auto overflow-auto min-h-screen">
+      <table className="min-w-full bg-secondaryColor border-collapse border border-gray-300 rounded-lg overflow-hidden">
+        <thead className="bg-secondaryColor text-buttonBackground">
           <tr className="text-left">
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
               SL.
@@ -80,17 +80,17 @@ const ViewCategory = () => {
             </th>
           </tr>
         </thead>
-        <tbody className="text-gray-700">
-          {paginatedData.map((row,i) => (
+        <tbody className="text-white">
+          {paginatedData.map((row, i) => (
             <tr key={row._id}>
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                {i+1}
+              <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-sm">
+                {i + 1}
               </td>
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+              <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-sm">
                 {row.categoryName}
               </td>
 
-              <td className="px-1 py-2 border-b border-gray-200 bg-white text-sm">
+              <td className="px-1 py-2 border-b border-gray-200 bg-secondaryColor text-sm">
                 <div className="flex flex-col md:flex-row gap-1 justify-center items-center">
                   <Link
                     to={`/dashboard/edit-category/${row._id}`}
@@ -111,7 +111,7 @@ const ViewCategory = () => {
         </tbody>
       </table>
       <ReactPaginate
-        className="flex mt-5 gap-3"
+        className="flex mt-5 gap-3 text-white"
         previousLabel={"Previous"}
         nextLabel={"Next"}
         breakLabel={"..."}

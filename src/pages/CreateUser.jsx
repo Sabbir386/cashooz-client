@@ -35,7 +35,7 @@ const CreateUser = () => {
         },
       };
 
-      console.log("Registration data:", normalUser);
+      // console.log("Registration data:", normalUser);
       await registration(normalUser);
       toast.success("Registration successful", { id: toastId, duration: 2000 });
       navigate("/login");
@@ -45,14 +45,11 @@ const CreateUser = () => {
     }
   };
   return (
-    <>
+    <div className="min-h-screen">
       <div className="h-full py-5 w-full flex justify-center items-center">
         <div className="w-full  flex flex-col md:flex-row items-left mx-5">
-          
-          <div className="bg-white w-full flex flex-col items-left py-8 px-8 rounded">
-            <h3 className="text-3xl font-bold text-blue-600 mb-4">
-              Create User
-            </h3>
+          <div className="bg-secondaryColor w-full flex flex-col items-left py-8 px-8 rounded">
+            <h3 className="text-2xl text-white font-bold mb-4">Create User</h3>
             <form
               onSubmit={handleSubmit(onSubmit)}
               action="#"
@@ -62,7 +59,7 @@ const CreateUser = () => {
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     First Name
                   </label>
@@ -78,7 +75,7 @@ const CreateUser = () => {
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     Last Name
                   </label>
@@ -94,7 +91,7 @@ const CreateUser = () => {
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     Phone Number
                   </label>
@@ -110,7 +107,7 @@ const CreateUser = () => {
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     Email Address
                   </label>
@@ -124,7 +121,7 @@ const CreateUser = () => {
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     Password
                   </label>
@@ -140,7 +137,7 @@ const CreateUser = () => {
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     Role
                   </label>
@@ -157,7 +154,7 @@ const CreateUser = () => {
               <div className="">
                 <label
                   for="countries"
-                  class="block mb-2 text-sm font-medium text-gray-900"
+                  class="block mb-2 text-sm font-medium text-white"
                 >
                   Address
                 </label>
@@ -183,7 +180,7 @@ const CreateUser = () => {
                 </div>
                 <label
                   for="remember"
-                  className="block mb-2 ml-1 text-sm font-medium text-gray-900"
+                  className="block mb-2 ml-1 text-sm font-medium text-white"
                 >
                   I agree with the{" "}
                   <a
@@ -194,7 +191,7 @@ const CreateUser = () => {
                   </a>
                 </label>
               </div>
-              <button className="bg-blue-600 hover:bg-blue-700 font-bold text-sm text-white focus:outline-none rounded p-2.5 w-32 ml-auto">
+              <button className="ml-auto text-white bg-buttonBackground hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-24 px-5 py-2.5 text-center dark:bg-buttonBackground dark:hover:bg-green-500 dark:focus:ring-blue-800">
                 Submit
               </button>
               <div className=""></div>
@@ -202,7 +199,7 @@ const CreateUser = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

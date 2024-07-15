@@ -28,7 +28,7 @@ const Register = () => {
             firstName: data.firstName,
             lastName: data.lastName,
           },
-          gender: 'male', // Assuming gender is available in your data
+          gender: "male", // Assuming gender is available in your data
           email: data.email,
           contactNo: data.contactNo,
           presentAddress: data.presentAddress,
@@ -36,10 +36,10 @@ const Register = () => {
         },
       };
 
-      console.log("Registration data:", normalUser);
+      // console.log("Registration data:", normalUser);
       await registration(normalUser);
       toast.success("Registration successful", { id: toastId, duration: 2000 });
-      navigate('/login')
+      navigate("/login");
     } catch (error) {
       toast.error("Something went wrong", { id: toastId, duration: 2000 });
       console.error("Registration error:", error);
@@ -207,15 +207,19 @@ const Register = () => {
               <div className=""></div>
             </form>
             <div className="w-full flex justify-between my-5">
-              <Link to={'/'} className="text-red-600 font-semibold text-sm">Back to Home</Link>
-              <Link to={'/login'} className="text-blue-600 font-semibold text-sm">Go to Login</Link>
+              <Link to={"/"} className="text-red-600 font-semibold text-sm">
+                Back to Home
+              </Link>
+              <Link
+                to={"/login"}
+                className="text-blue-600 font-semibold text-sm"
+              >
+                Go to Login
+              </Link>
+            </div>
           </div>
-          </div>
-          
         </div>
-        
       </div>
-      
     </>
   );
 };

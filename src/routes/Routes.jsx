@@ -25,6 +25,9 @@ import EditUser from "../pages/EditUser";
 import EditNetwork from "../pages/EditNetwork";
 import EditCategory from "../pages/EditCategory";
 import Landing from "../pages/Landing/Landing";
+import SurveyList from "../pages/SurveyList";
+import DetailsPage from "../pages/DetailsPage/DetailsPage";
+import NotFound from "../pages/NotFound/NotFound";
 
 export const router = createBrowserRouter([
   {
@@ -45,85 +48,178 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/dashboard",
-        element: <ProtectedRoutes><AdminDashboard></AdminDashboard></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <AdminDashboard></AdminDashboard>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/create-offer",
-        element: <ProtectedRoutes><CreateOffer></CreateOffer></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <CreateOffer></CreateOffer>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/create-network",
-        element: <ProtectedRoutes><CreateNetwork></CreateNetwork></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <CreateNetwork></CreateNetwork>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/create-category",
-        element: <ProtectedRoutes><CreateCategory></CreateCategory></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <CreateCategory></CreateCategory>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/view-category",
-        element: <ProtectedRoutes><ViewCategory></ViewCategory></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <ViewCategory></ViewCategory>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/edit-category/:id",
-        element:<ProtectedRoutes> <EditCategory></EditCategory></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            {" "}
+            <EditCategory></EditCategory>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/view-network",
-        element: <ProtectedRoutes><ViewNetwork></ViewNetwork></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <ViewNetwork></ViewNetwork>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/edit-network/:id",
-        element: <ProtectedRoutes><EditNetwork></EditNetwork></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <EditNetwork></EditNetwork>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/create-admin",
-        element: <ProtectedRoutes><CreateAdmin></CreateAdmin></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <CreateAdmin></CreateAdmin>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/view-admin",
-        element: <ProtectedRoutes><ViewAdminList></ViewAdminList></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <ViewAdminList></ViewAdminList>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/edit-admin/:id",
-        element: <ProtectedRoutes><EditAdmin></EditAdmin></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <EditAdmin></EditAdmin>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/create-advertiser",
-        element: <ProtectedRoutes><CreateAdvertiser></CreateAdvertiser></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <CreateAdvertiser></CreateAdvertiser>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/view-advertiser",
-        element: <ProtectedRoutes><ViewAdvertiserList></ViewAdvertiserList></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <ViewAdvertiserList></ViewAdvertiserList>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/edit-advertiser/:id",
-        element: <ProtectedRoutes><EditAdvertiser></EditAdvertiser></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <EditAdvertiser></EditAdvertiser>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/create-user",
-        element: <ProtectedRoutes><CreateUser></CreateUser></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <CreateUser></CreateUser>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/view-user",
-        element: <ProtectedRoutes><ViewUserList></ViewUserList></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <ViewUserList></ViewUserList>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/edit-user/:id",
-        element: <ProtectedRoutes><EditUser></EditUser></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <EditUser></EditUser>
+          </ProtectedRoutes>
+        ),
       },
 
       {
         path: "/dashboard/offer-list",
-        element: <ProtectedRoutes><OfferList></OfferList></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <OfferList></OfferList>
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/dashboard/view-offer/:id",
+        element: (
+          <ProtectedRoutes>
+            <DetailsPage></DetailsPage>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/edit-offer/:id",
-        element: <ProtectedRoutes><EditOffer></EditOffer></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <EditOffer></EditOffer>
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/dashboard/authentication",
         element: <Authentication></Authentication>,
       },
+      {
+        path: "/dashboard/survey-list",
+        element: <SurveyList></SurveyList>,
+      },
     ],
+  },
+  {
+    path: "/*",
+    element: <NotFound></NotFound>,
   },
 ]);

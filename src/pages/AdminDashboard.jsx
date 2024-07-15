@@ -23,6 +23,7 @@ import {
   useLoggedInUserDailycCompletedOfferCountsQuery,
   useLoggedInUserOfferNameandTotalCountsQuery,
   useLoggedUserTotalCompletedOfferQuery,
+  useOfferByNetworkQuery,
   usePerDayCompletedOfferQuery,
   useSpecificOfferTotalCountsQuery,
   useSpecificUserTotalOfferCountsQuery,
@@ -39,9 +40,26 @@ import "swiper/css";
 import { useAppSelector } from "../redux/features/hooks";
 import { verifyToken } from "../utils/verifyToken";
 import { logOut, useCurrentToken } from "../redux/features/auth/authSlice";
+import { HiOutlineStar } from "react-icons/hi";
+import SurveyList from "./SurveyList";
+import OfferView from "./OfferView/OfferView";
 const AdminDashboard = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [cpaOffers, setCpaOffers] = useState([]);
+  const [networkOffers, setNetworkOffers] = useState([]);
+  const {
+    data: offers,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useOfferByNetworkQuery();
+
+  useEffect(() => {
+    if (offers) {
+      setNetworkOffers(offers.data);
+      console.log(offers);
+    }
+  }, [offers]);
 
   useEffect(() => {
     const fetchOffers = async () => {
@@ -423,9 +441,256 @@ const AdminDashboard = () => {
 
   return (
     <div className="container mx-auto">
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-4">
+      <div className="overflow-hidden mt-4 mb-6 z-[97]">
+        <div className="text-white p-2 rounded shadow-sm inline-flex flex-nowrap gap-5 overflow-hidden animate-infinite-scroll">
+          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
+            <div>
+              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
+                A
+              </div>
+            </div>
+            <div>
+              <h5 className="text-sm">Payout</h5>
+              <h6 className="text-xs mt-1">Game</h6>
+            </div>
+            <div>
+              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
+                $18.52
+              </span>
+            </div>
+          </div>
+          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
+            <div>
+              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
+                A
+              </div>
+            </div>
+            <div>
+              <h5 className="text-sm">Payout</h5>
+              <h6 className="text-xs mt-1">Game</h6>
+            </div>
+            <div>
+              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
+                $18.52
+              </span>
+            </div>
+          </div>
+          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
+            <div>
+              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
+                A
+              </div>
+            </div>
+            <div>
+              <h5 className="text-sm">Payout</h5>
+              <h6 className="text-xs mt-1">Game</h6>
+            </div>
+            <div>
+              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
+                $18.52
+              </span>
+            </div>
+          </div>
+          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
+            <div>
+              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
+                A
+              </div>
+            </div>
+            <div>
+              <h5 className="text-sm">Payout</h5>
+              <h6 className="text-xs mt-1">Game</h6>
+            </div>
+            <div>
+              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
+                $18.52
+              </span>
+            </div>
+          </div>
+          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
+            <div>
+              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
+                A
+              </div>
+            </div>
+            <div>
+              <h5 className="text-sm">Payout</h5>
+              <h6 className="text-xs mt-1">Game</h6>
+            </div>
+            <div>
+              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
+                $18.52
+              </span>
+            </div>
+          </div>
+          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
+            <div>
+              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
+                A
+              </div>
+            </div>
+            <div>
+              <h5 className="text-sm">Payout</h5>
+              <h6 className="text-xs mt-1">Game</h6>
+            </div>
+            <div>
+              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
+                $18.52
+              </span>
+            </div>
+          </div>
+          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
+            <div>
+              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
+                A
+              </div>
+            </div>
+            <div>
+              <h5 className="text-sm">Payout</h5>
+              <h6 className="text-xs mt-1">Game</h6>
+            </div>
+            <div>
+              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
+                $18.52
+              </span>
+            </div>
+          </div>
+          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
+            <div>
+              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
+                A
+              </div>
+            </div>
+            <div>
+              <h5 className="text-sm">Payout</h5>
+              <h6 className="text-xs mt-1">Game</h6>
+            </div>
+            <div>
+              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
+                $18.52
+              </span>
+            </div>
+          </div>
+          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
+            <div>
+              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
+                A
+              </div>
+            </div>
+            <div>
+              <h5 className="text-sm">Payout</h5>
+              <h6 className="text-xs mt-1">Game</h6>
+            </div>
+            <div>
+              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
+                $18.52
+              </span>
+            </div>
+          </div>
+          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
+            <div>
+              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
+                A
+              </div>
+            </div>
+            <div>
+              <h5 className="text-sm">Payout</h5>
+              <h6 className="text-xs mt-1">Game</h6>
+            </div>
+            <div>
+              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
+                $18.52
+              </span>
+            </div>
+          </div>
+          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
+            <div>
+              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
+                A
+              </div>
+            </div>
+            <div>
+              <h5 className="text-sm">Payout</h5>
+              <h6 className="text-xs mt-1">Game</h6>
+            </div>
+            <div>
+              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
+                $18.52
+              </span>
+            </div>
+          </div>
+          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
+            <div>
+              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
+                A
+              </div>
+            </div>
+            <div>
+              <h5 className="text-sm">Payout</h5>
+              <h6 className="text-xs mt-1">Game</h6>
+            </div>
+            <div>
+              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
+                $18.52
+              </span>
+            </div>
+          </div>
+          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
+            <div>
+              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
+                A
+              </div>
+            </div>
+            <div>
+              <h5 className="text-sm">Payout</h5>
+              <h6 className="text-xs mt-1">Game</h6>
+            </div>
+            <div>
+              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
+                $18.52
+              </span>
+            </div>
+          </div>
+          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
+            <div>
+              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
+                A
+              </div>
+            </div>
+            <div>
+              <h5 className="text-sm">Payout</h5>
+              <h6 className="text-xs mt-1">Game</h6>
+            </div>
+            <div>
+              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
+                $18.52
+              </span>
+            </div>
+          </div>
+          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
+            <div>
+              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
+                A
+              </div>
+            </div>
+            <div>
+              <h5 className="text-sm">Payout</h5>
+              <h6 className="text-xs mt-1">Game</h6>
+            </div>
+            <div>
+              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
+                $18.52
+              </span>
+            </div>
+          </div>
+
+          {/* Repeat the inner divs as necessary */}
+        </div>
+      </div>
+
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
         {(userRole === "admin" || userRole === "superAdmin") && (
-          <div className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-4 py-6 rounded shadow-sm">
+          <div className="bg-cardBackground text-white px-4 py-6 rounded shadow-sm">
             <h4 className="font-bold text-xl">Total Offer</h4>
             {isLoadingOffer && <p>Loading...</p>}
             {errorOffer && <p>Error loading offer data</p>}
@@ -434,7 +699,7 @@ const AdminDashboard = () => {
         )}
 
         {(userRole === "admin" || userRole === "superAdmin") && (
-          <div className="bg-gradient-to-r from-amber-200 to-yellow-500 text-white px-4 py-6 rounded shadow-sm">
+          <div className="bg-secondaryColor text-white px-4 py-6 rounded shadow-sm">
             <h4 className="font-bold text-">All Completed Offer</h4>
             {isLoadingCompleted && <p>Loading...</p>}
             {errorCompleted && <p>Error loading offer data</p>}
@@ -442,7 +707,7 @@ const AdminDashboard = () => {
           </div>
         )}
         {(userRole === "user" || userRole === "advertiser") && (
-          <div className="bg-gradient-to-r from-amber-200 to-yellow-500 text-white px-4 py-6 rounded shadow-sm">
+          <div className="bg-cardBackground text-white px-4 py-6 rounded shadow-sm">
             <h4 className="font-bold text-">Total Completed Offer</h4>
             {isLoadingloggedUserTotalCompletedOffer && <p>Loading...</p>}
             {errorloggedUserTotalCompletedOffer && (
@@ -457,7 +722,7 @@ const AdminDashboard = () => {
         )}
 
         {(userRole === "admin" || userRole === "superAdmin") && (
-          <div className="bg-gradient-to-r from-blue-800 to-indigo-900 text-white px-4 py-6 rounded shadow-sm">
+          <div className="bg-secondaryColor text-white px-4 py-6 rounded shadow-sm">
             <h4 className="font-bold text-xl">Total Admin</h4>
             {isLoadingAdmins && <p>Loading...</p>}
             {errorAdmins && <p>Error loading offer data</p>}
@@ -466,7 +731,7 @@ const AdminDashboard = () => {
         )}
 
         {(userRole === "admin" || userRole === "superAdmin") && (
-          <div className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white px-4 py-6 rounded shadow-sm">
+          <div className="bg-secondaryColor text-white px-4 py-6 rounded shadow-sm">
             <h4 className="font-bold text-">Total User</h4>
             {isLoadingUsers && <p>Loading...</p>}
             {errorUsers && <p>Error loading offer data</p>}
@@ -475,7 +740,7 @@ const AdminDashboard = () => {
         )}
 
         {(userRole === "admin" || userRole === "superAdmin") && (
-          <div className="bg-gradient-to-r from-emerald-500 to-emerald-900 text-white px-4 py-6 rounded shadow-sm">
+          <div className="bg-secondaryColor text-white px-4 py-6 rounded shadow-sm">
             <h4 className="font-bold text-xl">Total Advertiser</h4>
             {isLoadingAdvertisers && <p>Loading...</p>}
             {errorAdvertisers && <p>Error loading offer data</p>}
@@ -484,7 +749,7 @@ const AdminDashboard = () => {
         )}
 
         {(userRole === "admin" || userRole === "superAdmin") && (
-          <div className="bg-gradient-to-r from-indigo-400 to-cyan-400 text-white px-4 py-6 rounded shadow-sm">
+          <div className="bg-secondaryColor text-white px-4 py-6 rounded shadow-sm">
             <h4 className="font-bold text-xl">Today Completed Offer</h4>
             <h5 className="font-semibold text-base">
               {regularCompletedOffer?.data[0]?.TotalCount}
@@ -492,7 +757,7 @@ const AdminDashboard = () => {
           </div>
         )}
         {(userRole === "user" || userRole === "advertiser") && (
-          <div className="bg-gradient-to-r from-indigo-400 to-cyan-400 text-white px-4 py-6 rounded shadow-sm">
+          <div className="bg-cardBackground text-white px-4 py-6 rounded shadow-sm">
             <h4 className="font-bold text-">Today Completed Offer</h4>
             {isLoadingloggedInUserDailycCompletedOfferCounts && (
               <p>Loading...</p>
@@ -506,9 +771,9 @@ const AdminDashboard = () => {
           </div>
         )}
       </div>
-     <div className="grid gap-4 mt-5 grid-cols-1 md:grid-cols-2">
+      <div className="grid gap-4 mt-5 grid-cols-1 md:grid-cols-2">
         {(userRole === "admin" || userRole === "superAdmin") && (
-          <div className="bg-white px-4 py-6 rounded shadow-sm">
+          <div className="bg-cardBackground px-4 py-6 rounded shadow-sm">
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={data}>
                 <XAxis dataKey="id" stroke="#8884d8" />
@@ -534,7 +799,7 @@ const AdminDashboard = () => {
           </div>
         )}
         {(userRole === "user" || userRole === "advertiser") && (
-          <div className="bg-white px-4 py-6 rounded shadow-sm">
+          <div className="bg-cardBackground px-4 py-6 rounded shadow-sm">
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={transformedData}>
                 <XAxis dataKey="date" stroke="#8884d8" />
@@ -560,7 +825,7 @@ const AdminDashboard = () => {
           </div>
         )}
         {(userRole === "admin" || userRole === "superAdmin") && (
-          <div className="bg-white px-4 py-6 rounded shadow-sm">
+          <div className="bg-secondaryColor px-4 py-6 rounded shadow-sm">
             <ResponsiveContainer width="100%" height={250}>
               <PieChart width={400} height={400}>
                 <Pie
@@ -586,7 +851,7 @@ const AdminDashboard = () => {
           </div>
         )}
         {(userRole === "user" || userRole === "advertiser") && (
-          <div className="bg-white px-4 py-6 rounded shadow-sm">
+          <div className="bg-cardBackground px-4 py-6 rounded shadow-sm">
             <ResponsiveContainer width="100%" height={250}>
               <PieChart width={400} height={400}>
                 <Pie
@@ -616,7 +881,7 @@ const AdminDashboard = () => {
         {(userRole === "admin" || userRole === "superAdmin") && (
           <div
             style={{ width: "100%", height: 300 }}
-            className="bg-white px-4 py-6 rounded shadow-sm mt-5"
+            className="bg-secondaryColor px-4 py-6 rounded shadow-sm mt-5"
           >
             <ResponsiveContainer>
               <AreaChart
@@ -643,20 +908,20 @@ const AdminDashboard = () => {
           </div>
         )}
         {(userRole === "admin" || userRole === "superAdmin") && (
-          <div className="bg-white px-4 py-6 rounded shadow-sm mt-5 overflow-x-auto">
+          <div className="bg-secondaryColor px-4 py-6 rounded shadow-sm mt-5 overflow-x-auto">
             <table className="min-w-full bg-white border-collapse border border-gray-300 rounded-lg overflow-hidden">
-              <thead className="bg-gray-100 text-gray-800">
+              <thead className="bg-secondaryColor text-white">
                 <tr className="text-left">
-                  <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+                  <th className="py-3 px-4 uppercase font-semibold text-sm bg-secondaryColor border-b border-gray-300">
                     No.
                   </th>
-                  <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+                  <th className="py-3 px-4 uppercase font-semibold text-sm bg-secondaryColor border-b border-gray-300">
                     Offer
                   </th>
-                  <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+                  <th className="py-3 px-4 uppercase font-semibold text-sm bg-secondaryColor border-b border-gray-300">
                     Completed
                   </th>
-                  <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+                  <th className="py-3 px-4 uppercase font-semibold text-sm bg-secondaryColor border-b border-gray-300">
                     Date
                   </th>
                 </tr>
@@ -666,16 +931,16 @@ const AdminDashboard = () => {
                   .slice(0, 3)
                   .map((row, idx) => (
                     <tr key={idx}>
-                      <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                      <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                         {idx + 1}
                       </td>
-                      <td className="px-5 py-2 border-b border-gray-200 bg-white text-xs">
+                      <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-xs">
                         {row.name}
                       </td>
-                      <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                      <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                         {row.count}
                       </td>
-                      <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                      <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                         {row.date}
                       </td>
                     </tr>
@@ -685,8 +950,41 @@ const AdminDashboard = () => {
           </div>
         )}
       </div>
-        
-      <div className="hidden w-full bg-white px-4 py-6 rounded shadow-sm mt-5">
+      {networkOffers.map((networkOffer, idx) => (
+        <div key={idx} className="my-8">
+          <h2 className="text-3xl font-bold text-white  border-b-[1px] border-b-secondaryColor pb-4">{networkOffer.networkName}</h2>
+          <div className="grid gap-4 mt-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-7">
+          {networkOffer.offers.map((offer, offerIdx) => (
+              
+              <Link
+                key={offer._id}
+                to={`/dashboard/view-offer/${offer._id}`}
+                className="bg-cardBackground p-4 rounded-md"
+              
+              >
+                <div className="relative">
+                  <img
+                    src="https://main-p.agmcdn.com/offers/1126583-cwTa2k02.jpg"
+                    alt=""
+                    className="w-full relative h-24 object-cover rounded-md"
+                  />
+                  <div className="absolute w-9 rounded-full h-5 bg-black bg-opacity-50 top-2 right-3 flex items-center justify-center font-bold">
+                    <span className="text-white">A</span>
+                  </div>
+                </div>
+                <div className="mt-4 text-white">
+                  <h4 className="font-bold text-base">{offer?.name ? offer.name : "Offer Name"}</h4>
+                  <h6 className="text-grayColor text-sm">{offer?.categoryName ? offer.categoryName : offer.category }</h6>
+                  <h3 className="font-semibold">{offer?.points}</h3>
+                </div>
+              </Link>
+            ))}
+            {/* <OfferView networkOffers={networkOffers}></OfferView> */}
+          </div>
+        </div>
+      ))}
+      
+      <div className="hidden w-full bg-white px-4 py-6 rounded shadow-sm my-5">
         <Swiper
           className="w-full"
           spaceBetween={50}
@@ -724,6 +1022,8 @@ const AdminDashboard = () => {
             ))}
         </Swiper>
       </div>
+
+      <SurveyList></SurveyList>
     </div>
   );
 };

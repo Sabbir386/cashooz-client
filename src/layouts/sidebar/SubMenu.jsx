@@ -12,10 +12,10 @@ const SubMenu = ({ data }) => {
         className={`link ${pathname.includes(data.name) && "text-blue-600"}`}
         onClick={() => setSubMenuOpen(!subMenuOpen)}
       >
-        <data.icon size={23} className="min-w-max" />
-        <p className="flex-1 capitalize">{data.name}</p>
+        <data.icon size={23} className="min-w-max text-grayColor" />
+        <p className="flex-1 capitalize text-grayColor">{data.name}</p>
         <IoIosArrowDown
-          className={` ${subMenuOpen && "rotate-180"} duration-200 `}
+          className={` ${subMenuOpen && "rotate-180"} duration-200  text-grayColor`}
         />
       </div>
       <motion.ul
@@ -34,7 +34,7 @@ const SubMenu = ({ data }) => {
           <li key={menu.id}>
             <NavLink
               to={`/dashboard/${menu.path}`}
-              className="link !bg-transparent capitalize"
+              className="link bg-transparent capitalize text-grayColor"
             >
               {menu.name}
             </NavLink>

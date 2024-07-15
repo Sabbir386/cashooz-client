@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import Product from "../assets/img/cashooz.png";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
-import { useDeleteAdvertiserMutation, useViewAdvertiserQuery } from "./advertiserApi";
+import {
+  useDeleteAdvertiserMutation,
+  useViewAdvertiserQuery,
+} from "./advertiserApi";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 
@@ -13,7 +16,6 @@ const ViewAdvertiserList = () => {
   const { data: advertisers, error, isLoading } = useViewAdvertiserQuery();
   const [data, setData] = useState([]);
   const [deleteAdvertiser] = useDeleteAdvertiserMutation();
-
 
   // Update state when advertisers data is available
   useEffect(() => {
@@ -35,7 +37,7 @@ const ViewAdvertiserList = () => {
   // Handle deletion of an advertiser
   const handleDelete = (_id) => {
     // Implement your logic to delete advertiser with ID 'id'
-    console.log("Delete advertiser with ID:", _id);
+    // console.log("Delete advertiser with ID:", _id);
     Swal.fire({
       title: "Are you sure you want to delete this Advertiser?",
       icon: "warning",
@@ -57,10 +59,10 @@ const ViewAdvertiserList = () => {
             id: toastId,
             duration: 2000,
           });
-          console.log("Error:", error);
+          // console.log("Error:", error);
         }
       }
-    })
+    });
   };
 
   // If data is still loading
@@ -77,9 +79,9 @@ const ViewAdvertiserList = () => {
   const paginatedData = data.slice(offset, offset + pageSize);
 
   return (
-    <div className="container mx-auto overflow-auto">
-      <table className="min-w-full bg-white border-collapse border border-gray-300 rounded-lg overflow-hidden">
-        <thead className="bg-gray-100 text-gray-800">
+    <div className="container mx-auto overflow-auto min-h-screen">
+      <table className="min-w-full bg-secondaryColor border-collapse border border-gray-300 rounded-lg overflow-hidden">
+        <thead className="bg-secondaryColor text-buttonBackground">
           <tr className="text-left">
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
               SL.
@@ -99,12 +101,12 @@ const ViewAdvertiserList = () => {
           </tr>
         </thead>
         <tbody className="text-gray-700">
-          {paginatedData.map((row,i) => (
+          {paginatedData.map((row, i) => (
             <tr key={row._id}>
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                {i+1}
+              <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
+                {i + 1}
               </td>
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+              <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                 <div className="flex">
                   <div className="flex-shrink-0 w-10 h-10">
                     <img
@@ -114,23 +116,20 @@ const ViewAdvertiserList = () => {
                     />
                   </div>
                   <div className="ml-3">
-                    <p className="text-gray-900 font-medium whitespace-no-wrap">
+                    <p className="text-white font-medium whitespace-no-wrap">
                       {row.fullName}
                     </p>
                     <p className="text-gray-600 whitespace-no-wrap"></p>
                   </div>
                 </div>
               </td>
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+              <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                 {row.gender}
               </td>
-
-              <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+              <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                 {row.contactNo}
               </td>
-
-              
-              <td className="px-1 py-2 border-b border-gray-200 bg-white text-sm">
+              <td className="px-1 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                 <div className="flex flex-col md:flex-row gap-1 justify-center items-center">
                   <Link
                     to={`/dashboard/edit-advertiser/${row._id}`}
@@ -139,21 +138,19 @@ const ViewAdvertiserList = () => {
                     <FaEdit />
                   </Link>
                   <button
-                     onClick={() => handleDelete(row._id)}
+                    onClick={() => handleDelete(row._id)}
                     className="w-7 h-7 grid justify-center items-center bg-red-500 rounded text-white "
                   >
                     <FaRegTrashAlt />
                   </button>
                 </div>
               </td>
-
-
             </tr>
           ))}
         </tbody>
       </table>
       <ReactPaginate
-        className="flex mt-5 gap-3"
+        className="flex mt-5 gap-3 text-white"
         previousLabel={"Previous"}
         nextLabel={"Next"}
         breakLabel={"..."}

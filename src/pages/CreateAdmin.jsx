@@ -39,7 +39,7 @@ const CreateAdmin = () => {
         },
       };
 
-      console.log("Registration data:", adminInfo);
+      // console.log("Registration data:", adminInfo);
       await createAdmin(adminInfo);
       toast.success("Registration successful", { id: toastId, duration: 2000 });
       navigate("/login");
@@ -49,12 +49,11 @@ const CreateAdmin = () => {
     }
   };
   return (
-    <>
+    <div className="min-h-screen">
       <div className="h-full py-2 w-full flex justify-center items-center">
         <div className="w-full sm:w-1/0 md:w-12/12 lg:w-1/1 flex flex-col md:flex-row items-center ">
-          
-          <div className="bg-white w-full flex flex-col items-start py-8 px-8 rounded">
-            <h3 className="text-3xl font-bold text-blue-600 mb-4 text-left">
+          <div className="bg-secondaryColor w-full flex flex-col items-start py-8 px-8 rounded">
+            <h3 className="text-3xl font-bold text-white mb-4 text-left">
               Create Admin
             </h3>
             <form
@@ -66,7 +65,7 @@ const CreateAdmin = () => {
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     First Name
                   </label>
@@ -82,7 +81,7 @@ const CreateAdmin = () => {
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     Last Name
                   </label>
@@ -98,7 +97,7 @@ const CreateAdmin = () => {
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     Phone Number
                   </label>
@@ -114,7 +113,7 @@ const CreateAdmin = () => {
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     Email Address
                   </label>
@@ -128,7 +127,7 @@ const CreateAdmin = () => {
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     Password
                   </label>
@@ -144,7 +143,7 @@ const CreateAdmin = () => {
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     Designation
                   </label>
@@ -163,7 +162,7 @@ const CreateAdmin = () => {
               <div className="">
                 <label
                   for="countries"
-                  class="block mb-2 text-sm font-medium text-gray-900"
+                  class="block mb-2 text-sm font-medium text-white"
                 >
                   Address
                 </label>
@@ -189,7 +188,7 @@ const CreateAdmin = () => {
                 </div>
                 <label
                   for="remember"
-                  className="block mb-2 ml-1 text-sm font-medium text-gray-900"
+                  className="block mb-2 ml-1 text-sm font-medium text-white"
                 >
                   I agree with the{" "}
                   <a
@@ -200,7 +199,7 @@ const CreateAdmin = () => {
                   </a>
                 </label>
               </div>
-              <button className="bg-blue-600 hover:bg-blue-700 font-bold text-sm text-white focus:outline-none rounded p-2.5 w-32 ml-auto">
+              <button className="ml-auto text-white bg-buttonBackground hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-24 px-5 py-2.5 text-center dark:bg-buttonBackground dark:hover:bg-green-500 dark:focus:ring-blue-800">
                 Submit
               </button>
               <div className=""></div>
@@ -208,7 +207,7 @@ const CreateAdmin = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

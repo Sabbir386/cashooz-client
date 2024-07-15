@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import SubMenu from "./SubMenu";
 import { IoIosArrowBack } from "react-icons/io";
 import { SlSettings } from "react-icons/sl";
-import { HiOutlineUsers } from "react-icons/hi";
+import { HiOutlineUsers, HiCurrencyDollar } from "react-icons/hi";
 import { CiBullhorn } from "react-icons/ci";
 import { AiOutlineAppstore } from "react-icons/ai";
 import { BsPerson } from "react-icons/bs";
@@ -149,6 +149,7 @@ const Sidebar = () => {
         id: "user-offers",
         name: "Offer's",
         icon: HiOutlineUsers,
+        path: "offer-list",
         menus: [
           {
             id: "user-offer-list",
@@ -156,6 +157,30 @@ const Sidebar = () => {
             name: "- All Offer List",
           },
         ],
+      },
+      {
+        id: "user-Surveys",
+        name: "Surveys",
+        icon: HiCurrencyDollar,
+        path: "survey-list",
+      },
+      {
+        id: "user-Cashout",
+        name: "Cashout",
+        icon: HiOutlineUsers,
+        path: "cashout",
+      },
+      {
+        id: "user-Rewards",
+        name: "Rewards",
+        icon: HiOutlineUsers,
+        path: "rewards",
+      },
+      {
+        id: "user-Affiliate",
+        name: "Affiliate",
+        icon: HiOutlineUsers,
+        path: "affiliates",
       },
     ];
   } else if (user?.role === "advertiser") {
@@ -316,7 +341,7 @@ const Sidebar = () => {
       };
 
   return (
-    <div>
+    <div className="fixed z-[99999]">
       <div
         onClick={() => setOpen(false)}
         className={`md:hidden fixed inset-0 max-h-screen z-[998] bg-black/50 ${
@@ -328,12 +353,14 @@ const Sidebar = () => {
         variants={Nav_animation}
         initial={{ x: isTabletMid ? -250 : 0 }}
         animate={open ? "open" : "closed"}
-        className="bg-white text-gray shadow-xl z-[999] max-w-[16rem] w-[16rem] 
+        className="bg-secondaryColor text-gray shadow-xl z-[999] max-w-[16rem] w-[16rem] 
             overflow-hidden md:relative fixed
          h-screen "
       >
         <div className="flex items-center gap-2.5 font-medium border-b py-3 border-slate-300 mx-3">
-          <span className="text-xl whitespace-pre">CASHOOZ</span>
+          <span className="text-buttonBackground font-bold text-4xl whitespace-pre">
+            CASHOOZ
+          </span>
         </div>
 
         <div className="flex flex-col h-full">
@@ -343,8 +370,8 @@ const Sidebar = () => {
                 to={"/dashboard"}
                 className={`p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium ${
                   location.pathname === "/dashboard"
-                    ? "bg-blue-600 text-white"
-                    : ""
+                    ? "bg-sidebarBackground text-buttonBackground"
+                    : "bg-sidebarBackground text-buttonBackground"
                 }`}
               >
                 <AiOutlineAppstore size={23} className="min-w-max" />
@@ -352,12 +379,29 @@ const Sidebar = () => {
               </Link>
             </li>
 
-            <li>
-              {menulist?.map((menu) => (
-                <div key={menu.id} className="flex flex-col gap-1">
-                  <SubMenu data={menu} />
-                </div>
-              ))}
+            <li className="mb-1">
+              {menulist?.map((menu) =>
+                menu?.menus ? (
+                  <div key={menu.id} className="flex flex-col gap-1 mb-1">
+                    <SubMenu data={menu} />
+                  </div>
+                ) : (
+                  <li className="mb-1 bg-sidebarBackground text-buttonBackground">
+                    <Link
+                      to={`/dashboard/${menu.path}`}
+
+                      className={`p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium ${
+                        location.pathname === "/dashboard"
+                          ? "bg-sidebarBackground text-buttonBackground"
+                          : ""
+                      }`}
+                    >
+                      <AiOutlineAppstore size={23} className="min-w-max" />
+                      {menu.name}
+                    </Link>
+                  </li>
+                )
+              )}
             </li>
           </ul>
           <button
@@ -369,18 +413,18 @@ const Sidebar = () => {
           {open && (
             <div className="flex-1 text-sm z-50 max-h-48 my-auto whitespace-pre w-full font-medium">
               <div className="flex border-y border-slate-300 p-4 items-center justify-between">
-                <div>
+                <div className="text-grayColor">
                   <p>Cashooz</p>
                   <small>No-cost $0/month</small>
                 </div>
-                <p className="text-teal-500 py-1.5 px-3 text-xs bg-teal-50 rounded-xl">
+                <p className="text-white py-1.5 px-3 text-xs bg-buttonBackground rounded-xl">
                   Upgrade
                 </p>
               </div>
             </div>
           )}
         </div>
-        <motion.div
+        {/* <motion.div
           onClick={() => {
             setOpen(!open);
           }}
@@ -401,9 +445,9 @@ const Sidebar = () => {
           className="absolute w-fit h-fit md:block z-50 hidden right-2 bottom-3 cursor-pointer"
         >
           <IoIosArrowBack size={25} />
-        </motion.div>
+        </motion.div> */}
       </motion.div>
-      <div className="m-3 md:hidden" onClick={() => setOpen(true)}>
+      <div className="m-3 md:hidden text-white" onClick={() => setOpen(true)}>
         <MdMenu size={25} />
       </div>
     </div>

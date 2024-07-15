@@ -31,13 +31,13 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   DefinitionType
 > = async (args, api, extraOptions): Promise<any> => {
   let result = await baseQuery(args, api, extraOptions);
-  console.log(result);
+  // console.log(result);
   if (result?.error?.status === 404) {
     toast.error("User Not Found");
   }
   if (result?.error?.status === 401) {
     //* Send Refresh
-    console.log("Sending refresh token");
+    // console.log("Sending refresh token");
 
     const res = await fetch(
       "https://cashooz-server.vercel.app/api/v1/auth/refresh-token",

@@ -66,7 +66,7 @@ const EditAdmin = () => {
             id: toastId,
             duration: 2000,
           });
-          console.log("Error:", error);
+          // console.log("Error:", error);
         }
       }
     });
@@ -78,7 +78,6 @@ const EditAdmin = () => {
   return (
     <div className=" h-full py-5 w-full flex justify-center items-center">
       <div className="w-full sm:w-1/0 md:w-12/12 lg:w-1/1 flex flex-col md:flex-row items-left mx-5">
-       
         <div className="bg-white w-full  flex flex-col items-left py-8 px-8 rounded">
           <h3 className="text-3xl font-bold text-blue-600 mb-4">Edit Admin</h3>
           <form

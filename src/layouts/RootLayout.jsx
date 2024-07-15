@@ -4,11 +4,12 @@ import Sidebar from "./sidebar";
 function RootLayout() {
 
   return (
-    <div className="flex gap-5">
+    <div className="flex">
       <Sidebar />
-      <main className="mr-5 flex-1 mx-auto py-4 w-5 md:w-[100% - 16rem]"><Outlet></Outlet></main>
+      <main className="ml-0 md:ml-[16rem] flex-1 mx-auto py-4 w-5 md:w-[100% - 16rem] bg-primaryColor px-3"><Outlet></Outlet></main>
     </div>
   );
+
 }
 
 export default RootLayout;

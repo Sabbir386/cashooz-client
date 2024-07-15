@@ -5,7 +5,7 @@ import { verifyToken } from "../utils/verifyToken";
 
 const ProtectedRoutes = ({ children }) => {
   const token = useAppSelector(useCurrentToken);
-  console.log(token);
+  // console.log(token);
 
   let user;
   if (token) {

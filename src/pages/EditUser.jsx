@@ -4,7 +4,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 
-import { useSingleNormalUserQuery, useUpdateNormalUserMutation } from "../redux/features/auth/authApi";
+import {
+  useSingleNormalUserQuery,
+  useUpdateNormalUserMutation,
+} from "../redux/features/auth/authApi";
 
 const EditUser = () => {
   const navigate = useNavigate();
@@ -70,7 +73,7 @@ const EditUser = () => {
             id: toastId,
             duration: 2000,
           });
-          console.log("Error:", error);
+          // console.log("Error:", error);
         }
       }
     });
@@ -83,7 +86,6 @@ const EditUser = () => {
   return (
     <div className="h-full py-5 w-full flex justify-center items-center">
       <div className="w-full  flex flex-col md:flex-row items-left mx-5">
-        
         <div className="bg-white w-full flex flex-col items-left py-8 px-8 rounded">
           <h3 className="text-3xl font-bold text-blue-600 mb-4">Edit User</h3>
           <form

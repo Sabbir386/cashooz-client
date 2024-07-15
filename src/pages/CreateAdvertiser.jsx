@@ -35,11 +35,12 @@ const CreateAdvertiser = () => {
           designation: data.designation,
           emergencyContactNo: "01578458458",
           bloodGroup: "A-",
+          role:'adverstiser',
           permanentAddress: "456 Second Avenue, Town, Country",
         },
       };
 
-      console.log("Registration data:", advertiserInfo);
+      // console.log("Registration data:", advertiserInfo);
       await createAdvertiser(advertiserInfo);
       toast.success("Registration successful", { id: toastId, duration: 2000 });
       //   navigate("/login");
@@ -49,13 +50,13 @@ const CreateAdvertiser = () => {
     }
   };
   return (
-    <>
+    <div className="min-h-screen">
       <div className="h-full py-5 w-full flex justify-center items-center">
         <div className="w-full flex flex-col md:flex-row items-left mx-5">
-          
-          <div className="bg-white w-full flex flex-col items-left py-8 px-8 rounded">
-            <h3 className="text-3xl font-bold text-blue-600 mb-4">
-Create Advertiser            </h3>
+          <div className="bg-secondaryColor w-full flex flex-col items-left py-8 px-8 rounded">
+            <h3 className="text-2xl text-white font-bold mb-4">
+              Create Advertiser{" "}
+            </h3>
             <form
               onSubmit={handleSubmit(onSubmit)}
               action="#"
@@ -65,7 +66,7 @@ Create Advertiser            </h3>
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     First Name
                   </label>
@@ -81,7 +82,7 @@ Create Advertiser            </h3>
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     Last Name
                   </label>
@@ -97,7 +98,7 @@ Create Advertiser            </h3>
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     Phone Number
                   </label>
@@ -113,7 +114,7 @@ Create Advertiser            </h3>
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     Email Address
                   </label>
@@ -127,7 +128,7 @@ Create Advertiser            </h3>
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     Password
                   </label>
@@ -143,7 +144,7 @@ Create Advertiser            </h3>
                 <div className="">
                   <label
                     for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
+                    class="block mb-2 text-sm font-medium text-white"
                   >
                     Designation
                   </label>
@@ -162,7 +163,7 @@ Create Advertiser            </h3>
               <div className="">
                 <label
                   for="countries"
-                  class="block mb-2 text-sm font-medium text-gray-900"
+                  class="block mb-2 text-sm font-medium text-white"
                 >
                   Address
                 </label>
@@ -188,7 +189,7 @@ Create Advertiser            </h3>
                 </div>
                 <label
                   for="remember"
-                  className="block mb-2 ml-1 text-sm font-medium text-gray-900"
+                  className="block mb-2 ml-1 text-sm font-medium text-white"
                 >
                   I agree with the{" "}
                   <a
@@ -199,7 +200,7 @@ Create Advertiser            </h3>
                   </a>
                 </label>
               </div>
-              <button className="bg-blue-600 hover:bg-blue-700 font-bold text-sm text-white focus:outline-none rounded p-2.5 w-32 ml-auto">
+              <button className="ml-auto text-white bg-buttonBackground hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-24 px-5 py-2.5 text-center dark:bg-buttonBackground dark:hover:bg-green-500 dark:focus:ring-blue-800">
                 Submit
               </button>
               <div className=""></div>
@@ -207,7 +208,7 @@ Create Advertiser            </h3>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
