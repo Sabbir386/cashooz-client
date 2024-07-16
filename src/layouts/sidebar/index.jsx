@@ -78,23 +78,23 @@ const Sidebar = () => {
           },
         ],
       },
-      {
-        id: "admin-advertisers",
-        name: "Advertiser's",
-        icon: CiBullhorn,
-        menus: [
-          {
-            id: "admin-create-advertiser",
-            path: "create-advertiser",
-            name: "- Create Advertiser",
-          },
-          {
-            id: "admin-view-advertiser",
-            path: "view-advertiser",
-            name: "- All-Advertiser List",
-          },
-        ],
-      },
+      // {
+      //   id: "admin-advertisers",
+      //   name: "Advertiser's",
+      //   icon: CiBullhorn,
+      //   menus: [
+      //     {
+      //       id: "admin-create-advertiser",
+      //       path: "create-advertiser",
+      //       name: "- Create Advertiser",
+      //     },
+      //     {
+      //       id: "admin-view-advertiser",
+      //       path: "view-advertiser",
+      //       name: "- All-Advertiser List",
+      //     },
+      //   ],
+      // },
       {
         id: "admin-users",
         name: "User's",
@@ -234,23 +234,23 @@ const Sidebar = () => {
           },
         ],
       },
-      {
-        id: "superadmin-advertisers",
-        name: "Advertiser's",
-        icon: CiBullhorn,
-        menus: [
-          {
-            id: "superadmin-create-advertiser",
-            path: "create-advertiser",
-            name: "- Create Advertiser",
-          },
-          {
-            id: "superadmin-view-advertiser",
-            path: "view-advertiser",
-            name: "- All-Advertiser List",
-          },
-        ],
-      },
+      // {
+      //   id: "superadmin-advertisers",
+      //   name: "Advertiser's",
+      //   icon: CiBullhorn,
+      //   menus: [
+      //     {
+      //       id: "superadmin-create-advertiser",
+      //       path: "create-advertiser",
+      //       name: "- Create Advertiser",
+      //     },
+      //     {
+      //       id: "superadmin-view-advertiser",
+      //       path: "view-advertiser",
+      //       name: "- All-Advertiser List",
+      //     },
+      //   ],
+      // },
       {
         id: "superadmin-users",
         name: "User's",

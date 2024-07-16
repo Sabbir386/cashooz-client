@@ -19,6 +19,7 @@ import { useCurrentToken } from "../redux/features/auth/authSlice";
 import Swal from "sweetalert2";
 import ReactModal from "react-modal";
 import "./modal/ModalStyles.css";
+import OfferView from "./OfferView/OfferView";
 
 const OfferList = () => {
   const [data, setData] = useState([]);
@@ -237,9 +238,13 @@ const OfferList = () => {
   if (isLoadingOffersForAdmin || isFetchingOffersForAdmin) {
     return <div>Loading...</div>; // Show loading state
   }
-
+  
   return (
-    <div className="min-h-screen">
+
+    
+    (userRole === 'superAdmin' || userRole === 'admin') ?  
+      
+      (<div className="min-h-screen">
       <div className="container mx-auto overflow-auto relative">
         <div className="flex justify-between items-center my-4">
           <h3 className="font-bold text-base text-white">All Offer List</h3>
@@ -522,7 +527,11 @@ const OfferList = () => {
           )}
         </ReactModal>
       </div>
-    </div>
+    </div>)
+      
+      : userRole === 'user' ?
+    <OfferView/> : ''
+   
   );
 };
 

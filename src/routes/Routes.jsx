@@ -28,6 +28,7 @@ import Landing from "../pages/Landing/Landing";
 import SurveyList from "../pages/SurveyList";
 import DetailsPage from "../pages/DetailsPage/DetailsPage";
 import NotFound from "../pages/NotFound/NotFound";
+import AdvertiserRegister from "../auth/AdvertiserRegister";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register></Register>,
+  },
+  {
+    path: "/advertiser-register",
+    element: <AdvertiserRegister></AdvertiserRegister>,
   },
   {
     path: "/dashboard",

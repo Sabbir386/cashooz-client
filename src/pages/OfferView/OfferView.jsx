@@ -1,8 +1,22 @@
-import React from 'react';
-import { useTotalOfferQuery } from '../dashboardApi';
+import React, { useEffect, useState } from 'react';
+import { useOfferByNetworkQuery, useTotalOfferQuery } from '../dashboardApi';
 import { Link } from 'react-router-dom';
 
-const OfferView = ({networkOffers}) => {
+const OfferView = () => {
+  const [networkOffers, setNetworkOffers] = useState([]);
+  const {
+    data: offers,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useOfferByNetworkQuery();
+
+  useEffect(() => {
+    if (offers) {
+      setNetworkOffers(offers.data);
+      console.log(offers);
+    }
+  }, [offers]);
 
     return (
         <div>

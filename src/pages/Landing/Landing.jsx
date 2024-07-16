@@ -48,6 +48,15 @@ const Landing = () => {
             <li className="mx-4 my-6 md:my-0">
               <Link
                 onClick={() => setOpen(!open)}
+                to={"/advertiser-register"}
+                className="text-lg hover:text-white duration bg-red-400 hover:bg-orange-500 text-white px-4 py-2 rounded-md shadow-md hover:shadow-lg"
+              >
+                Advertiser Registration
+              </Link>
+            </li>
+            <li className="mx-4 my-6 md:my-0">
+              <Link
+                onClick={() => setOpen(!open)}
                 to={"/register"}
                 className="text-lg hover:text-white duration bg-blue-400 hover:bg-orange-500 text-white px-4 py-2 rounded-md shadow-md hover:shadow-lg"
               >

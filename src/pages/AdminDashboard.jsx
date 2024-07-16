@@ -46,20 +46,10 @@ import OfferView from "./OfferView/OfferView";
 const AdminDashboard = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [cpaOffers, setCpaOffers] = useState([]);
-  const [networkOffers, setNetworkOffers] = useState([]);
-  const {
-    data: offers,
-    isLoading,
-    isFetching,
-    refetch,
-  } = useOfferByNetworkQuery();
 
-  useEffect(() => {
-    if (offers) {
-      setNetworkOffers(offers.data);
-      console.log(offers);
-    }
-  }, [offers]);
+
+
+
 
   useEffect(() => {
     const fetchOffers = async () => {
@@ -78,49 +68,7 @@ const AdminDashboard = () => {
     fetchOffers();
   }, []);
 
-  // if (cpaOffers) {
-  //   console.log(cpaOffers);
-  // }
-
-  // useEffect(() => {
-  //   const fetchCampaignData = async () => {
-  //     const url =
-  //       "https://www.adworkmedia.com/api/index.php?pubID=160988&apiID=v16ba1my0oaesbdq9cljlhmk9uo1r6hvlc2c1v&campDetails=true";
-  //     try {
-  //       const response = await fetch(url);
-  //       const data = await response.text();
-  //       const parser = new DOMParser();
-  //       const xml = parser.parseFromString(data, "application/xml");
-
-  //       const campaignsArray = Array.from(
-  //         xml.getElementsByTagName("campDetails")
-  //       ).map((campDetail) => ({
-  //         campaignId:
-  //           campDetail.getElementsByTagName("campaign_id")[0]?.textContent ||
-  //           "",
-  //         campaignName:
-  //           campDetail.getElementsByTagName("campaign_name")[0]?.textContent ||
-  //           "",
-  //         campaignDesc:
-  //           campDetail.getElementsByTagName("campaign_desc")[0]?.textContent ||
-  //           "",
-  //         payout:
-  //           campDetail.getElementsByTagName("payout")[0]?.textContent || "",
-  //         url: campDetail.getElementsByTagName("url")[0]?.textContent || "",
-  //       }));
-  //       const limitedCampaignsArray = campaignsArray.slice(0, 15);
-
-  //       setCampaigns(limitedCampaignsArray);
-  //     } catch (error) {
-  //       console.error("Error fetching XML:", error);
-  //     }
-  //   };
-
-  //   fetchCampaignData();
-  // }, []);
-  // if (campaigns) {
-  //   console.log(campaigns);
-  // }
+  
   const token = useAppSelector(useCurrentToken);
 
   let userRole;
@@ -276,19 +224,19 @@ const AdminDashboard = () => {
   );
 
   useEffect(() => {
-    if (totalOffer) {
+    if (totalOffer && totalOffer.meta) {
       setCountTotalOffer(totalOffer.meta.total);
     }
-    if (completedOffer) {
+    if (completedOffer && completedOffer.meta) {
       setCountCompletedOffer(completedOffer.meta.total);
     }
-    if (totalAdmins) {
+    if (totalAdmins && totalAdmins.meta) {
       setCountTotalAdmin(totalAdmins.meta.total);
     }
-    if (totalUsers) {
+    if (totalUsers && totalUsers.meta) {
       setCountTotalUser(totalUsers.meta.total);
     }
-    if (totalAdvertisers) {
+    if (totalAdvertisers && totalAdvertisers.meta) {
       setCountTotalAdvertiser(totalAdvertisers.meta.total);
     }
     if (regularCompletedOffer) {
@@ -344,6 +292,7 @@ const AdminDashboard = () => {
     loggedInUserDailycCompletedOfferCounts,
     loggedInUserOfferNameandTotalCounts,
   ]);
+  
 
   const data = countSpecificUserWiseCompletedOffer?.data ?? [];
   let LoggedData = [];
@@ -715,7 +664,7 @@ const AdminDashboard = () => {
             )}
             <h5 className="font-semibold text-base">
               {CountLoggedUserTotalCompletedOffer?.data?.length > 0
-                ? CountLoggedUserTotalCompletedOffer.data[0].TotalCount
+                ? CountLoggedUserTotalCompletedOffer?.data[0].TotalCount
                 : "calculating.."}
             </h5>
           </div>
@@ -744,7 +693,7 @@ const AdminDashboard = () => {
             <h4 className="font-bold text-xl">Total Advertiser</h4>
             {isLoadingAdvertisers && <p>Loading...</p>}
             {errorAdvertisers && <p>Error loading offer data</p>}
-            <h5 className="font-semibold text-base">{countTotalAdvertiser}</h5>
+            <h5 className="font-semibold text-base">{countTotalAdvertiser ? countTotalAdvertiser:'0'}</h5>
           </div>
         )}
 
@@ -950,39 +899,9 @@ const AdminDashboard = () => {
           </div>
         )}
       </div>
-      {networkOffers.map((networkOffer, idx) => (
-        <div key={idx} className="my-8">
-          <h2 className="text-3xl font-bold text-white  border-b-[1px] border-b-secondaryColor pb-4">{networkOffer.networkName}</h2>
-          <div className="grid gap-4 mt-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-7">
-          {networkOffer.offers.map((offer, offerIdx) => (
-              
-              <Link
-                key={offer._id}
-                to={`/dashboard/view-offer/${offer._id}`}
-                className="bg-cardBackground p-4 rounded-md"
-              
-              >
-                <div className="relative">
-                  <img
-                    src="https://main-p.agmcdn.com/offers/1126583-cwTa2k02.jpg"
-                    alt=""
-                    className="w-full relative h-24 object-cover rounded-md"
-                  />
-                  <div className="absolute w-9 rounded-full h-5 bg-black bg-opacity-50 top-2 right-3 flex items-center justify-center font-bold">
-                    <span className="text-white">A</span>
-                  </div>
-                </div>
-                <div className="mt-4 text-white">
-                  <h4 className="font-bold text-base">{offer?.name ? offer.name.slice(0,14) : "Offer Name"}</h4>
-                  <h6 className="text-grayColor text-sm">{offer?.categoryName ? offer.categoryName : offer.category }</h6>
-                  <h3 className="font-semibold">{offer?.points}</h3>
-                </div>
-              </Link>
-            ))}
-            {/* <OfferView networkOffers={networkOffers}></OfferView> */}
-          </div>
-        </div>
-      ))}
+      
+
+        <OfferView></OfferView>
       
       <div className="hidden w-full bg-white px-4 py-6 rounded shadow-sm my-5">
         <Swiper
