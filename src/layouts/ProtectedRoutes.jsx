@@ -1,11 +1,12 @@
+// ProtectedRoutes.jsx
 import { useAppDispatch, useAppSelector } from "../redux/features/hooks";
 import { logOut, useCurrentToken } from "../redux/features/auth/authSlice";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { verifyToken } from "../utils/verifyToken";
 
 const ProtectedRoutes = ({ children }) => {
   const token = useAppSelector(useCurrentToken);
-  // console.log(token);
+  const location = useLocation();
 
   let user;
   if (token) {
@@ -14,8 +15,12 @@ const ProtectedRoutes = ({ children }) => {
 
   const dispatch = useAppDispatch();
 
-  if (!token) {
+  if (!token && location.pathname !== '/login') {
     return <Navigate to="/login" replace={true} />;
+  }
+
+  if (token && location.pathname === '/login') {
+    return <Navigate to="/dashboard" replace={true} />;
   }
 
   return children;

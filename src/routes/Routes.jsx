@@ -1,3 +1,4 @@
+// routes/Routes.jsx
 import { createBrowserRouter } from "react-router-dom";
 import AdminDashboard from "../pages/AdminDashboard";
 import RootLayout from "../layouts/RootLayout";
@@ -37,7 +38,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <Login></Login>,
+    element: (
+      <ProtectedRoutes>
+        <Login></Login>
+      </ProtectedRoutes>
+    ),
   },
   {
     path: "/register",
