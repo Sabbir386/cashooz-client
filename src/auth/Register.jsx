@@ -19,20 +19,25 @@ const Register = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const toastId = toast.loading("Registering...");
+    const toastId = toast.loading("User Registering...");
     try {
       const normalUser = {
         password: data.password,
         normalUser: {
-          name: {
-            firstName: data.firstName,
-            lastName: data.lastName,
-          },
-          gender: "male", // Assuming gender is available in your data
+          name: data.name,
           email: data.email,
-          contactNo: data.contactNo,
-          presentAddress: data.presentAddress,
-          // You can add other fields as needed
+          designation: "Advertiser manager",
+          username: "sharukh Khan",
+          gender: "male",
+          dateOfBirth: "1985-07-15",
+          contactNo: "9876543210",
+          emergencyContactNo: "1234567890",
+          bloodGroup: "A+",
+          presentAddress: "456 Elm Street, Cityville, Country",
+          permanentAddress: "789 Maple Avenue, Townsville, Country",
+          profileImg: "profile_picture.jpg",
+          isDeleted: false,
+          
         },
       };
 
@@ -69,49 +74,19 @@ const Register = () => {
                     for="countries"
                     class="block mb-2 text-sm font-medium text-gray-900"
                   >
-                    First Name
+                    Name
                   </label>
                   <input
                     type="text"
-                    placeholder="John"
-                    {...register("firstName", {
-                      required: "First Name is required",
+                    placeholder="ragnar"
+                    {...register("name", {
+                      required: "Name is required",
                     })}
                     className="w-full p-2 rounded border placeholder-gray-400 focus:outline-none focus:border-blue-600"
                   />
                 </div>
-                <div className="">
-                  <label
-                    for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
-                  >
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Due"
-                    {...register("lastName", {
-                      required: "Last Name is required",
-                    })}
-                    className="w-full p-2 rounded border placeholder-gray-400 focus:outline-none focus:border-blue-600"
-                  />
-                </div>
-                <div className="">
-                  <label
-                    for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
-                  >
-                    Phone Number
-                  </label>
-                  <input
-                    type="number"
-                    placeholder="Phone Number"
-                    {...register("contactNo", {
-                      required: "Phone Number is required",
-                    })}
-                    className="w-full p-2 rounded border placeholder-gray-400 focus:outline-none focus:border-blue-600"
-                  />
-                </div>
+                
+                
                 <div className="">
                   <label
                     for="countries"
@@ -142,42 +117,9 @@ const Register = () => {
                     className="w-full p-2 rounded border placeholder-gray-400 focus:outline-none focus:border-blue-600"
                   />
                 </div>
-                <div className="">
-                  <label
-                    for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
-                  >
-                    Role
-                  </label>
-                  <select
-                    {...register("role", { required: "Role is required" })}
-                    id="role"
-                    className="w-full p-2 rounded border text-gray-400 focus:outline-none focus:border-blue-600"
-                  >
-                    <option selected>user</option>
-                    <option value="user">user</option>
-                    <option value="admin">admin</option>
-                    <option value="advertiser">advertiser</option>
-                  </select>
-                </div>
+               
               </div>
-              <div className="">
-                <label
-                  for="countries"
-                  class="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Address
-                </label>
-                <textarea
-                  name=""
-                  id=""
-                  placeholder="Address"
-                  {...register("presentAddress", {
-                    required: "Address is required",
-                  })}
-                  className="w-full p-2 rounded border placeholder-gray-400 focus:outline-none focus:border-blue-600"
-                ></textarea>
-              </div>
+              
               <div className="mb-2 flex">
                 <div className="flex items-center h-5">
                   <input
