@@ -45,7 +45,7 @@ const AdvertiserRegister = () => {
        console.log("Registration data:", advertiser);
       await createAdvertiser(advertiser);
       toast.success("Registration successful", { id: toastId, duration: 2000 });
-      // navigate("/login");
+      navigate("/login");
     } catch (error) {
       toast.error("Something went wrong", { id: toastId, duration: 2000 });
       console.error("Registration error:", error);

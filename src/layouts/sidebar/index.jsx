@@ -234,33 +234,33 @@ const Sidebar = () => {
           },
         ],
       },
-      // {
-      //   id: "superadmin-advertisers",
-      //   name: "Advertiser's",
-      //   icon: CiBullhorn,
-      //   menus: [
-      //     {
-      //       id: "superadmin-create-advertiser",
-      //       path: "create-advertiser",
-      //       name: "- Create Advertiser",
-      //     },
-      //     {
-      //       id: "superadmin-view-advertiser",
-      //       path: "view-advertiser",
-      //       name: "- All-Advertiser List",
-      //     },
-      //   ],
-      // },
+      {
+        id: "superadmin-advertisers",
+        name: "Advertiser's",
+        icon: CiBullhorn,
+        menus: [
+          // {
+          //   id: "superadmin-create-advertiser",
+          //   path: "create-advertiser",
+          //   name: "- Create Advertiser",
+          // },
+          {
+            id: "superadmin-view-advertiser",
+            path: "view-advertiser",
+            name: "- All-Advertiser List",
+          },
+        ],
+      },
       {
         id: "superadmin-users",
         name: "User's",
         icon: HiOutlineUsers,
         menus: [
-          {
-            id: "superadmin-create-user",
-            path: "create-user",
-            name: "- Create User",
-          },
+          // {
+          //   id: "superadmin-create-user",
+          //   path: "create-user",
+          //   name: "- Create User",
+          // },
           {
             id: "superadmin-view-user",
             path: "view-user",

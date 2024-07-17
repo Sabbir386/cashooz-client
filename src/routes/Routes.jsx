@@ -145,14 +145,14 @@ export const router = createBrowserRouter([
           </ProtectedRoutes>
         ),
       },
-      {
-        path: "/dashboard/create-advertiser",
-        element: (
-          <ProtectedRoutes>
-            <CreateAdvertiser></CreateAdvertiser>
-          </ProtectedRoutes>
-        ),
-      },
+      // {
+      //   path: "/dashboard/create-advertiser",
+      //   element: (
+      //     <ProtectedRoutes>
+      //       <CreateAdvertiser></CreateAdvertiser>
+      //     </ProtectedRoutes>
+      //   ),
+      // },
       {
         path: "/dashboard/view-advertiser",
         element: (
@@ -169,14 +169,14 @@ export const router = createBrowserRouter([
           </ProtectedRoutes>
         ),
       },
-      {
-        path: "/dashboard/create-user",
-        element: (
-          <ProtectedRoutes>
-            <CreateUser></CreateUser>
-          </ProtectedRoutes>
-        ),
-      },
+      // {
+      //   path: "/dashboard/create-user",
+      //   element: (
+      //     <ProtectedRoutes>
+      //       <CreateUser></CreateUser>
+      //     </ProtectedRoutes>
+      //   ),
+      // },
       {
         path: "/dashboard/view-user",
         element: (
