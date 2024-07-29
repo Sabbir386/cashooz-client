@@ -301,19 +301,18 @@ const CreateOffer = () => {
         name: data.name,
         network: data.network,
         category: data.category,
-        // device: ["desktop"],
         country: data.country,
         device: data.devices,
         gender: ["male"],
         offerLink: data.offerLink,
-        offerStatus: data.offerStatus,
+        offerStatus: "inactive",
         dailyLimit: 100,
         totalLimit: 500,
-        price: Number(data.price),
+        price: 500,
         description: content,
         step: "A string representing the steps to complete the offer",
         image: "https://example.com/image.jpg",
-        points: 300,
+        points: Number(data.points),
         completionLimit: 200,
         completionWindow: 300,
         completedCount: 50,
@@ -363,7 +362,7 @@ const CreateOffer = () => {
                 {...register("name", { required: "Name is required" })}
               />
             </div>
-            <div>
+            {/* <div>
               <label
                 htmlFor="offerStatus"
                 className="block mb-2 text-sm font-medium text-white"
@@ -380,7 +379,7 @@ const CreateOffer = () => {
                   required: "Offer Status is required",
                 })}
               />
-            </div>
+            </div> */}
             <div>
               <label
                 htmlFor="category"
@@ -473,18 +472,18 @@ const CreateOffer = () => {
             </div>
             <div>
               <label
-                htmlFor="price"
+                htmlFor="points"
                 className="block mb-2 text-sm font-medium text-white"
               >
-                Price
+                Points
               </label>
               <input
                 type="number"
-                id="price"
+                id="points"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
                 placeholder="123"
                 required
-                {...register("price", { required: "Price is required" })}
+                {...register("points", { required: "Points is required" })}
               />
             </div>
             <div>

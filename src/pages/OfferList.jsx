@@ -72,6 +72,9 @@ const OfferList = () => {
     },
     { skip: !(userRole === "user" || userRole === "advertiser") }
   );
+  if(offersForAdmin){
+    console.log(offersForAdmin)
+  }
   useEffect(() => {
     if (token) {
       const user = verifyToken(token);
@@ -333,11 +336,22 @@ const OfferList = () => {
                     {row.price}
                   </td>
                   <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
-                    {deviceType}
-                  </td>
-                  <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
-                    {country}
-                  </td>
+  {row.device.slice(0, 2).map((device, index) => (
+    <span key={device._id}>
+      {device.label}
+      {index !== row.device.length - 1 && ", "}
+    </span>
+  ))}
+</td>
+<td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
+  {row.country.slice(0, 3).map((country, index) => (
+    <span key={country._id}>
+      {country.label}
+      {index !== row.country.length - 1 && ", "}
+    </span>
+  ))}
+</td>
+
                   <td className="w-4 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                     <button
                       onClick={() => handleToggle(row._id)}

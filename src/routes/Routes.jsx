@@ -30,6 +30,7 @@ import SurveyList from "../pages/SurveyList";
 import DetailsPage from "../pages/DetailsPage/DetailsPage";
 import NotFound from "../pages/NotFound/NotFound";
 import AdvertiserRegister from "../auth/AdvertiserRegister";
+import Payment from "../pages/Payment/payment";
 
 export const router = createBrowserRouter([
   {
@@ -177,6 +178,14 @@ export const router = createBrowserRouter([
       //     </ProtectedRoutes>
       //   ),
       // },
+      {
+        path: "/dashboard/payment",
+        element: (
+          <ProtectedRoutes>
+            <Payment></Payment>
+          </ProtectedRoutes>
+        ),
+      },
       {
         path: "/dashboard/view-user",
         element: (

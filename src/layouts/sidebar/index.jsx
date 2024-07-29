@@ -165,10 +165,10 @@ const Sidebar = () => {
         path: "survey-list",
       },
       {
-        id: "user-Cashout",
-        name: "Cashout",
+        id: "withdraw",
+        name: "Withdraw",
         icon: HiOutlineUsers,
-        path: "cashout",
+        path: "payment",
       },
       {
         id: "user-Rewards",
