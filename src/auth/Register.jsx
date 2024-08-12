@@ -37,7 +37,6 @@ const Register = () => {
           permanentAddress: "789 Maple Avenue, Townsville, Country",
           profileImg: "profile_picture.jpg",
           isDeleted: false,
-          
         },
       };
 
@@ -51,118 +50,81 @@ const Register = () => {
     }
   };
   return (
-    <>
-      <div className="bg-blue-600 h-full md:h-screen py-10 w-full flex justify-center items-center">
-        <div className="w-full sm:w-1/0 md:w-12/12 lg:w-1/1 flex flex-col md:flex-row items-center lg:mx-24 mx-5">
-          <div className="w-full md:w-1/2 hidden md:flex flex-col justify-center items-center text-white">
-            <h1 className="text-2xl">Hello</h1>
-            <p className="text-4xl font-extrabold">Welcome!</p>
-            <p className="text-4xl font-extrabold">To Cashooz</p>
-          </div>
-          <div className="bg-white w-full md:w-1/2 flex flex-col items-center py-8 px-8 rounded">
-            <h3 className="text-3xl font-bold text-blue-600 mb-4">
-              Register Here
-            </h3>
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              action="#"
-              className="w-full flex flex-col justify-center"
-            >
-              <div className="grid gap-6 mb-6 md:grid-cols-2">
-                <div className="">
-                  <label
-                    for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
-                  >
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="ragnar"
-                    {...register("name", {
-                      required: "Name is required",
-                    })}
-                    className="w-full p-2 rounded border placeholder-gray-400 focus:outline-none focus:border-blue-600"
-                  />
-                </div>
-                
-                
-                <div className="">
-                  <label
-                    for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
-                  >
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    {...register("email", { required: "Email is required" })}
-                    className="w-full p-2 rounded border placeholder-gray-400 focus:outline-none focus:border-blue-600"
-                  />
-                </div>
-                <div className="">
-                  <label
-                    for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900"
-                  >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    {...register("password", {
-                      required: "Password is required",
-                    })}
-                    className="w-full p-2 rounded border placeholder-gray-400 focus:outline-none focus:border-blue-600"
-                  />
-                </div>
-               
-              </div>
-              
-              <div className="mb-2 flex">
-                <div className="flex items-center h-5">
-                  <input
-                    id="remember"
-                    type="checkbox"
-                    value=""
-                    className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                    required
-                  />
-                </div>
-                <label
-                  for="remember"
-                  className="block mb-2 ml-1 text-sm font-medium text-gray-900"
-                >
-                  I agree with the{" "}
-                  <a
-                    href="#"
-                    className="text-blue-600 hover:underline dark:text-blue-500"
-                  >
-                    terms and conditions
-                  </a>
-                </label>
-              </div>
-              <button className="bg-blue-600 font-bold text-white focus:outline-none rounded p-2.5">
-                Submit
-              </button>
-              <div className=""></div>
-            </form>
-            <div className="w-full flex justify-between my-5">
-              <Link to={"/"} className="text-red-600 font-semibold text-sm">
-                Back to Home
-              </Link>
-              <Link
-                to={"/login"}
-                className="text-blue-600 font-semibold text-sm"
-              >
-                Go to Login
-              </Link>
+    <div className="bg-secondaryColor h-screen w-full flex justify-center items-center">
+      <div className="bg-cardBackground w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded-md">
+        <div className="w-full md:w-1/2 hidden md:flex flex-col justify-center items-center text-white">
+          <h1 className="text-3xl">Hello</h1>
+          <p className="text-5xl font-extrabold text-buttonBackground">
+            Welcome!
+          </p>
+          <p className="text-5xl font-extrabold text-buttonBackground">
+            To Cashooz
+          </p>
+        </div>
+        <div className="bg-white w-full md:w-1/2 flex flex-col items-center py-32 px-8 rounded-r-md">
+          <h3 className="text-3xl font-bold text-buttonBackground mb-4">
+            REGISTER
+          </h3>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="w-full flex flex-col justify-center"
+          >
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Name"
+                {...register("name", {
+                  required: "Name is required",
+                })}
+                className="w-full p-3 rounded border placeholder-gray-400 focus:outline-none focus:border-cardBackground text-cardBackground"
+              />
+              {errors.name && (
+                <p className="text-red-500 text-sm">{errors.name.message}</p>
+              )}
             </div>
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Email"
+                {...register("email", { required: "email is required" })}
+                className="w-full p-3 rounded border placeholder-gray-400 focus:outline-none focus:border-cardBackground text-cardBackground"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email.message}</p>
+              )}
+            </div>
+            <div className="mb-4">
+              <input
+                type="password"
+                placeholder="Password"
+                {...register("password", { required: "Password is required" })}
+                className="w-full p-3 rounded border placeholder-gray-400 focus:outline-none focus:border-cardBackground text-cardBackground"
+              />
+              {errors.password && (
+                <p className="text-red-500 text-sm">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+            <button className="bg-buttonBackground font-bold text-white uppercase focus:outline-none rounded p-3">
+              Register
+            </button>
+          </form>
+
+          <div className="w-full flex justify-between my-5">
+            <Link to={"/"} className="text-primaryColor font-semibold text-sm">
+              Back to Home
+            </Link>
+            <Link
+              to={"/register"}
+              className="text-cardBackground font-semibold text-sm"
+            >
+              Go to Registration
+            </Link>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -31,6 +31,7 @@ import DetailsPage from "../pages/DetailsPage/DetailsPage";
 import NotFound from "../pages/NotFound/NotFound";
 import AdvertiserRegister from "../auth/AdvertiserRegister";
 import Payment from "../pages/Payment/payment";
+import Profile from "../pages/Profile/Profile";
 
 export const router = createBrowserRouter([
   {
@@ -178,6 +179,14 @@ export const router = createBrowserRouter([
       //     </ProtectedRoutes>
       //   ),
       // },
+      {
+        path: "/dashboard/user-profile",
+        element: (
+          <ProtectedRoutes>
+            <Profile></Profile>
+          </ProtectedRoutes>
+        ),
+      },
       {
         path: "/dashboard/payment",
         element: (

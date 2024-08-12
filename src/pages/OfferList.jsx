@@ -72,8 +72,8 @@ const OfferList = () => {
     },
     { skip: !(userRole === "user" || userRole === "advertiser") }
   );
-  if(offersForAdmin){
-    console.log(offersForAdmin)
+  if (offersForAdmin) {
+    console.log(offersForAdmin);
   }
   useEffect(() => {
     if (token) {
@@ -241,13 +241,9 @@ const OfferList = () => {
   if (isLoadingOffersForAdmin || isFetchingOffersForAdmin) {
     return <div>Loading...</div>; // Show loading state
   }
-  
-  return (
 
-    
-    (userRole === 'superAdmin' || userRole === 'admin') ?  
-      
-      (<div className="min-h-screen">
+  return userRole === "superAdmin" || userRole === "admin" ? (
+    <div className="min-h-screen">
       <div className="container mx-auto overflow-auto relative">
         <div className="flex justify-between items-center my-4">
           <h3 className="font-bold text-base text-white">All Offer List</h3>
@@ -336,24 +332,24 @@ const OfferList = () => {
                     {row.price}
                   </td>
                   <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
-  {row.device.slice(0, 2).map((device, index) => (
-    <span key={device._id}>
-      {device.label}
-      {index !== row.device.length - 1 && ", "}
-    </span>
-  ))}
-</td>
-<td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
-  {row.country.slice(0, 3).map((country, index) => (
-    <span key={country._id}>
-      {country.label}
-      {index !== row.country.length - 1 && ", "}
-    </span>
-  ))}
-</td>
+                    {row.device.slice(0, 2).map((device, index) => (
+                      <span key={device._id}>
+                        {device.label}
+                        {index !== row.device.length - 1 && ", "}
+                      </span>
+                    ))}
+                  </td>
+                  <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
+                    {row.country.slice(0, 3).map((country, index) => (
+                      <span key={country._id}>
+                        {country.label}
+                        {index !== row.country.length - 1 && ", "}
+                      </span>
+                    ))}
+                  </td>
 
                   <td className="w-4 border-b border-gray-200 bg-secondaryColor text-white text-sm">
-                    <button
+                    {/* <button
                       onClick={() => handleToggle(row._id)}
                       className={`py-1 px-2 block w-full text-center rounded text-white ${
                         row.offerStatus === "active"
@@ -362,7 +358,19 @@ const OfferList = () => {
                       }`}
                     >
                       {row.offerStatus}
-                    </button>
+                    </button> */}
+
+                    <label className="relative flex justify-between items-center group p-2 text-xl">
+                      <input
+                        type="checkbox"
+                        className="absolute left-1/2 -translate-x-1/2 w-full h-full peer appearance-none rounded-md"
+                        checked={row.offerStatus === "active"}
+                        onClick={() => handleToggle(row._id)}
+                      />
+                      <span
+                        className={`w-12 h-7 flex items-center flex-shrink-0 ml-4 p-1 bg-red-300 rounded-full duration-300 ease-in-out peer-checked:bg-green-400 after:w-5 after:h-5 after:bg-white after:rounded-full after:shadow-md after:duration-300 peer-checked:after:translate-x-5 group-hover:after:translate-x-1`}
+                      ></span>
+                    </label>
                   </td>
                   <td className="px-1 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                     <div className="flex flex-col justify-center items-center md:flex-row gap-1">
@@ -541,11 +549,11 @@ const OfferList = () => {
           )}
         </ReactModal>
       </div>
-    </div>)
-      
-      : userRole === 'user' ?
-    <OfferView/> : ''
-   
+    </div>
+  ) : userRole === "user" ? (
+    <OfferView />
+  ) : (
+    ""
   );
 };
 

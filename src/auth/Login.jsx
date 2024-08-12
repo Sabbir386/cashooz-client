@@ -138,15 +138,15 @@ const Login = () => {
     }
   };
   return (
-    <div className="bg-gradient-to-tr from-purple-300 to-green-600 h-screen w-full flex justify-center items-center">
-      <div className="bg-blue-600 w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded">
+    <div className="bg-secondaryColor h-screen w-full flex justify-center items-center">
+      <div className="bg-cardBackground w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded-md">
         <div className="w-full md:w-1/2 hidden md:flex flex-col justify-center items-center text-white">
-          <h1 className="text-3xl">Hello</h1>
-          <p className="text-5xl font-extrabold">Welcome!</p>
-          <p className="text-5xl font-extrabold">To Cashooz</p>
+          <h1 className="text-3xl">Hey Buddy</h1>
+          <p className="text-5xl font-extrabold text-buttonBackground">Welcome</p>
+          <p className="text-5xl font-extrabold text-buttonBackground">Back!</p>
         </div>
-        <div className="bg-white w-full md:w-1/2 flex flex-col items-center py-32 px-8">
-          <h3 className="text-3xl font-bold text-blue-600 mb-4">LOGIN</h3>
+        <div className="bg-white w-full md:w-1/2 flex flex-col items-center py-32 px-8 rounded-r-md">
+          <h3 className="text-3xl font-bold text-buttonBackground mb-4">LOGIN</h3>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="w-full flex flex-col justify-center"
@@ -156,7 +156,7 @@ const Login = () => {
                 type="text"
                 placeholder="Email"
                 {...register("email", { required: "email is required" })}
-                className="w-full p-3 rounded border placeholder-gray-400 focus:outline-none focus:border-blue-600"
+                className="w-full p-3 rounded border placeholder-gray-400 focus:outline-none focus:border-cardBackground text-cardBackground"
               />
               {errors.email && (
                 <p className="text-red-500 text-sm">{errors.email.message}</p>
@@ -167,7 +167,7 @@ const Login = () => {
                 type="password"
                 placeholder="Password"
                 {...register("password", { required: "Password is required" })}
-                className="w-full p-3 rounded border placeholder-gray-400 focus:outline-none focus:border-blue-600"
+                className="w-full p-3 rounded border placeholder-gray-400 focus:outline-none focus:border-cardBackground text-cardBackground"
               />
               {errors.password && (
                 <p className="text-red-500 text-sm">
@@ -175,13 +175,13 @@ const Login = () => {
                 </p>
               )}
             </div>
-            <button className="bg-blue-600 font-bold text-white focus:outline-none rounded p-3">
+            <button className="bg-buttonBackground font-bold text-white focus:outline-none rounded p-3">
               Submit
             </button>
           </form>
           <button
             onClick={handleGoogleSignIn}
-            className="border w-full h-8 rounded-md mt-6 grid place-items-center text-xs shadow-sm"
+            className="bg-cardBackground text-white border w-full h-12 rounded-md mt-6 grid place-items-center text-xs shadow-sm"
           >
             <div className="flex gap-3 justify-center items-center">
               <FaGoogle />
@@ -189,12 +189,12 @@ const Login = () => {
             </div>
           </button>
           <div className="w-full flex justify-between my-5">
-            <Link to={"/"} className="text-red-600 font-semibold text-sm">
+            <Link to={"/"} className="text-primaryColor font-semibold text-sm">
               Back to Home
             </Link>
             <Link
               to={"/register"}
-              className="text-blue-600 font-semibold text-sm"
+              className="text-cardBackground font-semibold text-sm"
             >
               Go to Registration
             </Link>

@@ -182,6 +182,12 @@ const Sidebar = () => {
         icon: HiOutlineUsers,
         path: "affiliates",
       },
+      {
+        id: "user-profile",
+        name: "Profile",
+        icon: HiCurrencyDollar,
+        path: "user-profile",
+      },
     ];
   } else if (user?.role === "advertiser") {
     menulist = [
