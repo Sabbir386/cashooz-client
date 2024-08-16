@@ -1,7 +1,7 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useCreatePaymentIntentMutation, useSavePaymentInfoMutation } from "./paymentApi";
 import { useEffect, useState } from "react";
-
+import './CheckOutForm.css';
 const CheckOutForm = ({ price, userName, userEmail }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -74,7 +74,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   
         // Save payment info to database
         const amountReceived = paymentIntent.amount;
-        const amount = amountReceived / 100; // Convert cents to dollars
+        const amount = amountReceived / 100; 
   
         if (isNaN(amount)) {
           setCardError('Invalid payment amount');
@@ -84,13 +84,13 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   
         const paymentInfo = {
           transactionId: paymentIntent.id,
-          amount, // Properly calculated amount
+          amount, 
           email: userEmail,
           name: userName,
         };
   
         try {
-          const response = await savePaymentInfo(paymentInfo).unwrap(); // Use unwrap() to get the result
+          const response = await savePaymentInfo(paymentInfo).unwrap(); 
           setPaymentInfo(response);
         } catch (error) {
           console.error('Error saving payment info:', error);
