@@ -32,6 +32,7 @@ import NotFound from "../pages/NotFound/NotFound";
 import AdvertiserRegister from "../auth/AdvertiserRegister";
 import Payment from "../pages/Payment/payment";
 import Profile from "../pages/Profile/Profile";
+import Leaderboard from "../pages/Leaderboard/Leaderboard";
 
 export const router = createBrowserRouter([
   {
@@ -184,6 +185,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoutes>
             <Profile></Profile>
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/dashboard/leaderboard",
+        element: (
+          <ProtectedRoutes>
+            <Leaderboard></Leaderboard>
           </ProtectedRoutes>
         ),
       },

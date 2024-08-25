@@ -16,8 +16,25 @@ export const extendedBaseApi = baseApi.injectEndpoints({
         body: paymentInfo,
       }),
     }),
+    createPaypalOrder: builder.mutation({
+      query: () => ({
+        url: "/paypal/create-order",
+        method: "POST",
+      }),
+    }),
+    completeOrder: builder.query({ // Changed to query
+      query: () => ({
+        url: `/paypal/complete-order`,
+        method: "GET", // GET request for fetching data
+      }),
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useCreatePaymentIntentMutation, useSavePaymentInfoMutation } = extendedBaseApi;
+export const {
+  useCreatePaymentIntentMutation,
+  useSavePaymentInfoMutation,
+  useCreatePaypalOrderMutation,
+  useCompleteOrderQuery, 
+} = extendedBaseApi;

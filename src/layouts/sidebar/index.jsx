@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import SubMenu from "./SubMenu";
 import { IoIosArrowBack } from "react-icons/io";
 import { SlSettings } from "react-icons/sl";
-import { HiOutlineUsers, HiCurrencyDollar } from "react-icons/hi";
+import { HiOutlineUsers, HiCurrencyDollar, HiChartBar, HiColorSwatch, HiUser, HiAdjustments, HiClipboardList, HiSparkles } from "react-icons/hi";
 import { CiBullhorn } from "react-icons/ci";
 import { AiOutlineAppstore } from "react-icons/ai";
 import { BsPerson } from "react-icons/bs";
@@ -22,24 +22,9 @@ const Sidebar = () => {
   const sidebarRef = useRef();
   const [user, setUser] = useState();
   const { pathname } = useLocation();
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
-  const setLogout = () => {
-    Swal.fire({
-      title: "Are you sure you want to log out?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, log out!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        dispatch(logOut());
-        navigate("/login");
-      }
-    });
-  };
+
+
 
   useEffect(() => {
     if (isTabletMid) {
@@ -64,7 +49,7 @@ const Sidebar = () => {
       {
         id: "admin-offers",
         name: "Offer's",
-        icon: HiOutlineUsers,
+        icon: HiAdjustments,
         menus: [
           {
             id: "admin-create-offer",
@@ -128,7 +113,7 @@ const Sidebar = () => {
       {
         id: "admin-category",
         name: "Category",
-        icon: HiOutlineUsers,
+        icon: HiChartBar,
         menus: [
           {
             id: "admin-create-category",
@@ -148,7 +133,7 @@ const Sidebar = () => {
       {
         id: "user-offers",
         name: "Offer's",
-        icon: HiOutlineUsers,
+        icon: HiAdjustments,
         path: "offer-list",
         menus: [
           {
@@ -161,31 +146,37 @@ const Sidebar = () => {
       {
         id: "user-Surveys",
         name: "Surveys",
-        icon: HiCurrencyDollar,
+        icon: HiClipboardList,
         path: "survey-list",
       },
       {
         id: "withdraw",
         name: "Withdraw",
-        icon: HiOutlineUsers,
+        icon: HiCurrencyDollar,
         path: "payment",
       },
       {
         id: "user-Rewards",
         name: "Rewards",
-        icon: HiOutlineUsers,
+        icon: HiSparkles,
         path: "rewards",
+      },
+      {
+        id: "user-leaderboard",
+        name: "Leaderboard",
+        icon: HiChartBar,
+        path: "leaderboard",
       },
       {
         id: "user-Affiliate",
         name: "Affiliate",
-        icon: HiOutlineUsers,
+        icon: HiColorSwatch,
         path: "affiliates",
       },
       {
         id: "user-profile",
         name: "Profile",
-        icon: HiCurrencyDollar,
+        icon: HiUser,
         path: "user-profile",
       },
     ];
@@ -376,8 +367,8 @@ const Sidebar = () => {
                 to={"/dashboard"}
                 className={`p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium ${
                   location.pathname === "/dashboard"
-                    ? "bg-sidebarBackground text-buttonBackground"
-                    : "bg-sidebarBackground text-buttonBackground"
+                    ? "text-grayColor hover:text-buttonBackground"
+                    : "text-grayColor hover:text-buttonBackground"
                 }`}
               >
                 <AiOutlineAppstore size={23} className="min-w-max" />
@@ -392,17 +383,17 @@ const Sidebar = () => {
                     <SubMenu data={menu} />
                   </div>
                 ) : (
-                  <li className="mb-1 bg-sidebarBackground text-buttonBackground">
+                  <li className="mb-1 text-buttonBackground">
                     <Link
                       to={`/dashboard/${menu.path}`}
 
-                      className={`p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium ${
+                      className={`p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium hover:text-buttonBackground hover:bg-sidebarBackground ${
                         location.pathname === "/dashboard"
-                          ? "bg-sidebarBackground text-buttonBackground"
-                          : ""
+                          ? "text-grayColor hover:text-buttonBackground"
+                          : "text-grayColor hover:text-buttonBackground"
                       }`}
                     >
-                      <AiOutlineAppstore size={23} className="min-w-max" />
+                      <menu.icon size={23} className="min-w-max" />
                       {menu.name}
                     </Link>
                   </li>
@@ -410,12 +401,7 @@ const Sidebar = () => {
               )}
             </li>
           </ul>
-          <button
-            onClick={setLogout}
-            className="w-5/6 mx-auto my-3 rounded-md py-3 bg-red-400 text-center text-white cursor-pointer hover:bg-red-600 hover:-translate-y-2 duration-200 hover:shadow-lg"
-          >
-            Logout
-          </button>
+          
           {open && (
             <div className="flex-1 text-sm z-50 max-h-48 my-auto whitespace-pre w-full font-medium">
               <div className="flex border-y border-slate-300 p-4 items-center justify-between">

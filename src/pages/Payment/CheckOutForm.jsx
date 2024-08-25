@@ -1,143 +1,198 @@
+import React, { useEffect, useState } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { useCreatePaymentIntentMutation, useSavePaymentInfoMutation } from "./paymentApi";
-import { useEffect, useState } from "react";
-import './CheckOutForm.css';
+import {
+  useCreatePaymentIntentMutation,
+  useSavePaymentInfoMutation,
+  useCreatePaypalOrderMutation,
+  useCompleteOrderQuery,
+} from "./paymentApi";
+import { toast } from "sonner";
+
 const CheckOutForm = ({ price, userName, userEmail }) => {
   const stripe = useStripe();
   const elements = useElements();
-  const [cardError, setCardError] = useState('');
-  const [clientSecret, setClientSecret] = useState('');
-  const [transactionId, setTransactionId] = useState('');
+  const [cardError, setCardError] = useState("");
+  const [clientSecret, setClientSecret] = useState("");
+  const [transactionId, setTransactionId] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [paymentInfo, setPaymentInfo] = useState(null); // State to store payment info
+  const [paymentInfo, setPaymentInfo] = useState(null);
 
   const [createPaymentIntent] = useCreatePaymentIntentMutation();
   const [savePaymentInfo] = useSavePaymentInfoMutation();
+  const [createPaypalOrder] = useCreatePaypalOrderMutation();
+  const { data: completeOrderData, error: completeOrderError } = useCompleteOrderQuery();
 
+  // Handle Stripe Payment Intent
   useEffect(() => {
     const createPayment = async () => {
       try {
-        const response = await createPaymentIntent({ price: Math.round(price * 100) }); // Convert price to cents
+        const response = await createPaymentIntent({
+          price: Math.round(price * 100), // Convert price to cents
+        });
         if (response?.data?.clientSecret) {
           setClientSecret(response.data.clientSecret);
         }
       } catch (error) {
-        console.error('Error creating payment intent:', error);
+        console.error("Error creating payment intent:", error);
       }
     };
     createPayment();
   }, [createPaymentIntent, price]);
 
-  const handleSubmit = async (event) => {
+  // Handle Stripe Payment Submission
+  const handleSubmitStripePayment = async (event) => {
     event.preventDefault();
     setIsProcessing(true);
-  
+
     if (!stripe || !elements) {
       setIsProcessing(false);
       return;
     }
-  
+
     const card = elements.getElement(CardElement);
     if (card === null) {
       setIsProcessing(false);
       return;
     }
-  
+
     try {
       const { error, paymentMethod } = await stripe.createPaymentMethod({
-        type: 'card',
+        type: "card",
         card,
       });
-  
+
       if (error) {
         setCardError(error.message);
         setIsProcessing(false);
         return;
       } else {
-        setCardError('');
+        setCardError("");
       }
-  
-      const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: card,
-          billing_details: {
-            name: userName || 'Anonymous',
-            email: userEmail || '',
+
+      const { error: confirmError, paymentIntent } =
+        await stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: card,
+            billing_details: {
+              name: userName || "Anonymous",
+              email: userEmail || "",
+            },
           },
-        },
-      });
-  
+        });
+
       if (confirmError) {
         setCardError(confirmError.message);
-      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+      } else if (paymentIntent && paymentIntent.status === "succeeded") {
         setTransactionId(paymentIntent.id);
-  
+
         // Save payment info to database
         const amountReceived = paymentIntent.amount;
-        const amount = amountReceived / 100; 
-  
+        const amount = amountReceived / 100;
+
         if (isNaN(amount)) {
-          setCardError('Invalid payment amount');
+          setCardError("Invalid payment amount");
           setIsProcessing(false);
           return;
         }
-  
+
         const paymentInfo = {
           transactionId: paymentIntent.id,
-          amount, 
+          amount,
           email: userEmail,
           name: userName,
         };
-  
+
         try {
-          const response = await savePaymentInfo(paymentInfo).unwrap(); 
+          const response = await savePaymentInfo(paymentInfo).unwrap();
           setPaymentInfo(response);
         } catch (error) {
-          console.error('Error saving payment info:', error);
+          console.error("Error saving payment info:", error);
         }
       }
     } catch (error) {
-      console.error('Error handling payment submission:', error);
+      console.error("Error handling payment submission:", error);
     }
-  
+
     setIsProcessing(false);
+  };
+
+  // Handle PayPal Payment
+  const handlePaypalPayment = async () => {
+    try {
+      const orderResponse = await createPaypalOrder().unwrap();
+
+      if (orderResponse.success && orderResponse.orderUrl) {
+        window.location.href = orderResponse.orderUrl; // Redirect to PayPal for approval
+      } else {
+        console.error("Failed to create PayPal order");
+      }
+    } catch (error) {
+      console.error("Error creating PayPal order:", error);
+    }
   };
 
   return (
     <>
-      <form className="w-2/3 m-8" onSubmit={handleSubmit}>
+      <div>
+        <h3 className="text-xl font-bold text-white border-l-4 border-buttonBackground pl-3 ">
+          Payment
+        </h3>
+      </div>
+
+      {/* Stripe Payment Form */}
+      <form className="w-2/3 my-8" onSubmit={handleSubmitStripePayment}>
         <CardElement
           options={{
             style: {
               base: {
-                fontSize: '16px',
-                color: '#424770',
-                '::placeholder': {
-                  color: '#aab7c4',
+                fontSize: "16px",
+                color: "#ffffff", // White text for contrast
+                "::placeholder": {
+                  color: "#aab7c4", // Light grey placeholder
                 },
               },
               invalid: {
-                color: '#9e2146',
+                color: "#ff6b6b", // Red text for errors
               },
             },
           }}
+          className="block my-2.5 max-w-[500px] py-2.5 px-[14px] shadow-sm rounded-md bg-[#1f2029] text-white" // Darker card element background
         />
         <button
-          className="btn btn-outline btn-primary btn-sm hover:bg-primary hover:text-white rounded-lg px-4 py-2 mt-5"
+          className={`w-24 bg-buttonBackground text-white hover:bg-primary hover:text-white rounded-lg px-4 py-2 mt-5 ${
+            isProcessing ? "hidden" : "block"
+          }`}
           type="submit"
           disabled={!stripe || !clientSecret || isProcessing}
         >
-          {isProcessing ? 'Processing...' : 'Pay'}
+          Pay
         </button>
+        {isProcessing && toast.info("Payment is processing")}
       </form>
       {cardError && <p className="text-red-500 ml-8">{cardError}</p>}
-      {transactionId && <p className="text-green-500 ml-8">Transaction ID: {transactionId}</p>}
+      {transactionId && (
+        <p className="text-green-500 ml-8">Transaction ID: {transactionId}</p>
+      )}
       {paymentInfo && (
         <div className="ml-8 mt-4">
           <h3 className="text-lg font-semibold">Payment Info:</h3>
           <p className="text-green-500">Payment was successful!</p>
         </div>
       )}
+
+      {/* PayPal Payment Form */}
+      <div className="text-white mt-8">
+        <h3 className="text-xl font-bold text-white border-l-4 border-buttonBackground pl-3 ">
+          PayPal Payment
+        </h3>
+        <p className="text-lg mt-2">Amount: ${price.toFixed(2)}</p> {/* Display the amount */}
+        <button
+          onClick={handlePaypalPayment}
+          className="w-48 bg-buttonBackground text-white hover:bg-primary hover:text-white rounded-lg px-4 py-2 mt-5"
+        >
+          Pay with PayPal
+        </button>
+      </div>
     </>
   );
 };
