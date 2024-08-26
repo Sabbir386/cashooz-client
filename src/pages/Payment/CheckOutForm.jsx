@@ -135,7 +135,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
     <>
       <div>
         <h3 className="text-xl font-bold text-white border-l-4 border-buttonBackground pl-3 ">
-          Payment
+          Withdraw Bank
         </h3>
       </div>
 
@@ -183,16 +183,84 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
       {/* PayPal Payment Form */}
       <div className="text-white mt-8">
         <h3 className="text-xl font-bold text-white border-l-4 border-buttonBackground pl-3 ">
-          PayPal Payment
+          Withdraw Cash
         </h3>
-        <p className="text-lg mt-2">Amount: ${price.toFixed(2)}</p> {/* Display the amount */}
-        <button
-          onClick={handlePaypalPayment}
-          className="w-48 bg-buttonBackground text-white hover:bg-primary hover:text-white rounded-lg px-4 py-2 mt-5"
-        >
-          Pay with PayPal
-        </button>
+        <p className="text-lg mt-2 mb-3 pl-4">Amount: ${price.toFixed(2)}</p> {/* Display the amount */}
       </div>
+     {/* new added */}
+     <div className="flex flex-wrap gap-4">
+  <div
+    className="p-6 bg-[#259CDF] border border-gray-700 rounded-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/6 cursor-pointer text-center flex flex-col items-center justify-center gap-3"
+    onClick={handlePaypalPayment}
+  >
+    <img
+      src="https://freecash.com/public/img/cashout/paypal.png"
+      alt="Pay with PayPal"
+      className="w-20 h-20 mb-3"
+    />
+    <p className="text-white text-xl font-semibold">Pay with PayPal</p>
+    <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
+  </div>
+  
+  <div
+    className="p-6 bg-[#F9A540] border border-gray-700 rounded-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/6 cursor-pointer text-center flex flex-col items-center justify-center gap-3"
+    onClick={handlePaypalPayment} 
+  >
+    <img
+      src="https://freecash.com/public/img/cashout/bitcoin.png" 
+      alt="Pay with Bitcoin"
+      className="w-20 h-20 mb-3"
+    />
+    <p className="text-white text-xl font-semibold">Pay with Bitcoin</p>
+    <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
+  </div>
+  
+  <div
+    className="p-6 bg-[#31414B] border border-gray-700 rounded-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/6 cursor-pointer text-center flex flex-col items-center justify-center gap-3"
+    onClick={handlePaypalPayment}
+  >
+    <img
+      src="https://freecash.com/public/img/cashout/stake.png"
+      alt="Pay with PayPal"
+      className="w-20 h-20 mb-3"
+    />
+    <p className="text-white text-xl font-semibold">Pay with Stake</p>
+    <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
+  </div>
+  
+  <div
+    className="p-6 bg-[#757CBE] border border-gray-700 rounded-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/6 cursor-pointer text-center flex flex-col items-center justify-center gap-3"
+    onClick={handlePaypalPayment}
+  >
+    <img
+      src="https://freecash.com/public/img/cashout/ethereum.png"
+      alt="Pay with PayPal"
+      className="w-20 h-20 mb-3"
+    />
+    <p className="text-white text-xl font-semibold">Pay with Ethereum</p>
+    <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
+  </div>
+  
+  <div
+    className="p-6 bg-[#F7C97A] border border-gray-700 rounded-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/6 cursor-pointer text-center flex flex-col items-center justify-center gap-3"
+    onClick={handlePaypalPayment}
+  >
+    <img
+      src="	https://freecash.com/public/img/cashout/dogecoin.png"
+      alt="Pay with PayPal"
+      className="w-20 h-20 mb-3"
+    />
+    <p className="text-white text-xl font-semibold">Pay with Dogecoin</p>
+    <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
+  </div>
+</div>
+
+
+
+
+
+
+      
     </>
   );
 };
