@@ -1,8 +1,198 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaArrowAltCircleDown, FaRegClock } from "react-icons/fa";
 import { FaCalendarCheck } from "react-icons/fa";
+import { verifyToken } from "../../utils/verifyToken";
+import { useAppSelector } from "../../redux/features/hooks";
+import { useCurrentToken } from "../../redux/features/auth/authSlice";
+
+const TabOneComponent = () => (
+  <div className="py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-6 items-center justify-center">
+    <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
+      <div className="flex w-full justify-between">
+        <div className="flex gap-3 items-center">
+          <FaRegClock />
+          <h5 className="text-white font-semibold text-sm">March 08 2024</h5>
+        </div>
+        <div className="rounded-full py-1 px-2 text-xs bg-red-400">
+          Cancelled
+        </div>
+      </div>
+      <div className="flex w-full justify-start my-4">
+        <div className="w-1/2">
+          <p className="text-gray-300 text-xs font-semibold">
+            Total Attendence
+          </p>
+          <h5 className="text-white font-bold text-base">309</h5>
+        </div>
+        <div>
+          <p className="text-gray-300 text-xs font-semibold">
+            Total Attendence
+          </p>
+          <h5 className="text-white font-bold text-base">309</h5>
+        </div>
+      </div>
+    </div>
+    <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
+      <div className="flex w-full justify-between">
+        <div className="flex gap-3 items-center">
+          <FaRegClock />
+          <h5 className="text-white font-semibold text-sm">March 08 2024</h5>
+        </div>
+        <div className="rounded-full py-1 px-2 text-xs bg-yellow-400">
+          Pending
+        </div>
+      </div>
+      <div className="flex w-full justify-start my-4">
+        <div className="w-1/2">
+          <p className="text-gray-300 text-xs font-semibold">
+            Total Attendence
+          </p>
+          <h5 className="text-white font-bold text-base">309</h5>
+        </div>
+        <div>
+          <p className="text-gray-300 text-xs font-semibold">
+            Total Attendence
+          </p>
+          <h5 className="text-white font-bold text-base">309</h5>
+        </div>
+      </div>
+    </div>
+    <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
+      <div className="flex w-full justify-between">
+        <div className="flex gap-3 items-center">
+          <FaRegClock />
+          <h5 className="text-white font-semibold text-sm">March 08 2024</h5>
+        </div>
+        <div className="rounded-full py-1 px-2 text-xs bg-buttonBackground">
+          On time
+        </div>
+      </div>
+      <div className="flex w-full justify-start my-4">
+        <div className="w-1/2">
+          <p className="text-gray-300 text-xs font-semibold">
+            Total Attendence
+          </p>
+          <h5 className="text-white font-bold text-base">309</h5>
+        </div>
+        <div>
+          <p className="text-gray-300 text-xs font-semibold">
+            Total Attendence
+          </p>
+          <h5 className="text-white font-bold text-base">309</h5>
+        </div>
+      </div>
+    </div>
+    <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
+      <div className="flex w-full justify-between">
+        <div className="flex gap-3 items-center">
+          <FaRegClock />
+          <h5 className="text-white font-semibold text-sm">March 08 2024</h5>
+        </div>
+        <div className="rounded-full py-1 px-2 text-xs bg-buttonBackground">
+          On time
+        </div>
+      </div>
+      <div className="flex w-full justify-start my-4">
+        <div className="w-1/2">
+          <p className="text-gray-300 text-xs font-semibold">
+            Total Attendence
+          </p>
+          <h5 className="text-white font-bold text-base">309</h5>
+        </div>
+        <div>
+          <p className="text-gray-300 text-xs font-semibold">
+            Total Attendence
+          </p>
+          <h5 className="text-white font-bold text-base">309</h5>
+        </div>
+      </div>
+    </div>
+    <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
+      <div className="flex w-full justify-between">
+        <div className="flex gap-3 items-center">
+          <FaRegClock />
+          <h5 className="text-white font-semibold text-sm">March 08 2024</h5>
+        </div>
+        <div className="rounded-full py-1 px-2 text-xs bg-buttonBackground">
+          On time
+        </div>
+      </div>
+      <div className="flex w-full justify-start my-4">
+        <div className="w-1/2">
+          <p className="text-gray-300 text-xs font-semibold">
+            Total Attendence
+          </p>
+          <h5 className="text-white font-bold text-base">309</h5>
+        </div>
+        <div>
+          <p className="text-gray-300 text-xs font-semibold">
+            Total Attendence
+          </p>
+          <h5 className="text-white font-bold text-base">309</h5>
+        </div>
+      </div>
+    </div>
+    <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
+      <div className="flex w-full justify-between">
+        <div className="flex gap-3 items-center">
+          <FaRegClock />
+          <h5 className="text-white font-semibold text-sm">March 08 2024</h5>
+        </div>
+        <div className="rounded-full py-1 px-2 text-xs bg-buttonBackground">
+          On time
+        </div>
+      </div>
+      <div className="flex w-full justify-start my-4">
+        <div className="w-1/2">
+          <p className="text-gray-300 text-xs font-semibold">
+            Total Attendence
+          </p>
+          <h5 className="text-white font-bold text-base">309</h5>
+        </div>
+        <div>
+          <p className="text-gray-300 text-xs font-semibold">
+            Total Attendence
+          </p>
+          <h5 className="text-white font-bold text-base">309</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const TabTwoComponent = () => (
+  <div className="p-4 bg-green-100 rounded-lg">
+    <h2 className="text-xl font-semibold">Tab 2 UI</h2>
+    <p>This is the UI for Tab 2.</p>
+  </div>
+);
+
+const TabThreeComponent = () => (
+  <div className="p-4 bg-yellow-100 rounded-lg">
+    <h2 className="text-xl font-semibold">Tab 3 UI</h2>
+    <p>This is the UI for Tab 3.</p>
+  </div>
+);
 
 const Profile = () => {
+  const [activeTab, setActiveTab] = useState(0);
+  const token = useAppSelector(useCurrentToken);
+
+
+  let user;
+  if (token) {
+    user = verifyToken(token);
+  }
+
+  // console.log(user)
+
+  // Array of components corresponding to each tab
+  const tabComponents = [
+    <TabOneComponent />,
+    <TabTwoComponent />,
+    <TabThreeComponent />,
+  ];
+
   return (
     <div className="min-h-screen">
       <div className="bg-cardBackground p-4 rounded-md my-4">
@@ -35,7 +225,7 @@ const Profile = () => {
             />
           </div>
           <div>
-            <h4 className="text-xl text-white font-bold">Nilufa Yesmean</h4>
+            <h4 className="text-xl text-white font-bold">{user.email.match(/^([^@]*)@/)[1]}</h4>
             <div className="flex flex-col md:flex-row gap-10 my-5">
               <div>
                 <h5 className="text-gray-300 text-sm font-medium">Role</h5>
@@ -56,7 +246,7 @@ const Profile = () => {
                   Email Address
                 </h5>
                 <h6 className="font-semibold text-white text-base capitalize">
-                  john.doe.2024@gmail.com
+                {user.email}
                 </h6>
               </div>
             </div>
@@ -126,171 +316,29 @@ const Profile = () => {
             <h3 className="text-xl font-bold text-white border-l-4 border-buttonBackground pl-3 ">
               Information Overview
             </h3>
+          </div>   
+        </div>
+
+        <div>
+        <div className="flex ">
+            {["Withdraw", "Rewards", "Survey"].map((tabTitle, index) => (
+              <button
+                key={index}
+                onClick={() => setActiveTab(index)}
+                className={`px-4 py-2 -mb-px transition-colors duration-300 ease-in-out ${
+                  activeTab === index
+                    ? "text-buttonBackground border-buttonBackground border-b-2"
+                    : "text-white hover:text-buttonBackground"
+                }`}
+              >
+                {tabTitle}
+              </button>
+            ))}
           </div>
         </div>
-        <div className="py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-6 items-center justify-center">
-          <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
-            <div className="flex w-full justify-between">
-              <div className="flex gap-3 items-center">
-                <FaRegClock />
-                <h5 className="text-white font-semibold text-sm">
-                  March 08 2024
-                </h5>
-              </div>
-              <div className="rounded-full py-1 px-2 text-xs bg-red-400">
-                Cancelled
-              </div>
-            </div>
-            <div className="flex w-full justify-start my-4">
-              <div className="w-1/2">
-                <p className="text-gray-300 text-xs font-semibold">
-                  Total Attendence
-                </p>
-                <h5 className="text-white font-bold text-base">309</h5>
-              </div>
-              <div>
-                <p className="text-gray-300 text-xs font-semibold">
-                  Total Attendence
-                </p>
-                <h5 className="text-white font-bold text-base">309</h5>
-              </div>
-            </div>
-          </div>
-          <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
-            <div className="flex w-full justify-between">
-              <div className="flex gap-3 items-center">
-                <FaRegClock />
-                <h5 className="text-white font-semibold text-sm">
-                  March 08 2024
-                </h5>
-              </div>
-              <div className="rounded-full py-1 px-2 text-xs bg-yellow-400">
-                Pending
-              </div>
-            </div>
-            <div className="flex w-full justify-start my-4">
-              <div className="w-1/2">
-                <p className="text-gray-300 text-xs font-semibold">
-                  Total Attendence
-                </p>
-                <h5 className="text-white font-bold text-base">309</h5>
-              </div>
-              <div>
-                <p className="text-gray-300 text-xs font-semibold">
-                  Total Attendence
-                </p>
-                <h5 className="text-white font-bold text-base">309</h5>
-              </div>
-            </div>
-          </div>
-          <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
-            <div className="flex w-full justify-between">
-              <div className="flex gap-3 items-center">
-                <FaRegClock />
-                <h5 className="text-white font-semibold text-sm">
-                  March 08 2024
-                </h5>
-              </div>
-              <div className="rounded-full py-1 px-2 text-xs bg-buttonBackground">
-                On time
-              </div>
-            </div>
-            <div className="flex w-full justify-start my-4">
-              <div className="w-1/2">
-                <p className="text-gray-300 text-xs font-semibold">
-                  Total Attendence
-                </p>
-                <h5 className="text-white font-bold text-base">309</h5>
-              </div>
-              <div>
-                <p className="text-gray-300 text-xs font-semibold">
-                  Total Attendence
-                </p>
-                <h5 className="text-white font-bold text-base">309</h5>
-              </div>
-            </div>
-          </div>
-          <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
-            <div className="flex w-full justify-between">
-              <div className="flex gap-3 items-center">
-                <FaRegClock />
-                <h5 className="text-white font-semibold text-sm">
-                  March 08 2024
-                </h5>
-              </div>
-              <div className="rounded-full py-1 px-2 text-xs bg-buttonBackground">
-                On time
-              </div>
-            </div>
-            <div className="flex w-full justify-start my-4">
-              <div className="w-1/2">
-                <p className="text-gray-300 text-xs font-semibold">
-                  Total Attendence
-                </p>
-                <h5 className="text-white font-bold text-base">309</h5>
-              </div>
-              <div>
-                <p className="text-gray-300 text-xs font-semibold">
-                  Total Attendence
-                </p>
-                <h5 className="text-white font-bold text-base">309</h5>
-              </div>
-            </div>
-          </div>
-          <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
-            <div className="flex w-full justify-between">
-              <div className="flex gap-3 items-center">
-                <FaRegClock />
-                <h5 className="text-white font-semibold text-sm">
-                  March 08 2024
-                </h5>
-              </div>
-              <div className="rounded-full py-1 px-2 text-xs bg-buttonBackground">
-                On time
-              </div>
-            </div>
-            <div className="flex w-full justify-start my-4">
-              <div className="w-1/2">
-                <p className="text-gray-300 text-xs font-semibold">
-                  Total Attendence
-                </p>
-                <h5 className="text-white font-bold text-base">309</h5>
-              </div>
-              <div>
-                <p className="text-gray-300 text-xs font-semibold">
-                  Total Attendence
-                </p>
-                <h5 className="text-white font-bold text-base">309</h5>
-              </div>
-            </div>
-          </div>
-          <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
-            <div className="flex w-full justify-between">
-              <div className="flex gap-3 items-center">
-                <FaRegClock />
-                <h5 className="text-white font-semibold text-sm">
-                  March 08 2024
-                </h5>
-              </div>
-              <div className="rounded-full py-1 px-2 text-xs bg-buttonBackground">
-                On time
-              </div>
-            </div>
-            <div className="flex w-full justify-start my-4">
-              <div className="w-1/2">
-                <p className="text-gray-300 text-xs font-semibold">
-                  Total Attendence
-                </p>
-                <h5 className="text-white font-bold text-base">309</h5>
-              </div>
-              <div>
-                <p className="text-gray-300 text-xs font-semibold">
-                  Total Attendence
-                </p>
-                <h5 className="text-white font-bold text-base">309</h5>
-              </div>
-            </div>
-          </div>
+
+        <div className="p-4 mt-4">
+          {tabComponents[activeTab]}
         </div>
       </div>
     </div>

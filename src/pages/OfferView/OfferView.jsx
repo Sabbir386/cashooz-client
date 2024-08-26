@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useOfferByNetworkQuery, useTotalOfferQuery } from '../dashboardApi';
 import { Link } from 'react-router-dom';
+import { FcAndroidOs } from "react-icons/fc";
 
 const OfferView = () => {
   const [networkOffers, setNetworkOffers] = useState([]);
@@ -34,12 +35,13 @@ const OfferView = () => {
               >
                 <div className="relative">
                   <img
-                    src="https://main-p.agmcdn.com/offers/1126583-cwTa2k02.jpg"
+                    src={offer.image ? offer.image : "https://main-p.agmcdn.com/offers/1126583-cwTa2k02.jpg"}
                     alt=""
                     className="w-full relative h-24 object-cover rounded-md"
                   />
                   <div className="absolute w-9 rounded-full h-5 bg-black bg-opacity-50 top-2 right-3 flex items-center justify-center font-bold">
-                    <span className="text-white">A</span>
+                    <span className="text-white"><FcAndroidOs />
+                    </span>
                   </div>
                 </div>
                 <div className="mt-4 text-white">

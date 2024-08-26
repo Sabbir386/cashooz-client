@@ -72,11 +72,12 @@ const AdminDashboard = () => {
   const token = useAppSelector(useCurrentToken);
 
   let userRole;
+  let user;
   if (token) {
-    const user = verifyToken(token);
+    user = verifyToken(token);
     userRole = user.role;
   }
-  console.log(userRole);
+  // console.log(user);
   const [countTotalOffer, setCountTotalOffer] = useState(null);
   const {
     data: totalOffer,
