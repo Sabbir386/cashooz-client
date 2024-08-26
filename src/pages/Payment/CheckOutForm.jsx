@@ -161,7 +161,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         <button
           className={`w-24 bg-buttonBackground text-white hover:bg-primary hover:text-white rounded-lg px-4 py-2 mt-5 ${
             isProcessing ? "hidden" : "block"
-          }`}
+          }`} 
           type="submit"
           disabled={!stripe || !clientSecret || isProcessing}
         >

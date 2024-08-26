@@ -305,7 +305,7 @@ const OfferList = () => {
                       <div className="flex-shrink-0 w-10 h-10">
                         <img
                           className="w-full h-full rounded-lg object-cover"
-                          src={offer.image ? offer.image : "https://main-p.agmcdn.com/offers/1126583-cwTa2k02.jpg"}
+                          src={row.image ? row.image : "https://main-p.agmcdn.com/offers/1126583-cwTa2k02.jpg"}
                           alt=""
                         />
                       </div>
