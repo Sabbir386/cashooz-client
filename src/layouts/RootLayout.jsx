@@ -44,6 +44,13 @@ function RootLayout() {
     });
   };
 
+
+
+  let user;
+  if (token) {
+    user = verifyToken(token);
+  }
+
   return (
     <div className="flex">
       <Sidebar />
@@ -62,10 +69,10 @@ function RootLayout() {
                 />
               </div>
               <div className="flex flex-col">
-                <span className="text-white text-sm font-medium">John Doe</span>{" "}
+                <span className="text-white text-sm font-medium">{user.email.match(/^([^@]*)@/)[1]}</span>{" "}
                 {/* Replace with the user's name */}
                 <span className="text-gray-500 text-xs">
-                  nilufa.yesmean@example.com
+                {user.email}
                 </span>{" "}
                 {/* Replace with the user's email */}
               </div>

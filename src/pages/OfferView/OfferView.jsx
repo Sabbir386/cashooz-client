@@ -39,10 +39,11 @@ const OfferView = () => {
                     alt=""
                     className="w-full relative h-24 object-cover rounded-md"
                   />
-                  <div className="absolute w-9 rounded-full h-5 bg-black bg-opacity-50 top-2 right-3 flex items-center justify-center font-bold">
-                    <span className="text-white"><FcAndroidOs />
+                  {/* <div className="absolute w-9 rounded-full h-5 bg-black bg-opacity-50 top-2 right-3 flex items-center justify-center font-bold">
+                    <span className="text-white flex gap-1">
+                      {offer.device.map(device => <FcAndroidOs/>)}
                     </span>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="mt-4 text-white">
                   <h4 className="font-bold text-base">{offer?.name ? offer.name : "Offer Name"}</h4>
