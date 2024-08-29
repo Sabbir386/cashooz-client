@@ -32,7 +32,7 @@ const customStyles = {
   },
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.75)",
-    overflow:'auto'
+    overflow: "auto",
   },
 };
 
@@ -51,11 +51,12 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   const [createPaypalOrder] = useCreatePaypalOrderMutation();
   const { data: completeOrderData, error: completeOrderError } =
     useCompleteOrderQuery();
-    const [selectedAmount, setSelectedAmount] = useState(0);
-    const handleCardClick = (amount) => {
-      setSelectedAmount(amount); // Set the selected amount
-      console.log(`Selected PayPal amount: $${amount}`);
-    };
+  const [selectedAmount, setSelectedAmount] = useState(0);
+
+  const handleCardClick = (amount) => {
+    setSelectedAmount(amount); // Set the selected amount
+    console.log(`Selected PayPal amount: $${amount}`);
+  };
   // Handle Stripe Payment Intent
   useEffect(() => {
     const createPayment = async () => {
@@ -171,7 +172,6 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   };
 
   // Handle PayPal Amount Selection
- 
 
   return (
     <>
@@ -180,7 +180,6 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           Withdraw Bank
         </h3>
       </div>
-
       {/* Stripe Payment Form */}
       <form className="w-2/3 my-8" onSubmit={handleSubmitStripePayment}>
         <CardElement
@@ -221,7 +220,6 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           <p className="text-green-500">Payment was successful!</p>
         </div>
       )}
-
       {/* PayPal Payment Options */}
       <div className="text-white mt-8">
         <h3 className="text-xl font-bold text-white border-l-4 border-buttonBackground pl-3">
@@ -229,7 +227,6 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         </h3>
         <p className="text-lg mt-2 mb-3 pl-4">Amount: ${price.toFixed(2)}</p>
       </div>
-
       <div className="flex flex-wrap gap-4">
         <div
           className="p-6 bg-[#259CDF] border border-gray-700 rounded-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/6 cursor-pointer text-center flex flex-col items-center justify-center gap-3"
@@ -257,137 +254,140 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
         </div>
 
-        
-  <div
-    className="p-6 bg-[#31414B] border border-gray-700 rounded-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/6 cursor-pointer text-center flex flex-col items-center justify-center gap-3"
-    onClick={handlePaypalPayment}
-  >
-    <img
-      src="https://freecash.com/public/img/cashout/stake.png"
-      alt="Pay with PayPal"
-      className="w-20 h-20 mb-3"
-    />
-    <p className="text-white text-xl font-semibold">Pay with Stake</p>
-    <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
-  </div>
-  
-  <div
-    className="p-6 bg-[#757CBE] border border-gray-700 rounded-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/6 cursor-pointer text-center flex flex-col items-center justify-center gap-3"
-    onClick={handlePaypalPayment}
-  >
-    <img
-      src="https://freecash.com/public/img/cashout/ethereum.png"
-      alt="Pay with PayPal"
-      className="w-20 h-20 mb-3"
-    />
-    <p className="text-white text-xl font-semibold">Pay with Ethereum</p>
-    <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
-  </div>
-  
-  <div
-    className="p-6 bg-[#F7C97A] border border-gray-700 rounded-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/6 cursor-pointer text-center flex flex-col items-center justify-center gap-3"
-    onClick={handlePaypalPayment}
-  >
-    <img
-      src="	https://freecash.com/public/img/cashout/dogecoin.png"
-      alt="Pay with PayPal"
-      className="w-20 h-20 mb-3"
-    />
-    <p className="text-white text-xl font-semibold">Pay with Dogecoin</p>
-    <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
-  </div>
-      </div>
-
-      {/* modal necesarry  */}
-
-
-      <Modal
-  isOpen={isModalOpen}
-  onRequestClose={toggleModal}
-  style={customStyles}
-  contentLabel="PayPal Payment Modal"
->
-  <div className="relative flex flex-col items-center justify-center w-full h-full">
-    {/* Close Button */}
-    <button
-      className="fixed top-6 right-5 text-white text-2xl rounded-full p-3 bg-gray-700 hover:bg-gray-800 transition duration-300"
-      onClick={toggleModal}
-      style={{
-        borderRadius: "50%",
-        width: "40px",
-        height: "40px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        top: "14px",
-      }}
-    >
-      &times;
-    </button>
-
-    <h2 className="text-white text-xl mb-4 text-center">
-      Select PayPal Amount
-    </h2>
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto">
-      {[5, 10, 20, 30, 40, 50, 100, 200].map((amount, index) => (
         <div
-          key={index}
-          className="p-6 bg-gradient-to-r from-[#263b80] to-[#25bcff] border-gray-700 rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3 hover:border-green-500 border-2 transition duration-300 ease-in-out"
-          onClick={() => handleCardClick(amount)} // Set the selected amount
-          style={{
-            background:
-              "linear-gradient(351deg, rgb(38, 59, 128) 0%, rgb(37, 188, 255) 100%)",
-            textAlign: "center",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-            width: "100%",
-            height: "100%",
-            borderRadius: "8px",
-            outlineOffset: "-1px",
-          }}
+          className="p-6 bg-[#31414B] border border-gray-700 rounded-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/6 cursor-pointer text-center flex flex-col items-center justify-center gap-3"
+          onClick={handlePaypalPayment}
         >
           <img
-            src="https://freecash.com/public/img/cashout/paypal.png"
-            alt={`PayPal ${amount}`}
-            className="w-32 h-24 mb-3"
+            src="https://freecash.com/public/img/cashout/stake.png"
+            alt="Pay with PayPal"
+            className="w-20 h-20 mb-3"
           />
-          <p className="text-gray-200 text-sm font-semibold">
-            Amount: ${amount}
-          </p>
+          <p className="text-white text-xl font-semibold">Pay with Stake</p>
+          <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
         </div>
-      ))}
-    </div>
 
-    {/* Fee and Price Section */}
-    <div className="w-full mt-6 p-4 bg-[#1c1d2b] rounded-lg flex flex-col sm:flex-row justify-between items-center">
-      <div className="flex flex-col sm:flex-row items-center mb-4 sm:mb-0">
-        <div className="text-gray-400 text-sm mr-4">Fee</div>
-        <div className="text-white text-lg">$0</div>
+        <div
+          className="p-6 bg-[#757CBE] border border-gray-700 rounded-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/6 cursor-pointer text-center flex flex-col items-center justify-center gap-3"
+          onClick={handlePaypalPayment}
+        >
+          <img
+            src="https://freecash.com/public/img/cashout/ethereum.png"
+            alt="Pay with PayPal"
+            className="w-20 h-20 mb-3"
+          />
+          <p className="text-white text-xl font-semibold">Pay with Ethereum</p>
+          <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
+        </div>
+
+        <div
+          className="p-6 bg-[#F7C97A] border border-gray-700 rounded-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/6 cursor-pointer text-center flex flex-col items-center justify-center gap-3"
+          onClick={handlePaypalPayment}
+        >
+          <img
+            src="	https://freecash.com/public/img/cashout/dogecoin.png"
+            alt="Pay with PayPal"
+            className="w-20 h-20 mb-3"
+          />
+          <p className="text-white text-xl font-semibold">Pay with Dogecoin</p>
+          <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
+        </div>
       </div>
-      <div className="flex flex-col sm:flex-row items-center mb-4 sm:mb-0">
-        <div className="text-gray-400 text-sm mr-4">Price</div>
-        <div className="text-white text-lg">${selectedAmount || 0}</div> {/* Default value set to 0 */}
-      </div>
-      <button
-        onClick={() => handlePaypalPayment(selectedAmount)}
-        className={`bg-[#4ade80] text-white font-semibold py-2 px-6 rounded-lg transition duration-300 ${
-          !selectedAmount ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#32a562]'
-        }`}
-        style={{
-          minWidth: '150px',
-          textAlign: 'center',
-        }}
-        disabled={!selectedAmount} 
+      {/* modal necesarry  */}(
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={toggleModal}
+        style={customStyles}
+        contentLabel="PayPal Payment Modal"
       >
-        Withdraw
-      </button>
-    </div>
-  </div>
-</Modal>
+        <div className="relative flex flex-col items-center justify-center w-full h-full">
+          {/* Close Button */}
+          <button
+            className="fixed top-6 right-5 text-white text-2xl rounded-full p-3 bg-gray-700 hover:bg-gray-800 transition duration-300"
+            onClick={toggleModal}
+            style={{
+              borderRadius: "50%",
+              width: "40px",
+              height: "40px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              top: "14px",
+            }}
+          >
+            &times;
+          </button>
 
+          <h2 className="text-white text-xl mb-4 text-center">
+            Select PayPal Amount
+          </h2>
+          <div
+            className="grid grid-cols-2 
+         md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto"
+          >
+            {[5, 10, 20, 30, 40, 50, 100, 200].map((amount, index) => (
+              <div
+                key={index}
+                className={`p-6 bg-gradient-to-r from-[#263b80] to-[#25bcff] rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3 border-2 transition duration-300 ease-in-out ${
+                  selectedAmount === amount
+                    ? "border-green-500"
+                    : "border-gray-700 hover:border-green-500"
+                }`}
+                onClick={() => handleCardClick(amount)} // Set the clicked card as active
+                style={{
+                  background:
+                    "linear-gradient(351deg, rgb(38, 59, 128) 0%, rgb(37, 188, 255) 100%)",
+                  textAlign: "center",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: "8px",
+                  outlineOffset: "-1px",
+                }}
+              >
+                <img
+                  src="https://freecash.com/public/img/cashout/paypal.png"
+                  alt={`PayPal ${amount}`}
+                  className="w-32 h-24 mb-3"
+                />
+                <p className="text-gray-200 text-sm font-semibold">
+                  Amount: ${amount}
+                </p>
+              </div>
+            ))}
+          </div>
 
+          {/* Fee and Price Section */}
+          <div className="w-full mt-6 p-4 bg-[#1c1d2b] rounded-lg flex flex-col sm:flex-row justify-between items-center">
+            <div className="flex flex-col sm:flex-row items-center mb-4 sm:mb-0">
+              <div className="text-gray-400 text-sm mr-4">Fee</div>
+              <div className="text-white text-lg">$0</div>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center mb-4 sm:mb-0">
+              <div className="text-gray-400 text-sm mr-4">Price</div>
+              <div className="text-white text-lg">${selectedAmount || 0}</div>
+            </div>
+            <button
+              onClick={() => handlePaypalPayment(selectedAmount)}
+              className={`bg-[#4ade80] text-white font-semibold py-2 px-6 rounded-lg transition duration-300 ${
+                !selectedAmount
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-[#32a562]"
+              }`}
+              style={{
+                minWidth: "150px",
+                textAlign: "center",
+              }}
+              disabled={!selectedAmount}
+            >
+              Withdraw
+            </button>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 };
