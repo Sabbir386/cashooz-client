@@ -8,8 +8,9 @@ import {
 } from "./paymentApi";
 import { toast } from "sonner";
 import Modal from "react-modal";
+import { skipToken } from "@reduxjs/toolkit/query/react";
 
-// Modal Styles (You can customize these)
+// Modal Styles
 const customStyles = {
   content: {
     top: "50%",
@@ -24,11 +25,11 @@ const customStyles = {
     maxWidth: "90%",
     width: "600px",
     maxHeight: "80vh",
-    overflowY: "auto", // Enables vertical scrolling if content overflows
+    overflowY: "auto",
     boxSizing: "border-box",
     display: "flex",
     flexDirection: "column",
-    position: "relative", // Ensures modal positions properly
+    position: "relative",
   },
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.75)",
@@ -45,24 +46,31 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentInfo, setPaymentInfo] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedAmount, setSelectedAmount] = useState(0);
+
+  const [token, setToken] = useState(null);
+  const [PayerID, setPayerID] = useState(null);
+  const [paymentType, setPaymentType] = useState(null);
+  const [userEmailState, setUserEmailState] = useState(userEmail);
 
   const [createPaymentIntent] = useCreatePaymentIntentMutation();
   const [savePaymentInfo] = useSavePaymentInfoMutation();
   const [createPaypalOrder] = useCreatePaypalOrderMutation();
-  const { data: completeOrderData, error: completeOrderError } =
-    useCompleteOrderQuery();
-  const [selectedAmount, setSelectedAmount] = useState(0);
 
+  // Handle card click and select amount
   const handleCardClick = (amount) => {
-    setSelectedAmount(amount); // Set the selected amount
+    setSelectedAmount(amount);
     console.log(`Selected PayPal amount: $${amount}`);
   };
+
   // Handle Stripe Payment Intent
   useEffect(() => {
     const createPayment = async () => {
       try {
         const response = await createPaymentIntent({
           price: Math.round(price * 100), // Convert price to cents
+          userEmail: userEmailState,
+          paymentType: "stripe",
         });
         if (response?.data?.clientSecret) {
           setClientSecret(response.data.clientSecret);
@@ -71,8 +79,15 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         console.error("Error creating payment intent:", error);
       }
     };
-    createPayment();
-  }, [createPaymentIntent, price]);
+
+    if (userEmailState) {
+      createPayment();
+    } else {
+      console.warn(
+        "Cannot create payment intent because user email is not set."
+      );
+    }
+  }, [createPaymentIntent, price, userEmailState]);
 
   // Handle Stripe Payment Submission
   const handleSubmitStripePayment = async (event) => {
@@ -110,7 +125,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             card: card,
             billing_details: {
               name: userName || "Anonymous",
-              email: userEmail || "",
+              email: userEmailState || "",
             },
           },
         });
@@ -133,8 +148,9 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         const paymentInfo = {
           transactionId: paymentIntent.id,
           amount,
-          email: userEmail,
+          email: userEmailState,
           name: userName,
+          paymentType: "stripe",
         };
 
         try {
@@ -170,9 +186,6 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
-
-  // Handle PayPal Amount Selection
-
   return (
     <>
       <div>
@@ -321,10 +334,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           <h2 className="text-white text-xl mb-4 text-center">
             Select PayPal Amount
           </h2>
-          <div
-            className="grid grid-cols-2 
-         md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto"
-          >
+          <div className="grid grid-cols-1  md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto">
             {[5, 10, 20, 30, 40, 50, 100, 200].map((amount, index) => (
               <div
                 key={index}
