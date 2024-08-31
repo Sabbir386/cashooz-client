@@ -22,10 +22,17 @@ export const extendedBaseApi = baseApi.injectEndpoints({
         method: "POST",
       }),
     }),
-    completeOrder: builder.query({ // Changed to query
+    completeOrder: builder.query({
       query: () => ({
         url: `/paypal/complete-order`,
-        method: "GET", // GET request for fetching data
+        method: "GET",
+      }),
+    }),
+    // Updated endpoint to get payment info without additional query params
+    getPaymentInfo: builder.query({
+      query: () => ({
+        url: `/payment/payment-info`,
+        method: "GET",
       }),
     }),
   }),
@@ -37,4 +44,5 @@ export const {
   useSavePaymentInfoMutation,
   useCreatePaypalOrderMutation,
   useCompleteOrderQuery,
+  useGetPaymentInfoQuery, // Export the new hook
 } = extendedBaseApi;

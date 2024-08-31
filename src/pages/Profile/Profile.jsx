@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaArrowAltCircleDown, FaRegClock } from "react-icons/fa";
 import { FaCalendarCheck } from "react-icons/fa";
 import { verifyToken } from "../../utils/verifyToken";
 import { useAppSelector } from "../../redux/features/hooks";
 import { useCurrentToken } from "../../redux/features/auth/authSlice";
-import { Line } from 'react-chartjs-2';
+import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,7 +14,8 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
+import { useGetPaymentInfoQuery } from "../Payment/paymentApi";
 
 ChartJS.register(
   CategoryScale,
@@ -27,19 +28,30 @@ ChartJS.register(
 );
 
 const data = {
-  labels: ['Jul 30', 'Aug 02', 'Aug 05', 'Aug 08', 'Aug 11', 'Aug 14', 'Aug 17', 'Aug 20', 'Aug 23', 'Aug 26'],
+  labels: [
+    "Jul 30",
+    "Aug 02",
+    "Aug 05",
+    "Aug 08",
+    "Aug 11",
+    "Aug 14",
+    "Aug 17",
+    "Aug 20",
+    "Aug 23",
+    "Aug 26",
+  ],
   datasets: [
     {
-      label: 'Earnings',
+      label: "Earnings",
       data: [0, 0, 0, 0, 0, 0, 400, 0, 0, 0],
-      borderColor: 'rgba(16, 185, 129, 1)',
-      backgroundColor: 'rgba(16, 185, 129, 0.2)',
+      borderColor: "rgba(16, 185, 129, 1)",
+      backgroundColor: "rgba(16, 185, 129, 0.2)",
       tension: 0.1,
       fill: false,
-      pointBorderColor: 'rgba(16, 185, 129, 1)',
-      pointBackgroundColor: 'rgba(16, 185, 129, 1)',
-      pointHoverBackgroundColor: 'rgba(16, 185, 129, 1)',
-      pointHoverBorderColor: 'rgba(16, 185, 129, 1)',
+      pointBorderColor: "rgba(16, 185, 129, 1)",
+      pointBackgroundColor: "rgba(16, 185, 129, 1)",
+      pointHoverBackgroundColor: "rgba(16, 185, 129, 1)",
+      pointHoverBorderColor: "rgba(16, 185, 129, 1)",
     },
   ],
 };
@@ -53,83 +65,86 @@ const options = {
     },
     title: {
       display: true,
-      text: 'Recent Earnings (30 days)',
-      color: '#ffffff',
+      text: "Recent Earnings (30 days)",
+      color: "#ffffff",
     },
   },
   scales: {
     x: {
-      ticks: { color: '#94a3b8' },
+      ticks: { color: "#94a3b8" },
       grid: { display: false },
     },
     y: {
-      ticks: { color: '#94a3b8' },
+      ticks: { color: "#94a3b8" },
       grid: {
-        color: '#334155',
+        color: "#334155",
       },
     },
   },
 };
 
-
 const TabOneComponent = () => (
   <div className="w-full p-4 bg-gray-900 rounded-lg h-72">
-      <Line data={data} options={options} />
-    </div>
-  
+    <Line data={data} options={options} />
+  </div>
 );
-const TabTwoComponent = () => (
+const TabTwoComponent = ({ payments }) => (
   <div className="w-full p-4 bg-gray-900 rounded-lg">
-  <table className="w-full text-left text-sm text-gray-400">
-    <thead className="text-xs uppercase text-buttonBackground border-b border-gray-700">
-      <tr>
-        <th scope="col" className="px-6 py-3">Type</th>
-        <th scope="col" className="px-6 py-3">Rewards</th>
-        <th scope="col" className="px-6 py-3">Email/Address</th>
-        <th scope="col" className="px-6 py-3">Transaction ID</th>
-        <th scope="col" className="px-6 py-3">Date</th>
-        <th scope="col" className="px-6 py-3">Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      {/* Demo data row */}
-      <tr className="bg-gray-800">
-            <td className="px-6 py-4 text-white">Withdrawal</td>
-            <td className="px-6 py-4 text-white">500 Points</td>
-            <td className="px-6 py-4 text-white">example@gmail.com</td>
-            <td className="px-6 py-4 text-white">1234567890</td>
-            <td className="px-6 py-4 text-white">2024-08-27</td>
-            <td className="px-6 py-4 text-green-500">Completed</td>
-          </tr>
-          {/* No withdrawals yet row */}
+    <table className="w-full text-left text-sm text-gray-400">
+      <thead className="text-xs uppercase text-buttonBackground border-b border-gray-700">
+        <tr>
+          <th scope="col" className="px-6 py-3">Type</th>
+          <th scope="col" className="px-6 py-3">Amount</th>
+          <th scope="col" className="px-6 py-3">Email/Address</th>
+          <th scope="col" className="px-6 py-3">Transaction ID</th>
+          <th scope="col" className="px-6 py-3">Date</th>
+          <th scope="col" className="px-6 py-3">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {payments.length > 0 ? (
+          payments.map((payment) => (
+            <tr key={payment._id} className="bg-gray-800">
+              <td className="px-6 py-4 text-white">{payment.paymentType}</td>
+              <td className="px-6 py-4 text-white">${(payment.amount ).toFixed(2)}</td>
+              <td className="px-6 py-4 text-white">{payment.userEmail}</td>
+              <td className="px-6 py-4 text-white">{payment.transactionId}</td>
+              <td className="px-6 py-4 text-white">
+                {new Date(payment.createdAt).toLocaleDateString()}
+              </td>
+              <td className="px-6 py-4 text-green-500">Completed</td>
+            </tr>
+          ))
+        ) : (
           <tr className="bg-gray-800">
             <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
-              No withdrawals yet
+              No payment records found
             </td>
           </tr>
-    </tbody>
-  </table>
-</div>
+        )}
+      </tbody>
+    </table>
+  </div>
 );
 const TabThreeComponent = () => (
   <div className="flex flex-col items-center justify-center h-full p-4 bg-gray-900 rounded-lg">
-      {/* Image Icon */}
-      <div className="mb-4">
-        <img
-          src="https://i.ibb.co/tJpxPkW/earnings-in-progress-not-found.png"
-          alt="No Offers"
-          className="w-20 h-20"
-        />
-      </div>
-      {/* Message */}
-      <p className="mb-6 text-center text-gray-400">
-        You have not started any featured offers in the last year
-      </p>
-      {/* Button */}
-      <button className="px-6 py-3 text-white bg-buttonBackground rounded-full hover:bg-green-600 transition duration-300">
-        Start Earning <span aria-hidden="true">→</span>
-      </button>
+    {/* Image Icon */}
+    <div className="mb-4">
+      <img
+        src="https://i.ibb.co/tJpxPkW/earnings-in-progress-not-found.png"
+        alt="No Offers"
+        className="w-20 h-20"
+      />
     </div>
+    {/* Message */}
+    <p className="mb-6 text-center text-gray-400">
+      You have not started any featured offers in the last year
+    </p>
+    {/* Button */}
+    <button className="px-6 py-3 text-white bg-buttonBackground rounded-full hover:bg-green-600 transition duration-300">
+      Start Earning <span aria-hidden="true">→</span>
+    </button>
+  </div>
 );
 const TabFourComponent = () => (
   <div className="py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-6 items-center justify-center">
@@ -290,23 +305,31 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState(0);
   const token = useAppSelector(useCurrentToken);
 
-
-
   let user;
   if (token) {
     user = verifyToken(token);
   }
+// withdraw history 
+ 
+const { data: paymentsData, error, isLoading } = useGetPaymentInfoQuery();
 
-  // console.log(user)
+if (isLoading) return <p>Loading...</p>;
+if (error) return <p>Error: {error.message}</p>;
+
+const payments = paymentsData?.payments || [];
+
+    console.log("Fetched Payment Data:", payments);
+  
 
   // Array of components corresponding to each tab
   const tabComponents = [
     <TabOneComponent />,
-    <TabTwoComponent />,
+    <TabTwoComponent payments={payments} />,
     <TabThreeComponent />,
     <TabFourComponent />,
   ];
 
+  
   return (
     <div className="min-h-screen">
       <div className="bg-cardBackground p-4 rounded-md my-4">
@@ -339,7 +362,9 @@ const Profile = () => {
             />
           </div>
           <div>
-            <h4 className="text-xl text-white font-bold">{user.email.match(/^([^@]*)@/)[1]}</h4>
+            <h4 className="text-xl text-white font-bold">
+              {user.email.match(/^([^@]*)@/)[1]}
+            </h4>
             <div className="flex flex-col md:flex-row gap-10 my-5">
               {/* <div>
                 <h5 className="text-gray-300 text-sm font-medium">Role</h5>
@@ -360,7 +385,7 @@ const Profile = () => {
                   Email Address
                 </h5>
                 <h6 className="font-semibold text-white text-base capitalize">
-                {user.email}
+                  {user.email}
                 </h6>
               </div>
             </div>
@@ -430,30 +455,30 @@ const Profile = () => {
             <h3 className="text-xl font-bold text-white border-l-4 border-buttonBackground pl-3 ">
               Information Overview
             </h3>
-          </div>   
-        </div>
-
-        <div>
-        <div className="flex gap-4">
-            {["Earnings","Withdraw", "Rewards", "Survey"].map((tabTitle, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveTab(index)}
-                className={`px-4 py-2 text-sm -mb-px transition-colors duration-300 ease-in-out ${
-                  activeTab === index
-                    ? "text-buttonBackground bg-buttonBackground bg-opacity-20 border-buttonBackground border-b-2"
-                    : "text-gray-400 bg-gray-700 hover:text-buttonBackground hover:bg-buttonBackground hover:bg-opacity-20"
-                }`}
-              >
-                {tabTitle}
-              </button>
-            ))}
           </div>
         </div>
 
-        <div className="p-4 mt-4">
-          {tabComponents[activeTab]}
+        <div>
+          <div className="flex gap-4">
+            {["Earnings", "Withdraw", "Rewards", "Survey"].map(
+              (tabTitle, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveTab(index)}
+                  className={`px-4 py-2 text-sm -mb-px transition-colors duration-300 ease-in-out ${
+                    activeTab === index
+                      ? "text-buttonBackground bg-buttonBackground bg-opacity-20 border-buttonBackground border-b-2"
+                      : "text-gray-400 bg-gray-700 hover:text-buttonBackground hover:bg-buttonBackground hover:bg-opacity-20"
+                  }`}
+                >
+                  {tabTitle}
+                </button>
+              )
+            )}
+          </div>
         </div>
+
+        <div className="p-4 mt-4">{tabComponents[activeTab]}</div>
       </div>
     </div>
   );
