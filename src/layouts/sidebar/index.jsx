@@ -3,7 +3,16 @@ import { motion } from "framer-motion";
 import SubMenu from "./SubMenu";
 import { IoIosArrowBack } from "react-icons/io";
 import { SlSettings } from "react-icons/sl";
-import { HiOutlineUsers, HiCurrencyDollar, HiChartBar, HiColorSwatch, HiUser, HiAdjustments, HiClipboardList, HiSparkles } from "react-icons/hi";
+import {
+  HiOutlineUsers,
+  HiCurrencyDollar,
+  HiChartBar,
+  HiColorSwatch,
+  HiUser,
+  HiAdjustments,
+  HiClipboardList,
+  HiSparkles,
+} from "react-icons/hi";
 import { CiBullhorn } from "react-icons/ci";
 import { AiOutlineAppstore } from "react-icons/ai";
 import { BsPerson } from "react-icons/bs";
@@ -22,9 +31,6 @@ const Sidebar = () => {
   const sidebarRef = useRef();
   const [user, setUser] = useState();
   const { pathname } = useLocation();
-
-
-
 
   useEffect(() => {
     if (isTabletMid) {
@@ -376,32 +382,25 @@ const Sidebar = () => {
               </Link>
             </li>
 
-            <li className="mb-1">
-              {menulist?.map((menu) =>
-                menu?.menus ? (
-                  <div key={menu.id} className="flex flex-col gap-1 mb-1">
-                    <SubMenu data={menu} />
-                  </div>
-                ) : (
-                  <li className="mb-1 text-buttonBackground">
-                    <Link
-                      to={`/dashboard/${menu.path}`}
-
-                      className={`p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium hover:text-buttonBackground hover:bg-sidebarBackground ${
-                        location.pathname === "/dashboard"
-                          ? "text-grayColor hover:text-buttonBackground"
-                          : "text-grayColor hover:text-buttonBackground"
-                      }`}
-                    >
-                      <menu.icon size={23} className="min-w-max" />
-                      {menu.name}
-                    </Link>
-                  </li>
-                )
-              )}
-            </li>
+            {menulist?.map((menu) =>
+              menu?.menus ? (
+                <li key={menu.id} className="flex flex-col gap-1 mb-1">
+                  <SubMenu data={menu} />
+                </li>
+              ) : (
+                <li key={menu.id} className="mb-1 text-buttonBackground">
+                  <Link
+                    to={`/dashboard/${menu.path}`}
+                    className={`p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium hover:text-buttonBackground hover:bg-hoverBgColor`}
+                  >
+                    <menu.icon size={23} className="min-w-max" />
+                    {menu.name}
+                  </Link>
+                </li>
+              )
+            )}
           </ul>
-          
+
           {open && (
             <div className="flex-1 text-sm z-50 max-h-48 my-auto whitespace-pre w-full font-medium">
               <div className="flex border-y border-slate-300 p-4 items-center justify-between">

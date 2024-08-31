@@ -69,10 +69,10 @@ function RootLayout() {
                 />
               </div>
               <div className="flex flex-col">
-                <span className="text-white text-sm font-medium">{user.email.match(/^([^@]*)@/)[1]}</span>{" "}
+                <span className="text-white text-sm font-medium">{user?.email.match(/^([^@]*)@/)[1]}</span>{" "}
                 {/* Replace with the user's name */}
                 <span className="text-gray-500 text-xs">
-                {user.email}
+                {user?.email}
                 </span>{" "}
                 {/* Replace with the user's email */}
               </div>

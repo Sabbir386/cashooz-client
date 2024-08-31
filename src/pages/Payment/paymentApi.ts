@@ -4,14 +4,14 @@ export const extendedBaseApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createPaymentIntent: builder.mutation({
       query: (paymentInfo) => ({
-        url: `/payment/create-payment-intent?userEmail=${paymentInfo.userEmail}&paymentType=${paymentInfo.paymentType}`,
+        url: "/payment/create-payment-intent",
         method: "POST",
         body: paymentInfo,
       }),
     }),
     savePaymentInfo: builder.mutation({
       query: (paymentInfo) => ({
-        url: `/payment/save-payment-info?userEmail=${paymentInfo.userEmail}&paymentType=${paymentInfo.paymentType}`,
+        url: "/payment/save-payment-info",
         method: "POST",
         body: paymentInfo,
       }),

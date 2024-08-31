@@ -47,12 +47,6 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   const [paymentInfo, setPaymentInfo] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState(0);
-
-  const [token, setToken] = useState(null);
-  const [PayerID, setPayerID] = useState(null);
-  const [paymentType, setPaymentType] = useState(null);
-  const [userEmailState, setUserEmailState] = useState(userEmail);
-
   const [createPaymentIntent] = useCreatePaymentIntentMutation();
   const [savePaymentInfo] = useSavePaymentInfoMutation();
   const [createPaypalOrder] = useCreatePaypalOrderMutation();
@@ -69,8 +63,6 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
       try {
         const response = await createPaymentIntent({
           price: Math.round(price * 100), // Convert price to cents
-          userEmail: userEmailState,
-          paymentType: "stripe",
         });
         if (response?.data?.clientSecret) {
           setClientSecret(response.data.clientSecret);
@@ -79,15 +71,8 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         console.error("Error creating payment intent:", error);
       }
     };
-
-    if (userEmailState) {
-      createPayment();
-    } else {
-      console.warn(
-        "Cannot create payment intent because user email is not set."
-      );
-    }
-  }, [createPaymentIntent, price, userEmailState]);
+    createPayment();
+  }, [createPaymentIntent, price]);
 
   // Handle Stripe Payment Submission
   const handleSubmitStripePayment = async (event) => {
@@ -125,7 +110,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             card: card,
             billing_details: {
               name: userName || "Anonymous",
-              email: userEmailState || "",
+              email: userEmail || "",
             },
           },
         });
@@ -144,13 +129,11 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           setIsProcessing(false);
           return;
         }
-
         const paymentInfo = {
           transactionId: paymentIntent.id,
           amount,
-          email: userEmailState,
+          email: userEmail,
           name: userName,
-          paymentType: "stripe",
         };
 
         try {
@@ -166,7 +149,6 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
 
     setIsProcessing(false);
   };
-
   // Handle PayPal Payment
   const handlePaypalPayment = async () => {
     try {
@@ -307,97 +289,93 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         </div>
       </div>
       {/* modal necesarry  */}(
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={toggleModal}
-        style={customStyles}
-        contentLabel="PayPal Payment Modal"
-      >
-        <div className="relative flex flex-col items-center justify-center w-full h-full">
-          {/* Close Button */}
-          <button
-            className="fixed top-6 right-5 text-white text-2xl rounded-full p-3 bg-gray-700 hover:bg-gray-800 transition duration-300"
-            onClick={toggleModal}
-            style={{
-              borderRadius: "50%",
-              width: "40px",
-              height: "40px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              top: "14px",
-            }}
-          >
-            &times;
-          </button>
+        <Modal
+  isOpen={isModalOpen}
+  onRequestClose={toggleModal}
+  style={customStyles}
+  contentLabel="PayPal Payment Modal"
+>
+  <div className="relative flex flex-col items-center justify-center w-full h-full">
+    {/* Close Button */}
+    <button
+      className="fixed top-6 right-5 text-white text-2xl rounded-full p-3 bg-gray-700 hover:bg-gray-800 transition duration-300"
+      onClick={toggleModal}
+      style={{
+        borderRadius: "50%",
+        width: "40px",
+        height: "40px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        top: "14px",
+      }}
+    >
+      &times;
+    </button>
 
-          <h2 className="text-white text-xl mb-4 text-center">
-            Select PayPal Amount
-          </h2>
-          <div className="grid grid-cols-1  md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto">
-            {[5, 10, 20, 30, 40, 50, 100, 200].map((amount, index) => (
-              <div
-                key={index}
-                className={`p-6 bg-gradient-to-r from-[#263b80] to-[#25bcff] rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3 border-2 transition duration-300 ease-in-out ${
-                  selectedAmount === amount
-                    ? "border-green-500"
-                    : "border-gray-700 hover:border-green-500"
-                }`}
-                onClick={() => handleCardClick(amount)} // Set the clicked card as active
-                style={{
-                  background:
-                    "linear-gradient(351deg, rgb(38, 59, 128) 0%, rgb(37, 188, 255) 100%)",
-                  textAlign: "center",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexDirection: "column",
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: "8px",
-                  outlineOffset: "-1px",
-                }}
-              >
-                <img
-                  src="https://freecash.com/public/img/cashout/paypal.png"
-                  alt={`PayPal ${amount}`}
-                  className="w-32 h-24 mb-3"
-                />
-                <p className="text-gray-200 text-sm font-semibold">
-                  Amount: ${amount}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {/* Fee and Price Section */}
-          <div className="w-full mt-6 p-4 bg-[#1c1d2b] rounded-lg flex flex-col sm:flex-row justify-between items-center">
-            <div className="flex flex-col sm:flex-row items-center mb-4 sm:mb-0">
-              <div className="text-gray-400 text-sm mr-4">Fee</div>
-              <div className="text-white text-lg">$0</div>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center mb-4 sm:mb-0">
-              <div className="text-gray-400 text-sm mr-4">Price</div>
-              <div className="text-white text-lg">${selectedAmount || 0}</div>
-            </div>
-            <button
-              onClick={() => handlePaypalPayment(selectedAmount)}
-              className={`bg-[#4ade80] text-white font-semibold py-2 px-6 rounded-lg transition duration-300 ${
-                !selectedAmount
-                  ? "opacity-50 cursor-not-allowed"
-                  : "hover:bg-[#32a562]"
-              }`}
-              style={{
-                minWidth: "150px",
-                textAlign: "center",
-              }}
-              disabled={!selectedAmount}
-            >
-              Withdraw
-            </button>
-          </div>
+    <h2 className="text-white text-xl mb-4 text-center">Select PayPal Amount</h2>
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 overflow-y-auto">
+      {[5, 10, 20, 30, 40, 50, 100, 200].map((amount, index) => (
+        <div
+          key={index}
+          className={`p-6 bg-gradient-to-r from-[#263b80] to-[#25bcff] rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3 border-2 transition duration-300 ease-in-out ${
+            selectedAmount === amount
+              ? "border-green-500"
+              : "border-gray-700 hover:border-green-500"
+          }`}
+          onClick={() => handleCardClick(amount)} // Set the clicked card as active
+          style={{
+            background:
+              "linear-gradient(351deg, rgb(38, 59, 128) 0%, rgb(37, 188, 255) 100%)",
+            textAlign: "center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+            width: "100%",
+            height: "100%",
+            borderRadius: "8px",
+            outlineOffset: "-1px",
+          }}
+        >
+          <img
+            src="https://freecash.com/public/img/cashout/paypal.png"
+            alt={`PayPal ${amount}`}
+            className="w-32 h-24 mb-3"
+          />
+          <p className="text-gray-200 text-sm font-semibold">Amount: ${amount}</p>
         </div>
-      </Modal>
+      ))}
+    </div>
+
+    {/* Fee and Price Section */}
+    <div className="w-full mt-6 p-4 bg-[#1c1d2b] rounded-lg flex flex-col sm:flex-row justify-between items-center">
+      <div className="flex flex-col sm:flex-row items-center mb-4 sm:mb-0">
+        <div className="text-gray-400 text-sm mr-4">Fee</div>
+        <div className="text-white text-lg">$0</div>
+      </div>
+      <div className="flex flex-col sm:flex-row items-center mb-4 sm:mb-0">
+        <div className="text-gray-400 text-sm mr-4">Price</div>
+        <div className="text-white text-lg">${selectedAmount || 0}</div>
+      </div>
+      <button
+        onClick={() => handlePaypalPayment(selectedAmount)}
+        className={`bg-[#4ade80] text-white font-semibold py-2 px-6 rounded-lg transition duration-300 ${
+          !selectedAmount ? "opacity-50 cursor-not-allowed" : "hover:bg-[#32a562]"
+        }`}
+        style={{
+          minWidth: "150px",
+          textAlign: "center",
+        }}
+        disabled={!selectedAmount}
+      >
+        Withdraw
+      </button>
+    </div>
+  </div>
+</Modal>
+
+
     </>
   );
 };
