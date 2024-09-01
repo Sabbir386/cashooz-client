@@ -150,12 +150,12 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
     setIsProcessing(false);
   };
   // Handle PayPal Payment
-  const handlePaypalPayment = async () => {
+  const handlePaypalPayment = async (selectedAmount) => {
     try {
       const orderResponse = await createPaypalOrder().unwrap();
 
       if (orderResponse.success && orderResponse.orderUrl) {
-        window.location.href = orderResponse.orderUrl; // Redirect to PayPal for approval
+        window.location.href = orderResponse.orderUrl; 
       } else {
         console.error("Failed to create PayPal order");
       }
@@ -163,6 +163,11 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
       console.error("Error creating PayPal order:", error);
     }
   };
+
+  // After payment is completed, redirect back to your home URL
+  // const handlePaymentSuccess = () => {
+  //   window.location.href = "http://localhost:5173/dashboard/payment";
+  // };
 
   // Toggle Modal
   const toggleModal = () => {

@@ -44,5 +44,5 @@ export const {
   useSavePaymentInfoMutation,
   useCreatePaypalOrderMutation,
   useCompleteOrderQuery,
-  useGetPaymentInfoQuery, // Export the new hook
+  useGetPaymentInfoQuery, 
 } = extendedBaseApi;
