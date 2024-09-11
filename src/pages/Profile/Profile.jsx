@@ -93,24 +93,12 @@ const TabTwoComponent = ({ payments }) => (
     <table className="w-full text-left text-sm text-gray-400">
       <thead className="text-xs uppercase text-buttonBackground border-b border-gray-700">
         <tr>
-          <th scope="col" className="px-6 py-3">
-            Type
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Amount
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Email/Address
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Transaction ID
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Date
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Status
-          </th>
+          <th scope="col" className="px-6 py-3">Type</th>
+          <th scope="col" className="px-6 py-3">Amount</th>
+          <th scope="col" className="px-6 py-3">Email/Address</th>
+          <th scope="col" className="px-6 py-3">Transaction ID</th>
+          <th scope="col" className="px-6 py-3">Date</th>
+          <th scope="col" className="px-6 py-3">Status</th>
         </tr>
       </thead>
       <tbody>
@@ -118,9 +106,7 @@ const TabTwoComponent = ({ payments }) => (
           payments.map((payment) => (
             <tr key={payment._id} className="bg-gray-800">
               <td className="px-6 py-4 text-white">{payment.paymentType}</td>
-              <td className="px-6 py-4 text-white">
-                ${payment.amount.toFixed(2)}
-              </td>
+              <td className="px-6 py-4 text-white">${(payment.amount ).toFixed(2)}</td>
               <td className="px-6 py-4 text-white">{payment.userEmail}</td>
               <td className="px-6 py-4 text-white">{payment.transactionId}</td>
               <td className="px-6 py-4 text-white">
@@ -323,19 +309,17 @@ const Profile = () => {
   if (token) {
     user = verifyToken(token);
   }
-  if (user) {
-    console.log(user);
-  }
-  // withdraw history
+// withdraw history 
+ 
+const { data: paymentsData, error, isLoading } = useGetPaymentInfoQuery();
 
-  const { data: paymentsData, error, isLoading } = useGetPaymentInfoQuery();
+if (isLoading) return <p>Loading...</p>;
+if (error) return <p>Error: {error.message}</p>;
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+const payments = paymentsData?.payments || [];
 
-  const payments = paymentsData?.payments || [];
-
-  console.log("Fetched Payment Data:", payments);
+    console.log("Fetched Payment Data:", payments);
+  
 
   // Array of components corresponding to each tab
   const tabComponents = [
@@ -345,6 +329,7 @@ const Profile = () => {
     <TabFourComponent />,
   ];
 
+  
   return (
     <div className="min-h-screen">
       <div className="bg-cardBackground p-4 rounded-md my-4">
@@ -400,7 +385,7 @@ const Profile = () => {
                   Email Address
                 </h5>
                 <h6 className="font-semibold text-white text-base capitalize">
-                  {user?.email}
+                  {user.email}
                 </h6>
               </div>
             </div>

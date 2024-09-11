@@ -10,9 +10,7 @@ import Stroage from "./pages/Stroage";
 import { router } from "./routes/Routes";
 
 const App = () => {
-  return (
-    <RouterProvider router={router}></RouterProvider>
-  );
+  return <RouterProvider router={router}></RouterProvider>;
 };
 
 export default App;

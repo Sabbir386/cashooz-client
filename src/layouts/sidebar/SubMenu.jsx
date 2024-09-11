@@ -34,7 +34,7 @@ const SubMenu = ({ data }) => {
           <li key={menu.id}>
             <NavLink
               to={`/dashboard/${menu.path}`}
-              className="link bg-transparent capitalize text-grayColor"
+              className=" bg-transparent capitalize text-grayColor "
             >
               {menu.name}
             </NavLink>

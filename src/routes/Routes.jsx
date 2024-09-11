@@ -33,6 +33,7 @@ import AdvertiserRegister from "../auth/AdvertiserRegister";
 import Payment from "../pages/Payment/payment";
 import Profile from "../pages/Profile/Profile";
 import Leaderboard from "../pages/Leaderboard/Leaderboard";
+import Reward from "../rewards/Reward";
 
 export const router = createBrowserRouter([
   {
@@ -252,6 +253,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/survey-list",
         element: <SurveyList></SurveyList>,
+      },
+      {
+        path: "/dashboard/rewards",
+        element: <Reward></Reward>,
       },
     ],
   },

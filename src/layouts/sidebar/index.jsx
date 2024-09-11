@@ -388,7 +388,7 @@ const Sidebar = () => {
                   <SubMenu data={menu} />
                 </li>
               ) : (
-                <li key={menu.id} className="mb-1 text-buttonBackground">
+                <li key={menu.id} className="mb-1 text-grayColor hover:text-buttonBackground">
                   <Link
                     to={`/dashboard/${menu.path}`}
                     className={`p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium hover:text-buttonBackground hover:bg-hoverBgColor`}
