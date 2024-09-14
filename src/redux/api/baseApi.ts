@@ -80,6 +80,7 @@ export const baseApi = createApi({
     "category",
     "completedOffer",
     "users",
+    'Reward',
   ],
   endpoints: () => ({}),
 });

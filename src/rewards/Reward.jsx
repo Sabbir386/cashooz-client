@@ -1,94 +1,111 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useClaimBonusMutation, useGetUserRewardQuery } from "./rewardApi";
 
 const Reward = () => {
   const [activeTab, setActiveTab] = useState(1); // Track active tab (1 for week 1, etc.)
+  const [userId, setUserId] = useState("66b8b79678c3977d24564b59"); // Replace with actual user ID or context
+  const [userReward, setUserReward] = useState(null);
+
+  const { data: rewardData, error: fetchError } = useGetUserRewardQuery(userId);
+  const [claimBonus, { isLoading: isClaiming, error: claimError }] =
+    useClaimBonusMutation();
+
+  useEffect(() => {
+    if (rewardData) {
+      setUserReward(rewardData);
+    }
+  }, [rewardData]);
+
+  const handleClaimBonus = async () => {
+    try {
+      const response = await claimBonus({ userId }).unwrap();
+      alert(response.message);
+      setUserReward(response); // Update local state with new reward data
+    } catch (error) {
+      console.error("Failed to claim bonus:", error);
+      alert("Error claiming bonus. Please try again.");
+    }
+  };
+
+  const isRewardClaimable = (day) => {
+    if (!userReward) return false;
+    // Check if the reward for the given day is claimable
+    const today = new Date().getDate();
+    return day === today && !userReward.claimedDays.includes(day);
+  };
 
   const renderRewards = () => {
     switch (activeTab) {
       case 1:
         return (
           <div className="grid grid-cols-3 gap-4 text-center">
-            {/* Day 1 to Day 6 for Week 1 */}
-            <div className="bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-lg shadow-md transition-transform transform hover:scale-105">
-              <div className="text-lg font-bold text-yellow-400 mb-2">
-                Day 1
+            {[1, 2, 3, 4, 5, 6].map((day) => (
+              <div
+                key={day}
+                className={`bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-lg shadow-md transition-transform transform hover:scale-105 ${
+                  isRewardClaimable(day) ? "opacity-100" : "opacity-50"
+                }`}
+              >
+                <div className="text-lg font-bold text-yellow-400 mb-2">
+                  Day {day}
+                </div>
+                <div className="text-white text-2xl">5 CZ</div>
+                {isRewardClaimable(day) && (
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
+                    onClick={() =>
+                      handleClaimBonus(
+                        day,
+                        new Date().toLocaleString("default", { month: "long" })
+                      )
+                    }
+                    disabled={isClaiming}
+                  >
+                    {isClaiming ? "Claiming..." : "Claim Bonus"}
+                  </button>
+                )}
               </div>
-              <div className="text-white text-2xl">100K</div>
-            </div>
-            <div className="bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-lg shadow-md transition-transform transform hover:scale-105">
-              <div className="text-lg font-bold text-yellow-400 mb-2">
-                Day 2
-              </div>
-              <div className="text-white text-2xl">1</div>
-            </div>
-            <div className="bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-lg shadow-md transition-transform transform hover:scale-105">
-              <div className="text-lg font-bold text-yellow-400 mb-2">
-                Day 3
-              </div>
-              <div className="text-white text-2xl">500K</div>
-            </div>
-            <div className="bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-lg shadow-md transition-transform transform hover:scale-105">
-              <div className="text-lg font-bold text-yellow-400 mb-2">
-                Day 4
-              </div>
-              <div className="text-white text-2xl">2</div>
-            </div>
-            <div className="bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-lg shadow-md transition-transform transform hover:scale-105">
-              <div className="text-lg font-bold text-yellow-400 mb-2">
-                Day 5
-              </div>
-              <div className="text-white text-2xl">1M</div>
-            </div>
-            <div className="bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-lg shadow-md transition-transform transform hover:scale-105">
-              <div className="text-lg font-bold text-yellow-400 mb-2">
-                Day 6
-              </div>
-              <div className="text-white text-2xl">3</div>
-            </div>
-
+            ))}
             {/* Day 7: Exclusive rewards */}
             <div className="col-span-3 bg-gradient-to-l from-transparent via-[#4a6fa1] to-[#2c3e5c] p-4 h-36 rounded-lg shadow-lg transition-transform transform hover:scale-105 flex flex-col items-center justify-center">
-  <div className="text-lg font-bold text-yellow-400 mb-1">
-    Day 7
-  </div>
-  <img
-    src="https://www.kindpng.com/picc/m/18-182340_golden-cup-prize-png-prize-png-transparent-png.png"
-    alt="Exclusive Skin"
-    className="w-16 h-16 object-cover mb-1 rounded-full shadow-lg"
-  />
-  <div className="text-white text-xl font-semibold">
-    Exclusive Rewards
-  </div>
-</div>
-
+              <div className="text-lg font-bold text-yellow-400 mb-1">
+                Day 7
+              </div>
+              <img
+                src="https://www.kindpng.com/picc/m/18-182340_golden-cup-prize-png-prize-png-transparent-png.png"
+                alt="Exclusive Skin"
+                className="w-16 h-16 object-cover mb-1 rounded-full shadow-lg"
+              />
+              <div className="text-white text-xl font-semibold">
+                Exclusive Rewards
+              </div>
+            </div>
           </div>
         );
       case 2:
         return (
           <div className="grid grid-cols-3 gap-4 text-center">
             {/* Week 2 rewards */}
-            {/* Example rewards for Week 2, you can customize further */}
             <div className="bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-lg shadow-md transition-transform transform hover:scale-105">
               <div className="text-lg font-bold text-yellow-400 mb-2">
                 Day 1
               </div>
               <div className="text-white text-2xl">500K</div>
             </div>
-            {/* Add more cards for Week 2... */}
+            {/* Add more cards for Week 2 */}
           </div>
         );
       case 3:
         return (
           <div className="grid grid-cols-3 gap-4 text-center">
             {/* Week 3 rewards */}
-            {/* Example rewards for Week 3, you can customize further */}
             <div className="bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-lg shadow-md transition-transform transform hover:scale-105">
               <div className="text-lg font-bold text-yellow-400 mb-2">
                 Day 1
               </div>
               <div className="text-white text-2xl">1M</div>
             </div>
-            {/* Add more cards for Week 3... */}
+            {/* Add more cards for Week 3 */}
           </div>
         );
       default:
@@ -124,7 +141,7 @@ const Reward = () => {
           }`}
           onClick={() => setActiveTab(1)}
         >
-          1 Week
+          1-Week <br /> Login Bonus
         </button>
         <button
           className={`flex-1 text-center p-3 rounded-lg shadow-md transition-transform transform hover:scale-105 mx-2 ${
@@ -134,7 +151,7 @@ const Reward = () => {
           }`}
           onClick={() => setActiveTab(2)}
         >
-          2 Week
+          2-Week <br /> Task Completed Bonus
         </button>
         <button
           className={`flex-1 text-center p-3 rounded-lg shadow-md transition-transform transform hover:scale-105 mx-2 ${
@@ -144,7 +161,7 @@ const Reward = () => {
           }`}
           onClick={() => setActiveTab(3)}
         >
-          3 Week
+          3-Week <br /> Affiliated Bonus
         </button>
       </div>
 

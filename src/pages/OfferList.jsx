@@ -278,7 +278,7 @@ const OfferList = () => {
                   Network
                 </th>
                 <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-                  Price
+                Points
                 </th>
                 <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
                   Device
@@ -298,7 +298,7 @@ const OfferList = () => {
               {paginatedData.map((row, i) => (
                 <tr key={row._id} className="bg-secondaryColor">
                   <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
-                    {i + 1}
+                  {currentPage * pageSize + i + 1}
                   </td>
                   <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                     <div className="flex">
@@ -329,7 +329,7 @@ const OfferList = () => {
                     {row.networkInfo?.networkName}
                   </td>
                   <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
-                    {row.price}
+                    {row.points}
                   </td>
                   <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                     {row.device.slice(0, 2).map((device, index) => (
@@ -418,7 +418,6 @@ const OfferList = () => {
           subContainerClassName={"pages pagination"}
           activeClassName={"active"}
         />
-
         <ReactModal
           isOpen={isModalOpen}
           onRequestClose={closeModal}
@@ -449,7 +448,7 @@ const OfferList = () => {
                     <span>Points:</span> {singleOffer.data.points}
                   </p>
                   <p>
-                    <span>Price:</span> {singleOffer.data.price}
+                    <span>Points:</span> {singleOffer.data.points}
                   </p>
                   <p>
                     <span className="text-blue-600 text-sm">
