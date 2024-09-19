@@ -305,7 +305,7 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState(0);
   const token = useAppSelector(useCurrentToken);
 
-  let user;
+  let user;     
   if (token) {
     user = verifyToken(token);
   }

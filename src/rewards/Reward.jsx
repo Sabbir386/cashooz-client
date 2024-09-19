@@ -1,121 +1,129 @@
 import React, { useState, useEffect } from "react";
 import { useClaimBonusMutation, useGetUserRewardQuery } from "./rewardApi";
-
+import Swal from "sweetalert2";
 const Reward = () => {
   const [activeTab, setActiveTab] = useState(1); // Track active tab (1 for week 1, etc.)
-  const [userId, setUserId] = useState("66b8b79678c3977d24564b59"); // Replace with actual user ID or context
-  const [userReward, setUserReward] = useState(null);
 
-  const { data: rewardData, error: fetchError } = useGetUserRewardQuery(userId);
-  const [claimBonus, { isLoading: isClaiming, error: claimError }] =
-    useClaimBonusMutation();
+  const [userReward, setUserReward] = useState(null);
+  const [currentDay, setCurrentDay] = useState(1); // Track the current day
+  const [claimedDays, setClaimedDays] = useState([]); // Track claimed days
+
+  // Extract userId from the token using useEffect to prevent re-render loops
+  // Only run this effect when the token changes
+
+  const { data: rewardData } = useGetUserRewardQuery();
+
+  const [claimBonus, { isLoading: isClaiming }] = useClaimBonusMutation();
 
   useEffect(() => {
     if (rewardData) {
-      setUserReward(rewardData);
+      console.log(rewardData);
+      setUserReward(rewardData); // Store reward data in local state
+      setClaimedDays(rewardData.claimedDays || []); // Assuming rewardData contains claimed days
+      setCurrentDay(rewardData.currentDay || 1); // Assuming rewardData contains the current day
     }
   }, [rewardData]);
 
-  const handleClaimBonus = async () => {
+  const handleClaimBonus = async (day) => {
     try {
-      const response = await claimBonus({ userId }).unwrap();
-      alert(response.message);
-      setUserReward(response); // Update local state with new reward data
+      const response = await claimBonus().unwrap();
+
+      // Success alert
+      Swal.fire({
+        icon: "success",
+        title: "Bonus Claimed!",
+        text: response.message,
+      });
+
+      // Update the state after claiming the reward
+      setClaimedDays([...claimedDays, day]); // Mark this day as claimed
+      setCurrentDay(day + 1); // Move to the next day
     } catch (error) {
-      console.error("Failed to claim bonus:", error);
-      alert("Error claiming bonus. Please try again.");
+      // Error alert
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.message || "Failed to claim bonus! Try Again Tomorrow ",
+      });
     }
   };
 
-  const isRewardClaimable = (day) => {
-    if (!userReward) return false;
-    // Check if the reward for the given day is claimable
-    const today = new Date().getDate();
-    return day === today && !userReward.claimedDays.includes(day);
-  };
-
+  // Function to render rewards for each day
   const renderRewards = () => {
-    switch (activeTab) {
-      case 1:
-        return (
-          <div className="grid grid-cols-3 gap-4 text-center">
-            {[1, 2, 3, 4, 5, 6].map((day) => (
-              <div
-                key={day}
-                className={`bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-lg shadow-md transition-transform transform hover:scale-105 ${
-                  isRewardClaimable(day) ? "opacity-100" : "opacity-50"
-                }`}
+    return (
+      <div className="grid grid-cols-3 gap-4 text-center">
+        {[1, 2, 3, 4, 5, 6].map((day, idx) => (
+          <div
+            key={day}
+            className={`bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-lg shadow-md transition-transform transform hover:scale-105 ${
+              claimedDays.includes(day) ? "opacity-50" : ""
+            }`}
+          >
+            <div className="text-lg font-bold text-yellow-400 mb-2">
+              Day {day}
+            </div>
+            <div className="text-white text-2xl">Reward: 5 CZ</div>
+            {idx + 1 <= userReward?.claimCount ||
+            idx + 1 > userReward?.claimCount + 1 ? (
+              <button
+                className={`bg-blue-500 text-white px-4 py-2 rounded mt-2 opacity-50 cursor-not-allowed`}
+                onClick={() => handleClaimBonus(day)}
+                disabled
               >
-                <div className="text-lg font-bold text-yellow-400 mb-2">
-                  Day {day}
-                </div>
-                <div className="text-white text-2xl">5 CZ</div>
-                {isRewardClaimable(day) && (
-                  <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
-                    onClick={() =>
-                      handleClaimBonus(
-                        day,
-                        new Date().toLocaleString("default", { month: "long" })
-                      )
-                    }
-                    disabled={isClaiming}
-                  >
-                    {isClaiming ? "Claiming..." : "Claim Bonus"}
-                  </button>
-                )}
-              </div>
-            ))}
-            {/* Day 7: Exclusive rewards */}
-            <div className="col-span-3 bg-gradient-to-l from-transparent via-[#4a6fa1] to-[#2c3e5c] p-4 h-36 rounded-lg shadow-lg transition-transform transform hover:scale-105 flex flex-col items-center justify-center">
-              <div className="text-lg font-bold text-yellow-400 mb-1">
-                Day 7
-              </div>
-              <img
-                src="https://www.kindpng.com/picc/m/18-182340_golden-cup-prize-png-prize-png-transparent-png.png"
-                alt="Exclusive Skin"
-                className="w-16 h-16 object-cover mb-1 rounded-full shadow-lg"
-              />
-              <div className="text-white text-xl font-semibold">
-                Exclusive Rewards
-              </div>
-            </div>
+                {idx + 1 <= userReward?.claimCount
+                  ? "Claimed"
+                  : idx + 1 > userReward?.claimCount + 1
+                  ? "Not Available"
+                  : ""}
+              </button>
+            ) : (
+              <button
+                className={`bg-blue-500 text-white px-4 py-2 rounded mt-2`}
+                onClick={() => handleClaimBonus(day)}
+              >
+                {isClaiming
+                  ? "Claiming..."
+                  : claimedDays.includes(day)
+                  ? "Claimed"
+                  : "Claim Bonus"}
+              </button>
+            )}
           </div>
-        );
-      case 2:
-        return (
-          <div className="grid grid-cols-3 gap-4 text-center">
-            {/* Week 2 rewards */}
-            <div className="bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-lg shadow-md transition-transform transform hover:scale-105">
-              <div className="text-lg font-bold text-yellow-400 mb-2">
-                Day 1
-              </div>
-              <div className="text-white text-2xl">500K</div>
-            </div>
-            {/* Add more cards for Week 2 */}
+        ))}
+
+        {/* Day 7: Exclusive rewards */}
+        <div className="col-span-3 bg-gradient-to-l from-transparent via-[#4a6fa1] to-[#2c3e5c] p-4 h-36 rounded-lg shadow-lg transition-transform transform hover:scale-105 flex flex-col items-center justify-center">
+          <div className="text-lg font-bold text-yellow-400 mb-1">Day 7</div>
+          <img
+            src="https://www.kindpng.com/picc/m/18-182340_golden-cup-prize-png-prize-png-transparent-png.png"
+            alt="Exclusive Skin"
+            className="w-16 h-16 object-cover mb-1 rounded-full shadow-lg"
+          />
+          <div className="text-white text-xl font-semibold">
+            Exclusive Rewards
           </div>
-        );
-      case 3:
-        return (
-          <div className="grid grid-cols-3 gap-4 text-center">
-            {/* Week 3 rewards */}
-            <div className="bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-lg shadow-md transition-transform transform hover:scale-105">
-              <div className="text-lg font-bold text-yellow-400 mb-2">
-                Day 1
-              </div>
-              <div className="text-white text-2xl">1M</div>
-            </div>
-            {/* Add more cards for Week 3 */}
-          </div>
-        );
-      default:
-        return null;
-    }
+          <button
+            className={`bg-blue-500 text-white px-4 py-2 rounded mt-2 ${
+              claimedDays.includes(7) || currentDay !== 7
+                ? "opacity-50 cursor-not-allowed"
+                : ""
+            }`}
+            onClick={() => handleClaimBonus(7)}
+            disabled={isClaiming || claimedDays.includes(7) || currentDay !== 7}
+          >
+            {isClaiming
+              ? "Claiming..."
+              : claimedDays.includes(7)
+              ? "Claimed"
+              : "Claim Bonus"}
+          </button>
+        </div>
+      </div>
+    );
   };
 
   return (
     <div className="bg-gradient-to-b from-gray-900 via-black to-transparent p-6 rounded-xl shadow-2xl w-full max-w-3xl mx-auto lg:max-w-5xl lg:my-12 lg:py-10">
-      {/* Header Section */}
       <div className="relative flex justify-between items-center bg-gradient-to-r from-transparent via-[#285D65] to-blue-500 p-4 rounded-lg shadow-lg mb-6 backdrop-filter backdrop-blur-md">
         <div>
           <h2 className="text-3xl font-extrabold text-white">Daily Reward</h2>
@@ -131,7 +139,6 @@ const Reward = () => {
         />
       </div>
 
-      {/* Week Tabs */}
       <div className="flex justify-around bg-transparent backdrop-blur-md p-2 rounded-xl shadow-inner mb-6">
         <button
           className={`flex-1 text-center p-3 rounded-lg shadow-md transition-transform transform hover:scale-105 mx-2 ${
@@ -165,15 +172,7 @@ const Reward = () => {
         </button>
       </div>
 
-      {/* Rewards Content */}
       {renderRewards()}
-
-      {/* Footer Button */}
-      <div className="mt-6 text-center">
-        <button className="bg-gradient-to-r from-gray-700 to-gray-900 text-white px-8 py-4 rounded-full shadow-xl hover:bg-gradient-to-r hover:from-gray-600 hover:to-gray-800 transition-transform transform hover:scale-105">
-          Come back tomorrow
-        </button>
-      </div>
     </div>
   );
 };

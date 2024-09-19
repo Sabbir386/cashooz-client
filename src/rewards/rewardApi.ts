@@ -10,8 +10,8 @@ export const rewardApi = baseApi.injectEndpoints({
             invalidatesTags: ['Reward'],
         }),
         getUserReward: builder.query({
-            query: (userId) => ({
-                url: `/reward/user/${userId}`,
+            query: () => ({
+                url: '/reward/user',
                 method: 'GET',
             }),
             providesTags: ['Reward'],
