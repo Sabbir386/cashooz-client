@@ -52,21 +52,35 @@ const Reward = () => {
   const renderRewards = () => {
     return (
       <div className="grid grid-cols-3 gap-4 text-center">
-        {[1, 2, 3, 4, 5, 6].map((day, idx) => (
+        {[1, 2, 3, 4, 5, 6, 7].map((day, idx) => (
           <div
             key={day}
-            className={`bg-gradient-to-b from-gray-800 to-gray-900 p-5 rounded-lg shadow-md transition-transform transform hover:scale-105 ${
+            className={`${
+              day === 7
+                ? "col-span-3 bg-gradient-to-l from-transparent via-[#4a6fa1] to-[#2c3e5c] "
+                : "bg-gradient-to-b from-gray-800 to-gray-900"
+            } p-5 rounded-lg shadow-md transition-transform transform hover:scale-105 ${
               claimedDays.includes(day) ? "opacity-50" : ""
-            }`}
+            } flex flex-col items-center justify-center`}
           >
             <div className="text-lg font-bold text-yellow-400 mb-2">
               Day {day}
             </div>
-            <div className="text-white text-2xl">Reward: 5 CZ</div>
+
+            {day === 7 ? (
+              <img
+                src="https://www.kindpng.com/picc/m/18-182340_golden-cup-prize-png-prize-png-transparent-png.png"
+                alt="Exclusive Skin"
+                className="w-16 h-16 object-cover mb-1 rounded-full shadow-lg"
+              />
+            ) : (
+              <div className="text-white text-2xl">Reward: 5 CZ</div>
+            )}
+
             {idx + 1 <= userReward?.claimCount ||
             idx + 1 > userReward?.claimCount + 1 ? (
               <button
-                className={`bg-blue-500 text-white px-4 py-2 rounded mt-2 opacity-50 cursor-not-allowed`}
+                className="bg-blue-500 text-white px-4 py-2 rounded mt-2 opacity-50 cursor-not-allowed"
                 onClick={() => handleClaimBonus(day)}
                 disabled
               >
@@ -90,34 +104,6 @@ const Reward = () => {
             )}
           </div>
         ))}
-
-        {/* Day 7: Exclusive rewards */}
-        <div className="col-span-3 bg-gradient-to-l from-transparent via-[#4a6fa1] to-[#2c3e5c] p-4 h-36 rounded-lg shadow-lg transition-transform transform hover:scale-105 flex flex-col items-center justify-center">
-          <div className="text-lg font-bold text-yellow-400 mb-1">Day 7</div>
-          <img
-            src="https://www.kindpng.com/picc/m/18-182340_golden-cup-prize-png-prize-png-transparent-png.png"
-            alt="Exclusive Skin"
-            className="w-16 h-16 object-cover mb-1 rounded-full shadow-lg"
-          />
-          <div className="text-white text-xl font-semibold">
-            Exclusive Rewards
-          </div>
-          <button
-            className={`bg-blue-500 text-white px-4 py-2 rounded mt-2 ${
-              claimedDays.includes(7) || currentDay !== 7
-                ? "opacity-50 cursor-not-allowed"
-                : ""
-            }`}
-            onClick={() => handleClaimBonus(7)}
-            disabled={isClaiming || claimedDays.includes(7) || currentDay !== 7}
-          >
-            {isClaiming
-              ? "Claiming..."
-              : claimedDays.includes(7)
-              ? "Claimed"
-              : "Claim Bonus"}
-          </button>
-        </div>
       </div>
     );
   };
