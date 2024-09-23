@@ -1,26 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useClaimBonusMutation, useGetUserRewardQuery } from "./rewardApi";
 import Swal from "sweetalert2";
+
 const Reward = () => {
-  const [activeTab, setActiveTab] = useState(1); // Track active tab (1 for week 1, etc.)
-
+  const [activeTab, setActiveTab] = useState(1);
   const [userReward, setUserReward] = useState(null);
-  const [currentDay, setCurrentDay] = useState(1); // Track the current day
-  const [claimedDays, setClaimedDays] = useState([]); // Track claimed days
-
-  // Extract userId from the token using useEffect to prevent re-render loops
-  // Only run this effect when the token changes
+  const [claimedDays, setClaimedDays] = useState([]); // For daily login bonus
+  const [currentDay, setCurrentDay] = useState(1); 
+  const [claimedTasks, setClaimedTasks] = useState([]); // For task bonuses
 
   const { data: rewardData } = useGetUserRewardQuery();
-
   const [claimBonus, { isLoading: isClaiming }] = useClaimBonusMutation();
 
   useEffect(() => {
     if (rewardData) {
-      console.log(rewardData);
-      setUserReward(rewardData); // Store reward data in local state
-      setClaimedDays(rewardData.claimedDays || []); // Assuming rewardData contains claimed days
-      setCurrentDay(rewardData.currentDay || 1); // Assuming rewardData contains the current day
+      setUserReward(rewardData);
+      setClaimedDays(rewardData.claimedDays || []);
+      setClaimedTasks(rewardData.claimedTasks || []);
     }
   }, [rewardData]);
 
@@ -37,7 +33,8 @@ const Reward = () => {
 
       // Update the state after claiming the reward
       setClaimedDays([...claimedDays, day]); // Mark this day as claimed
-      setCurrentDay(day + 1); // Move to the next day
+      setClaimedDays(rewardData.claimedDays || []); // Assuming rewardData contains claimed days
+      setCurrentDay(rewardData.currentDay || 1); // Assuming rewardData contains the current day
     } catch (error) {
       // Error alert
       Swal.fire({
@@ -48,7 +45,6 @@ const Reward = () => {
     }
   };
 
-  // Function to render rewards for each day
   const renderRewards = () => {
     return (
       <div className="grid grid-cols-3 gap-4 text-center">
@@ -108,14 +104,61 @@ const Reward = () => {
     );
   };
 
+  const renderTaskBonuses = () => (
+    <div className="grid grid-cols-2 gap-4">
+      {[
+        { id: 1, reward: 10 },
+        { id: 2, reward: 20 },
+      ].map((task) => (
+        <div
+          key={task.id}
+          className={`p-5 rounded-lg shadow-md transition-transform transform hover:scale-105 ${
+            claimedTasks.includes(task.id) ? "opacity-50" : ""
+          } flex flex-col items-center justify-center bg-gradient-to-b from-gray-800 to-gray-900`}
+        >
+          <div className="text-lg font-bold text-yellow-400 mb-2">
+            {task.reward}-Task Bonus
+          </div>
+          <div className="text-white text-2xl">
+            Reward: {task.reward * 2} CZ
+          </div>
+          <button
+            className={`bg-blue-500 text-white px-4 py-2 rounded mt-2 ${
+              claimedTasks.includes(task.id)
+                ? "opacity-50 cursor-not-allowed"
+                : ""
+            }`}
+            onClick={() => handleClaimBonus("task", task.id)}
+            disabled={claimedTasks.includes(task.id)}
+          >
+            {claimedTasks.includes(task.id) ? "Claimed" : "Claim Bonus"}
+          </button>
+        </div>
+      ))}
+      <div className="col-span-2 text-center text-gray-500 text-sm">
+        Complete 40 Tasks to unlock the 40 CZ bonus (Coming Soon...)
+      </div>
+    </div>
+  );
+
+  const renderAffiliatedBonus = () => (
+    <div className="flex justify-center items-center">
+      <div className="text-center p-10 rounded-lg bg-gray-800 shadow-md text-white">
+        <h3 className="text-2xl font-bold">Affiliated Bonus</h3>
+        <p className="mt-4">
+          Earn more bonuses by referring others to our platform!
+        </p>
+      </div>
+    </div>
+  );
+
   return (
     <div className="bg-gradient-to-b from-gray-900 via-black to-transparent p-6 rounded-xl shadow-2xl w-full max-w-3xl mx-auto lg:max-w-5xl lg:my-12 lg:py-10">
       <div className="relative flex justify-between items-center bg-gradient-to-r from-transparent via-[#285D65] to-blue-500 p-4 rounded-lg shadow-lg mb-6 backdrop-filter backdrop-blur-md">
         <div>
-          <h2 className="text-3xl font-extrabold text-white">Daily Reward</h2>
+          <h2 className="text-3xl font-extrabold text-white">Rewards</h2>
           <p className="text-sm text-gray-200 mt-1">
-            Get points for logging into the Website visit daily without
-            skipping.
+            Claim bonuses by completing tasks, logging in, or referring others.
           </p>
         </div>
         <img
@@ -134,7 +177,7 @@ const Reward = () => {
           }`}
           onClick={() => setActiveTab(1)}
         >
-          1-Week <br /> Login Bonus
+          7 Days  <br /> Login Bonus
         </button>
         <button
           className={`flex-1 text-center p-3 rounded-lg shadow-md transition-transform transform hover:scale-105 mx-2 ${
@@ -144,7 +187,7 @@ const Reward = () => {
           }`}
           onClick={() => setActiveTab(2)}
         >
-          2-Week <br /> Task Completed Bonus
+          Task <br /> Completed Bonus
         </button>
         <button
           className={`flex-1 text-center p-3 rounded-lg shadow-md transition-transform transform hover:scale-105 mx-2 ${
@@ -154,11 +197,13 @@ const Reward = () => {
           }`}
           onClick={() => setActiveTab(3)}
         >
-          3-Week <br /> Affiliated Bonus
+          Affiliated <br /> Bonus
         </button>
       </div>
 
-      {renderRewards()}
+      {activeTab === 1 && renderRewards()}
+      {activeTab === 2 && renderTaskBonuses()}
+      {activeTab === 3 && renderAffiliatedBonus()}
     </div>
   );
 };
