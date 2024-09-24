@@ -1,141 +1,142 @@
-import React from "react";
-import { FaLink } from "react-icons/fa";
-import LeaderboardRow from "./LeaderboardRow";
+import React, { useState } from "react";
 
 const Leaderboard = () => {
-  const users = [
-    {
-      rank: 1,
-      name: "junsanghel05",
-      earnings: "$310.50",
-      prize: "$50",
-      avatar: null,
-    },
-    {
-      rank: 2,
-      name: "a.ellentrahan",
-      earnings: "$300",
-      prize: "$35",
-      avatar: null,
-    },
-    {
-      rank: 3,
-      name: "jason",
-      earnings: "$299.75",
-      prize: "$17.50",
-      avatar: "/path/to/jason-avatar.jpg",
-    },
-    {
-      rank: 4,
-      name: "haluakhalo",
-      earnings: "$273.53",
-      prize: "$12.50",
-      avatar: null,
-    },
-    {
-      rank: 5,
-      name: "Savannah",
-      earnings: "$260.60",
-      prize: "$11.25",
-      avatar: "/path/to/savannah-avatar.jpg",
-    },
-    {
-      rank: 6,
-      name: "dzaiquan",
-      earnings: "$255.90",
-      prize: "$10",
-      avatar: null,
-    },
+  const [activeTab, setActiveTab] = useState("usersLadder");
+  const usersLadderData = [
+    { position: 1, user: 'tb224873530', country: 'Turkey', earnings: '$26', bonus: '$38' },
+    { position: 2, user: 'tb222796625', country: 'Italy', earnings: '$21.13', bonus: '$33' },
+    { position: 3, user: 'tb123456789', country: 'Germany', earnings: '$21.13', bonus: '$24' },
   ];
+
+  const referralLadderData = [
+    { position: 1, user: 'referralUser1', earnings: '$30', referrals: 12 },
+    { position: 2, user: 'referralUser2', earnings: '$25', referrals: 10 },
+  ];
+
+  const recentCompletionsData = [
+    { task: 'Task A', user: 'User A', earnings: '$10', completed: '2024-09-20' },
+    { task: 'Task B', user: 'User B', earnings: '$15', completed: '2024-09-21' },
+  ];
+
+  const renderTableContent = () => {
+    if (activeTab === "usersLadder") {
+      return (
+        <table className="min-w-full leading-normal">
+          <thead>
+            <tr className="bg-gray-200 text-left">
+              <th className="px-4 py-2">Position</th>
+              <th className="px-4 py-2">User</th>
+              <th className="px-4 py-2">Earnings</th>
+              <th className="px-4 py-2">Potential Bonus</th>
+            </tr>
+          </thead>
+          <tbody>
+            {usersLadderData.map((user, index) => (
+              <tr key={index} className="bg-white border-b">
+                <td className="px-4 py-4">{user.position}</td>
+                <td className="px-4 py-4">{user.user}</td>
+                <td className="px-4 py-4">{user.earnings}</td>
+                <td className="px-4 py-4">{user.bonus}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      );
+    } else if (activeTab === "referralLadder") {
+      return (
+        <table className="min-w-full leading-normal">
+          <thead>
+            <tr className="bg-gray-200 text-left">
+              <th className="px-4 py-2">Position</th>
+              <th className="px-4 py-2">User</th>
+              <th className="px-4 py-2">Earnings</th>
+              <th className="px-4 py-2">Referrals</th>
+            </tr>
+          </thead>
+          <tbody>
+            {referralLadderData.map((referral, index) => (
+              <tr key={index} className="bg-white border-b">
+                <td className="px-4 py-4">{referral.position}</td>
+                <td className="px-4 py-4">{referral.user}</td>
+                <td className="px-4 py-4">{referral.earnings}</td>
+                <td className="px-4 py-4">{referral.referrals}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      );
+    } else if (activeTab === "recentCompletions") {
+      return (
+        <table className="min-w-full leading-normal">
+          <thead>
+            <tr className="bg-gray-200 text-left">
+              <th className="px-4 py-2">Recent Task</th>
+              <th className="px-4 py-2">User</th>
+              <th className="px-4 py-2">Earnings</th>
+              <th className="px-4 py-2">Date Completed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {recentCompletionsData.map((task, index) => (
+              <tr key={index} className="bg-white border-b">
+                <td className="px-4 py-4">{task.task}</td>
+                <td className="px-4 py-4">{task.user}</td>
+                <td className="px-4 py-4">{task.earnings}</td>
+                <td className="px-4 py-4">{task.completed}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      );
+    }
+  };
+
   return (
-    <div className="min-h-screen">
-      <div className="w-full md:w-1/2 mx-auto my-6 rounded-full py-4 bg-cardBackground text-center">
-        <h3 className="text-buttonBackground text-xl">Leaderboard</h3>
-      </div>
+    <div className="p-4 bg-gray-100 min-h-screen">
+      <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+        {/* Tab Navigation */}
+        <div className="flex bg-gray-200 p-4">
+          <button
+            onClick={() => setActiveTab("usersLadder")}
+            className={`px-4 py-2 text-gray-700 font-semibold rounded-t-lg focus:outline-none ${
+              activeTab === "usersLadder" ? "bg-white" : "bg-gray-200"
+            }`}
+          >
+            Users Ladder
+          </button>
+          <button
+            onClick={() => setActiveTab("referralLadder")}
+            className={`px-4 py-2 text-gray-700 font-semibold rounded-t-lg focus:outline-none ${
+              activeTab === "referralLadder" ? "bg-white" : "bg-gray-200"
+            }`}
+          >
+            Referral Ladder
+          </button>
+          <button
+            onClick={() => setActiveTab("recentCompletions")}
+            className={`px-4 py-2 text-gray-700 font-semibold rounded-t-lg focus:outline-none ${
+              activeTab === "recentCompletions" ? "bg-white" : "bg-gray-200"
+            }`}
+          >
+            Recent Completions
+          </button>
+        </div>
 
-      <div className="bg-cardBackground rounded-md py-4 overflow-x-auto">
-        {/* header  */}
-
-        <div className="flex justify-center gap-0">
-          {/* rank piller */}
-          <div className="mt-5">
-            <div className="w-full my-4 flex flex-col gap-1 justify-center items-center">
-              <img
-                className="w-20 h-20 border-4 border-white object-cover rounded-full mx-auto"
-                src="https://images.unsplash.com/photo-1664575600850-c4b712e6e2bf?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                alt=""
-              />
-              <h5 className="text-white text-sm text-center">MElinah</h5>
-              <h6 className="px-5 py-1 rounded-full bg-buttonBackground bg-opacity-30 text-white text-xs">
-                $120
-              </h6>
-            </div>
-            <div className="relative w-32 h-60 bg-gradient-to-b from-fuchsia-400 to-fuchsia-600 text-white rounded-lg shadow-2xl flex items-center justify-center">
-              <div className="absolute top-0 left-0 right-0 h-2 bg-fuchsia-300 rounded-t-lg shadow-inner"></div>
-              <div className="text-4xl font-bold z-10">{2}</div>
-              <div className="absolute bottom-0 left-0 right-0 h-2 bg-fuchsia-700 rounded-b-lg shadow-inner"></div>
-              <div className="absolute bottom-0 left-0 w-full h-full bg-slate-800 opacity-50 rounded-lg transform rotate-2"></div>
-            </div>
-          </div>
-          {/* rank piller */}
-          <div>
-            <div className="w-full my-4 flex flex-col gap-1 justify-center items-center">
-              <img
-                className="w-20 h-20 border-4 border-white object-cover rounded-full mx-auto"
-                src="https://images.unsplash.com/photo-1706885093487-7eda37b48a60?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                alt=""
-              />
-              <h5 className="text-white text-sm text-center">Lenda Smith</h5>
-              <h6 className="px-5 py-1 rounded-full bg-buttonBackground bg-opacity-30 text-white text-xs">
-                $150
-              </h6>
-            </div>
-            <div className="relative w-32 h-60 bg-gradient-to-b from-red-400 to-red-600 text-white rounded-lg shadow-2xl flex items-center justify-center">
-              <div className="absolute top-0 left-0 right-0 h-2 bg-red-300 rounded-t-lg shadow-inner"></div>
-              <div className="text-4xl font-bold z-10">{1}</div>
-              <div className="absolute bottom-0 left-0 right-0 h-2 bg-red-700 rounded-b-lg shadow-inner"></div>
-              <div className="absolute bottom-0 left-0 w-full h-full bg-yellow-800 opacity-50 rounded-lg transform rotate-2"></div>
-            </div>
-          </div>
-          {/* rank piller */}
-          <div className="mt-12">
-            <div className="w-full my-4 flex flex-col gap-1 justify-center items-center">
-              <img
-                className="w-20 h-20 border-4 border-white object-cover rounded-full mx-auto"
-                src="https://images.unsplash.com/photo-1631947430066-48c30d57b943?q=80&w=1916&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                alt=""
-              />
-              <h5 className="text-white text-sm text-center">Johm Smith</h5>
-              <h6 className="px-5 py-1 rounded-full bg-buttonBackground bg-opacity-30 text-white text-xs">
-                $150
-              </h6>
-            </div>
-            <div className="relative w-32 h-60 bg-gradient-to-b from-green-400 to-green-600 text-white rounded-lg shadow-2xl flex items-center justify-center">
-              <div className="absolute top-0 left-0 right-0 h-2 bg-green-300 rounded-t-lg shadow-inner"></div>
-              <div className="text-4xl font-bold z-10">{3}</div>
-              <div className="absolute bottom-0 left-0 right-0 h-2 bg-green-700 rounded-b-lg shadow-inner"></div>
-              <div className="absolute bottom-0 left-0 w-full h-full bg-black opacity-50 rounded-lg transform rotate-2"></div>
-            </div>
+        {/* Filter Section */}
+        <div className="p-4 border-b">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <select className="border rounded p-2 mb-2 md:mb-0">
+              <option>Users in my Country</option>
+            </select>
+            <label className="flex items-center space-x-2">
+              <input type="checkbox" className="form-checkbox" />
+              <span>Only show high paying tasks</span>
+            </label>
           </div>
         </div>
-        {/* header  */}
 
-        {/* rows */}
-        <div className="flex items-center justify-between bg-gray-800 text-white p-4 rounded-lg shadow-lg mb-2">
-          <span className="w-2/6">Rank User</span>
-          <span className="w-3/6">Earnings</span>
-          <span className="w-1/6">Prize</span>
-        </div>
-        {users.map((user) => (
-          <LeaderboardRow
-            key={user.rank}
-            rank={user.rank}
-            name={user.name}
-            earnings={user.earnings}
-            prize={user.prize}
-            avatar={user.avatar}
-          />
-        ))}
+        {/* Table */}
+        <div className="overflow-x-auto">{renderTableContent()}</div>
       </div>
     </div>
   );
