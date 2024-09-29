@@ -50,6 +50,7 @@ const OfferView = () => {
                   <h6 className="text-grayColor text-sm">{offer?.categoryName ? offer.categoryName : offer.category }</h6>
                   <h3 className="font-semibold">{offer?.points ? offer.points:'00'} CZ</h3>
                 </div>
+                
               </Link>
             ))}
           </div>

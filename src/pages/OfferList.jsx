@@ -278,7 +278,7 @@ const OfferList = () => {
                   Network
                 </th>
                 <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-                Points
+                  Points
                 </th>
                 <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
                   Device
@@ -298,14 +298,18 @@ const OfferList = () => {
               {paginatedData.map((row, i) => (
                 <tr key={row._id} className="bg-secondaryColor">
                   <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
-                  {currentPage * pageSize + i + 1}
+                    {currentPage * pageSize + i + 1}
                   </td>
                   <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                     <div className="flex">
                       <div className="flex-shrink-0 w-10 h-10">
                         <img
                           className="w-full h-full rounded-lg object-cover"
-                          src={row.image ? row.image : "https://main-p.agmcdn.com/offers/1126583-cwTa2k02.jpg"}
+                          src={
+                            row.image
+                              ? row.image
+                              : "https://main-p.agmcdn.com/offers/1126583-cwTa2k02.jpg"
+                          }
                           alt=""
                         />
                       </div>
@@ -539,6 +543,7 @@ const OfferList = () => {
                     >
                       offer link
                     </a>
+                    
                   </div>
                 </div>
               </div>
