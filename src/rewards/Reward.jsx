@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useClaimBonusMutation, useGetUserRewardQuery } from "./rewardApi";
 import Swal from "sweetalert2";
+import { verifyToken } from "../utils/verifyToken";
+import { useViewCompletedOfferQuery } from "../pages/completedOfferApi";
+import { useAppSelector } from "../redux/features/hooks";
+import { useCurrentToken } from "../redux/features/auth/authSlice";
 
 const Reward = () => {
   const [activeTab, setActiveTab] = useState(1);
@@ -11,6 +15,26 @@ const Reward = () => {
 
   const { data: rewardData } = useGetUserRewardQuery();
   const [claimBonus, { isLoading: isClaiming }] = useClaimBonusMutation();
+  const token = useAppSelector(useCurrentToken);
+
+  // Always declare the user, even if it's null initially
+  let user = null;
+  if (token) {
+    user = verifyToken(token);
+  }
+
+  // Declare the userId and always call the hook
+  const userId = user?.objectId || ""; // Ensure it's always defined
+  const { data: completedOfferData, isLoading: isOffersLoading, error: offersError } = useViewCompletedOfferQuery(userId, {
+    skip: !userId, // Skip fetching if userId is not available
+  });
+
+  useEffect(() => {
+    if (completedOfferData) {
+      console.log("Completed offer data:", completedOfferData); 
+      console.log("total Completed offer total :", completedOfferData.data.length); 
+    }
+  }, [completedOfferData]);
 
   useEffect(() => {
     if (rewardData) {
@@ -40,10 +64,19 @@ const Reward = () => {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: error.message || "Failed to claim bonus! Try Again Tomorrow ",
+        text: error.message || "Failed to claim bonus! Try Again Tomorrow",
       });
     }
   };
+
+  // Loading and error handling for completed offers
+  if (isOffersLoading) {
+    return <p>Loading completed offer data...</p>;
+  }
+
+  if (offersError) {
+    return <p>Failed to fetch completed offer data.</p>;
+  }
 
   const renderRewards = () => {
     return (
