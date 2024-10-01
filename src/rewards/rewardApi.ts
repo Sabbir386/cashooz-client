@@ -16,10 +16,18 @@ export const rewardApi = baseApi.injectEndpoints({
             }),
             providesTags: ['Reward'],
         }),
+        taskCompleted: builder.mutation({
+            query: ({ userId, taskReward }) => ({
+                url: `/reward/taskCompleted?userId=${userId}&taskReward=${taskReward}`,
+                method: 'POST',
+            }),
+            invalidatesTags: ['Reward'],
+        }),
     }),
 });
 
 export const {
     useClaimBonusMutation,
     useGetUserRewardQuery,
+    useTaskCompletedMutation,
 } = rewardApi;

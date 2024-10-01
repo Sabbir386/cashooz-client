@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useClaimBonusMutation, useGetUserRewardQuery } from "./rewardApi";
+import { useClaimBonusMutation, useGetUserRewardQuery, useTaskCompletedMutation } from "./rewardApi";
 import Swal from "sweetalert2";
 import { verifyToken } from "../utils/verifyToken";
 import { useViewCompletedOfferQuery } from "../pages/completedOfferApi";
@@ -9,30 +9,34 @@ import { useCurrentToken } from "../redux/features/auth/authSlice";
 const Reward = () => {
   const [activeTab, setActiveTab] = useState(1);
   const [userReward, setUserReward] = useState(null);
-  const [claimedDays, setClaimedDays] = useState([]); // For daily login bonus
-  const [currentDay, setCurrentDay] = useState(1); 
-  const [claimedTasks, setClaimedTasks] = useState([]); // For task bonuses
+  const [userCompletedTask, setUserCompletedTask] = useState(0);
+  const [claimedDays, setClaimedDays] = useState([]);
+  const [currentDay, setCurrentDay] = useState(1);
+  const [claimedTasks, setClaimedTasks] = useState([]);
+  const [isClaiming, setIsClaiming] = useState(false); // New state for claiming tasks
 
-  const { data: rewardData } = useGetUserRewardQuery();
-  const [claimBonus, { isLoading: isClaiming }] = useClaimBonusMutation();
+  const { data: rewardData, refetch: refetchRewardData } = useGetUserRewardQuery();
+  const [claimBonus] = useClaimBonusMutation();
   const token = useAppSelector(useCurrentToken);
+  const [taskCompleted] = useTaskCompletedMutation();
 
-  // Always declare the user, even if it's null initially
   let user = null;
   if (token) {
     user = verifyToken(token);
   }
 
-  // Declare the userId and always call the hook
-  const userId = user?.objectId || ""; // Ensure it's always defined
-  const { data: completedOfferData, isLoading: isOffersLoading, error: offersError } = useViewCompletedOfferQuery(userId, {
-    skip: !userId, // Skip fetching if userId is not available
+  const userId = user?.objectId || "";
+  const {
+    data: completedOfferData,
+    isLoading: isOffersLoading,
+    error: offersError,
+  } = useViewCompletedOfferQuery(userId, {
+    skip: !userId,
   });
 
   useEffect(() => {
     if (completedOfferData) {
-      console.log("Completed offer data:", completedOfferData); 
-      console.log("total Completed offer total :", completedOfferData.data.length); 
+      setUserCompletedTask(completedOfferData.data.length);
     }
   }, [completedOfferData]);
 
@@ -40,15 +44,15 @@ const Reward = () => {
     if (rewardData) {
       setUserReward(rewardData);
       setClaimedDays(rewardData.claimedDays || []);
-      setClaimedTasks(rewardData.claimedTasks || []);
+      setClaimedTasks(rewardData.taskClaimCount || []);
     }
   }, [rewardData]);
 
   const handleClaimBonus = async (day) => {
     try {
+      setIsClaiming(true); // Set loading state
       const response = await claimBonus().unwrap();
 
-      // Success alert
       Swal.fire({
         icon: "success",
         title: "Bonus Claimed!",
@@ -56,28 +60,143 @@ const Reward = () => {
       });
 
       // Update the state after claiming the reward
-      setClaimedDays([...claimedDays, day]); // Mark this day as claimed
-      setClaimedDays(rewardData.claimedDays || []); // Assuming rewardData contains claimed days
-      setCurrentDay(rewardData.currentDay || 1); // Assuming rewardData contains the current day
+      setClaimedDays([...claimedDays, day]);
+      setCurrentDay(rewardData.currentDay || 1);
     } catch (error) {
-      // Error alert
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: error.message || "Failed to claim bonus! Try Again Tomorrow",
       });
+    } finally {
+      setIsClaiming(false); // Reset loading state
     }
   };
 
-  // Loading and error handling for completed offers
-  if (isOffersLoading) {
-    return <p>Loading completed offer data...</p>;
-  }
+  const handleClaimTaskBonus = async (taskId, taskReward) => {
+    if (!userId) {
+      Swal.fire({
+        icon: "error",
+        title: "User ID Not Found",
+        text: "Unable to claim task bonus. Please try logging in again.",
+      });
+      return; // Exit the function if userId is not available
+    }
 
-  if (offersError) {
-    return <p>Failed to fetch completed offer data.</p>;
-  }
+    try {
+      setIsClaiming(true); // Set loading state
+      const response = await taskCompleted({ userId, taskReward }).unwrap();
 
+      Swal.fire({
+        icon: "success",
+        title: "Bonus Claimed!",
+        text: response.message,
+      });
+
+      // Update claimed tasks state to include the newly claimed task
+      setClaimedTasks((prev) => [...prev, taskId]);
+
+      // Refetch user rewards to get updated claimedTasks from the server
+      await refetchRewardData();
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.message || "Failed to claim task reward!",
+      });
+    } finally {
+      setIsClaiming(false); // Reset loading state
+    }
+  };
+
+  const renderTaskBonuses = () => (
+    <div className="grid grid-cols-2 gap-4">
+      {[  // Define your task bonuses here
+        { id: 1, reward: 20, requiredTasks: 10 },
+        { id: 2, reward: 30, requiredTasks: 15 },
+        { id: 3, reward: 40, requiredTasks: 20 },
+        { id: 4, reward: 60, requiredTasks: 30 },
+      ].map((task) => (
+        <div
+          key={task.id}
+          className={`p-5 rounded-lg shadow-md transition-transform transform hover:scale-105 ${
+            claimedTasks.includes(task.id) ? "opacity-50" : ""
+          } flex flex-col items-center justify-center bg-gradient-to-b from-gray-800 to-gray-900`}
+        >
+          <div className="text-lg font-bold text-yellow-400 mb-2">
+            {task.requiredTasks}-Task Bonus
+          </div>
+
+          <div className="text-white text-2xl">Reward: {task.reward} CZ</div>
+
+          <div className="flex justify-center items-center mt-4 mb-4">
+            <div className="grid grid-cols-10 gap-2">
+              {[...Array(task.requiredTasks)].map((_, index) => {
+                const step = index + 1;
+                return (
+                  <div
+                    key={step}
+                    className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                      userCompletedTask >= step
+                        ? "bg-purple-600 text-white"
+                        : "border-2 border-gray-400 text-gray-400"
+                    }`}
+                  >
+                    {userCompletedTask >= step ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    ) : (
+                      <span className="text-sm">{step}</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="text-sm text-gray-400 text-center mt-4">
+            <span className="font-bold text-green-300">
+              {Math.min(userCompletedTask, task.requiredTasks)}
+            </span>
+            /<span className="text-yellow-400">{task.requiredTasks}</span> Tasks Completed
+          </div>
+
+          <button
+            className={`bg-blue-500 text-white px-4 py-2 rounded mt-2 ${
+              userCompletedTask >= task.requiredTasks &&
+              !claimedTasks.includes(task.id)
+                ? "hover:bg-blue-600"
+                : "opacity-50 cursor-not-allowed"
+            }`}
+            onClick={() => handleClaimTaskBonus(task.id, task.reward)}
+            disabled={
+              userCompletedTask < task.requiredTasks ||
+              claimedTasks.includes(task.id) ||
+              isClaiming // Disable if claiming in progress
+            }
+          >
+            {claimedTasks.includes(task.id) ? "Claimed" : "Claim Task Bonus"}
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+
+
+
+  
   const renderRewards = () => {
     return (
       <div className="grid grid-cols-3 gap-4 text-center">
@@ -136,44 +255,6 @@ const Reward = () => {
       </div>
     );
   };
-
-  const renderTaskBonuses = () => (
-    <div className="grid grid-cols-2 gap-4">
-      {[
-        { id: 1, reward: 10 },
-        { id: 2, reward: 20 },
-      ].map((task) => (
-        <div
-          key={task.id}
-          className={`p-5 rounded-lg shadow-md transition-transform transform hover:scale-105 ${
-            claimedTasks.includes(task.id) ? "opacity-50" : ""
-          } flex flex-col items-center justify-center bg-gradient-to-b from-gray-800 to-gray-900`}
-        >
-          <div className="text-lg font-bold text-yellow-400 mb-2">
-            {task.reward}-Task Bonus
-          </div>
-          <div className="text-white text-2xl">
-            Reward: {task.reward * 2} CZ
-          </div>
-          <button
-            className={`bg-blue-500 text-white px-4 py-2 rounded mt-2 ${
-              claimedTasks.includes(task.id)
-                ? "opacity-50 cursor-not-allowed"
-                : ""
-            }`}
-            onClick={() => handleClaimBonus("task", task.id)}
-            disabled={claimedTasks.includes(task.id)}
-          >
-            {claimedTasks.includes(task.id) ? "Claimed" : "Claim Bonus"}
-          </button>
-        </div>
-      ))}
-      <div className="col-span-2 text-center text-gray-500 text-sm">
-        Complete 40 Tasks to unlock the 40 CZ bonus (Coming Soon...)
-      </div>
-    </div>
-  );
-
   const renderAffiliatedBonus = () => (
     <div className="flex justify-center items-center">
       <div className="text-center p-10 rounded-lg bg-gray-800 shadow-md text-white">
@@ -210,7 +291,7 @@ const Reward = () => {
           }`}
           onClick={() => setActiveTab(1)}
         >
-          7 Days  <br /> Login Bonus
+          7 Days <br /> Login Bonus
         </button>
         <button
           className={`flex-1 text-center p-3 rounded-lg shadow-md transition-transform transform hover:scale-105 mx-2 ${
