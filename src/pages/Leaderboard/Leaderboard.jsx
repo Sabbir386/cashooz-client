@@ -1,24 +1,32 @@
 import React, { useState } from "react";
+import { useGetAllPaymentsQuery } from "./leaderBoardApi";
 
 const Leaderboard = () => {
   const [activeTab, setActiveTab] = useState("usersLadder");
-  const usersLadderData = [
-    { position: 1, user: 'tb224873530', country: 'Turkey', earnings: '$26', bonus: '$38' },
-    { position: 2, user: 'tb222796625', country: 'Italy', earnings: '$21.13', bonus: '$33' },
-    { position: 3, user: 'tb123456789', country: 'Germany', earnings: '$21.13', bonus: '$24' },
-  ];
 
-  const referralLadderData = [
-    { position: 1, user: 'referralUser1', earnings: '$30', referrals: 12 },
-    { position: 2, user: 'referralUser2', earnings: '$25', referrals: 10 },
-  ];
+  // Fetch all payments data from API
+  const { data: paymentsResponse, error, isLoading } = useGetAllPaymentsQuery();
+ console.log(paymentsResponse)
+  // Check if the data exists and contains payments array
+  const paymentsData = paymentsResponse?.payments || [];
 
-  const recentCompletionsData = [
-    { task: 'Task A', user: 'User A', earnings: '$10', completed: '2024-09-20' },
-    { task: 'Task B', user: 'User B', earnings: '$15', completed: '2024-09-21' },
-  ];
+  // Map paymentsData to usersLadderData format
+  const usersLadderData = paymentsData.map((payment, index) => ({
+    position: index + 1,
+    user: payment.name || `User ${index + 1}`, // Get the user's name
+    earnings: `$${payment.amount || "0.00"}`, // Get the payment amount
+    bonus: "Coming Soon!", // Placeholder for potential bonus
+  }));
 
   const renderTableContent = () => {
+    if (isLoading) {
+      return <p>Loading...</p>;
+    }
+
+    if (error) {
+      return <p>Error loading data: {error.message}</p>;
+    }
+
     if (activeTab === "usersLadder") {
       return (
         <table className="min-w-full leading-normal">
@@ -27,22 +35,37 @@ const Leaderboard = () => {
               <th className="px-4 py-2">Position</th>
               <th className="px-4 py-2">User</th>
               <th className="px-4 py-2">Earnings</th>
-              <th className="px-4 py-2">Potential Bonus</th>
+              <th className="px-4 py-2 text-center">Potential Bonus</th>
             </tr>
           </thead>
           <tbody>
-            {usersLadderData.map((user, index) => (
-              <tr key={index} className="bg-white border-b">
-                <td className="px-4 py-4">{user.position}</td>
-                <td className="px-4 py-4">{user.user}</td>
-                <td className="px-4 py-4">{user.earnings}</td>
-                <td className="px-4 py-4">{user.bonus}</td>
+            {usersLadderData.length > 0 ? (
+              usersLadderData.map((user, index) => (
+                <tr key={index} className="bg-white border-b">
+                  <td className="px-4 py-4">{user.position}</td>
+                  <td className="px-4 py-4">{user.user}</td>
+                  <td className="px-4 py-4">{user.earnings}</td>
+                  <td className="px-4 py-4 text-center">
+                    <span className="text-yellow-600 font-semibold">
+                      {user.bonus}
+                    </span>
+                    <span className="text-gray-500 text-sm"> - Stay tuned for exciting bonuses!</span>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4" className="px-4 py-4 text-center">
+                  No data available
+                </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       );
-    } else if (activeTab === "referralLadder") {
+    }
+
+    if (activeTab === "referralLadder") {
       return (
         <table className="min-w-full leading-normal">
           <thead>
@@ -54,18 +77,13 @@ const Leaderboard = () => {
             </tr>
           </thead>
           <tbody>
-            {referralLadderData.map((referral, index) => (
-              <tr key={index} className="bg-white border-b">
-                <td className="px-4 py-4">{referral.position}</td>
-                <td className="px-4 py-4">{referral.user}</td>
-                <td className="px-4 py-4">{referral.earnings}</td>
-                <td className="px-4 py-4">{referral.referrals}</td>
-              </tr>
-            ))}
+            {/* Add content for referral ladder */}
           </tbody>
         </table>
       );
-    } else if (activeTab === "recentCompletions") {
+    }
+
+    if (activeTab === "recentCompletions") {
       return (
         <table className="min-w-full leading-normal">
           <thead>
@@ -77,14 +95,7 @@ const Leaderboard = () => {
             </tr>
           </thead>
           <tbody>
-            {recentCompletionsData.map((task, index) => (
-              <tr key={index} className="bg-white border-b">
-                <td className="px-4 py-4">{task.task}</td>
-                <td className="px-4 py-4">{task.user}</td>
-                <td className="px-4 py-4">{task.earnings}</td>
-                <td className="px-4 py-4">{task.completed}</td>
-              </tr>
-            ))}
+            {/* Add content for recent completions */}
           </tbody>
         </table>
       );
