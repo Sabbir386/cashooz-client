@@ -1,15 +1,24 @@
 import React, { useState } from "react";
-import { useGetAllPaymentsQuery } from "./leaderBoardApi";
+import {
+  useGetAllPaymentsQuery,
+  useGetRecentPaymentsQuery,
+} from "./leaderBoardApi";
 
 const Leaderboard = () => {
   const [activeTab, setActiveTab] = useState("usersLadder");
 
   // Fetch all payments data from API
   const { data: paymentsResponse, error, isLoading } = useGetAllPaymentsQuery();
- console.log(paymentsResponse)
+  const {
+    data: recentPaymentsResponse,
+    error: recentError,
+    isLoading: isRecentLoading,
+  } = useGetRecentPaymentsQuery();
+
   // Check if the data exists and contains payments array
   const paymentsData = paymentsResponse?.payments || [];
-
+  const recentPaymentsData = recentPaymentsResponse?.payments || []; // Use recent payments data
+  console.log(recentPaymentsData);
   // Map paymentsData to usersLadderData format
   const usersLadderData = paymentsData.map((payment, index) => ({
     position: index + 1,
@@ -49,7 +58,10 @@ const Leaderboard = () => {
                     <span className="text-yellow-600 font-semibold">
                       {user.bonus}
                     </span>
-                    <span className="text-gray-500 text-sm"> - Stay tuned for exciting bonuses!</span>
+                    <span className="text-gray-500 text-sm">
+                      {" "}
+                      - Stay tuned for exciting bonuses!
+                    </span>
                   </td>
                 </tr>
               ))
@@ -76,9 +88,7 @@ const Leaderboard = () => {
               <th className="px-4 py-2">Referrals</th>
             </tr>
           </thead>
-          <tbody>
-            {/* Add content for referral ladder */}
-          </tbody>
+          <tbody>{/* Add content for referral ladder */}</tbody>
         </table>
       );
     }
@@ -88,14 +98,43 @@ const Leaderboard = () => {
         <table className="min-w-full leading-normal">
           <thead>
             <tr className="bg-gray-200 text-left">
-              <th className="px-4 py-2">Recent Task</th>
               <th className="px-4 py-2">User</th>
+              <th className="px-4 py-2">PaymentType</th>
               <th className="px-4 py-2">Earnings</th>
               <th className="px-4 py-2">Date Completed</th>
             </tr>
           </thead>
           <tbody>
-            {/* Add content for recent completions */}
+            {isRecentLoading ? (
+              <tr>
+                <td colSpan="4" className="px-4 py-4 text-center">
+                  Loading recent completions...
+                </td>
+              </tr>
+            ) : recentError ? (
+              <tr>
+                <td colSpan="4" className="px-4 py-4 text-center">
+                  Error loading recent completions: {recentError.message}
+                </td>
+              </tr>
+            ) : recentPaymentsData.length > 0 ? (
+              recentPaymentsData.map((payment, index) => (
+                <tr key={index} className="bg-white border-b">
+                  <td className="px-4 py-4">{payment.name || "Anonymous"}</td>
+                  <td className="px-4 py-4">
+                    {payment.paymentType || "Unknown Task"}
+                  </td>
+                  <td className="px-4 py-4">${payment.amount || "0.00"}</td>
+                  <td className="px-4 py-4">{payment.timeAgo}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4" className="px-4 py-4 text-center">
+                  No recent completions available
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       );
