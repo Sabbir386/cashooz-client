@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FaCcPaypal, FaCcStripe, FaPaypal, FaStripeS  } from "react-icons/fa";
 import {
   BarChart,
   Bar,
@@ -43,13 +44,15 @@ import { logOut, useCurrentToken } from "../redux/features/auth/authSlice";
 import { HiOutlineStar } from "react-icons/hi";
 import SurveyList from "./SurveyList";
 import OfferView from "./OfferView/OfferView";
+import { useGetAllPaymentsQuery } from "./Leaderboard/leaderBoardApi";
 const AdminDashboard = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [cpaOffers, setCpaOffers] = useState([]);
 
-
-
-
+  //moments js on dashbaord top
+  const { data: paymentsResponse, error, isLoading } = useGetAllPaymentsQuery();
+  const paymentsData = paymentsResponse?.payments || [];
+  console.log(paymentsData);
 
   useEffect(() => {
     const fetchOffers = async () => {
@@ -68,7 +71,6 @@ const AdminDashboard = () => {
     fetchOffers();
   }, []);
 
-  
   const token = useAppSelector(useCurrentToken);
 
   let userRole;
@@ -293,7 +295,6 @@ const AdminDashboard = () => {
     loggedInUserDailycCompletedOfferCounts,
     loggedInUserOfferNameandTotalCounts,
   ]);
-  
 
   const data = countSpecificUserWiseCompletedOffer?.data ?? [];
   let LoggedData = [];
@@ -392,251 +393,43 @@ const AdminDashboard = () => {
   return (
     <div className="container mx-auto">
       <div className="overflow-hidden mt-4 mb-6 z-[97]">
-        <div className="text-white p-2 rounded shadow-sm inline-flex flex-nowrap gap-5 overflow-hidden animate-infinite-scroll">
-          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-            <div>
-              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                A
-              </div>
-            </div>
-            <div>
-              <h5 className="text-sm">Payout</h5>
-              <h6 className="text-xs mt-1">Game</h6>
-            </div>
-            <div>
-              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                $18.52
-              </span>
-            </div>
+  <div className="text-white p-2 rounded shadow-sm inline-flex flex-nowrap gap-5 overflow-hidden animate-infinite-scroll">
+    {paymentsData.map((payment, index) => (
+      <div
+        key={payment._id}
+        className="w-[200px] flex gap-3 justify-center items-center border-r-2"
+      >
+        {/* Conditionally render icons based on paymentType */}
+        <div>
+          <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
+            {payment.paymentType === "paypal" ? (
+              <FaCcPaypal />
+            ) : payment.paymentType === "stripe" ? (
+              <FaCcStripe/>
+            ) : (
+              payment.name ? payment.name.charAt(0) : "C" // Default to initials if no match
+            )}
           </div>
-          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-            <div>
-              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                A
-              </div>
-            </div>
-            <div>
-              <h5 className="text-sm">Payout</h5>
-              <h6 className="text-xs mt-1">Game</h6>
-            </div>
-            <div>
-              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                $18.52
-              </span>
-            </div>
-          </div>
-          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-            <div>
-              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                A
-              </div>
-            </div>
-            <div>
-              <h5 className="text-sm">Payout</h5>
-              <h6 className="text-xs mt-1">Game</h6>
-            </div>
-            <div>
-              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                $18.52
-              </span>
-            </div>
-          </div>
-          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-            <div>
-              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                A
-              </div>
-            </div>
-            <div>
-              <h5 className="text-sm">Payout</h5>
-              <h6 className="text-xs mt-1">Game</h6>
-            </div>
-            <div>
-              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                $18.52
-              </span>
-            </div>
-          </div>
-          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-            <div>
-              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                A
-              </div>
-            </div>
-            <div>
-              <h5 className="text-sm">Payout</h5>
-              <h6 className="text-xs mt-1">Game</h6>
-            </div>
-            <div>
-              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                $18.52
-              </span>
-            </div>
-          </div>
-          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-            <div>
-              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                A
-              </div>
-            </div>
-            <div>
-              <h5 className="text-sm">Payout</h5>
-              <h6 className="text-xs mt-1">Game</h6>
-            </div>
-            <div>
-              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                $18.52
-              </span>
-            </div>
-          </div>
-          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-            <div>
-              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                A
-              </div>
-            </div>
-            <div>
-              <h5 className="text-sm">Payout</h5>
-              <h6 className="text-xs mt-1">Game</h6>
-            </div>
-            <div>
-              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                $18.52
-              </span>
-            </div>
-          </div>
-          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-            <div>
-              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                A
-              </div>
-            </div>
-            <div>
-              <h5 className="text-sm">Payout</h5>
-              <h6 className="text-xs mt-1">Game</h6>
-            </div>
-            <div>
-              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                $18.52
-              </span>
-            </div>
-          </div>
-          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-            <div>
-              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                A
-              </div>
-            </div>
-            <div>
-              <h5 className="text-sm">Payout</h5>
-              <h6 className="text-xs mt-1">Game</h6>
-            </div>
-            <div>
-              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                $18.52
-              </span>
-            </div>
-          </div>
-          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-            <div>
-              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                A
-              </div>
-            </div>
-            <div>
-              <h5 className="text-sm">Payout</h5>
-              <h6 className="text-xs mt-1">Game</h6>
-            </div>
-            <div>
-              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                $18.52
-              </span>
-            </div>
-          </div>
-          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-            <div>
-              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                A
-              </div>
-            </div>
-            <div>
-              <h5 className="text-sm">Payout</h5>
-              <h6 className="text-xs mt-1">Game</h6>
-            </div>
-            <div>
-              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                $18.52
-              </span>
-            </div>
-          </div>
-          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-            <div>
-              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                A
-              </div>
-            </div>
-            <div>
-              <h5 className="text-sm">Payout</h5>
-              <h6 className="text-xs mt-1">Game</h6>
-            </div>
-            <div>
-              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                $18.52
-              </span>
-            </div>
-          </div>
-          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-            <div>
-              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                A
-              </div>
-            </div>
-            <div>
-              <h5 className="text-sm">Payout</h5>
-              <h6 className="text-xs mt-1">Game</h6>
-            </div>
-            <div>
-              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                $18.52
-              </span>
-            </div>
-          </div>
-          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-            <div>
-              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                A
-              </div>
-            </div>
-            <div>
-              <h5 className="text-sm">Payout</h5>
-              <h6 className="text-xs mt-1">Game</h6>
-            </div>
-            <div>
-              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                $18.52
-              </span>
-            </div>
-          </div>
-          <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-            <div>
-              <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                A
-              </div>
-            </div>
-            <div>
-              <h5 className="text-sm">Payout</h5>
-              <h6 className="text-xs mt-1">Game</h6>
-            </div>
-            <div>
-              <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                $18.52
-              </span>
-            </div>
-          </div>
-
-          {/* Repeat the inner divs as necessary */}
+        </div>
+        
+        {/* Display first name */}
+        <div>
+          <h5 className="text-sm">{payment.name ? payment.name.split(" ")[0] : "Unknown"}</h5>
+          <h6 className="text-xs mt-1">{payment.paymentType}</h6>
+        </div>
+        
+        {/* Display payment amount */}
+        <div>
+          <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
+            ${parseFloat(payment.amount / 100).toFixed(2)} {/* Convert amount to dollars */}
+          </span>
+          
         </div>
       </div>
+    ))}
+  </div>
+</div>
+
 
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
         {(userRole === "admin" || userRole === "superAdmin") && (
@@ -694,7 +487,9 @@ const AdminDashboard = () => {
             <h4 className="font-bold text-xl">Total Advertiser</h4>
             {isLoadingAdvertisers && <p>Loading...</p>}
             {errorAdvertisers && <p>Error loading offer data</p>}
-            <h5 className="font-semibold text-base">{countTotalAdvertiser ? countTotalAdvertiser:'0'}</h5>
+            <h5 className="font-semibold text-base">
+              {countTotalAdvertiser ? countTotalAdvertiser : "0"}
+            </h5>
           </div>
         )}
 
@@ -900,10 +695,9 @@ const AdminDashboard = () => {
           </div>
         )}
       </div>
-      
 
-        <OfferView></OfferView>
-      
+      <OfferView></OfferView>
+
       <div className="hidden w-full bg-white px-4 py-6 rounded shadow-sm my-5">
         <Swiper
           className="w-full"
