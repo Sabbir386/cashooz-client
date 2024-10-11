@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from "../redux/features/hooks";
 import { verifyToken } from "../utils/verifyToken";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase/firebase.init";
-import { FaGoogle } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const Login = () => {
@@ -21,8 +21,9 @@ const Login = () => {
   const [firebaseUser, setFirebaseUser] = useState(null);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [showPassword, setShowPassword] = useState(false);
   const currentUser = useAppSelector((state) => state.auth.user);
-
+  
   const {
     register,
     handleSubmit,
@@ -142,11 +143,15 @@ const Login = () => {
       <div className="bg-cardBackground w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded-md">
         <div className="w-full md:w-1/2 hidden md:flex flex-col justify-center items-center text-white">
           <h1 className="text-3xl">Hey Buddy</h1>
-          <p className="text-5xl font-extrabold text-buttonBackground">Welcome</p>
+          <p className="text-5xl font-extrabold text-buttonBackground">
+            Welcome
+          </p>
           <p className="text-5xl font-extrabold text-buttonBackground">Back!</p>
         </div>
         <div className="bg-white w-full md:w-1/2 flex flex-col items-center py-32 px-8 rounded-r-md">
-          <h3 className="text-3xl font-bold text-buttonBackground mb-4">LOGIN</h3>
+          <h3 className="text-3xl font-bold text-buttonBackground mb-4">
+            LOGIN
+          </h3>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="w-full flex flex-col justify-center"
@@ -162,13 +167,19 @@ const Login = () => {
                 <p className="text-red-500 text-sm">{errors.email.message}</p>
               )}
             </div>
-            <div className="mb-4">
+            <div className="mb-4 relative">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 {...register("password", { required: "Password is required" })}
-                className="w-full p-3 rounded border placeholder-gray-400 focus:outline-none focus:border-cardBackground text-cardBackground"
+                className="w-full p-3 pr-10 rounded border placeholder-gray-400 focus:outline-none focus:border-cardBackground text-cardBackground"
               />
+              <span
+                className="absolute right-3 top-7 transform -translate-y-1/2 cursor-pointer text-gray-500"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
               {errors.password && (
                 <p className="text-red-500 text-sm">
                   {errors.password.message}

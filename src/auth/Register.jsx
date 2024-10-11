@@ -3,15 +3,19 @@ import { useRegistrationMutation } from "../redux/features/auth/authApi";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
   const navigate = useNavigate();
   const [registration] = useRegistrationMutation();
+  const [showPassword, setShowPassword] = useState(false);
   const defaultValues = {
     username: "Sabbir",
     email: "sabbir333@gmail.com",
     password: "password12345",
   };
+
   const {
     register,
     handleSubmit,
@@ -40,7 +44,6 @@ const Register = () => {
         },
       };
 
-      // console.log("Registration data:", normalUser);
       await registration(normalUser);
       toast.success("Registration successful", { id: toastId, duration: 2000 });
       navigate("/login");
@@ -49,6 +52,7 @@ const Register = () => {
       console.error("Registration error:", error);
     }
   };
+
   return (
     <div className="bg-secondaryColor h-screen w-full flex justify-center items-center">
       <div className="bg-cardBackground w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded-md">
@@ -69,6 +73,7 @@ const Register = () => {
             onSubmit={handleSubmit(onSubmit)}
             className="w-full flex flex-col justify-center"
           >
+            {/* Name field */}
             <div className="mb-4">
               <input
                 type="text"
@@ -82,30 +87,63 @@ const Register = () => {
                 <p className="text-red-500 text-sm">{errors.name.message}</p>
               )}
             </div>
+
+            {/* Email field with format validation */}
             <div className="mb-4">
               <input
                 type="text"
                 placeholder="Email"
-                {...register("email", { required: "email is required" })}
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                    message: "Invalid email format",
+                  },
+                })}
                 className="w-full p-3 rounded border placeholder-gray-400 focus:outline-none focus:border-cardBackground text-cardBackground"
               />
               {errors.email && (
                 <p className="text-red-500 text-sm">{errors.email.message}</p>
               )}
             </div>
-            <div className="mb-4">
+
+            {/* Password field with eye icon and strong password hint */}
+            <div className="mb-4 relative">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                {...register("password", { required: "Password is required" })}
-                className="w-full p-3 rounded border placeholder-gray-400 focus:outline-none focus:border-cardBackground text-cardBackground"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 8,
+                    message: "Password must be at least 8 characters",
+                  },
+                  pattern: {
+                    value:
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                    message:
+                      "Password must contain an uppercase letter, a number, and a special character",
+                  },
+                })}
+                className="w-full p-3 pr-10 rounded border placeholder-gray-400 focus:outline-none focus:border-cardBackground text-cardBackground"
               />
+              <span
+                className="absolute right-3 top-7 transform -translate-y-1/2 cursor-pointer text-gray-500"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
               {errors.password && (
                 <p className="text-red-500 text-sm">
                   {errors.password.message}
                 </p>
               )}
+              <p className="text-sm mt-2 text-gray-500">
+                Password must be at least 8 characters long, contain an
+                uppercase letter, a number, and a special character.
+              </p>
             </div>
+
             <button className="bg-buttonBackground font-bold text-white uppercase focus:outline-none rounded p-3">
               Register
             </button>
