@@ -33,7 +33,8 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   let result = await baseQuery(args, api, extraOptions);
   // console.log(result);
   if (result?.error?.status === 404) {
-    toast.error("User Not Found");
+    // toast.error("User Not Found");
+    return { data: [] };
   }
   if (result?.error?.status === 401) {
     //* Send Refresh
@@ -48,7 +49,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     );
 
     const data = await res.json();
-
+    //  console.log(data)
     if (data?.data?.accessToken) {
       const user = (api.getState() as RootState).auth.user;
 

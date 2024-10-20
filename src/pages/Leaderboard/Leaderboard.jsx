@@ -7,17 +7,14 @@ import {
 const Leaderboard = () => {
   const [activeTab, setActiveTab] = useState("usersLadder");
 
-  // Fetch all payments data from API
   const { data: paymentsResponse, error, isLoading } = useGetAllPaymentsQuery();
-  const {
-    data: recentPaymentsResponse,
-    error: recentError,
-    isLoading: isRecentLoading,
-  } = useGetRecentPaymentsQuery();
+  const { data: recentPaymentsResponse, error: recentError, isLoading: isRecentLoading } = useGetRecentPaymentsQuery();
 
-  // Check if the data exists and contains payments array
+  console.log('Recent Payments Response:', recentPaymentsResponse); // Log response
+
+  // Safely handle recentPaymentsResponse and its payments property
   const paymentsData = paymentsResponse?.payments || [];
-  const recentPaymentsData = recentPaymentsResponse?.payments || []; // Use recent payments data
+  const recentPaymentsData = recentPaymentsResponse?.payments ?? [];
   console.log(recentPaymentsData);
   // Map paymentsData to usersLadderData format
   const usersLadderData = paymentsData.map((payment, index) => ({
@@ -97,12 +94,7 @@ const Leaderboard = () => {
       return (
         <table className="min-w-full leading-normal">
           <thead>
-            <tr className="bg-gray-200 text-left">
-              <th className="px-4 py-2">User</th>
-              <th className="px-4 py-2">PaymentType</th>
-              <th className="px-4 py-2">Earnings</th>
-              <th className="px-4 py-2">Date Completed</th>
-            </tr>
+            {/* Table Headers */}
           </thead>
           <tbody>
             {isRecentLoading ? (
@@ -112,11 +104,19 @@ const Leaderboard = () => {
                 </td>
               </tr>
             ) : recentError ? (
-              <tr>
-                <td colSpan="4" className="px-4 py-4 text-center">
-                  Error loading recent completions: {recentError.message}
-                </td>
-              </tr>
+              recentError.status === 404 ? (
+                <tr>
+                  <td colSpan="4" className="px-4 py-4 text-center">
+                    No recent payments found in the last 3 hours.
+                  </td>
+                </tr>
+              ) : (
+                <tr>
+                  <td colSpan="4" className="px-4 py-4 text-center">
+                    Error loading recent completions: {recentError?.message || 'Unknown error'}
+                  </td>
+                </tr>
+              )
             ) : recentPaymentsData.length > 0 ? (
               recentPaymentsData.map((payment, index) => (
                 <tr key={index} className="bg-white border-b">

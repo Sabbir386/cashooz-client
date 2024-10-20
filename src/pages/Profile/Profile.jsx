@@ -312,7 +312,7 @@ const Profile = () => {
 // withdraw history 
  
 const { data: paymentsData, error, isLoading } = useGetPaymentInfoQuery();
-
+console.log(data.payments)
 if (isLoading) return <p>Loading...</p>;
 if (error) return <p>Error: {error.message}</p>;
 
