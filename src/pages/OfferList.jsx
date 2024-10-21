@@ -6,7 +6,7 @@ import { FaEdit, FaRegTrashAlt, FaEye } from "react-icons/fa";
 import {
   useDeleteOfferMutation,
   useSingleOfferQuery,
-  useToggleOfferStatusMutation,
+  useToggleOfferStatusMutation, 
   useViewOfferQuery,
 } from "./offerApi";
 import UAParser from "ua-parser-js";

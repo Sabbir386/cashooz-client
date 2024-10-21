@@ -27,7 +27,7 @@ import EditNetwork from "../pages/EditNetwork";
 import EditCategory from "../pages/EditCategory";
 import Landing from "../pages/Landing/Landing";
 import SurveyList from "../pages/SurveyList";
-import DetailsPage from "../pages/DetailsPage/DetailsPage";
+// import DetailsPage from "../pages/DetailsPage/DetailsPage";
 import NotFound from "../pages/NotFound/NotFound";
 import AdvertiserRegister from "../auth/AdvertiserRegister";
 import Payment from "../pages/Payment/payment";
@@ -231,14 +231,14 @@ export const router = createBrowserRouter([
           </ProtectedRoutes>
         ),
       },
-      {
-        path: "/dashboard/view-offer/:id",
-        element: (
-          <ProtectedRoutes>
-            <DetailsPage></DetailsPage>
-          </ProtectedRoutes>
-        ),
-      },
+      // {
+      //   path: "/dashboard/view-offer/:id",
+      //   element: (
+      //     <ProtectedRoutes>
+      //       <DetailsPage></DetailsPage>
+      //     </ProtectedRoutes>
+      //   ),
+      // },
       {
         path: "/dashboard/edit-offer/:id",
         element: (
