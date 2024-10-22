@@ -32,10 +32,9 @@ const OfferView = () => {
     if (!description) return "No description available.";
     const words = description.split(" ");
     return words.length > 35
-      ? words.slice(0, 35).join(" ") + "." 
+      ? words.slice(0, 35).join(" ") + "..." // Slice first 35 words and add "..."
       : description;
   };
-  
 
   // Decode token to get user information
   let user;
@@ -184,50 +183,49 @@ const OfferView = () => {
 
             {/* Description */}
             <div className="mb-4 bg-gray-700 p-2 rounded-md">
-  <p className="text-white font-semibold">Description</p>
+              <p className="text-white font-semibold">Description</p>
 
-  <div className="text-gray-300 text-sm mb-2">
-    {/* Always display truncated description, even when More Info is clicked */}
-    <p>
-      {truncatedDescription(selectedOffer.description)}
-    </p>
-  </div>
+              <div className="text-gray-300 text-sm mb-2">
+                {/* Always display truncated description, even when More Info is clicked */}
+                <p>{truncatedDescription(selectedOffer.description)}</p>
+              </div>
 
-  <div
-    className="text-blue-400 cursor-pointer flex items-center"
-    onClick={toggleMoreInfo}
-  >
-    <span>{isMoreInfoOpen ? "Less Info" : "More Info"}</span>
-    <span className="ml-1">{isMoreInfoOpen ? "▲" : "▼"}</span>
-  </div>
+              <div
+                className="text-blue-400 cursor-pointer flex items-center"
+                onClick={toggleMoreInfo}
+              >
+                <span>{isMoreInfoOpen ? "Less Info" : "More Info"}</span>
+                <span className="ml-1">{isMoreInfoOpen ? "▲" : "▼"}</span>
+              </div>
 
-  {/* Display additional info (e.g., Status, Category, Provider) when expanded */}
-  {isMoreInfoOpen && (
-    <div className="text-gray-400 mt-2">
-      <div className="flex justify-between text-sm mb-4 mt-2">
-        <div className="text-center">
-          <p className="text-gray-400">Status</p>
-          <p className="text-white">Not Started</p>
-        </div>
-        <div className="text-center">
-          <p className="text-gray-400">Category</p>
-          <p className="text-green-400">Survey</p>
-        </div>
-        <div className="text-center">
-          <p className="text-gray-400">Provider</p>
-          <p className="text-blue-400 flex items-center">Adsend</p>
-        </div>
-      </div>
-    </div>
-  )}
-</div>
-
+              {/* Display additional info (e.g., Status, Category, Provider) when expanded */}
+              {isMoreInfoOpen && (
+                <div className="text-gray-400 mt-2">
+                  <div className="flex justify-between text-sm mb-4 mt-2">
+                    <div className="text-center">
+                      <p className="text-gray-400">Status</p>
+                      <p className="text-white">Not Started</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-gray-400">Category</p>
+                      <p className="text-green-400">Survey</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-gray-400">Provider</p>
+                      <p className="text-blue-400 flex items-center">Adsend</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Rewards Section */}
             <div className="mb-4">
               <p className="text-white font-semibold">Rewards</p>
               <div className="flex justify-between items-center bg-gray-700 p-2 rounded-md">
-                <p className="text-green-400 font-bold">${selectedOffer.points || "0"}</p>
+                <p className="text-green-400 font-bold">
+                  ${selectedOffer.points || "0"}
+                </p>
                 <p className="text-white">Complete Quiz - (15 questions)</p>
               </div>
             </div>
