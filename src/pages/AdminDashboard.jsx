@@ -42,7 +42,7 @@ import { useAppSelector } from "../redux/features/hooks";
 import { verifyToken } from "../utils/verifyToken";
 import { logOut, useCurrentToken } from "../redux/features/auth/authSlice";
 import { HiOutlineStar } from "react-icons/hi";
-import SurveyList from "./SurveyList";
+// import SurveyList from "./SurveyList";
 import OfferView from "./OfferView/OfferView";
 import { useGetAllPaymentsQuery } from "./Leaderboard/leaderBoardApi";
 const AdminDashboard = () => {
@@ -737,7 +737,7 @@ const AdminDashboard = () => {
         </Swiper>
       </div>
 
-      <SurveyList></SurveyList>
+      
     </div>
   );
 };

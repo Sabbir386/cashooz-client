@@ -24,6 +24,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const currentUser = useAppSelector((state) => state.auth.user);
   
+
   const {
     register,
     handleSubmit,
@@ -186,6 +187,7 @@ const Login = () => {
                 </p>
               )}
             </div>
+           
             <button className="bg-buttonBackground font-bold text-white focus:outline-none rounded p-3">
               Submit
             </button>

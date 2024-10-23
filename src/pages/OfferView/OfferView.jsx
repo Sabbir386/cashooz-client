@@ -7,6 +7,7 @@ import { verifyToken } from "../../utils/verifyToken";
 import { useAppSelector } from "../../redux/features/hooks";
 import { useCurrentToken } from "../../redux/features/auth/authSlice";
 import { Link, useParams } from "react-router-dom";
+import { FaStar, FaStarHalf } from "react-icons/fa";
 
 const OfferView = () => {
   const [networkOffers, setNetworkOffers] = useState([]); // Holds network offers data
@@ -148,92 +149,111 @@ const OfferView = () => {
       {/* Modal for displaying selected offer details */}
       {isModalOpen && selectedOffer && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center">
-          <div className="bg-[#1f2029] p-6 rounded-lg w-full max-w-md shadow-lg">
+          <div className="bg-[#1f2029] p-6 rounded-lg w-full max-w-md h-[600px] shadow-lg relative">
             {/* Modal Header */}
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-4 sticky h-[50px]">
               <h2 className="text-white text-xl font-bold">
-                {selectedOffer.name || "The 7th Grade Math Quiz!"}
+                {selectedOffer.name
+                  ? selectedOffer.name.split(" ").slice(0, 7).join(" ") +
+                    (selectedOffer.name.split(" ").length > 7 ? "..." : "")
+                  : "Not Available!"}
               </h2>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-gray-400 text-2xl hover:text-gray-100"
+                className="text-white text-2xl bg-red-500 w-8 h-8 rounded-full cursor-pointer"
               >
                 ×
               </button>
             </div>
 
-            {/* Offer Image */}
-            <div className="flex items-center mb-4">
-              <img
-                src={
-                  selectedOffer.image || "https://i.ibb.co/JjrS14H/cashooz.png"
-                }
-                alt="Offer"
-                className="w-14 h-14 rounded-full mr-4"
-              />
-              <div>
-                <p className="text-white text-2xl font-bold">
-                  ${selectedOffer.points || "0"}
-                </p>{" "}
-                <p className="text-yellow-400 text-sm">
-                  ⭐⭐⭐⭐⭐ <br /> Popularity Score
-                </p>{" "}
-              </div>
-            </div>
-
-            {/* Description */}
-            <div className="mb-4 bg-gray-700 p-2 rounded-md">
-              <p className="text-white font-semibold">Description</p>
-
-              <div className="text-gray-300 text-sm mb-2">
-                {/* Always display truncated description, even when More Info is clicked */}
-                <p>{truncatedDescription(selectedOffer.description)}</p>
-              </div>
-
-              <div
-                className="text-blue-400 cursor-pointer flex items-center"
-                onClick={toggleMoreInfo}
-              >
-                <span>{isMoreInfoOpen ? "Less Info" : "More Info"}</span>
-                <span className="ml-1">{isMoreInfoOpen ? "▲" : "▼"}</span>
+            <div className="flex flex-col mb-4  h-[430px] overflow-y-auto ">
+              {/* Offer Image */}
+              <div className="flex items-center justify-start gap-3 mb-4">
+                <img
+                  src={
+                    selectedOffer.image ||
+                    "https://i.ibb.co/JjrS14H/cashooz.png"
+                  }
+                  alt="Offer"
+                  className="w-14 h-14 rounded-full mr-4"
+                />
+                <div>
+                  <p className="text-white text-2xl font-bold">
+                    ${selectedOffer.points || "0"}
+                  </p>{" "}
+                  <div className="text-cyan-400 text-sm">
+                    <div className="text-yellow-400 flex gap-1">
+                      <FaStar />
+                      <FaStar />
+                      <FaStar />
+                      <FaStar />
+                      <FaStarHalf />
+                    </div>{" "}
+                    <p> Popularity Score</p>
+                  </div>{" "}
+                </div>
               </div>
 
-              {/* Display additional info (e.g., Status, Category, Provider) when expanded */}
-              {isMoreInfoOpen && (
-                <div className="text-gray-400 mt-2">
-                  <div className="flex justify-between text-sm mb-4 mt-2">
-                    <div className="text-center">
-                      <p className="text-gray-400">Status</p>
-                      <p className="text-white">Not Started</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-gray-400">Category</p>
-                      <p className="text-green-400">Survey</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-gray-400">Provider</p>
-                      <p className="text-blue-400 flex items-center">Adsend</p>
+              {/* Description */}
+              <div className="mb-4 bg-gray-700 p-2 rounded-md">
+                <p className="text-white font-semibold">Description</p>
+
+                <div className="text-gray-300 text-sm mb-2">
+                  {/* Always display truncated description, even when More Info is clicked */}
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: truncatedDescription(selectedOffer.description),
+                    }}
+                  ></p>
+                </div>
+
+                <div
+                  className="text-blue-400 cursor-pointer flex items-center"
+                  onClick={toggleMoreInfo}
+                >
+                  <span>{isMoreInfoOpen ? "Less Info" : "More Info"}</span>
+                  <span className="ml-1">{isMoreInfoOpen ? "▲" : "▼"}</span>
+                </div>
+
+                {/* Display additional info (e.g., Status, Category, Provider) when expanded */}
+                {isMoreInfoOpen && (
+                  <div className="text-gray-400 mt-2">
+                    <div className="flex justify-between text-sm mb-4 mt-2">
+                      <div className="text-center">
+                        <p className="text-gray-400">Status</p>
+                        <p className="text-white">Not Started</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-gray-400">Category</p>
+                        <p className="text-green-400">Survey</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-gray-400">Provider</p>
+                        <p className="text-blue-400 flex items-center">
+                          Adsend
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-
-            {/* Rewards Section */}
-            <div className="mb-4">
-              <p className="text-white font-semibold">Rewards</p>
-              <div className="flex justify-between items-center bg-gray-700 p-2 rounded-md">
-                <p className="text-green-400 font-bold">
-                  ${selectedOffer.points || "0"}
-                </p>
-                <p className="text-white">Complete Quiz - (15 questions)</p>
+                )}
               </div>
-            </div>
 
-            {/* Status, Category, Provider */}
-            <div className="mb-4">
-              <p className="text-white font-semibold mb-2">Steps</p>
-              <p className="text-white text-sm">earn as per you can </p>
+              {/* Rewards Section */}
+              <div className="mb-4">
+                <p className="text-white font-semibold">Rewards</p>
+                <div className="flex justify-between items-center bg-gray-700 p-2 rounded-md">
+                  <p className="text-green-400 font-bold">
+                    ${selectedOffer.points || "0"}
+                  </p>
+                  <p className="text-white">Complete Quiz - (15 questions)</p>
+                </div>
+              </div>
+
+              {/* Status, Category, Provider */}
+              <div className="mb-4">
+                <p className="text-white font-semibold mb-2">Steps</p>
+                <p className="text-white text-sm">earn as per you can </p>
+              </div>
             </div>
             {/* Earn Button */}
             <button
