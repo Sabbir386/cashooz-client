@@ -146,7 +146,7 @@ const Register = () => {
                 uppercase letter, a number, and a special character.
               </p>
             </div>
-            
+
             <div className="flex flex-col items-start p-4  rounded-md bg-white w-80">
               <div className="w-full flex justify-between">
                 <div className="text-xl font-semibold">Join for free!</div>
@@ -176,7 +176,14 @@ const Register = () => {
                 </div>
               </div>
             </div>
-            <button className="bg-buttonBackground font-bold text-white uppercase focus:outline-none rounded p-3">
+            <button
+              disabled={!isChecked}
+              className={`font-bold text-white uppercase focus:outline-none rounded p-3 ${
+                isChecked
+                  ? "bg-buttonBackground" // Button color when enabled
+                  : "bg-gray-400 cursor-not-allowed" // Button color when disabled
+              }`}
+            >
               Register
             </button>
           </form>

@@ -9,6 +9,12 @@ import { useCurrentToken } from "../../redux/features/auth/authSlice";
 import { Link, useParams } from "react-router-dom";
 import { FaStar, FaStarHalf } from "react-icons/fa";
 
+// Import Swiper React components
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper core and required modules
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+
 const OfferView = () => {
   const [networkOffers, setNetworkOffers] = useState([]); // Holds network offers data
   const [selectedOffer, setSelectedOffer] = useState(null); // Holds selected offer details for modal
@@ -107,37 +113,61 @@ const OfferView = () => {
               {networkOffer.networkName}
             </h2>
 
-            <div className="grid gap-4 mt-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-7">
+            <div className="w-full">
+              <Swiper
+               modules={[Navigation, Pagination, Scrollbar, A11y]}
+                spaceBetween={10}
+                slidesPerView={2}
+                navigation
+                pagination={{ clickable: true }}
+                breakpoints={{
+                  640: {
+                    slidesPerView: 2,
+                    spaceBetween: 10,
+                  },
+                  768: {
+                    slidesPerView: 4,
+                    spaceBetween: 10,
+                  },
+                  1024: {
+                    slidesPerView: 7,
+                    spaceBetween: 10,
+                  },
+                }}
+              >
               {networkOffer.offers.map((offer) => (
-                <div
-                  key={offer._id}
-                  className="cursor-pointer bg-cardBackground p-4 rounded-md"
-                  onClick={() => toggleModal(offer)} // Open modal on offer click
-                >
-                  <div className="relative">
-                    <img
-                      src={
-                        offer.image ||
-                        "https://main-p.agmcdn.com/offers/1126583-cwTa2k02.jpg"
-                      }
-                      alt={offer.name}
-                      className="w-full h-24 object-cover rounded-md"
-                    />
+                <SwiperSlide className="text-white">
+                  <div
+                    key={offer._id}
+                    className="cursor-pointer bg-cardBackground p-4 rounded-md"
+                    onClick={() => toggleModal(offer)} // Open modal on offer click
+                  >
+                    <div className="relative">
+                      <img
+                        src={
+                          offer.image ||
+                          "https://main-p.agmcdn.com/offers/1126583-cwTa2k02.jpg"
+                        }
+                        alt={offer.name}
+                        className="w-full h-24 object-cover rounded-md"
+                      />
+                    </div>
+                    <div className="mt-4 text-white">
+                      <h4 className="font-bold text-base">
+                        {offer?.name ? offer.name.slice(0, 19) : "Offer Name"}
+                        {offer.name.length > 19 && "..."}
+                      </h4>
+                      <h6 className="text-grayColor text-sm">
+                        {offer?.categoryName || offer.category}
+                      </h6>
+                      <h3 className="font-semibold">
+                        {offer?.points || "00"} CZ
+                      </h3>
+                    </div>
                   </div>
-                  <div className="mt-4 text-white">
-                    <h4 className="font-bold text-base">
-                      {offer?.name ? offer.name.slice(0, 19) : "Offer Name"}
-                      {offer.name.length > 19 && "..."}
-                    </h4>
-                    <h6 className="text-grayColor text-sm">
-                      {offer?.categoryName || offer.category}
-                    </h6>
-                    <h3 className="font-semibold">
-                      {offer?.points || "00"} CZ
-                    </h3>
-                  </div>
-                </div>
+                </SwiperSlide>
               ))}
+              </Swiper>
             </div>
           </div>
         ))
@@ -148,7 +178,7 @@ const OfferView = () => {
       {/* Modal for displaying selected offer details */}
       {/* Modal for displaying selected offer details */}
       {isModalOpen && selectedOffer && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center">
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-[9999]">
           <div className="bg-[#1f2029] p-6 rounded-lg w-full max-w-md h-[600px] shadow-lg relative">
             {/* Modal Header */}
             <div className="flex justify-between items-center mb-4 sticky h-[50px]">

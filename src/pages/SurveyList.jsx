@@ -3,8 +3,25 @@ import { HiOutlineStar } from "react-icons/hi";
 import { FaArrowLeft, FaArrowRight, FaLinux, FaPlay } from "react-icons/fa"; // For pagination arrows
 import { MdSort } from "react-icons/md"; // For sort icon
 import { FcSurvey } from "react-icons/fc";
+import { useGetFilteredSurveysQuery } from "./surveyWallApi";
 
 const SurveyList = () => {
+  const {
+    data: surveys,
+    error,
+    isLoading,
+  } = useGetFilteredSurveysQuery({
+    networkName: "Survey Wall",
+  });
+
+  if (isLoading) {
+    return <p className="text-white">Loading...</p>;
+  }
+
+  if (error) {
+    return <p className="text-red-500">Failed to load surveys</p>;
+  }
+  const offers = surveys?.data[0]?.offers || [];
   return (
     <div className="min-h-screen bg-[#212134] p-4 md:p-6 lg:p-10 text-center rounded mt-5">
       {/* Header Section */}
@@ -25,16 +42,56 @@ const SurveyList = () => {
         </div>
       </div>
 
-      {/* Empty State Message */}
-      <div className="flex flex-col items-center justify-center h-64 mb-8">
-        <FcSurvey className="w-10 h-10 md:w-12 md:h-12 mb-4" />
-        <h2 className="text-2xl md:text-4xl font-bold text-white">
-          You've cleared the board!
-        </h2>
-        <p className="text-sm md:text-lg text-gray-400 mt-2 text-center">
-          You've completed all the surveys we have for you right now. More
-          surveys might be available through our survey partners below.
-        </p>
+      <div className="p-4">
+        {/* Empty State Message */}
+        {offers.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-64 mb-8">
+            <FcSurvey className="w-10 h-10 md:w-12 md:h-12 mb-4" />
+            <h2 className="text-2xl md:text-4xl font-bold text-white">
+              You've cleared the board!
+            </h2>
+            <p className="text-sm md:text-lg text-gray-400 mt-2 text-center">
+              You've completed all the surveys we have for you right now. More
+              surveys might be available through our survey partners below.
+            </p>
+          </div>
+        ) : (
+          // Survey Offers Section
+          <div className="grid gap-3 mt-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {offers.map((offer) => (
+              <div
+                key={offer._id}
+                className="relative p-5 rounded-xl shadow-lg flex flex-col justify-center items-center text-center text-white transition-transform duration-300 hover:scale-105 cursor-pointer"
+              >
+                {/* Background with blur effect on hover */}
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-[#1f1f2e] to-[#0f0f1f] transition-filter duration-300 hover:blur-sm z-0"></div>
+
+                {/* Play button - appears on hover */}
+                <div className="absolute inset-0 flex justify-center items-center z-20 opacity-0 hover:opacity-100 transition-opacity duration-300">
+                  <div className="bg-green-600 rounded-full p-3">
+                    {/* <FaPlay className="text-white text-lg" /> */}
+                  </div>
+                </div>
+
+                {/* Text content - always visible */}
+                <div className="relative z-30">
+                  
+                  <h5 className="font-bold mt-2 transition-transform duration-300 transform hover:scale-110">
+                    {offer.name}
+                  </h5>
+                  {/* Offer image */}
+                  {offer.image && (
+                    <img
+                      src={offer.image}
+                      alt={offer.name}
+                      className="mt-2 h-52 w-full object-cover rounded-md"
+                    />
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Pagination for All Surveys Section */}
