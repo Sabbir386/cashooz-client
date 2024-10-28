@@ -10,7 +10,7 @@ import Select from "react-select";
 
 const CreateOffer = () => {
   const [inputValue, setInputValue] = useState("");
-  const [image, setImage] = useState('https://avatar.iran.liara.run/public');
+  const [image, setImage] = useState("https://avatar.iran.liara.run/public");
   const editor = useRef(null);
   const [content, setContent] = useState("");
   const [CreateOffer] = useCreateOfferMutation();
@@ -297,59 +297,55 @@ const CreateOffer = () => {
 
     // // console.log(data);
 
-
     try {
-
       const image = data.image[0];
-        const formData = new FormData();
-        formData.append("file", image);
-        formData.append('upload_preset','cashooz')
-        formData.append('cloud_name','dmnl8yjw9')
-        const url = `https://api.cloudinary.com/v1_1/dmnl8yjw9/image/upload`;
+      const formData = new FormData();
+      formData.append("file", image);
+      formData.append("upload_preset", "cashooz");
+      formData.append("cloud_name", "dmnl8yjw9");
+      const url = `https://api.cloudinary.com/v1_1/dmnl8yjw9/image/upload`;
 
-        fetch(url, {
-          method: "POST",
-          body: formData,
+      fetch(url, {
+        method: "POST",
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then(async (imageData) => {
+          // console.log(imageData);
+          if (imageData.url) {
+            const offerInfo = {
+              name: data.name,
+              network: data.network,
+              category: data.category,
+              country: data.country,
+              device: data.devices,
+              gender: ["male"],
+              offerLink: data.offerLink,
+              offerStatus: "inactive",
+              dailyLimit: 100,
+              totalLimit: 500,
+              price: 500,
+              description: content,
+              terms: data.terms,
+              image: imageData.url,
+              points: Number(data.points),
+              completionLimit: 200,
+              completionWindow: 300,
+              completedCount: 50,
+              startDate: "2023-11-01T00:00:00.000Z",
+              endDate: "2024-01-31T00:00:00.000Z",
+            };
+            // console.log(offerInfo);
+            await CreateOffer(offerInfo);
+            toast.success("Successfully Offer Created", {
+              id: toastId,
+              duration: 2000,
+            });
+          }
         })
-          .then((res) => res.json())
-          .then(async (imageData) => {
-            // console.log(imageData);
-            if (imageData.url) {
-             
-              const offerInfo = {
-                name: data.name,
-                network: data.network,
-                category: data.category,
-                country: data.country,
-                device: data.devices,
-                gender: ["male"],
-                offerLink: data.offerLink,
-                offerStatus: "inactive",
-                dailyLimit: 100,
-                totalLimit: 500,
-                price: 500,
-                description: content,
-                step: "A string representing the steps to complete the offer",
-                image: imageData.url,
-                points: Number(data.points),
-                completionLimit: 200,
-                completionWindow: 300,
-                completedCount: 50,
-                startDate: "2023-11-01T00:00:00.000Z",
-                endDate: "2024-01-31T00:00:00.000Z",
-              };
-              // console.log(offerInfo);
-              await CreateOffer(offerInfo);
-              toast.success("Successfully Offer Created", {
-                id: toastId,
-                duration: 2000,
-              });
-            }
-          }).catch(err =>{
-            console.log(err);
-          });
-
-  
+        .catch((err) => {
+          console.log(err);
+        });
 
       // reset();
       // navigate("/dashboard");
@@ -363,7 +359,6 @@ const CreateOffer = () => {
     if (event.target.files && event.target.files[0]) {
       setImage(URL.createObjectURL(event.target.files[0]));
       setUploadImage(event.target.files[0]);
-      
     }
   };
 
@@ -469,22 +464,7 @@ const CreateOffer = () => {
                 {networksError && <option>Error loading networks</option>}
               </select>
             </div>
-            <div>
-              <label
-                htmlFor="company"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Company
-              </label>
-              <input
-                type="text"
-                id="company"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="Company"
-                required
-                {...register("company", { required: "Company is required" })}
-              />
-            </div>
+            
             <div>
               <label
                 htmlFor="contactNo"
@@ -648,6 +628,22 @@ const CreateOffer = () => {
                 {...register("email", { required: "Email is required" })}
               />
             </div>
+            <div>
+              <label
+                htmlFor="terms"
+                className="block mb-2 text-sm font-medium text-white"
+              >
+                Terms
+              </label>
+              <textarea
+                rows={3}
+                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
+                placeholder="Terms"
+                required
+                {...register("terms", { required: "Terms is required" })}
+              ></textarea>
+            </div>
+
             <div className="mb-6">
               <label
                 htmlFor="email"

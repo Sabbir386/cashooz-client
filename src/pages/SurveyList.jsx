@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { HiOutlineStar } from "react-icons/hi";
 import { FaArrowLeft, FaArrowRight, FaPlay } from "react-icons/fa";
 import { MdSort } from "react-icons/md";
@@ -20,9 +20,16 @@ const SurveyList = () => {
     networkName: "Survey Wall",
   });
 
-  const offers = surveys?.data[0]?.offers || [];
+  const offers = surveys?.data?.[0]?.offers || [];
+  const [surveyOffers, setSurveyOffers] = useState([]);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
+
+  useEffect(() => {
+    if (Array.isArray(offers) && offers.length) {
+      setSurveyOffers(offers);
+    }
+  }, [offers]);
 
   if (isLoading) {
     return <p className="text-white">Loading...</p>;
@@ -41,16 +48,9 @@ const SurveyList = () => {
             Surveys Wall
           </h1>
         </div>
-        <div className="flex items-center space-x-2">
-          <span className="text-sm md:text-base text-white">Sort by</span>
-          <div className="flex items-center bg-gray-800 px-2 py-2 md:px-3 md:py-2 rounded-md">
-            <MdSort className="text-white mr-1 md:mr-2" />
-            <span className="text-sm md:text-base text-white">Recommended</span>
-          </div>
-        </div>
       </div>
 
-      {offers.length === 0 ? (
+      {surveyOffers.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-64 mb-8">
           <FcSurvey className="w-10 h-10 md:w-12 md:h-12 mb-4" />
           <h2 className="text-2xl md:text-4xl font-bold text-white">
@@ -81,7 +81,7 @@ const SurveyList = () => {
             1024: { slidesPerView: 4, spaceBetween: 10 },
           }}
         >
-          {offers.map((offer) => (
+          {surveyOffers.map((offer) => (
             <SwiperSlide key={offer._id} className="text-white">
               <div className="p-5 rounded-xl shadow-lg bg-gradient-to-b from-[#1f1f2e] to-[#0f0f1f] transition-transform duration-300 hover:scale-105 cursor-pointer">
                 {offer.image && (
@@ -114,10 +114,9 @@ const SurveyList = () => {
           </div>
           <span className="text-[#3D4F58] hidden sm:inline">PREVIOUS</span>
         </button>
-
         {/* Results Info */}
         <span className="text-white font-semibold">
-          1 - {offers.length} of results
+          1 - {surveyOffers.length} of results
         </span>
 
         {/* Next Button */}
@@ -131,7 +130,6 @@ const SurveyList = () => {
           </div>
         </button>
       </div>
-
       {/* Survey Partners Section */}
       <div className="mt-10">
         <h3 className="text-xl md:text-2xl font-semibold text-white text-left flex items-center">

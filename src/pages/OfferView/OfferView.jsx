@@ -308,8 +308,8 @@ const OfferView = () => {
 
               {/* Status, Category, Provider */}
               <div className="mb-4">
-                <p className="text-white font-semibold mb-2">Steps</p>
-                <p className="text-white text-sm">earn as per you can </p>
+                <p className="text-white font-semibold mb-2">Terms</p>
+                <p className="text-white text-sm">{selectedOffer.terms} </p>
               </div>
             </div>
             {/* Earn Button */}
