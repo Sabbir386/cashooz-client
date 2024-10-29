@@ -35,6 +35,7 @@ import Profile from "../pages/Profile/Profile";
 import Leaderboard from "../pages/Leaderboard/Leaderboard";
 import Reward from "../rewards/Reward";
 import Affiliate from "../pages/Affiliate";
+import TermsAndConditions from "../pages/Terms&Conditions/TermsAndConditions";
 
 export const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ export const router = createBrowserRouter([
   {
     path: "/advertiser-register",
     element: <AdvertiserRegister></AdvertiserRegister>,
+  },
+  {
+    path: "/termsncondition",
+    element: <TermsAndConditions></TermsAndConditions>,
   },
   {
     path: "/dashboard",

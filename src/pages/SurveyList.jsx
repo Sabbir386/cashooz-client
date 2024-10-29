@@ -65,10 +65,11 @@ const SurveyList = () => {
         <Swiper
           modules={[Navigation, Pagination, Scrollbar, A11y]}
           spaceBetween={10}
-          slidesPerView={3}
+       
           navigation={{
             prevEl: prevRef.current,
             nextEl: nextRef.current,
+            disabledClass: 'opacity-25 cursor-not-allowed', 
           }}
           onBeforeInit={(swiper) => {
             swiper.params.navigation.prevEl = prevRef.current;
@@ -76,9 +77,10 @@ const SurveyList = () => {
           }}
           pagination={{ clickable: true }}
           breakpoints={{
-            640: { slidesPerView: 2, spaceBetween: 10 },
-            768: { slidesPerView: 3, spaceBetween: 10 },
-            1024: { slidesPerView: 4, spaceBetween: 10 },
+            1368: { slidesPerView: 6, spaceBetween: 10 },
+            1024: { slidesPerView: 5, spaceBetween: 10 },
+            768: { slidesPerView: 3, spaceBetween: 25 },
+            510: { slidesPerView: 2, spaceBetween: 20 },
           }}
         >
           {surveyOffers.map((offer) => (
@@ -88,7 +90,7 @@ const SurveyList = () => {
                   <img
                     src={offer.image}
                     alt={offer.name}
-                    className="h-52 w-full object-cover rounded-md mb-3"
+                    className="h-36 w-full object-cover rounded-md mb-3"
                   />
                 )}
 
@@ -109,11 +111,12 @@ const SurveyList = () => {
           ref={prevRef}
           className="flex items-center space-x-2 font-semibold"
         >
-          <div className="flex items-center justify-center w-8 h-8 rounded border border-gray-600 hover:bg-green-700">
-            <FaArrowLeft className="text-[#3D4F58] hover:text-white" />
+          <div className="flex items-center justify-center w-8 h-8 rounded bg-green-700">
+            <FaArrowLeft className="text-white hover:text-white" />
           </div>
-          <span className="text-[#3D4F58] hidden sm:inline">PREVIOUS</span>
+          <span className="text-white hidden sm:inline">PREVIOUS</span>
         </button>
+
         {/* Results Info */}
         <span className="text-white font-semibold">
           1 - {surveyOffers.length} of results
@@ -124,7 +127,7 @@ const SurveyList = () => {
           ref={nextRef}
           className="flex items-center space-x-2 font-semibold"
         >
-          <span className="text-[#3D4F58] hidden sm:inline">NEXT</span>
+          <span className="text-white hidden sm:inline">NEXT</span>
           <div className="flex items-center justify-center w-8 h-8 rounded bg-green-700">
             <FaArrowRight className="text-white" />
           </div>

@@ -189,7 +189,7 @@ const Login = () => {
             </div>
            
             <button className="bg-buttonBackground font-bold text-white focus:outline-none rounded p-3">
-              Submit
+              Login
             </button>
           </form>
           <button

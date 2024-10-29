@@ -98,7 +98,7 @@ const OfferView = () => {
 
   return (
     <div>
-      <div>
+      <div className="min-h-screen">
         {networkOffers.length > 0 ? (
           networkOffers.map((networkOffer, idx) => (
             <div key={idx} className="my-8">
@@ -114,6 +114,7 @@ const OfferView = () => {
                   navigation={{
                     prevEl: prevRefs.current[idx].current,
                     nextEl: nextRefs.current[idx].current,
+                    disabledClass: "opacity-25 cursor-not-allowed",
                   }}
                   onBeforeInit={(swiper) => {
                     swiper.params.navigation.prevEl =
@@ -167,12 +168,12 @@ const OfferView = () => {
                   {/* Previous Button */}
                   <button
                     ref={prevRefs.current[idx]}
-                    className="flex items-center space-x-2 font-semibold cursor-pointer" // Cursor pointer added here
+                    className="flex items-center space-x-2 font-semibold" // Cursor pointer added here
                   >
-                    <div className="flex items-center justify-center w-8 h-8 rounded border border-gray-600 hover:bg-green-700 cursor-pointer">
-                      <FaArrowLeft className="text-[#3D4F58] hover:text-white" />
+                    <div className="flex items-center justify-center w-8 h-8 rounded bg-green-500 ">
+                      <FaArrowLeft className="text-white hover:text-white" />
                     </div>
-                    <span className="text-[#3D4F58] hidden sm:inline">
+                    <span className="text-white hidden sm:inline">
                       PREVIOUS
                     </span>
                   </button>
@@ -185,13 +186,11 @@ const OfferView = () => {
                   {/* Next Button */}
                   <button
                     ref={nextRefs.current[idx]}
-                    className="flex items-center space-x-2 font-semibold cursor-pointer" // Cursor pointer added here
+                    className="flex items-center space-x-2 font-semibold" // Cursor pointer added here
                   >
-                    <span className="text-[#3D4F58] hidden sm:inline">
-                      NEXT
-                    </span>
-                    <div className="flex items-center justify-center w-8 h-8 rounded bg-green-700 cursor-pointer">
-                      <FaArrowRight className="text-[#3D4F58] hover:text-white" />
+                    <span className="text-white hidden sm:inline">NEXT</span>
+                    <div className="flex items-center justify-center w-8 h-8 rounded bg-green-500">
+                      <FaArrowRight className="text-white hover:text-white" />
                     </div>
                   </button>
                 </div>

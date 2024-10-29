@@ -148,7 +148,7 @@ const OfferList = () => {
       } catch (error) {
         console.error("Error fetching IP information:", error);
       }
-
+      console.log(deviceInfo)
       setDeviceInfo(deviceInfo);
       setDeviceType(deviceType);
       setOSdeviceType(os);
@@ -165,7 +165,7 @@ const OfferList = () => {
   }, [token, offersForAdmin, offers]);
 
   if (deviceInfo) {
-    // console.log(OSdeviceType);
+    console.log(OSdeviceType);
   }
   // const [createCompletedOffer] = useCreateCompletedOfferMutation();
   const handleDeleteOffer = async (_id) => {

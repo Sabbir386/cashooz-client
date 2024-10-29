@@ -21,6 +21,7 @@ function RootLayout() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
+  const [bgColor, setBgColor] = useState("bg-transparent");
 
   const token = useAppSelector(useCurrentToken);
 
@@ -28,6 +29,16 @@ function RootLayout() {
     if (token) {
       setUser(verifyToken(token));
     }
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setBgColor("bg-secondaryColor"); // Change color when scrolled
+      } else {
+        setBgColor("bg-transparent"); // Default color
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [token]);
 
   const toggleDropdown = () => {
@@ -53,12 +64,13 @@ function RootLayout() {
   if (token) {
     user = verifyToken(token);
   }
+  
 
   return (
     <div className="flex">
       <Sidebar />
-      <main className="ml-0 md:ml-[16rem] flex-1 mx-auto py-4 w-5 md:w-[100% - 16rem] bg-primaryColor px-3">
-        <div className="flex justify-end items-center space-x-4">
+      <main className="min-h-screen ml-0 md:ml-[16rem] flex-1 mx-auto py-4 w-5 md:w-[100% - 16rem] bg-primaryColor px-3 relative">
+        <div className={`flex justify-end items-center space-x-4 fixed top-0 left-0 w-full h-16 px-4 z-[990] ${bgColor}`}>
           {/* Balance Display */}
           <div
             className="flex items-center space-x-2 p-2 rounded-md"
@@ -116,7 +128,9 @@ function RootLayout() {
             )}
           </div>
         </div>
-        <Outlet></Outlet>
+        <div className="min-h-screen mt-16">
+          <Outlet></Outlet>
+        </div>
       </main>
     </div>
   );

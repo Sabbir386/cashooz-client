@@ -3,15 +3,103 @@ import { useRegistrationMutation } from "../redux/features/auth/authApi";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { UAParser } from "ua-parser-js";
 
 const Register = () => {
   const navigate = useNavigate();
   const [registration] = useRegistrationMutation();
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [deviceInfo, setDeviceInfo] = useState("");
+  const [deviceType, setDeviceType] = useState("");
+  const [OSdeviceType, setOSdeviceType] = useState("");
+  const [country, setCountry] = useState("");
+  const [ip, setIP] = useState("");
+  const [CountryCode, setCountryCode] = useState("");
+  // device tracking ip address
+  useEffect(() => {
+    const getDeviceInfo = async () => {
+      const parser = new UAParser();
+      const result = parser.getResult();
 
+      const os = result.os.name || "Unknown OS";
+      let deviceType = result.device.type || "desktop";
+      const browser = result.browser.name || "Unknown Browser";
+
+      const userAgent = navigator.userAgent.toLowerCase();
+      let deviceName = "Unknown Device";
+
+      if (userAgent.includes("iphone")) {
+        deviceName = "iPhone";
+      } else if (userAgent.includes("ipad")) {
+        deviceName = "iPad";
+      } else if (userAgent.includes("samsung")) {
+        deviceName = "Samsung";
+      } else if (
+        userAgent.includes("xiaomi") ||
+        userAgent.includes("redmi") ||
+        userAgent.includes("mi")
+      ) {
+        deviceName = "Xiaomi";
+      } else if (userAgent.includes("huawei")) {
+        deviceName = "Huawei";
+      } else if (userAgent.includes("pixel")) {
+        deviceName = "Google Pixel";
+      } else if (userAgent.includes("oneplus")) {
+        deviceName = "OnePlus";
+      } else if (userAgent.includes("nokia")) {
+        deviceName = "Nokia";
+      } else if (userAgent.includes("sony")) {
+        deviceName = "Sony";
+      } else if (userAgent.includes("lg")) {
+        deviceName = "LG";
+      } else if (userAgent.includes("htc")) {
+        deviceName = "HTC";
+      } else if (userAgent.includes("motorola")) {
+        deviceName = "Motorola";
+      }
+
+      let deviceInfo = `OS: ${os}, Device Type: ${deviceType}, Device Name: ${deviceName}, Browser: ${browser}`;
+
+      try {
+        const ipResponse = await fetch("https://api.ipify.org?format=json");
+        if (!ipResponse.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const ipData = await ipResponse.json();
+        const ip = ipData.ip;
+        setIP(ip); // Set IP in state
+
+        const locationResponse = await fetch(`https://ipapi.co/${ip}/json/`);
+        if (!locationResponse.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const locationData = await locationResponse.json();
+        const country = locationData.country_name;
+        const countryCode = locationData.country_code;
+
+        deviceInfo += `, IP: ${ip}, Country: ${country}, CountryCode: ${countryCode}`;
+
+        setCountry(country); // Set Country in state
+        setCountryCode(countryCode); // Set Country Code in state
+      } catch (error) {
+        console.error("Error fetching IP information:", error);
+      }
+
+      setDeviceInfo(deviceInfo);
+      setDeviceType(deviceType);
+    };
+
+    getDeviceInfo();
+  }, []);
+
+  if (deviceInfo) {
+    console.log("Device Info:", deviceInfo);
+    console.log("IP:", ip);
+    console.log("Country:", country);
+  }
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
@@ -29,31 +117,60 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     const toastId = toast.loading("User Registering...");
-    try {
-      const normalUser = {
-        password: data.password,
-        normalUser: {
-          name: data.name,
-          email: data.email,
-          designation: "Advertiser manager",
-          username: "sharukh Khan",
-          gender: "male",
-          dateOfBirth: "1985-07-15",
-          contactNo: "9876543210",
-          emergencyContactNo: "1234567890",
-          bloodGroup: "A+",
-          presentAddress: "456 Elm Street, Cityville, Country",
-          permanentAddress: "789 Maple Avenue, Townsville, Country",
-          profileImg: "profile_picture.jpg",
-          isDeleted: false,
-        },
-      };
 
-      await registration(normalUser);
-      toast.success("Registration successful", { id: toastId, duration: 2000 });
+    const normalUser = {
+      password: data.password,
+      normalUser: {
+        name: data.name,
+        email: data.email,
+        ip: ip,
+        country: country,
+        designation: "Advertiser manager",
+        username: "sharukh Khan",
+        gender: "male",
+        dateOfBirth: "1985-07-15",
+        contactNo: "9876543210",
+        emergencyContactNo: "1234567890",
+        bloodGroup: "A+",
+        presentAddress: "456 Elm Street, Cityville, Country",
+        permanentAddress: "789 Maple Avenue, Townsville, Country",
+        profileImg: "profile_picture.jpg",
+        isDeleted: false,
+      },
+    };
+
+    console.log(normalUser);
+
+    try {
+      const user = await registration(normalUser);
+
+      // Check if response contains an error status
+      // console.log(user?.error?.status);
+      if (user?.error?.status == 409) {
+        // Handle specific error messages
+        const errorMessage =
+          user?.error?.data?.errorSources[0]?.message || "Conflict error.";
+        toast.error(errorMessage, {
+          id: toastId,
+          duration: 2000,
+        });
+        console.error("Error:", errorMessage);
+        return; // Exit the function here to avoid further processing
+      }
+
+      // Only log user and show success if registration was successful
+      console.log(user);
+      toast.success("Registration successful", {
+        id: toastId,
+        duration: 2000,
+      });
       navigate("/login");
     } catch (error) {
-      toast.error("Something went wrong", { id: toastId, duration: 2000 });
+      // Handle unexpected errors from the registration process
+      toast.error("Something went wrong. Please try again later.", {
+        id: toastId,
+        duration: 2000,
+      });
       console.error("Registration error:", error);
     }
   };
@@ -164,14 +281,20 @@ const Register = () => {
                 />
                 <div className="text-xs text-gray-700">
                   I agree to the{" "}
-                  <a href="#" className="text-blue-500 underline">
+                  <Link
+                    to="/termsncondition"
+                    className="text-blue-500 underline"
+                  >
                     Terms of Use
-                  </a>{" "}
+                  </Link>{" "}
                   and to receive marketing email messages from InboxDollars, and
                   I accept the{" "}
-                  <a href="#" className="text-blue-500 underline">
+                  <Link
+                    to={"/termsncondition"}
+                    className="text-blue-500 underline"
+                  >
                     Privacy Policy
-                  </a>
+                  </Link>
                   .
                 </div>
               </div>
