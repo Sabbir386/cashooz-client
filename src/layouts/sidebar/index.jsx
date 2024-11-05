@@ -185,6 +185,18 @@ const Sidebar = () => {
         icon: HiUser,
         path: "user-profile",
       },
+      // {
+      //   id: "new-payment",
+      //   name: "New Payment",
+      //   icon: HiUser,
+      //   path: "new-payment",
+      // },
+      // {
+      //   id: "edit-profile",
+      //   name: "Edit Profile",
+      //   icon: HiUser,
+      //   path: "edit-profile",
+      // },
     ];
   } else if (user?.role === "advertiser") {
     menulist = [
@@ -388,7 +400,10 @@ const Sidebar = () => {
                   <SubMenu data={menu} />
                 </li>
               ) : (
-                <li key={menu.id} className="mb-1 text-grayColor hover:text-buttonBackground">
+                <li
+                  key={menu.id}
+                  className="mb-1 text-grayColor hover:text-buttonBackground"
+                >
                   <Link
                     to={`/dashboard/${menu.path}`}
                     className={`p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium hover:text-buttonBackground hover:bg-hoverBgColor`}

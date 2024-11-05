@@ -17,6 +17,7 @@ import {
 import { verifyToken } from "../utils/verifyToken";
 import { Link } from "react-router-dom";
 import { FaCommentDollar } from "react-icons/fa";
+import DashboardFooter from "./sidebar/DashboardFooter";
 function RootLayout() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -128,9 +129,10 @@ function RootLayout() {
             )}
           </div>
         </div>
-        <div className="min-h-screen mt-16">
+        <div className="min-h-screen mt-16 pb-10 relative">
           <Outlet></Outlet>
         </div>
+        <DashboardFooter></DashboardFooter>
       </main>
     </div>
   );

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { FaArrowAltCircleDown, FaRegClock } from "react-icons/fa";
+import { FaArrowAltCircleDown, FaRegClock, FaEdit } from "react-icons/fa";
+import { CiSettings } from "react-icons/ci";
+
 import { FaCalendarCheck } from "react-icons/fa";
 import { verifyToken } from "../../utils/verifyToken";
 import { useAppSelector } from "../../redux/features/hooks";
 import { useCurrentToken } from "../../redux/features/auth/authSlice";
 import { Line } from "react-chartjs-2";
+import UserDashboard from "./UserDashboard";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -16,6 +19,8 @@ import {
   Legend,
 } from "chart.js";
 import { useGetPaymentInfoQuery } from "../Payment/paymentApi";
+import EditProfile from "./EditProfile";
+import Loader from "../../components/Loader";
 
 ChartJS.register(
   CategoryScale,
@@ -89,16 +94,28 @@ const TabOneComponent = () => (
   </div>
 );
 const TabTwoComponent = ({ payments }) => (
-  <div className="w-full p-4 bg-gray-900 rounded-lg">
+  <div className="w-full overflow-x-scroll p-4 bg-gray-900 rounded-lg">
     <table className="w-full text-left text-sm text-gray-400">
       <thead className="text-xs uppercase text-buttonBackground border-b border-gray-700">
         <tr>
-          <th scope="col" className="px-6 py-3">Type</th>
-          <th scope="col" className="px-6 py-3">Amount</th>
-          <th scope="col" className="px-6 py-3">Email/Address</th>
-          <th scope="col" className="px-6 py-3">Transaction ID</th>
-          <th scope="col" className="px-6 py-3">Date</th>
-          <th scope="col" className="px-6 py-3">Status</th>
+          <th scope="col" className="px-6 py-3">
+            Type
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Amount
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Email/Address
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Transaction ID
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Date
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Status
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -106,7 +123,9 @@ const TabTwoComponent = ({ payments }) => (
           payments.map((payment) => (
             <tr key={payment._id} className="bg-gray-800">
               <td className="px-6 py-4 text-white">{payment.paymentType}</td>
-              <td className="px-6 py-4 text-white">${(payment.amount ).toFixed(2)}</td>
+              <td className="px-6 py-4 text-white">
+                ${payment.amount.toFixed(2)}
+              </td>
               <td className="px-6 py-4 text-white">{payment.userEmail}</td>
               <td className="px-6 py-4 text-white">{payment.transactionId}</td>
               <td className="px-6 py-4 text-white">
@@ -127,199 +146,127 @@ const TabTwoComponent = ({ payments }) => (
   </div>
 );
 const TabThreeComponent = () => (
-  <div className="flex flex-col items-center justify-center h-full p-4 bg-gray-900 rounded-lg">
-    {/* Image Icon */}
-    <div className="mb-4">
-      <img
-        src="https://i.ibb.co/tJpxPkW/earnings-in-progress-not-found.png"
-        alt="No Offers"
-        className="w-20 h-20"
-      />
-    </div>
-    {/* Message */}
-    <p className="mb-6 text-center text-gray-400">
-      You have not started any featured offers in the last year
-    </p>
-    {/* Button */}
-    <button className="px-6 py-3 text-white bg-buttonBackground rounded-full hover:bg-green-600 transition duration-300">
-      Start Earning <span aria-hidden="true">→</span>
-    </button>
+  <div className="w-full overflow-x-scroll p-4 bg-gray-900 rounded-lg">
+    <table className="w-full text-left text-sm text-gray-400">
+      <thead className="text-xs uppercase text-buttonBackground border-b border-gray-700">
+        <tr>
+          <th scope="col" className="px-6 py-3">
+            Reward Name
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Reward
+          </th>
+          <th scope="col" className="px-6 py-3">
+          Reward Status
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Reward From
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Date
+          </th>
+        </tr>
+      </thead>
+      {/* <tbody>
+        {payments.length > 0 ? (
+          payments.map((payment) => (
+            <tr key={payment._id} className="bg-gray-800">
+              <td className="px-6 py-4 text-white">{payment.paymentType}</td>
+              <td className="px-6 py-4 text-white">
+                ${payment.amount.toFixed(2)}
+              </td>
+              <td className="px-6 py-4 text-white">{payment.userEmail}</td>
+              <td className="px-6 py-4 text-white">{payment.transactionId}</td>
+              <td className="px-6 py-4 text-white">
+                {new Date(payment.createdAt).toLocaleDateString()}
+              </td>
+              <td className="px-6 py-4 text-green-500">Completed</td>
+            </tr>
+          ))
+        ) : (
+          <tr className="bg-gray-800">
+            <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
+              No payment records found
+            </td>
+          </tr>
+        )}
+      </tbody> */}
+    </table>
   </div>
 );
 const TabFourComponent = () => (
-  <div className="py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-6 items-center justify-center">
-    <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
-      <div className="flex w-full justify-between">
-        <div className="flex gap-3 items-center">
-          <FaRegClock />
-          <h5 className="text-white font-semibold text-sm">March 08 2024</h5>
-        </div>
-        <div className="rounded-full py-1 px-2 text-xs bg-red-400">
-          Cancelled
-        </div>
-      </div>
-      <div className="flex w-full justify-start my-4">
-        <div className="w-1/2">
-          <p className="text-gray-300 text-xs font-semibold">
-            Total Attendence
-          </p>
-          <h5 className="text-white font-bold text-base">309</h5>
-        </div>
-        <div>
-          <p className="text-gray-300 text-xs font-semibold">
-            Total Attendence
-          </p>
-          <h5 className="text-white font-bold text-base">309</h5>
-        </div>
-      </div>
-    </div>
-    <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
-      <div className="flex w-full justify-between">
-        <div className="flex gap-3 items-center">
-          <FaRegClock />
-          <h5 className="text-white font-semibold text-sm">March 08 2024</h5>
-        </div>
-        <div className="rounded-full py-1 px-2 text-xs bg-yellow-400">
-          Pending
-        </div>
-      </div>
-      <div className="flex w-full justify-start my-4">
-        <div className="w-1/2">
-          <p className="text-gray-300 text-xs font-semibold">
-            Total Attendence
-          </p>
-          <h5 className="text-white font-bold text-base">309</h5>
-        </div>
-        <div>
-          <p className="text-gray-300 text-xs font-semibold">
-            Total Attendence
-          </p>
-          <h5 className="text-white font-bold text-base">309</h5>
-        </div>
-      </div>
-    </div>
-    <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
-      <div className="flex w-full justify-between">
-        <div className="flex gap-3 items-center">
-          <FaRegClock />
-          <h5 className="text-white font-semibold text-sm">March 08 2024</h5>
-        </div>
-        <div className="rounded-full py-1 px-2 text-xs bg-buttonBackground">
-          On time
-        </div>
-      </div>
-      <div className="flex w-full justify-start my-4">
-        <div className="w-1/2">
-          <p className="text-gray-300 text-xs font-semibold">
-            Total Attendence
-          </p>
-          <h5 className="text-white font-bold text-base">309</h5>
-        </div>
-        <div>
-          <p className="text-gray-300 text-xs font-semibold">
-            Total Attendence
-          </p>
-          <h5 className="text-white font-bold text-base">309</h5>
-        </div>
-      </div>
-    </div>
-    <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
-      <div className="flex w-full justify-between">
-        <div className="flex gap-3 items-center">
-          <FaRegClock />
-          <h5 className="text-white font-semibold text-sm">March 08 2024</h5>
-        </div>
-        <div className="rounded-full py-1 px-2 text-xs bg-buttonBackground">
-          On time
-        </div>
-      </div>
-      <div className="flex w-full justify-start my-4">
-        <div className="w-1/2">
-          <p className="text-gray-300 text-xs font-semibold">
-            Total Attendence
-          </p>
-          <h5 className="text-white font-bold text-base">309</h5>
-        </div>
-        <div>
-          <p className="text-gray-300 text-xs font-semibold">
-            Total Attendence
-          </p>
-          <h5 className="text-white font-bold text-base">309</h5>
-        </div>
-      </div>
-    </div>
-    <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
-      <div className="flex w-full justify-between">
-        <div className="flex gap-3 items-center">
-          <FaRegClock />
-          <h5 className="text-white font-semibold text-sm">March 08 2024</h5>
-        </div>
-        <div className="rounded-full py-1 px-2 text-xs bg-buttonBackground">
-          On time
-        </div>
-      </div>
-      <div className="flex w-full justify-start my-4">
-        <div className="w-1/2">
-          <p className="text-gray-300 text-xs font-semibold">
-            Total Attendence
-          </p>
-          <h5 className="text-white font-bold text-base">309</h5>
-        </div>
-        <div>
-          <p className="text-gray-300 text-xs font-semibold">
-            Total Attendence
-          </p>
-          <h5 className="text-white font-bold text-base">309</h5>
-        </div>
-      </div>
-    </div>
-    <div className="bg-primaryColor text-white  px-4 py-3 rounded-lg">
-      <div className="flex w-full justify-between">
-        <div className="flex gap-3 items-center">
-          <FaRegClock />
-          <h5 className="text-white font-semibold text-sm">March 08 2024</h5>
-        </div>
-        <div className="rounded-full py-1 px-2 text-xs bg-buttonBackground">
-          On time
-        </div>
-      </div>
-      <div className="flex w-full justify-start my-4">
-        <div className="w-1/2">
-          <p className="text-gray-300 text-xs font-semibold">
-            Total Attendence
-          </p>
-          <h5 className="text-white font-bold text-base">309</h5>
-        </div>
-        <div>
-          <p className="text-gray-300 text-xs font-semibold">
-            Total Attendence
-          </p>
-          <h5 className="text-white font-bold text-base">309</h5>
-        </div>
-      </div>
-    </div>
+  <div className="w-full overflow-x-scroll p-4 bg-gray-900 rounded-lg">
+    <table className="w-full text-left text-sm text-gray-400">
+      <thead className="text-xs uppercase text-buttonBackground border-b border-gray-700">
+        <tr>
+          <th scope="col" className="px-6 py-3">
+            Survey Name
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Reward
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Reward Status
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Survey Partner
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Date
+          </th>
+        </tr>
+      </thead>
+      {/* <tbody>
+        {payments.length > 0 ? (
+          payments.map((payment) => (
+            <tr key={payment._id} className="bg-gray-800">
+              <td className="px-6 py-4 text-white">{payment.paymentType}</td>
+              <td className="px-6 py-4 text-white">
+                ${payment.amount.toFixed(2)}
+              </td>
+              <td className="px-6 py-4 text-white">{payment.userEmail}</td>
+              <td className="px-6 py-4 text-white">{payment.transactionId}</td>
+              <td className="px-6 py-4 text-white">
+                {new Date(payment.createdAt).toLocaleDateString()}
+              </td>
+              <td className="px-6 py-4 text-green-500">Completed</td>
+            </tr>
+          ))
+        ) : (
+          <tr className="bg-gray-800">
+            <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
+              No payment records found
+            </td>
+          </tr>
+        )}
+      </tbody> */}
+    </table>
   </div>
 );
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const token = useAppSelector(useCurrentToken);
 
-  let user;     
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  let user;
   if (token) {
     user = verifyToken(token);
   }
-// withdraw history 
- 
-const { data: paymentsData, error, isLoading } = useGetPaymentInfoQuery();
-console.log(data.payments)
-if (isLoading) return <p>Loading...</p>;
-if (error) return <p>Error: {error.message}</p>;
+  // withdraw history
 
-const payments = paymentsData?.payments || [];
+  const { data: paymentsData, error, isLoading } = useGetPaymentInfoQuery();
+  console.log(data.payments);
+  if (isLoading) return <Loader></Loader>;
+  if (error) return <p>Error: {error.message}</p>;
 
-    console.log("Fetched Payment Data:", payments);
-  
+  const payments = paymentsData?.payments || [];
+
+  console.log("Fetched Payment Data:", payments);
 
   // Array of components corresponding to each tab
   const tabComponents = [
@@ -329,7 +276,6 @@ const payments = paymentsData?.payments || [];
     <TabFourComponent />,
   ];
 
-  
   return (
     <div className="min-h-screen">
       <div className="bg-cardBackground p-4 rounded-md my-4">
@@ -339,7 +285,15 @@ const payments = paymentsData?.payments || [];
               Details Information
             </h3>
           </div>
-          <div className="flex flex-col lg:flex-row gap-3">
+          <div className="flex flex-col items-center lg:flex-row gap-3">
+            <div
+              className="flex justify-center items-center gap-2 text-white cursor-pointer"
+              onClick={() => toggleModal()}
+            >
+              <CiSettings className="block hover:rotate-45 transition-transform duration-300" />
+
+              <small className="block">Edit profile</small>
+            </div>
             <select
               name=""
               id=""
@@ -347,7 +301,7 @@ const payments = paymentsData?.payments || [];
             >
               <option value="">this year</option>
             </select>
-            <button className="w-[190px] bg-buttonBackground px-4 py-2 text-sm text-white rounded-md font-semibold flex items-center justify-center gap-2">
+            <button className="w-[190px] bg-buttonBackground px-4 py-3 text-sm text-white rounded-md font-semibold flex items-center justify-center gap-2">
               {" "}
               <span>Download Info</span> <FaArrowAltCircleDown />
             </button>
@@ -391,7 +345,7 @@ const payments = paymentsData?.payments || [];
             </div>
           </div>
         </div>
-        <div className="py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-center justify-start">
+        {/* <div className="py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-center justify-start">
           <div className="bg-primaryColor text-white flex gap-3 px-4 py-3 rounded-lg">
             <div className="flex justify-center items-center w-12 h-12 bg-secondaryColor rounded-full">
               <FaCalendarCheck />
@@ -447,8 +401,13 @@ const payments = paymentsData?.payments || [];
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
+
+        
       </div>
+ 
+      <UserDashboard />
+      
       <div className="bg-cardBackground p-4 rounded-md my-4">
         <div className="py-4 flex flex-col md:flex-row gap-3 justify-between">
           <div>
@@ -459,7 +418,7 @@ const payments = paymentsData?.payments || [];
         </div>
 
         <div>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-4">
             {["Earnings", "Withdraw", "Rewards", "Survey"].map(
               (tabTitle, index) => (
                 <button
@@ -480,6 +439,24 @@ const payments = paymentsData?.payments || [];
 
         <div className="p-4 mt-4">{tabComponents[activeTab]}</div>
       </div>
+
+      {isModalOpen && (
+        <div
+          className={`w-full min-h-screen fixed inset-0 bg-black bg-opacity-75 z-[99999] p-6 overflow-y-scroll transition-opacity duration-700 ${
+            isModalOpen ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <div className="w-full md:w-3/4 mx-auto p-3 relative">
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="text-white text-2xl bg-red-500 w-8 h-8 rounded-full cursor-pointer absolute right-5 top-5"
+            >
+              ×
+            </button>
+            <EditProfile />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

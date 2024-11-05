@@ -10,6 +10,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 // import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import Loader from "../components/Loader";
 
 const SurveyList = () => {
   const {
@@ -32,7 +33,7 @@ const SurveyList = () => {
   }, [offers]);
 
   if (isLoading) {
-    return <p className="text-white">Loading...</p>;
+    return <Loader></Loader>;
   }
 
   if (error) {

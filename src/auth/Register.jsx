@@ -145,7 +145,7 @@ const Register = () => {
       const user = await registration(normalUser);
 
       // Check if response contains an error status
-      // console.log(user?.error?.status);
+      console.log(user);
       if (user?.error?.status == 409) {
         // Handle specific error messages
         const errorMessage =

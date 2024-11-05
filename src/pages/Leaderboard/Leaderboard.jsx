@@ -3,6 +3,7 @@ import {
   useGetAllPaymentsQuery,
   useGetRecentPaymentsQuery,
 } from "./leaderBoardApi";
+import Loader from "../../components/Loader";
 
 const Leaderboard = () => {
   const [activeTab, setActiveTab] = useState("usersLadder");
@@ -26,7 +27,7 @@ const Leaderboard = () => {
 
   const renderTableContent = () => {
     if (isLoading) {
-      return <p>Loading...</p>;
+      return <Loader></Loader>;
     }
 
     if (error) {
@@ -37,20 +38,20 @@ const Leaderboard = () => {
       return (
         <table className="min-w-full leading-normal">
           <thead>
-            <tr className="bg-gray-200 text-left">
-              <th className="px-4 py-2">Position</th>
-              <th className="px-4 py-2">User</th>
-              <th className="px-4 py-2">Earnings</th>
-              <th className="px-4 py-2 text-center">Potential Bonus</th>
+            <tr className="bg-buttonBackground text-white">
+              <th className="px-4 py-4 text-left">Position</th>
+              <th className="px-4 py-4 text-left">User</th>
+              <th className="px-4 py-4 text-left">Earnings</th>
+              <th className="px-4 py-4 text-center">Potential Bonus</th>
             </tr>
           </thead>
           <tbody>
             {usersLadderData.length > 0 ? (
               usersLadderData.map((user, index) => (
-                <tr key={index} className="bg-white border-b">
-                  <td className="px-4 py-4">{user.position}</td>
-                  <td className="px-4 py-4">{user.user}</td>
-                  <td className="px-4 py-4">{user.earnings}</td>
+                <tr key={index} className="bg-primaryColor text-white border-b">
+                  <td className="px-4 py-4 text-left">{user.position}</td>
+                  <td className="px-4 py-4 text-left">{user.user}</td>
+                  <td className="px-4 py-4 text-left">{user.earnings}</td>
                   <td className="px-4 py-4 text-center">
                     <span className="text-yellow-600 font-semibold">
                       {user.bonus}
@@ -142,30 +143,30 @@ const Leaderboard = () => {
   };
 
   return (
-    <div className="p-4 bg-gray-100 min-h-screen">
-      <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="p-4 bg-primaryColor min-h-screen">
+      <div className="max-w-6xl mx-auto bg-secondaryColor rounded-lg shadow-md overflow-hidden">
         {/* Tab Navigation */}
-        <div className="flex bg-gray-200 p-4">
+        <div className="flex bg-secondaryColor p-4 gap-1">
           <button
             onClick={() => setActiveTab("usersLadder")}
-            className={`px-4 py-2 text-gray-700 font-semibold rounded-t-lg focus:outline-none ${
-              activeTab === "usersLadder" ? "bg-white" : "bg-gray-200"
+            className={`px-4 py-2 text-white text-sm font-medium rounded-lg focus:outline-none ${
+              activeTab === "usersLadder" ? "bg-buttonBackground" : "bg-primaryColor"
             }`}
           >
             Users Ladder
           </button>
           <button
             onClick={() => setActiveTab("referralLadder")}
-            className={`px-4 py-2 text-gray-700 font-semibold rounded-t-lg focus:outline-none ${
-              activeTab === "referralLadder" ? "bg-white" : "bg-gray-200"
+            className={`px-4 py-2 text-white text-sm font-medium rounded-lg focus:outline-none ${
+              activeTab === "referralLadder" ? "bg-buttonBackground" : "bg-primaryColor"
             }`}
           >
             Referral Ladder
           </button>
           <button
             onClick={() => setActiveTab("recentCompletions")}
-            className={`px-4 py-2 text-gray-700 font-semibold rounded-t-lg focus:outline-none ${
-              activeTab === "recentCompletions" ? "bg-white" : "bg-gray-200"
+            className={`px-4 py-2 text-white text-sm font-medium rounded-lg focus:outline-none ${
+              activeTab === "recentCompletions" ? "bg-buttonBackground" : "bg-primaryColor"
             }`}
           >
             Recent Completions
@@ -175,12 +176,12 @@ const Leaderboard = () => {
         {/* Filter Section */}
         <div className="p-4 border-b">
           <div className="flex flex-col md:flex-row items-center justify-between">
-            <select className="border rounded p-2 mb-2 md:mb-0">
+            <select className="border border-buttonBackground rounded p-2 mb-2 md:mb-0 bg-transparent text-white">
               <option>Users in my Country</option>
             </select>
             <label className="flex items-center space-x-2">
               <input type="checkbox" className="form-checkbox" />
-              <span>Only show high paying tasks</span>
+              <span className="text-buttonBackground">Only show high paying tasks</span>
             </label>
           </div>
         </div>

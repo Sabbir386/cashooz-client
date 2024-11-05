@@ -10,6 +10,7 @@ import { Link, useParams } from "react-router-dom";
 import { FaArrowLeft, FaArrowRight, FaStar, FaStarHalf } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import Loader from "../../components/Loader";
 
 const OfferView = () => {
   const [networkOffers, setNetworkOffers] = useState([]);
@@ -89,7 +90,7 @@ const OfferView = () => {
   };
 
   if (isLoading) {
-    return <p>Loading offers...</p>;
+    return <Loader></Loader>;
   }
 
   if (offerError) {

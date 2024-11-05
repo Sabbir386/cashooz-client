@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaCcPaypal, FaCcStripe, FaPaypal, FaStripeS  } from "react-icons/fa";
+import { FaCcPaypal, FaCcStripe, FaPaypal, FaStripeS } from "react-icons/fa";
 import {
   BarChart,
   Bar,
@@ -188,43 +188,6 @@ const AdminDashboard = () => {
   );
 
   //logged User --......>
-  const [CountLoggedUserTotalCompletedOffer, setLoggedUserTotalCompletedOffer] =
-    useState(null);
-  const {
-    data: loggedUserTotalCompletedOffer,
-    isLoading: isLoadingloggedUserTotalCompletedOffer,
-    error: errorloggedUserTotalCompletedOffer,
-  } = useLoggedUserTotalCompletedOfferQuery(
-    {},
-    { skip: !(userRole === "user" || userRole === "advertiser") }
-  );
-  //loggedUser Daily
-  const [
-    CountLoggedInUserDailycCompletedOfferCounts,
-    setLoggedInUserDailycCompletedOfferCounts,
-  ] = useState(null);
-  const {
-    data: loggedInUserDailycCompletedOfferCounts,
-    isLoading: isLoadingloggedInUserDailycCompletedOfferCounts,
-    error: errorloggedInUserDailycCompletedOfferCounts,
-  } = useLoggedInUserDailycCompletedOfferCountsQuery(
-    {},
-    { skip: !(userRole === "user" || userRole === "advertiser") }
-  );
-
-  // loogeduser OfferName And total Counts
-  const [
-    CountLoggedInUserOfferNameandTotalCounts,
-    setLoggedInUserOfferNameandTotalCounts,
-  ] = useState(null);
-  const {
-    data: loggedInUserOfferNameandTotalCounts,
-    isLoading: isLoadingloggedInUserOfferNameandTotalCounts,
-    error: errorloggedInUserOfferNameandTotalCounts,
-  } = useLoggedInUserOfferNameandTotalCountsQuery(
-    {},
-    { skip: !(userRole === "user" || userRole === "advertiser") }
-  );
 
   useEffect(() => {
     if (totalOffer && totalOffer.meta) {
@@ -264,22 +227,6 @@ const AdminDashboard = () => {
       console.log(specificOfferWiseCompletedOffer);
       setCountSpecificOfferWiseCompletedOffer(specificOfferWiseCompletedOffer);
     }
-    if (loggedUserTotalCompletedOffer) {
-      console.log(loggedUserTotalCompletedOffer);
-      setLoggedUserTotalCompletedOffer(loggedUserTotalCompletedOffer);
-    }
-    if (loggedInUserDailycCompletedOfferCounts) {
-      console.log(loggedInUserDailycCompletedOfferCounts);
-      setLoggedInUserDailycCompletedOfferCounts(
-        loggedInUserDailycCompletedOfferCounts
-      );
-    }
-    if (loggedInUserOfferNameandTotalCounts) {
-      console.log(loggedInUserOfferNameandTotalCounts);
-      setLoggedInUserOfferNameandTotalCounts(
-        loggedInUserOfferNameandTotalCounts
-      );
-    }
   }, [
     totalOffer,
     completedOffer,
@@ -291,17 +238,14 @@ const AdminDashboard = () => {
     specificUserWiseCompletedOffer,
     regularCompletedOffer,
     specificOfferWiseCompletedOffer,
-    loggedUserTotalCompletedOffer,
-    loggedInUserDailycCompletedOfferCounts,
-    loggedInUserOfferNameandTotalCounts,
   ]);
 
   const data = countSpecificUserWiseCompletedOffer?.data ?? [];
   let LoggedData = [];
-  if (userRole === "user" || userRole === "advertiser") {
-    LoggedData = CountLoggedUserTotalCompletedOffer?.data ?? [];
-    console.log("loged", LoggedData);
-  }
+  // if (userRole === "user" || userRole === "advertiser") {
+  //   LoggedData = CountLoggedUserTotalCompletedOffer?.data ?? [];
+  //   console.log("loged", LoggedData);
+  // }
   const transformedData = LoggedData.flatMap((entry) =>
     entry.offerInfo.map((info) => ({
       date: info.date,
@@ -322,11 +266,11 @@ const AdminDashboard = () => {
   const data01 = countSpecificOfferWiseCompletedOffer?.data;
 
   let LoggedDatawithNameAndCount = [];
-  if (userRole === "user" || userRole === "advertiser") {
-    LoggedDatawithNameAndCount =
-      CountLoggedInUserOfferNameandTotalCounts?.data ?? [];
-    console.log("logedwithNameData", LoggedDatawithNameAndCount);
-  }
+  // if (userRole === "user" || userRole === "advertiser") {
+  //   LoggedDatawithNameAndCount =
+  //     CountLoggedInUserOfferNameandTotalCounts?.data ?? [];
+  //   console.log("logedwithNameData", LoggedDatawithNameAndCount);
+  // }
 
   // Check if LoggedDatawithNameAndCount.data exists and is an array
   const transformedLoggedDatawithNameAndCount =
@@ -337,6 +281,9 @@ const AdminDashboard = () => {
           value: info.count,
         }))
       : [];
+  if (LoggedDatawithNameAndCount) {
+    console.log("daa", transformedLoggedDatawithNameAndCount);
+  }
   const data02 = [
     { name: "A1", value: 100 },
     { name: "A2", value: 300 },
@@ -393,43 +340,48 @@ const AdminDashboard = () => {
   return (
     <div className="container mx-auto">
       <div className="overflow-hidden mt-4 mb-6 z-[97]">
-  <div className="text-white p-2 rounded shadow-sm inline-flex flex-nowrap gap-5 overflow-hidden animate-infinite-scroll">
-    {paymentsData.map((payment, index) => (
-      <div
-        key={payment._id}
-        className="w-[200px] flex gap-3 justify-center items-center border-r-2"
-      >
-        {/* Conditionally render icons based on paymentType */}
-        <div>
-          <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-            {payment.paymentType === "paypal" ? (
-              <FaCcPaypal />
-            ) : payment.paymentType === "stripe" ? (
-              <FaCcStripe/>
-            ) : (
-              payment.name ? payment.name.charAt(0) : "C" // Default to initials if no match
-            )}
-          </div>
-        </div>
-        
-        {/* Display first name */}
-        <div>
-          <h5 className="text-sm">{payment.name ? payment.name.split(" ")[0] : "Unknown"}</h5>
-          <h6 className="text-xs mt-1">{payment.paymentType}</h6>
-        </div>
-        
-        {/* Display payment amount */}
-        <div>
-          <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-            ${parseFloat(payment.amount / 100).toFixed(2)} {/* Convert amount to dollars */}
-          </span>
-          
+        <div className="text-white p-2 rounded shadow-sm inline-flex flex-nowrap gap-5 overflow-hidden animate-infinite-scroll">
+          {paymentsData.map((payment, index) => (
+            <div
+              key={payment._id}
+              className="w-[200px] flex gap-3 justify-center items-center border-r-2"
+            >
+              {/* Conditionally render icons based on paymentType */}
+              <div>
+                <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
+                  {
+                    payment.paymentType === "paypal" ? (
+                      <FaCcPaypal />
+                    ) : payment.paymentType === "stripe" ? (
+                      <FaCcStripe />
+                    ) : payment.name ? (
+                      payment.name.charAt(0)
+                    ) : (
+                      "C"
+                    ) // Default to initials if no match
+                  }
+                </div>
+              </div>
+
+              {/* Display first name */}
+              <div>
+                <h5 className="text-sm">
+                  {payment.name ? payment.name.split(" ")[0] : "Unknown"}
+                </h5>
+                <h6 className="text-xs mt-1">{payment.paymentType}</h6>
+              </div>
+
+              {/* Display payment amount */}
+              <div>
+                <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
+                  ${parseFloat(payment.amount / 100).toFixed(2)}{" "}
+                  {/* Convert amount to dollars */}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-    ))}
-  </div>
-</div>
-
 
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
         {(userRole === "admin" || userRole === "superAdmin") && (
@@ -447,20 +399,6 @@ const AdminDashboard = () => {
             {isLoadingCompleted && <p>Loading...</p>}
             {errorCompleted && <p>Error loading offer data</p>}
             <h5 className="font-semibold text-base">{countCompletedOffer}</h5>
-          </div>
-        )}
-        {(userRole === "user" || userRole === "advertiser") && (
-          <div className="bg-cardBackground text-white px-4 py-6 rounded shadow-sm">
-            <h4 className="font-bold text-">Total Completed Offer</h4>
-            {isLoadingloggedUserTotalCompletedOffer && <p>Loading...</p>}
-            {errorloggedUserTotalCompletedOffer && (
-              <p>Error loading offer data</p>
-            )}
-            <h5 className="font-semibold text-base">
-              {CountLoggedUserTotalCompletedOffer?.data?.length > 0
-                ? CountLoggedUserTotalCompletedOffer?.data[0].TotalCount
-                : "calculating.."}
-            </h5>
           </div>
         )}
 
@@ -501,20 +439,6 @@ const AdminDashboard = () => {
             </h5>
           </div>
         )}
-        {(userRole === "user" || userRole === "advertiser") && (
-          <div className="bg-cardBackground text-white px-4 py-6 rounded shadow-sm">
-            <h4 className="font-bold text-">Today Completed Offer</h4>
-            {isLoadingloggedInUserDailycCompletedOfferCounts && (
-              <p>Loading...</p>
-            )}
-            {errorloggedInUserDailycCompletedOfferCounts && (
-              <p>Error loading offer data</p>
-            )}
-            <h5 className="font-semibold text-base">
-              {CountLoggedInUserDailycCompletedOfferCounts?.data[0]?.TotalCount}
-            </h5>
-          </div>
-        )}
       </div>
       <div className="grid gap-4 mt-5 grid-cols-1 md:grid-cols-2">
         {(userRole === "admin" || userRole === "superAdmin") && (
@@ -543,32 +467,7 @@ const AdminDashboard = () => {
             </ResponsiveContainer>
           </div>
         )}
-        {(userRole === "user" || userRole === "advertiser") && (
-          <div className="bg-cardBackground px-4 py-6 rounded shadow-sm">
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={transformedData}>
-                <XAxis dataKey="date" stroke="#8884d8" />
-                <YAxis />
-                <Tooltip
-                  wrapperStyle={{ width: 100, backgroundColor: "#ccc" }}
-                />
-                <Legend
-                  width={100}
-                  wrapperStyle={{
-                    top: 40,
-                    right: 20,
-                    backgroundColor: "#f5f5f5",
-                    border: "1px solid #d5d5d5",
-                    borderRadius: 3,
-                    lineHeight: "40px",
-                  }}
-                />
-                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                <Bar dataKey="count" fill="#8884d8" barSize={30} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        )}
+
         {(userRole === "admin" || userRole === "superAdmin") && (
           <div className="bg-secondaryColor px-4 py-6 rounded shadow-sm">
             <ResponsiveContainer width="100%" height={250}>
@@ -584,32 +483,6 @@ const AdminDashboard = () => {
                   dataKey="TotalCount"
                 >
                   {data.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        )}
-        {(userRole === "user" || userRole === "advertiser") && (
-          <div className="bg-cardBackground px-4 py-6 rounded shadow-sm">
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart width={400} height={400}>
-                <Pie
-                  data={transformedLoggedDatawithNameAndCount}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={renderCustomizedLabel}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {transformedLoggedDatawithNameAndCount.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={COLORS[index % COLORS.length]}
@@ -736,8 +609,6 @@ const AdminDashboard = () => {
             ))}
         </Swiper>
       </div>
-
-      
     </div>
   );
 };

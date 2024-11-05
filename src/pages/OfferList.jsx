@@ -20,6 +20,7 @@ import Swal from "sweetalert2";
 import ReactModal from "react-modal";
 import "./modal/ModalStyles.css";
 import OfferView from "./OfferView/OfferView";
+import Loader from "../components/Loader";
 
 const OfferList = () => {
   const [data, setData] = useState([]);
@@ -148,7 +149,7 @@ const OfferList = () => {
       } catch (error) {
         console.error("Error fetching IP information:", error);
       }
-      console.log(deviceInfo)
+
       setDeviceInfo(deviceInfo);
       setDeviceType(deviceType);
       setOSdeviceType(os);
@@ -165,7 +166,7 @@ const OfferList = () => {
   }, [token, offersForAdmin, offers]);
 
   if (deviceInfo) {
-    console.log(OSdeviceType);
+    // console.log(OSdeviceType);
   }
   // const [createCompletedOffer] = useCreateCompletedOfferMutation();
   const handleDeleteOffer = async (_id) => {
@@ -236,10 +237,10 @@ const OfferList = () => {
   const paginatedData = data.slice(offset, offset + pageSize);
 
   if (isLoading || isFetching) {
-    return <div>Loading...</div>; // Show loading state
+    return <Loader></Loader>; // Show loading state
   }
   if (isLoadingOffersForAdmin || isFetchingOffersForAdmin) {
-    return <div>Loading...</div>; // Show loading state
+    return <Loader></Loader>; // Show loading state
   }
 
   return userRole === "superAdmin" || userRole === "admin" ? (

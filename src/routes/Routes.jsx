@@ -36,6 +36,8 @@ import Leaderboard from "../pages/Leaderboard/Leaderboard";
 import Reward from "../rewards/Reward";
 import Affiliate from "../pages/Affiliate";
 import TermsAndConditions from "../pages/Terms&Conditions/TermsAndConditions";
+import EditProfile from "../pages/Profile/EditProfile";
+import NewPayment from "../pages/NewPyment/NewPayment";
 
 export const router = createBrowserRouter([
   {
@@ -156,6 +158,14 @@ export const router = createBrowserRouter([
         ),
       },
       // {
+      //   path: "/dashboard/edit-profile",
+      //   element: (
+      //     <ProtectedRoutes>
+      //       <EditProfile></EditProfile>
+      //     </ProtectedRoutes>
+      //   ),
+      // },
+      // {
       //   path: "/dashboard/create-advertiser",
       //   element: (
       //     <ProtectedRoutes>
@@ -207,7 +217,15 @@ export const router = createBrowserRouter([
         path: "/dashboard/payment",
         element: (
           <ProtectedRoutes>
-            <Payment></Payment>
+            <NewPayment></NewPayment>
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/dashboard/new-payment",
+        element: (
+          <ProtectedRoutes>
+            <NewPayment></NewPayment>
           </ProtectedRoutes>
         ),
       },
