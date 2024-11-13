@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUpdateNormalUserMutation } from "../../redux/features/auth/authApi";
 import { useAppSelector } from "../../redux/features/hooks";
 import { useCurrentToken } from "../../redux/features/auth/authSlice";
 import { verifyToken } from "../../utils/verifyToken";
 
-const EditProfile = () => {
+const EditProfile = ({ onClose }) => {
   const token = useAppSelector(useCurrentToken);
   let user;
+
   if (token) {
     user = verifyToken(token);
   }
@@ -52,7 +53,7 @@ const EditProfile = () => {
       console.error("No user data found");
       return;
     }
-    console.log(user);
+
     const normalUser = {
       normalUser: {
         name: formData.name,
@@ -65,14 +66,12 @@ const EditProfile = () => {
         presentAddress: formData.presentAddress,
       },
     };
-    console.log(normalUser);
-    // Trigger the mutation and handle the state
+
     updateNormalUser({ id: user?.objectId, normalUser })
       .unwrap()
       .then((response) => {
         console.log("Full response:", response);
 
-        // Check if the update was successful
         if (response.success) {
           console.log("User updated successfully:", response.message);
         } else {
@@ -84,51 +83,60 @@ const EditProfile = () => {
       });
   };
 
+  // UseEffect to trigger onClose after successful save
+  useEffect(() => {
+    if (isSuccess) {
+      const timer = setTimeout(() => {
+        onClose(); // Automatically close after success
+      }, 1000); // Adjust timing as needed
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess, onClose]);
+
   return (
     <div className="w-full flex flex-col items-start min-h-screen p-6 relative">
-  {/* Loading Spinner Overlay */}
-  {isLoading && (
-    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="flex flex-col items-center space-y-2">
-        <div className="w-8 h-8 border-4 border-t-transparent border-white rounded-full animate-spin"></div>
-        <span className="text-white font-semibold">Saving...</span>
-      </div>
-    </div>
-  )}
-
-
-  <div className="w-full bg-secondaryColor rounded-lg shadow-md p-6 space-y-6">
-    <div className="bg-primaryColor p-6 rounded-lg shadow-sm">
-      <div className="flex flex-col items-center space-y-4">
-        <img
-          src={profileImage}
-          alt="Profile"
-          className="w-32 h-32 rounded-full object-cover border-2 border-gray-300"
-        />
-        <div className="flex space-x-2">
-          <button
-            onClick={handleChangePhoto}
-            className="bg-purple-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-purple-600 transition"
-          >
-            Change photo
-          </button>
-          <button
-            onClick={handleDeletePhoto}
-            className="bg-white text-red-500 px-4 py-2 rounded-lg shadow-md border border-gray-300 hover:bg-gray-100 transition"
-          >
-            <span className="flex items-center space-x-1">
-              <span>🗑️</span> <span>Delete</span>
-            </span>
-          </button>
+      {/* Loading Spinner Overlay */}
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="flex flex-col items-center space-y-2">
+            <div className="w-8 h-8 border-4 border-t-transparent border-white rounded-full animate-spin"></div>
+            <span className="text-white font-semibold">Saving...</span>
+          </div>
         </div>
-        <p className="text-gray-500 text-sm">
-          Cashooz keeps your profile private
-        </p>
-      </div>
-    </div>
+      )}
 
-    {/* Edit Profile Section */}
-    <div className="bg-primaryColor p-6 rounded-lg shadow-sm">
+      <div className="w-full bg-secondaryColor rounded-lg shadow-md p-6 space-y-6">
+        <div className="bg-primaryColor p-6 rounded-lg shadow-sm">
+          <div className="flex flex-col items-center space-y-4">
+            <img
+              src={profileImage}
+              alt="Profile"
+              className="w-32 h-32 rounded-full object-cover border-2 border-gray-300"
+            />
+            <div className="flex space-x-2">
+              <button
+                onClick={handleChangePhoto}
+                className="bg-purple-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-purple-600 transition"
+              >
+                Change photo
+              </button>
+              <button
+                onClick={handleDeletePhoto}
+                className="bg-white text-red-500 px-4 py-2 rounded-lg shadow-md border border-gray-300 hover:bg-gray-100 transition"
+              >
+                <span className="flex items-center space-x-1">
+                  <span>🗑️</span> <span>Delete</span>
+                </span>
+              </button>
+            </div>
+            <p className="text-gray-500 text-sm">
+              Cashooz keeps your profile private
+            </p>
+          </div>
+        </div>
+
+        {/* Edit Profile Section */}
+        <div className="bg-primaryColor p-6 rounded-lg shadow-sm">
           <h2 className="text-lg font-semibold mb-4 text-white">
             Edit Profile
           </h2>
@@ -254,36 +262,40 @@ const EditProfile = () => {
           </div>
         </div>
 
-    {/* Save Button Section */}
-    <div className="flex justify-end items-center space-x-4 p-4 rounded-lg shadow-lg bg-[#01D676] bg-opacity-80 backdrop-blur-md transition-all duration-300 ease-in-out">
-      <button
-        className={`px-6 py-2 text-white font-semibold rounded-lg shadow-md transition-all duration-300 ease-in-out 
-          ${isLoading ? "bg-blue-300 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}
-        `}
-        type="button"
-        onClick={handleSave}
-        disabled={isLoading}
-      >
-        {isLoading ? (
-          <span className="animate-pulse">Saving...</span>
-        ) : (
-          "Save"
-        )}
-      </button>
-      {isSuccess && (
-        <p className="text-white font-medium text-sm transition-opacity duration-500">
-          Profile updated successfully!
-        </p>
-      )}
-      {isError && (
-        <p className="text-red-500 font-medium text-sm transition-opacity duration-500">
-          Error updating profile: {error?.message}
-        </p>
-      )}
-    </div>
-  </div>
-</div>
+        {/* Save Button Section */}
+        <div className="flex justify-end items-center space-x-4 p-4 rounded-lg shadow-lg bg-[#01D676] bg-opacity-80 backdrop-blur-md transition-all duration-300 ease-in-out">
+          <button
+            className={`px-6 py-2 text-white font-semibold rounded-lg shadow-md transition-all duration-300 ease-in-out 
+    ${
+      isLoading
+        ? "bg-blue-300 cursor-not-allowed"
+        : "bg-blue-600 hover:bg-blue-700"
+    }
+  `}
+            type="button"
+            onClick={handleSave}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <span className="animate-pulse">Saving...</span>
+            ) : (
+              "Save"
+            )}
+          </button>
+          {isSuccess && (
+            <p className="text-white font-medium text-sm transition-opacity duration-500">
+              Profile updated successfully! Closing shortly...
+            </p>
+          )}
+          {isError && (
+            <p className="text-red-500 font-medium text-sm transition-opacity duration-500">
+              Error updating profile: {error?.message}
+            </p>
+          )}
 
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -21,6 +21,7 @@ import {
 import { useGetPaymentInfoQuery } from "../Payment/paymentApi";
 import EditProfile from "./EditProfile";
 import Loader from "../../components/Loader";
+import Swal from "sweetalert2";
 
 ChartJS.register(
   CategoryScale,
@@ -157,7 +158,7 @@ const TabThreeComponent = () => (
             Reward
           </th>
           <th scope="col" className="px-6 py-3">
-          Reward Status
+            Reward Status
           </th>
           <th scope="col" className="px-6 py-3">
             Reward From
@@ -252,7 +253,16 @@ const Profile = () => {
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
-
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    Swal.fire({
+      icon: "success",
+      title: "Profile updated successfully",
+      // confirmButtonColor: "#3085d6",
+      // cancelButtonColor: "#d33",
+      timer: 1800,
+    });
+  };
   let user;
   if (token) {
     user = verifyToken(token);
@@ -402,12 +412,10 @@ const Profile = () => {
             </div>
           </div>
         </div> */}
-
-        
       </div>
- 
+
       <UserDashboard />
-      
+
       <div className="bg-cardBackground p-4 rounded-md my-4">
         <div className="py-4 flex flex-col md:flex-row gap-3 justify-between">
           <div>
@@ -439,7 +447,6 @@ const Profile = () => {
 
         <div className="p-4 mt-4">{tabComponents[activeTab]}</div>
       </div>
-
       {isModalOpen && (
         <div
           className={`w-full min-h-screen fixed inset-0 bg-black bg-opacity-75 z-[99999] p-6 overflow-y-scroll transition-opacity duration-700 ${
@@ -447,13 +454,13 @@ const Profile = () => {
           }`}
         >
           <div className="w-full md:w-3/4 mx-auto p-3 relative">
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="text-white text-2xl bg-red-500 w-8 h-8 rounded-full cursor-pointer absolute right-5 top-5"
-            >
-              ×
-            </button>
-            <EditProfile />
+            {/* <button
+        onClick={handleCloseModal} // This should be bound correctly
+        className="text-white text-2xl bg-red-500 w-8 h-8 rounded-full cursor-pointer absolute right-5 top-5"
+      >
+        ×
+      </button> */}
+            <EditProfile onClose={handleCloseModal} />
           </div>
         </div>
       )}
