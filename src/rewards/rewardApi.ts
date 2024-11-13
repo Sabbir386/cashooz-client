@@ -23,6 +23,21 @@ export const rewardApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['Reward'],
         }),
+        surveyCompleted: builder.mutation({
+            query: ({ userId, surveyReward }) => ({
+                url: `/reward/surveyCompletedRewards?userId=${userId}&surveyReward=${surveyReward}`,
+                method: 'POST',
+            }),
+            invalidatesTags: ['Reward'],
+        }),
+
+        userTotalRewards: builder.query({
+            query: (userId) => ({
+                url: `/reward/userTotalRewards?userId=${userId}`,
+                method: 'GET',
+            }),
+            providesTags: ['Reward'],
+        }),
     }),
 });
 
@@ -30,4 +45,6 @@ export const {
     useClaimBonusMutation,
     useGetUserRewardQuery,
     useTaskCompletedMutation,
+    useSurveyCompletedMutation,
+    useUserTotalRewardsQuery,
 } = rewardApi;

@@ -188,9 +188,17 @@ const Register = () => {
           </p>
         </div>
         <div className="bg-white w-full md:w-1/2 flex flex-col items-center py-32 px-8 rounded-r-md">
-          <h3 className="text-3xl font-bold text-buttonBackground mb-4">
+          {/* <h3 className="text-3xl font-bold text-buttonBackground mb-4">
             REGISTER
-          </h3>
+          </h3> */}
+          <div className="flex flex-col items-start p-4  rounded-md bg-white w-80">
+            <div className="w-full flex justify-between">
+              <div className="text-xl font-semibold">Join for free!</div>
+              <div className="text-green-600 text-xl font-bold bg-green-200 px-3 py-1 rounded">
+                500 CZ Bonus
+              </div>
+            </div>
+          </div>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="w-full flex flex-col justify-center"
@@ -264,39 +272,28 @@ const Register = () => {
               </p>
             </div>
 
-            <div className="flex flex-col items-start p-4  rounded-md bg-white w-80">
-              <div className="w-full flex justify-between">
-                <div className="text-xl font-semibold">Join for free!</div>
-                <div className="text-green-600 text-xl font-bold bg-green-200 px-3 py-1 rounded">
-                  $5 Bonus
-                </div>
-              </div>
-              <div className="mt-4 flex items-start">
-                <div className="mr-2 text-green-500 text-2xl">➜</div>
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={handleCheckboxChange}
-                  className="mr-2 mt-1 h-5 w-5 border-gray-300 rounded"
-                />
-                <div className="text-xs text-gray-700">
-                  I agree to the{" "}
-                  <Link
-                    to="/termsncondition"
-                    className="text-blue-500 underline"
-                  >
-                    Terms of Use
-                  </Link>{" "}
-                  and to receive marketing email messages from InboxDollars, and
-                  I accept the{" "}
-                  <Link
-                    to={"/termsncondition"}
-                    className="text-blue-500 underline"
-                  >
-                    Privacy Policy
-                  </Link>
-                  .
-                </div>
+            <div className="mt-4 flex items-start my-4">
+              <div className="mr-2 text-green-500 text-2xl">➜</div>
+              <input
+                type="checkbox"
+                checked={isChecked}
+                onChange={handleCheckboxChange}
+                className="mr-2 mt-1 h-5 w-5 border-gray-300 rounded"
+              />
+              <div className="text-xs text-gray-700">
+                I agree to the{" "}
+                <Link to="/termsncondition" className="text-blue-500 underline">
+                  Terms of Use
+                </Link>{" "}
+                and to receive marketing email messages from InboxDollars, and I
+                accept the{" "}
+                <Link
+                  to={"/termsncondition"}
+                  className="text-blue-500 underline"
+                >
+                  Privacy Policy
+                </Link>
+                .
               </div>
             </div>
             <button

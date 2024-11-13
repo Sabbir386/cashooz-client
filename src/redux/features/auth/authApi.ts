@@ -47,10 +47,10 @@ export const authApi = baseApi.injectEndpoints({
       providesTags: ["users"],
     }),
     updateNormalUser: builder.mutation({
-      query: ({ id, ...updatedData }) => ({
+      query: ({ id, normalUser }) => ({
         url: `/normalUsers/${id}`,
         method: "PATCH",
-        body: updatedData,
+        body: normalUser,
       }),
       invalidatesTags: ["normalUser"],
     }),

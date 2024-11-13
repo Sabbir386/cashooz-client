@@ -40,6 +40,23 @@ const Sidebar = () => {
     }
   }, [isTabletMid]);
 
+  // useEffect(() => {
+  //   if (open) {
+  //     document.addEventListener('mousedown', handleClickOutside);
+  //   } else {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   }
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, [open]);
+
+  // const handleClickOutside = (event) => {
+  //   if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+  //     setIsOpen(false);
+  //   }
+  // };
+
   const token = useAppSelector(useCurrentToken);
 
   useEffect(() => {
@@ -348,7 +365,7 @@ const Sidebar = () => {
           },
         },
         closed: {
-          width: "4rem",
+          width: "16rem",
           transition: {
             damping: 40,
           },
@@ -388,6 +405,7 @@ const Sidebar = () => {
                     ? "text-grayColor hover:text-buttonBackground"
                     : "text-grayColor hover:text-buttonBackground"
                 }`}
+                onClick={() => setOpen(false)}
               >
                 <AiOutlineAppstore size={23} className="min-w-max" />
                 Dashboard
@@ -397,7 +415,7 @@ const Sidebar = () => {
             {menulist?.map((menu) =>
               menu?.menus ? (
                 <li key={menu.id} className="flex flex-col gap-1 mb-1">
-                  <SubMenu data={menu} />
+                  <SubMenu data={menu} setOpen={setOpen} />
                 </li>
               ) : (
                 <li
@@ -405,6 +423,7 @@ const Sidebar = () => {
                   className="mb-1 text-grayColor hover:text-buttonBackground"
                 >
                   <Link
+                  onClick={() => setOpen(false)}
                     to={`/dashboard/${menu.path}`}
                     className={`p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium hover:text-buttonBackground hover:bg-hoverBgColor`}
                   >

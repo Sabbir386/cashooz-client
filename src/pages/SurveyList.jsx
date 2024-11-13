@@ -1,17 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import { HiOutlineStar } from "react-icons/hi";
 import { FaArrowLeft, FaArrowRight, FaPlay } from "react-icons/fa";
-import { MdSort } from "react-icons/md";
 import { FcSurvey } from "react-icons/fc";
 import { useGetFilteredSurveysQuery } from "./surveyWallApi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-// import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import Loader from "../components/Loader";
-
+import Swal from "sweetalert2";
+import { useCurrentToken } from "../redux/features/auth/authSlice";
+import { verifyToken } from "../utils/verifyToken";
+import { useAppSelector } from "../redux/features/hooks";
+import { useCreateCompletedOfferMutation } from "./completedOfferApi";
+import { useSurveyCompletedMutation } from "../rewards/rewardApi";
 const SurveyList = () => {
   const {
     data: surveys,
@@ -20,12 +23,15 @@ const SurveyList = () => {
   } = useGetFilteredSurveysQuery({
     networkName: "Survey Wall",
   });
-
+  const [createCompletedOffer] = useCreateCompletedOfferMutation();
+  const [surveyCompleted] = useSurveyCompletedMutation();
   const offers = surveys?.data?.[0]?.offers || [];
   const [surveyOffers, setSurveyOffers] = useState([]);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-
+  const token = useAppSelector(useCurrentToken);
+  const user = token ? verifyToken(token) : null;
+  console.log(user);
   useEffect(() => {
     if (Array.isArray(offers) && offers.length) {
       setSurveyOffers(offers);
@@ -39,7 +45,45 @@ const SurveyList = () => {
   if (error) {
     return <p className="text-red-500">Failed to load surveys</p>;
   }
+  // survey completeion
+  const handleSurveyCompletion = async (offer) => {
+    // Redirect to Toluna survey
+    window.open("https://www.toluna.com/", "_blank");
 
+    // Display success notification with specific offer details
+
+    try {
+      console.log(offer?._id, user?.objectId, offer?.points);
+      await createCompletedOffer({
+        clickId: "clickIdValue",
+        offerId: offer?._id,
+        userId: user?.objectId,
+        points: offer?.points,
+      }).unwrap();
+
+      await surveyCompleted({
+        userId: user?.objectId,
+        surveyReward: offer?.points,
+      }).unwrap();
+
+      Swal.fire({
+        icon: "success",
+        title: `Survey Completed!`,
+        html: `<strong>${offer.name}</strong><br>You earned <strong>${offer.points} CZ</strong> for completing this survey!`,
+        confirmButtonText: "Claim",
+      });
+    } catch (err) {
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to complete offer.",
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
+    }
+    // Save the survey completion in the backend (assumes a backend function to update rewards)
+    // For example, if you have a function like `saveSurveyCompletion`:
+    // await saveSurveyCompletion({ offerId: offer._id, userId: user?.objectId, points: offer.points });
+  };
   return (
     <div className="min-h-screen bg-[#212134] p-4 md:p-6 lg:p-10 text-center rounded mt-5">
       <div className="flex flex-col md:flex-row justify-between items-center mb-6">
@@ -66,11 +110,10 @@ const SurveyList = () => {
         <Swiper
           modules={[Navigation, Pagination, Scrollbar, A11y]}
           spaceBetween={10}
-       
           navigation={{
             prevEl: prevRef.current,
             nextEl: nextRef.current,
-            disabledClass: 'opacity-25 cursor-not-allowed', 
+            disabledClass: "opacity-25 cursor-not-allowed",
           }}
           onBeforeInit={(swiper) => {
             swiper.params.navigation.prevEl = prevRef.current;
@@ -86,7 +129,10 @@ const SurveyList = () => {
         >
           {surveyOffers.map((offer) => (
             <SwiperSlide key={offer._id} className="text-white">
-              <div className="p-5 rounded-xl shadow-lg bg-gradient-to-b from-[#1f1f2e] to-[#0f0f1f] transition-transform duration-300 hover:scale-105 cursor-pointer">
+              <div
+                className="p-5 rounded-xl shadow-lg bg-gradient-to-b from-[#1f1f2e] to-[#0f0f1f] transition-transform duration-300 hover:scale-105 cursor-pointer"
+                onClick={() => handleSurveyCompletion(offer)}
+              >
                 {offer.image && (
                   <img
                     src={offer.image}
@@ -143,6 +189,9 @@ const SurveyList = () => {
           {[...Array(7)].map((_, index) => (
             <div
               key={index}
+              onClick={() =>
+                window.open("https://freecash.com/w/bitlabs", "_blank")
+              }
               className="relative h-64 rounded-xl shadow-lg flex flex-col justify-center items-center text-center text-white transition-transform duration-300 hover:scale-105 cursor-pointer"
             >
               <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-[#1f1f2e] to-[#0f0f1f] transition-filter duration-300 hover:blur-sm z-0"></div>

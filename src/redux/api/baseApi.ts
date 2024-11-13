@@ -39,7 +39,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   if (result?.error?.status === 401) {
     //* Send Refresh
     // console.log("Sending refresh token");
-
+    // return { data: [] };
     const res = await fetch(
       "https://cashooz-server.vercel.app/api/v1/auth/refresh-token",
       {

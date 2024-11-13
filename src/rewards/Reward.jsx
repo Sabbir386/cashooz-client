@@ -9,7 +9,6 @@ import { verifyToken } from "../utils/verifyToken";
 import { useViewCompletedOfferQuery } from "../pages/completedOfferApi";
 import { useAppSelector } from "../redux/features/hooks";
 import { useCurrentToken } from "../redux/features/auth/authSlice";
-import Loader from "../components/Loader";
 
 const Reward = () => {
   const [activeTab, setActiveTab] = useState(1);
