@@ -115,9 +115,9 @@ function RootLayout() {
       ) : error ? (
         <span className="text-white">Error</span>
       ) : (
-        <span className="text-buttonBackground animate-pulse font-bold text-2xl">
-          {totalRewards?.userTotalRewards.toFixed(2) || '0.00'} CZ
-        </span>
+        <span className="text-buttonBackground animate-pulse font-bold text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+        {totalRewards?.userTotalRewards || "0"} CZ
+      </span>
       )}
     </>
   )}

@@ -38,6 +38,9 @@ import Affiliate from "../pages/Affiliate";
 import TermsAndConditions from "../pages/Terms&Conditions/TermsAndConditions";
 import EditProfile from "../pages/Profile/EditProfile";
 import NewPayment from "../pages/NewPyment/NewPayment";
+import PaypalBox from "../pages/Payment/PaypalBox";
+import ResetPasswod from "../auth/ResetPasswod";
+import ConfirmReset from "../auth/ConfirmReset";
 
 export const router = createBrowserRouter([
   {
@@ -51,6 +54,15 @@ export const router = createBrowserRouter([
         <Login></Login>
       </ProtectedRoutes>
     ),
+  },
+  {
+    path: "/auth/forgot-password",
+    
+    element: <ResetPasswod></ResetPasswod>,
+  },
+  {
+    path: "/auth/reset-password",
+    element: <ConfirmReset></ConfirmReset>,
   },
   {
     path: "/register",
@@ -217,7 +229,17 @@ export const router = createBrowserRouter([
         path: "/dashboard/payment",
         element: (
           <ProtectedRoutes>
-            <NewPayment></NewPayment>
+            <Payment></Payment>
+            {/* <NewPayment></NewPayment> */}
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/dashboard/payment-paypal",
+        element: (
+          <ProtectedRoutes>
+            <PaypalBox></PaypalBox>
+            {/* <NewPayment></NewPayment> */}
           </ProtectedRoutes>
         ),
       },

@@ -255,13 +255,7 @@ const Profile = () => {
   };
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    Swal.fire({
-      icon: "success",
-      title: "Profile updated successfully",
-      // confirmButtonColor: "#3085d6",
-      // cancelButtonColor: "#d33",
-      timer: 1800,
-    });
+
   };
   let user;
   if (token) {
@@ -454,12 +448,12 @@ const Profile = () => {
           }`}
         >
           <div className="w-full md:w-3/4 mx-auto p-3 relative">
-            {/* <button
+            <button
         onClick={handleCloseModal} // This should be bound correctly
-        className="text-white text-2xl bg-red-500 w-8 h-8 rounded-full cursor-pointer absolute right-5 top-5"
+        className="text-white text-2xl bg-red-500 w-8 h-8 rounded-full cursor-pointer absolute right-5 top-5 z-50"
       >
         ×
-      </button> */}
+      </button>
             <EditProfile onClose={handleCloseModal} />
           </div>
         </div>

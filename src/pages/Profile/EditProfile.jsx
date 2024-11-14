@@ -3,6 +3,7 @@ import { useUpdateNormalUserMutation } from "../../redux/features/auth/authApi";
 import { useAppSelector } from "../../redux/features/hooks";
 import { useCurrentToken } from "../../redux/features/auth/authSlice";
 import { verifyToken } from "../../utils/verifyToken";
+import Swal from "sweetalert2";
 
 const EditProfile = ({ onClose }) => {
   const token = useAppSelector(useCurrentToken);
@@ -73,6 +74,13 @@ const EditProfile = ({ onClose }) => {
         console.log("Full response:", response);
 
         if (response.success) {
+          Swal.fire({
+            icon: "success",
+            title: "Profile updated successfully",
+            // confirmButtonColor: "#3085d6",
+            // cancelButtonColor: "#d33",
+            timer: 1800,
+          });
           console.log("User updated successfully:", response.message);
         } else {
           console.error("Update failed:", response.message);
@@ -88,7 +96,7 @@ const EditProfile = ({ onClose }) => {
     if (isSuccess) {
       const timer = setTimeout(() => {
         onClose(); // Automatically close after success
-      }, 1000); // Adjust timing as needed
+      }, 400); // Adjust timing as needed
       return () => clearTimeout(timer);
     }
   }, [isSuccess, onClose]);

@@ -19,12 +19,14 @@ const Login = () => {
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
   const [firebaseUser, setFirebaseUser] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const currentUser = useAppSelector((state) => state.auth.user);
-  
-
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
   const {
     register,
     handleSubmit,
@@ -139,9 +141,14 @@ const Login = () => {
       console.error("Login error:", error);
     }
   };
+
+  const sendMail = () =>{
+    //
+    navigate('/auth/forgot-password')
+  }
   return (
     <div className="bg-secondaryColor h-screen w-full flex justify-center items-center">
-      <div className="bg-cardBackground w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded-md">
+      <div className="bg-cardBackground w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded-md relative">
         <div className="w-full md:w-1/2 hidden md:flex flex-col justify-center items-center text-white">
           <h1 className="text-3xl">Hey Buddy</h1>
           <p className="text-5xl font-extrabold text-buttonBackground">
@@ -187,10 +194,13 @@ const Login = () => {
                 </p>
               )}
             </div>
-           
+
             <button className="bg-buttonBackground font-bold text-white focus:outline-none rounded p-3">
               Login
             </button>
+            <p className="text-xs text-right mt-2 cursor-pointer" onClick={toggleModal}>
+              forgot password?
+            </p>
           </form>
           <button
             onClick={handleGoogleSignIn}
@@ -213,6 +223,23 @@ const Login = () => {
             </Link>
           </div>
         </div>
+        {isModalOpen && (
+          <div className="absolute top-0 left-0 w-full h-full bg-cardBackground bg-opacity-75 grid place-items-center justify-center">
+            <button className="w-9 h-9 rounded-full text-center text-white absolute -top-2 -right-2 bg-red-500" onClick={toggleModal}>X</button>
+          <form className="mb-4" onSubmit={sendMail}>
+            <label className="block text-buttonBackground text-sm font-medium mb-1">
+               Please enter your email
+            </label>
+            <input
+              type="email"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 focus:outline-none focus:border-blue-500"
+              placeholder="Enter your email"
+            />
+            <button  className="inline-block bg-buttonBackground py-2 px-4 text-white rounded mt-2">send email</button>
+          </form>
+        </div>
+        )}
+        
       </div>
     </div>
   );

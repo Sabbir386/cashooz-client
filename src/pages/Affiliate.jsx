@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const Affiliate = () => {
   const [referralLink, setReferralLink] = useState(
-    "cashooz.com/r/4dcdc7fae003591be84"
+    "http://localhost:5173/register/4dcdc7fae003591be84"
   );
   const [copied, setCopied] = useState(false);
 
@@ -51,51 +51,53 @@ const Affiliate = () => {
             <p>$0.00</p>
           </div>
         </div>
-
-       
-        
       </div>
- {/* Referral */}
+      {/* Referral */}
       <div className="bg-gray-800 p-4 rounded-lg text-white mt-4">
-          <h3 className="font-semibold text-lg mb-2">Your Referral Link</h3>
-          <div className="flex items-center justify-between">
-            <p>{referralLink}</p>
-            <button
-              onClick={copyToClipboard}
-              className="bg-gray-700 hover:bg-gray-600 text-white rounded-md px-2 py-1"
-            >
-              {copied ? "Copied" : "Copy"}
-            </button>
-          </div>
-          <div className="mt-4 flex justify-evenly">
-            {/* Social Icons */}
-            <a href="#" className="bg-gray-700 p-2 rounded-full">
-              🌐
-            </a>
-            <a href="#" className="bg-gray-700 p-2 rounded-full">
-              💬
-            </a>
-            <a href="#" className="bg-gray-700 p-2 rounded-full">
-              🐦
-            </a>
-            <a href="#" className="bg-gray-700 p-2 rounded-full">
-              📨
-            </a>
-          </div>
+        <h3 className="font-semibold text-lg mb-2">Your Referral Link</h3>
+        <div className="flex items-center justify-between">
+          <p>{referralLink}</p>
+          <button
+            onClick={copyToClipboard}
+            className="bg-gray-700 hover:bg-gray-600 text-white rounded-md px-2 py-1"
+          >
+            {copied ? "Copied" : "Copy"}
+          </button>
         </div>
+        <div className="mt-4 flex justify-evenly">
+          {/* Social Icons */}
+          <a href="#" className="bg-gray-700 p-2 rounded-full">
+            🌐
+          </a>
+          <a href="#" className="bg-gray-700 p-2 rounded-full">
+            💬
+          </a>
+          <a href="#" className="bg-gray-700 p-2 rounded-full">
+            🐦
+          </a>
+          <a href="#" className="bg-gray-700 p-2 rounded-full">
+            📨
+          </a>
+        </div>
+      </div>
 
       {/* Tiers Section */}
       <div className="bg-gray-800 p-6 mt-6 rounded-lg">
         <div className="flex flex-wrap gap-2 justify-start text-white">
           <button className="px-4 py-2 bg-green-500 rounded-lg">Tiers</button>
-          <button className="px-4 py-2 bg-gray-700 rounded-lg">Affiliates</button>
-          <button className="px-4 py-2 bg-gray-700 rounded-lg">Leaderboard</button>
+          <button className="px-4 py-2 bg-gray-700 rounded-lg">
+            Affiliates
+          </button>
+          <button className="px-4 py-2 bg-gray-700 rounded-lg">
+            Leaderboard
+          </button>
           <button className="px-4 py-2 bg-gray-700 rounded-lg">Earnings</button>
         </div>
 
         <div className="mt-6 text-white">
           <h3 className="text-lg font-semibold mb-4">
-            Reach the next Tier to earn a higher commission from your affiliates.
+            Reach the next Tier to earn a higher commission from your
+            affiliates.
           </h3>
 
           {/* Tiers */}
