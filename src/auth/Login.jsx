@@ -14,6 +14,7 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase/firebase.init";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useForgetPasswordMutation } from "./loginApi";
 
 const Login = () => {
   const auth = getAuth(app);
@@ -33,6 +34,7 @@ const Login = () => {
     formState: { errors },
   } = useForm();
   const [login] = useLoginMutation();
+  const [email, setEmail] = useState("");
   const [registration] = useRegistrationMutation();
   const { data: userExists, refetch: refetchUser } = useFindByEmailUserQuery(
     firebaseUser?.email,
@@ -40,7 +42,8 @@ const Login = () => {
       skip: !firebaseUser?.email,
     }
   );
-
+  const [forgetPassword, { isLoading, isError, error, isSuccess }] =
+    useForgetPasswordMutation();
   useEffect(() => {
     const handleFirebaseLogin = async () => {
       if (!firebaseUser) return;
@@ -142,10 +145,25 @@ const Login = () => {
     }
   };
 
-  const sendMail = () =>{
-    //
-    navigate('/auth/forgot-password')
-  }
+  const sendMail = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await forgetPassword( email ).unwrap();
+      console.log("API Response:", response);
+      navigate("/auth/forgot-password");
+    } catch (err) {
+      if (err?.status === 400) {
+        console.error("Bad Request: Check payload format and API endpoint");
+      } else if (err?.status === 500) {
+        console.error("Server Error: Check backend logs for details");
+      } else {
+        console.error("Unknown Error:", err);
+      }
+    }
+  };
+  
+  
+
   return (
     <div className="bg-secondaryColor h-screen w-full flex justify-center items-center">
       <div className="bg-cardBackground w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded-md relative">
@@ -198,8 +216,12 @@ const Login = () => {
             <button className="bg-buttonBackground font-bold text-white focus:outline-none rounded p-3">
               Login
             </button>
-            <p className="text-xs text-right mt-2 cursor-pointer" onClick={toggleModal}>
-              forgot password?
+            <p
+              className="text-xs md:text-sm lg:text-base text-right mt-2 cursor-pointer"
+              style={{ color: "#01D676" }}
+              onClick={toggleModal}
+            >
+              Forgot your password?
             </p>
           </form>
           <button
@@ -224,22 +246,131 @@ const Login = () => {
           </div>
         </div>
         {isModalOpen && (
-          <div className="absolute top-0 left-0 w-full h-full bg-cardBackground bg-opacity-75 grid place-items-center justify-center">
-            <button className="w-9 h-9 rounded-full text-center text-white absolute -top-2 -right-2 bg-red-500" onClick={toggleModal}>X</button>
-          <form className="mb-4" onSubmit={sendMail}>
-            <label className="block text-buttonBackground text-sm font-medium mb-1">
-               Please enter your email
-            </label>
-            <input
-              type="email"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 focus:outline-none focus:border-blue-500"
-              placeholder="Enter your email"
-            />
-            <button  className="inline-block bg-buttonBackground py-2 px-4 text-white rounded mt-2">send email</button>
-          </form>
-        </div>
+          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+            <div className="bg-gray-800 rounded-lg w-full max-w-md p-6 relative shadow-lg">
+              {/* Close Button */}
+              <button
+                className="absolute top-4 right-4 bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-300 transition-colors duration-200 rounded-full"
+                onClick={toggleModal}
+                style={{
+                  fontSize: "1.5rem",
+                  width: "2.5rem",
+                  height: "2.5rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                &times;
+              </button>
+
+              {/* Lock Icon */}
+              <div className="flex justify-center mb-4">
+                <div
+                  className="p-4 rounded-full"
+                  style={{ backgroundColor: "#01D676" }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2"
+                    stroke="currentColor"
+                    className="w-6 h-6 text-white transition-all duration-300 transform hover:scale-110"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 15v2m0 0h.008m-.008 0H11.992m2.016 0H12m-7-8V8a5 5 0 0110 0v3m-4 4h3v4H8v-4h3z"
+                    />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Modal Header */}
+              <h2 className="text-center text-2xl font-semibold text-white mb-2">
+                Forgot your password?
+              </h2>
+              <p className="text-center text-gray-400 mb-6">
+                Enter your registered email below to receive your password reset
+                instructions.
+              </p>
+
+              {/* Form */}
+              <form onSubmit={sendMail}>
+                <label className="block text-gray-400 text-sm font-medium mb-1">
+                  Email
+                </label>
+                <div className="relative mb-4">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 hover:text-gray-600">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-6 h-6 transition-all duration-200 transform hover:scale-110"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M3 8l7.34 5.106a1.5 1.5 0 001.66 0L19 8m-9 8h8m2-8V6a1 1 0 00-1-1H6a1 1 0 00-1 1v2"
+                      />
+                    </svg>
+                  </span>
+
+                  {/* Email Input Field */}
+                  <input
+                    type="email"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-700 rounded-lg bg-gray-900 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-green-500"
+                    placeholder="Type your email here..."
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)} // Update email state on input change
+                    required
+                  />
+                </div>
+
+                {/* Feedback Messages */}
+                {isSuccess && (
+                  <p className="text-green-500">
+                    Password reset link sent successfully!
+                  </p>
+                )}
+                {isError && (
+                  <p className="text-red-500">
+                    {error?.data?.message ||
+                      "An error occurred. Please try again."}
+                  </p>
+                )}
+
+                {/* Action Buttons */}
+                <div className="flex justify-between">
+                  <button
+                    type="button"
+                    className="bg-gray-600 py-2 px-4 rounded-lg text-white hover:bg-gray-600"
+                    onClick={toggleModal}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="py-2 px-4 rounded-lg text-white transition-colors duration-200"
+                    style={{ backgroundColor: "#01D676" }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.backgroundColor = "#01B963")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.backgroundColor = "#01D676")
+                    }
+                    disabled={isLoading} // Disable button while loading
+                  >
+                    {isLoading ? "Sending..." : "Send Mail"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         )}
-        
       </div>
     </div>
   );
