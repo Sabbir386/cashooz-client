@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useResetPasswordMutation } from "./loginApi";
+import Swal from "sweetalert2";
 
 const ConfirmReset = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -55,10 +56,24 @@ const ConfirmReset = () => {
       }).unwrap();
 
       if (response) {
-        navigate("/login");
+        Swal.fire({
+          title: "Success!",
+          text: "Password reset successfully. You can now log in with your new password.",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then(() => {
+          // Navigate to the login page after the user acknowledges the success message
+          navigate("/login");
+        });
       }
     } catch (err) {
       console.error("Error resetting password:", err);
+      Swal.fire({
+        title: "Error",
+        text: "An error occurred while resetting your password. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 

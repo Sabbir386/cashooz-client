@@ -5,12 +5,13 @@ export const loginApi = baseApi.injectEndpoints({
         // Forget Password API
         forgetPassword: builder.mutation({
             query: ({ email }) => {
-                const body = { email };
-                console.log("Request body:", body);
+                // Directly construct the body with the email field
+                const body = { email }; 
+                console.log("Request body:", body); // This should log { email: "example@gmail.com" }
                 return {
                     url: "/auth/forget-password",
                     method: "POST",
-                    body,
+                    body, // Send the properly structured body
                 };
             },
         }),

@@ -15,6 +15,7 @@ import { app } from "../firebase/firebase.init";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useForgetPasswordMutation } from "./loginApi";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const auth = getAuth(app);
@@ -145,24 +146,52 @@ const Login = () => {
     }
   };
 
-  const sendMail = async (e) => {
-    e.preventDefault();
+  const sendMail = async (data) => {
+    const { email } = data; // Extract email from form data
     try {
-      const response = await forgetPassword( email ).unwrap();
+      // Call the forgetPassword mutation and ensure it's wrapped in an object
+      const response = await forgetPassword( {email} ).unwrap();
       console.log("API Response:", response);
+
+      // Show success notification
+      Swal.fire({
+        title: "Success!",
+        text: "Password reset email has been sent.",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+
+      // Navigate to the forgot-password page or another screen
       navigate("/auth/forgot-password");
     } catch (err) {
+      // Handle errors based on API response status
       if (err?.status === 400) {
+        Swal.fire({
+          title: "Error",
+          text: "Invalid email address. Please check and try again.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
         console.error("Bad Request: Check payload format and API endpoint");
       } else if (err?.status === 500) {
+        Swal.fire({
+          title: "Error",
+          text: "Server error. Please try again later.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
         console.error("Server Error: Check backend logs for details");
       } else {
+        Swal.fire({
+          title: "Error",
+          text: "Something went wrong. Please try again.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
         console.error("Unknown Error:", err);
       }
     }
   };
-  
-  
 
   return (
     <div className="bg-secondaryColor h-screen w-full flex justify-center items-center">
@@ -297,77 +326,79 @@ const Login = () => {
               </p>
 
               {/* Form */}
-              <form onSubmit={sendMail}>
-                <label className="block text-gray-400 text-sm font-medium mb-1">
-                  Email
-                </label>
-                <div className="relative mb-4">
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 hover:text-gray-600">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-6 h-6 transition-all duration-200 transform hover:scale-110"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M3 8l7.34 5.106a1.5 1.5 0 001.66 0L19 8m-9 8h8m2-8V6a1 1 0 00-1-1H6a1 1 0 00-1 1v2"
-                      />
-                    </svg>
-                  </span>
+              <form onSubmit={handleSubmit(sendMail)} className="w-full max-w-md mx-auto mt-10">
+      <label className="block text-gray-400 text-sm font-medium mb-1">
+        Email
+      </label>
+      <div className="relative mb-4">
+        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 hover:text-gray-600">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="w-6 h-6 transition-all duration-200 transform hover:scale-110"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3 8l7.34 5.106a1.5 1.5 0 001.66 0L19 8m-9 8h8m2-8V6a1 1 0 00-1-1H6a1 1 0 00-1 1v2"
+            />
+          </svg>
+        </span>
 
-                  {/* Email Input Field */}
-                  <input
-                    type="email"
-                    className="w-full pl-10 pr-4 py-2 border border-gray-700 rounded-lg bg-gray-900 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-green-500"
-                    placeholder="Type your email here..."
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)} // Update email state on input change
-                    required
-                  />
-                </div>
+        {/* Email Input Field */}
+        <input
+  type="text"
+  placeholder="Email"
+  {...register("email", { required: "Email is required" })}
+  className="w-full p-3 pl-10 rounded border placeholder-gray-400 focus:outline-none focus:border-cardBackground text-cardBackground"
+/>
+{errors.email && (
+  <p className="text-red-500 text-sm">
+    {errors.email.message}
+  </p>
+)}
+      </div>
 
-                {/* Feedback Messages */}
-                {isSuccess && (
-                  <p className="text-green-500">
-                    Password reset link sent successfully!
-                  </p>
-                )}
-                {isError && (
-                  <p className="text-red-500">
-                    {error?.data?.message ||
-                      "An error occurred. Please try again."}
-                  </p>
-                )}
+      {/* Feedback Messages */}
+      {isSuccess && (
+        <p className="text-green-500">
+          Password reset link sent successfully!
+        </p>
+      )}
+      {isError && (
+        <p className="text-red-500">
+          {error?.data?.message || "An error occurred. Please try again."}
+        </p>
+      )}
 
-                {/* Action Buttons */}
-                <div className="flex justify-between">
-                  <button
-                    type="button"
-                    className="bg-gray-600 py-2 px-4 rounded-lg text-white hover:bg-gray-600"
-                    onClick={toggleModal}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="py-2 px-4 rounded-lg text-white transition-colors duration-200"
-                    style={{ backgroundColor: "#01D676" }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.backgroundColor = "#01B963")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.backgroundColor = "#01D676")
-                    }
-                    disabled={isLoading} // Disable button while loading
-                  >
-                    {isLoading ? "Sending..." : "Send Mail"}
-                  </button>
-                </div>
-              </form>
+      {/* Action Buttons */}
+      <div className="flex justify-between">
+        <button
+          type="button"
+          className="bg-gray-600 py-2 px-4 rounded-lg text-white hover:bg-gray-600"
+          onClick={() => navigate(-1)} // Navigate back
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          className="py-2 px-4 rounded-lg text-white transition-colors duration-200"
+          style={{ backgroundColor: "#01D676" }}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.backgroundColor = "#01B963")
+          }
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.backgroundColor = "#01D676")
+          }
+          disabled={isLoading} // Disable button while loading
+        >
+          {isLoading ? "Sending..." : "Send Mail"}
+        </button>
+      </div>
+    </form>
             </div>
           </div>
         )}
