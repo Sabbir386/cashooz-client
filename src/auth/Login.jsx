@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import {
@@ -13,29 +13,22 @@ import { verifyToken } from "../utils/verifyToken";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase/firebase.init";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { useForgetPasswordMutation } from "./loginApi";
-import Swal from "sweetalert2";
+import ForgotPasswordModal from "./ForgotPasswordModal";
 
 const Login = () => {
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
   const [firebaseUser, setFirebaseUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [showPassword, setShowPassword] = useState(false);
-  const currentUser = useAppSelector((state) => state.auth.user);
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const [login] = useLoginMutation();
-  const [email, setEmail] = useState("");
   const [registration] = useRegistrationMutation();
   const { data: userExists, refetch: refetchUser } = useFindByEmailUserQuery(
     firebaseUser?.email,
@@ -43,8 +36,7 @@ const Login = () => {
       skip: !firebaseUser?.email,
     }
   );
-  const [forgetPassword, { isLoading, isError, error, isSuccess }] =
-    useForgetPasswordMutation();
+
   useEffect(() => {
     const handleFirebaseLogin = async () => {
       if (!firebaseUser) return;
@@ -54,7 +46,6 @@ const Login = () => {
         const userCheck = await refetchUser();
 
         if (userCheck.data) {
-          // console.log("User exists:", userCheck.data);
           const userInfo = {
             email: firebaseUser.email,
             password: "normalUser12345",
@@ -65,7 +56,6 @@ const Login = () => {
           toast.success("Logged in", { id: toastId, duration: 2000 });
           navigate("/dashboard");
         } else {
-          // console.log("User does not exist, registering new user");
           const displayName = firebaseUser.displayName
             ? firebaseUser.displayName.split(" ")
             : ["", ""];
@@ -95,17 +85,7 @@ const Login = () => {
           navigate("/dashboard");
         }
       } catch (error) {
-        if (
-          error.status === 500 &&
-          error.data.message.includes("duplicate key error")
-        ) {
-          toast.error("User already exists. Please try logging in.", {
-            id: toastId,
-            duration: 2000,
-          });
-        } else {
-          toast.error("Something went wrong", { id: toastId, duration: 2000 });
-        }
+        toast.error("Something went wrong", { id: toastId, duration: 2000 });
         console.error("Login/Registration error:", error);
       }
     };
@@ -121,7 +101,7 @@ const Login = () => {
         setFirebaseUser(loggedUser);
       })
       .catch((error) => {
-        // console.log("Google Sign-In error:", error.message);
+        console.error("Google Sign-In error:", error.message);
       });
   };
 
@@ -143,53 +123,6 @@ const Login = () => {
     } catch (error) {
       toast.error("Something went wrong", { id: toastId, duration: 2000 });
       console.error("Login error:", error);
-    }
-  };
-
-  const sendMail = async (data) => {
-    const { email } = data; // Extract email from form data
-    try {
-      // Call the forgetPassword mutation and ensure it's wrapped in an object
-      const response = await forgetPassword( {email} ).unwrap();
-      console.log("API Response:", response);
-
-      // Show success notification
-      Swal.fire({
-        title: "Success!",
-        text: "Password reset email has been sent.",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-
-      // Navigate to the forgot-password page or another screen
-      navigate("/auth/forgot-password");
-    } catch (err) {
-      // Handle errors based on API response status
-      if (err?.status === 400) {
-        Swal.fire({
-          title: "Error",
-          text: "Invalid email address. Please check and try again.",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-        console.error("Bad Request: Check payload format and API endpoint");
-      } else if (err?.status === 500) {
-        Swal.fire({
-          title: "Error",
-          text: "Server error. Please try again later.",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-        console.error("Server Error: Check backend logs for details");
-      } else {
-        Swal.fire({
-          title: "Error",
-          text: "Something went wrong. Please try again.",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-        console.error("Unknown Error:", err);
-      }
     }
   };
 
@@ -215,7 +148,7 @@ const Login = () => {
               <input
                 type="text"
                 placeholder="Email"
-                {...register("email", { required: "email is required" })}
+                {...register("email", { required: "Email is required" })}
                 className="w-full p-3 rounded border placeholder-gray-400 focus:outline-none focus:border-cardBackground text-cardBackground"
               />
               {errors.email && (
@@ -241,14 +174,13 @@ const Login = () => {
                 </p>
               )}
             </div>
-
             <button className="bg-buttonBackground font-bold text-white focus:outline-none rounded p-3">
               Login
             </button>
             <p
               className="text-xs md:text-sm lg:text-base text-right mt-2 cursor-pointer"
               style={{ color: "#01D676" }}
-              onClick={toggleModal}
+              onClick={() => setIsModalOpen(true)}
             >
               Forgot your password?
             </p>
@@ -275,132 +207,7 @@ const Login = () => {
           </div>
         </div>
         {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-            <div className="bg-gray-800 rounded-lg w-full max-w-md p-6 relative shadow-lg">
-              {/* Close Button */}
-              <button
-                className="absolute top-4 right-4 bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-300 transition-colors duration-200 rounded-full"
-                onClick={toggleModal}
-                style={{
-                  fontSize: "1.5rem",
-                  width: "2.5rem",
-                  height: "2.5rem",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                &times;
-              </button>
-
-              {/* Lock Icon */}
-              <div className="flex justify-center mb-4">
-                <div
-                  className="p-4 rounded-full"
-                  style={{ backgroundColor: "#01D676" }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2"
-                    stroke="currentColor"
-                    className="w-6 h-6 text-white transition-all duration-300 transform hover:scale-110"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 15v2m0 0h.008m-.008 0H11.992m2.016 0H12m-7-8V8a5 5 0 0110 0v3m-4 4h3v4H8v-4h3z"
-                    />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Modal Header */}
-              <h2 className="text-center text-2xl font-semibold text-white mb-2">
-                Forgot your password?
-              </h2>
-              <p className="text-center text-gray-400 mb-6">
-                Enter your registered email below to receive your password reset
-                instructions.
-              </p>
-
-              {/* Form */}
-              <form onSubmit={handleSubmit(sendMail)} className="w-full max-w-md mx-auto mt-10">
-      <label className="block text-gray-400 text-sm font-medium mb-1">
-        Email
-      </label>
-      <div className="relative mb-4">
-        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 hover:text-gray-600">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6 transition-all duration-200 transform hover:scale-110"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3 8l7.34 5.106a1.5 1.5 0 001.66 0L19 8m-9 8h8m2-8V6a1 1 0 00-1-1H6a1 1 0 00-1 1v2"
-            />
-          </svg>
-        </span>
-
-        {/* Email Input Field */}
-        <input
-  type="text"
-  placeholder="Email"
-  {...register("email", { required: "Email is required" })}
-  className="w-full p-3 pl-10 rounded border placeholder-gray-400 focus:outline-none focus:border-cardBackground text-cardBackground"
-/>
-{errors.email && (
-  <p className="text-red-500 text-sm">
-    {errors.email.message}
-  </p>
-)}
-      </div>
-
-      {/* Feedback Messages */}
-      {isSuccess && (
-        <p className="text-green-500">
-          Password reset link sent successfully!
-        </p>
-      )}
-      {isError && (
-        <p className="text-red-500">
-          {error?.data?.message || "An error occurred. Please try again."}
-        </p>
-      )}
-
-      {/* Action Buttons */}
-      <div className="flex justify-between">
-        <button
-          type="button"
-          className="bg-gray-600 py-2 px-4 rounded-lg text-white hover:bg-gray-600"
-          onClick={() => navigate(-1)} // Navigate back
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="py-2 px-4 rounded-lg text-white transition-colors duration-200"
-          style={{ backgroundColor: "#01D676" }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.backgroundColor = "#01B963")
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.backgroundColor = "#01D676")
-          }
-          disabled={isLoading} // Disable button while loading
-        >
-          {isLoading ? "Sending..." : "Send Mail"}
-        </button>
-      </div>
-    </form>
-            </div>
-          </div>
+          <ForgotPasswordModal onClose={() => setIsModalOpen(false)} />
         )}
       </div>
     </div>

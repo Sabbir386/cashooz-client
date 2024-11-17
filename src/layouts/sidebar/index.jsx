@@ -334,6 +334,19 @@ const Sidebar = () => {
           },
         ],
       },
+      {
+        id: "Withdrawl",
+        name: "withdrawl",
+        icon: HiOutlineUsers,
+        menus: [
+          {
+            id: "superadmin-withdrawl-list",
+            path: "withdrawl-list",
+            name: "Withdrawl History",
+          },
+        
+        ],
+      },
     ];
   }
 

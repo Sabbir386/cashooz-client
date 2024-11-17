@@ -41,6 +41,7 @@ import NewPayment from "../pages/NewPyment/NewPayment";
 import PaypalBox from "../pages/Payment/PaypalBox";
 import ResetPasswod from "../auth/ResetPasswod";
 import ConfirmReset from "../auth/ConfirmReset";
+import WithdrawlHistory from "../pages/Withdrawl/WithdrawlHistory";
 
 export const router = createBrowserRouter([
   {
@@ -169,6 +170,15 @@ export const router = createBrowserRouter([
           </ProtectedRoutes>
         ),
       },
+      {
+        path: "/dashboard/withdrawl-list",
+        element: (
+          <ProtectedRoutes>
+            <WithdrawlHistory></WithdrawlHistory>
+          </ProtectedRoutes>
+        ),
+      },
+      
       // {
       //   path: "/dashboard/edit-profile",
       //   element: (

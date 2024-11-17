@@ -3,9 +3,12 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useResetPasswordMutation } from "./loginApi";
 import Swal from "sweetalert2";
+import { logOut } from "../redux/features/auth/authSlice";
+import { useAppDispatch } from "../redux/features/hooks";
 
 const ConfirmReset = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [newPassword, setNewPassword] = useState("");
@@ -63,6 +66,7 @@ const ConfirmReset = () => {
           confirmButtonText: "OK",
         }).then(() => {
           // Navigate to the login page after the user acknowledges the success message
+          dispatch(logOut());
           navigate("/login");
         });
       }
