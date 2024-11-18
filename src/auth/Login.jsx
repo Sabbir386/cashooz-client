@@ -121,7 +121,9 @@ const Login = () => {
       toast.success("Logged in", { id: toastId, duration: 2000 });
       navigate("/dashboard");
     } catch (error) {
-      toast.error("Something went wrong", { id: toastId, duration: 2000 });
+      const errorMessage = error?.data?.message || "Something went wrong";
+      toast.error(errorMessage, { id: toastId, duration: 2000 });
+      console.error("Login error:", error);
       console.error("Login error:", error);
     }
   };

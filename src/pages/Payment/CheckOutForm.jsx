@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import CryptoModal from "./CryptoModal";
 import {
   useCreatePaymentIntentMutation,
   useSavePaymentInfoMutation,
@@ -52,6 +53,38 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   const [savePaymentInfo] = useSavePaymentInfoMutation();
   const [createPaypalOrder] = useCreatePaypalOrderMutation();
   const navigate = useNavigate();
+
+  // btc...
+  const [isCryptoModalOpen, setCryptoModalOpen] = useState(false);
+  const [cryptoData, setCryptoData] = useState(null);
+
+  const handleCryptoPayment = () => {
+    setCryptoModalOpen(true); // Open the CryptoModal
+  };
+
+  const handleCryptoSubmit = (data) => {
+    // Close the modal and save the data
+    setCryptoModalOpen(false);
+    setCryptoData(data);
+    console.log("Crypto Payment Data:", data);
+
+    // Submit the data to the backend or process it
+    // Example: send it via API
+    fetch("/api/submit-payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log("Payment submitted successfully:", result);
+      })
+      .catch((error) => {
+        console.error("Error submitting payment:", error);
+      });
+  };
 
   // Handle card click and select amount
   const handleCardClick = (amount) => {
@@ -152,9 +185,11 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
     setIsProcessing(false);
   };
   // Handle PayPal Payment
-  const handlePaypalPayment = async ({selectedAmount,method}) => {
-    console.log(selectedAmount,method)
-    navigate("/dashboard/payment-paypal",{state:{selectedAmount,method}});
+  const handlePaypalPayment = async ({ selectedAmount, method }) => {
+    console.log(selectedAmount, method);
+    navigate("/dashboard/payment-paypal", {
+      state: { selectedAmount, method },
+    });
     // try {
     //   const orderResponse = await createPaypalOrder().unwrap();
 
@@ -240,16 +275,49 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
         </div>
         {/* Other payment options */}
+        <div>
+          <div
+            className="bg-[#F9A540] p-6 py-10 border border-gray-700 rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3"
+            onClick={handleCryptoPayment}
+          >
+            <img
+              src="https://freecash.com/public/img/cashout/bitcoin.png"
+              alt="Pay with Bitcoin"
+              className="w-16 h-16 mb-3"
+            />
+            <p className="text-white text-xl font-semibold">Pay with Bitcoin</p>
+            <p className="text-gray-200 text-sm">Amount: $100.00</p>
+          </div>
+
+          {/* Render the CryptoModal */}
+          {isCryptoModalOpen && (
+            <CryptoModal
+              onClose={() => setCryptoModalOpen(false)}
+              onSubmit={handleCryptoSubmit}
+            />
+          )}
+
+          {/* Display submitted crypto data (optional for UI feedback) */}
+          {cryptoData && (
+            <div className="mt-6 p-4 bg-gray-800 text-white rounded-lg">
+              <h3 className="text-lg font-semibold">Submitted Crypto Data:</h3>
+              <p>Bitcoin Address: {cryptoData.bitcoinAddress}</p>
+              <p>Amount in USD: ${cryptoData.amountUSD}</p>
+              <p>BTC Amount: {cryptoData.btcAmount}</p>
+            </div>
+          )}
+        </div>
+
         <div
-          className="bg-[#F9A540] p-6 py-10 border border-gray-700 rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3"
-          onClick={() => handlePaypalPayment({selectedAmount, method: "btc"})}
+          className="bg-[#757CBE] p-6 py-10 border border-gray-700 rounded-lg   cursor-pointer text-center flex flex-col items-center justify-center gap-3"
+          onClick={handlePaypalPayment}
         >
           <img
-            src="https://freecash.com/public/img/cashout/bitcoin.png"
-            alt="Pay with Bitcoin"
+            src="https://freecash.com/public/img/cashout/ethereum.png"
+            alt="Pay with Ethereum"
             className="w-16 h-16 mb-3"
           />
-          <p className="text-white text-xl font-semibold">Pay with Bitcoin</p>
+          <p className="text-white text-xl font-semibold">Pay with Ethereum</p>
           <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
         </div>
 
@@ -259,23 +327,10 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         >
           <img
             src="https://freecash.com/public/img/cashout/stake.png"
-            alt="Pay with PayPal"
+            alt="Pay with Stake"
             className="w-16 h-16 mb-3"
           />
           <p className="text-white text-xl font-semibold">Pay with Stake</p>
-          <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
-        </div>
-
-        <div
-          className="bg-[#757CBE] p-6 py-10 border border-gray-700 rounded-lg   cursor-pointer text-center flex flex-col items-center justify-center gap-3"
-          onClick={handlePaypalPayment}
-        >
-          <img
-            src="https://freecash.com/public/img/cashout/ethereum.png"
-            alt="Pay with PayPal"
-            className="w-16 h-16 mb-3"
-          />
-          <p className="text-white text-xl font-semibold">Pay with Ethereum</p>
           <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
         </div>
 
@@ -285,7 +340,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         >
           <img
             src="	https://freecash.com/public/img/cashout/dogecoin.png"
-            alt="Pay with PayPal"
+            alt="Pay with dogecoin"
             className="w-16 h-16 mb-3"
           />
           <p className="text-white text-xl font-semibold">Pay with Dogecoin</p>
@@ -367,7 +422,12 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
               <div className="text-white text-lg">${selectedAmount || 0}</div>
             </div>
             <button
-              onClick={() => handlePaypalPayment({selectedAmount:selectedAmount, method: "paypal"})}
+              onClick={() =>
+                handlePaypalPayment({
+                  selectedAmount: selectedAmount,
+                  method: "paypal",
+                })
+              }
               className={`bg-[#4ade80] text-white font-semibold py-2 px-6 rounded-lg transition duration-300 ${
                 !selectedAmount
                   ? "opacity-50 cursor-not-allowed"
