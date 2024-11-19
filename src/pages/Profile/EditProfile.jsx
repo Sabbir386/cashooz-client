@@ -102,7 +102,7 @@ const EditProfile = ({ onClose }) => {
   }, [isSuccess, onClose]);
 
   return (
-    <div className="w-full flex flex-col items-start min-h-screen p-6 relative">
+    <div className="w-full flex flex-col items-start min-h-screen p-0 md:p-6 relative">
       {/* Loading Spinner Overlay */}
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -113,7 +113,13 @@ const EditProfile = ({ onClose }) => {
         </div>
       )}
 
-      <div className="w-full bg-secondaryColor rounded-lg shadow-md p-6 space-y-6">
+      <div className="w-full md:w-3/6 mx-auto bg-secondaryColor rounded-lg shadow-md p-6 space-y-6 relative">
+        <button
+          onClick={onClose} // This should be bound correctly
+          className="text-white text-2xl bg-red-500 w-8 h-8 rounded-full cursor-pointer absolute -right-2 -top-3 z-50"
+        >
+          ×
+        </button>
         <div className="bg-primaryColor p-6 rounded-lg shadow-sm">
           <div className="flex flex-col items-center space-y-4">
             <img
@@ -155,6 +161,7 @@ const EditProfile = ({ onClose }) => {
               value={formData.name}
               onChange={handleInputChange}
             />
+            <div className="flex justify-between items-center gap-2">
             <SelectField
               label="Gender"
               name="gender"
@@ -169,6 +176,8 @@ const EditProfile = ({ onClose }) => {
               value={formData.dateOfBirth.split("T")[0]}
               onChange={handleInputChange}
             />
+            </div>
+            
             <div className="flex space-x-2">
               <select
                 name="countryCode"
@@ -176,7 +185,7 @@ const EditProfile = ({ onClose }) => {
                   setFormData({ ...formData, countryCode: e.target.value })
                 }
                 value={formData.countryCode || "+1"} // Default to +1 (USA)
-                className="border border-gray-300 rounded-lg px-2 py-1 "
+                className="border border-gray-300 rounded-lg px-2 py-1 w-2/6"
               >
                 <option value="+1">+1 (USA)</option>
                 <option value="+44">+44 (UK)</option>
@@ -237,7 +246,7 @@ const EditProfile = ({ onClose }) => {
                 onChange={(e) =>
                   setFormData({ ...formData, contactNo: e.target.value })
                 }
-                className="w-full text-primaryColor border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-buttonBackground"
+                className="w-4/6 text-primaryColor border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-buttonBackground"
               />
             </div>
 
@@ -271,13 +280,13 @@ const EditProfile = ({ onClose }) => {
         </div>
 
         {/* Save Button Section */}
-        <div className="flex justify-end items-center space-x-4 p-4 rounded-lg shadow-lg bg-[#01D676] bg-opacity-80 backdrop-blur-md transition-all duration-300 ease-in-out">
+        <div className="flex justify-end items-center space-x-4 p-4 rounded-lg shadow-lg  bg-opacity-80 backdrop-blur-md transition-all duration-300 ease-in-out">
           <button
             className={`px-6 py-2 text-white font-semibold rounded-lg shadow-md transition-all duration-300 ease-in-out 
     ${
       isLoading
         ? "bg-blue-300 cursor-not-allowed"
-        : "bg-blue-600 hover:bg-blue-700"
+        : "bg-buttonBackground hover:bg-opacity-80"
     }
   `}
             type="button"
@@ -300,7 +309,6 @@ const EditProfile = ({ onClose }) => {
               Error updating profile: {error?.message}
             </p>
           )}
-
         </div>
       </div>
     </div>
@@ -309,7 +317,7 @@ const EditProfile = ({ onClose }) => {
 
 // Input field component
 const InputField = ({ label, name, type = "text", value, onChange }) => (
-  <div>
+  <div className="w-full">
     <label className="block text-buttonBackground mb-1 text-sm">{label}</label>
     <input
       type={type}
@@ -323,7 +331,7 @@ const InputField = ({ label, name, type = "text", value, onChange }) => (
 
 // Select field component
 const SelectField = ({ label, name, options, value, onChange }) => (
-  <div>
+  <div className="w-full">
     <label className="block text-buttonBackground mb-1">{label}</label>
     <select
       name={name}

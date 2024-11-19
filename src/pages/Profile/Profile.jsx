@@ -255,7 +255,6 @@ const Profile = () => {
   };
   const handleCloseModal = () => {
     setIsModalOpen(false);
-
   };
   let user;
   if (token) {
@@ -443,17 +442,17 @@ const Profile = () => {
       </div>
       {isModalOpen && (
         <div
-          className={`w-full min-h-screen fixed inset-0 bg-black bg-opacity-75 z-[99999] p-6 overflow-y-scroll transition-opacity duration-700 ${
+          className={`w-full min-h-screen fixed inset-0 bg-black bg-opacity-75 z-[99999] p-0 md:p-6 overflow-y-scroll transition-opacity duration-700 ${
             isModalOpen ? "opacity-100" : "opacity-0"
           }`}
         >
           <div className="w-full md:w-3/4 mx-auto p-3 relative">
-            <button
-        onClick={handleCloseModal} // This should be bound correctly
-        className="text-white text-2xl bg-red-500 w-8 h-8 rounded-full cursor-pointer absolute right-5 top-5 z-50"
-      >
-        ×
-      </button>
+            {/* <button
+              onClick={handleCloseModal} // This should be bound correctly
+              className="text-white text-2xl bg-red-500 w-8 h-8 rounded-full cursor-pointer absolute left-0 z-50"
+            >
+              ×
+            </button> */}
             <EditProfile onClose={handleCloseModal} />
           </div>
         </div>

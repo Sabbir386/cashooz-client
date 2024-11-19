@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import CryptoModal from "./CryptoModal";
+import EthereumCryptoModal from "./EthereumCryptoModal";
 import {
   useCreatePaymentIntentMutation,
   useSavePaymentInfoMutation,
@@ -53,6 +54,34 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   const [savePaymentInfo] = useSavePaymentInfoMutation();
   const [createPaypalOrder] = useCreatePaypalOrderMutation();
   const navigate = useNavigate();
+
+  // ehtehrum ..
+  const [isEthereumModalOpen, setEthereumModalOpen] = useState(false);
+
+  const handleEthereumPayment = () => {
+    setEthereumModalOpen(true); // Open the EthereumCryptoModal
+  };
+
+  const handleEthereumSubmit = (data) => {
+    setEthereumModalOpen(false);
+    console.log("Ethereum Payment Data:", data);
+
+    // Submit the data to the backend or process it
+    fetch("/api/submit-ethereum-payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log("Payment submitted successfully:", result);
+      })
+      .catch((error) => {
+        console.error("Error submitting payment:", error);
+      });
+  };
 
   // btc...
   const [isCryptoModalOpen, setCryptoModalOpen] = useState(false);
@@ -296,21 +325,11 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
               onSubmit={handleCryptoSubmit}
             />
           )}
-
-          {/* Display submitted crypto data (optional for UI feedback) */}
-          {cryptoData && (
-            <div className="mt-6 p-4 bg-gray-800 text-white rounded-lg">
-              <h3 className="text-lg font-semibold">Submitted Crypto Data:</h3>
-              <p>Bitcoin Address: {cryptoData.bitcoinAddress}</p>
-              <p>Amount in USD: ${cryptoData.amountUSD}</p>
-              <p>BTC Amount: {cryptoData.btcAmount}</p>
-            </div>
-          )}
         </div>
 
         <div
-          className="bg-[#757CBE] p-6 py-10 border border-gray-700 rounded-lg   cursor-pointer text-center flex flex-col items-center justify-center gap-3"
-          onClick={handlePaypalPayment}
+          className="bg-[#757CBE] p-6 py-10 border border-gray-700 rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3"
+          onClick={handleEthereumPayment}
         >
           <img
             src="https://freecash.com/public/img/cashout/ethereum.png"
@@ -321,10 +340,15 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
         </div>
 
-        <div
-          className="bg-[#31414B] p-6 py-10  border border-gray-700 rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3"
-          // onClick={()=> handlePaypalPayment(btc)}
-        >
+        {/* Render the EthereumCryptoModal */}
+        {isEthereumModalOpen && (
+          <EthereumCryptoModal
+            onClose={() => setEthereumModalOpen(false)}
+            onSubmit={handleEthereumSubmit}
+          />
+        )}
+
+        <div className="relative bg-[#31414B] p-6 py-10 border border-gray-700 rounded-lg cursor-not-allowed text-center flex flex-col items-center justify-center gap-3 opacity-50">
           <img
             src="https://freecash.com/public/img/cashout/stake.png"
             alt="Pay with Stake"
@@ -332,19 +356,25 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           />
           <p className="text-white text-xl font-semibold">Pay with Stake</p>
           <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
+
+          <div className="absolute top-4 right-5 bg-[#01D676] text-white text-sm font-bold px-3 py-1 rounded-md  shadow-lg animate-pulse">
+            Coming Soon
+          </div>
         </div>
 
-        <div
-          className="bg-[#F7C97A] p-6 py-10  border border-gray-700 rounded-lg  cursor-pointer text-center flex flex-col items-center justify-center gap-3"
-          onClick={handlePaypalPayment}
-        >
+        <div className="relative bg-[#F7C97A] p-6 py-10 border border-gray-700 rounded-lg cursor-not-allowed text-center flex flex-col items-center justify-center gap-3 opacity-50">
           <img
-            src="	https://freecash.com/public/img/cashout/dogecoin.png"
-            alt="Pay with dogecoin"
+            src="https://freecash.com/public/img/cashout/dogecoin.png"
+            alt="Pay with Dogecoin"
             className="w-16 h-16 mb-3"
           />
           <p className="text-white text-xl font-semibold">Pay with Dogecoin</p>
           <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
+
+          {/* Coming Soon Stamp */}
+          <div className="absolute top-4 right-5 bg-[#01D676] text-white text-sm font-bold px-3 py-1 rounded-md  shadow-lg animate-pulse">
+            Coming Soon
+          </div>
         </div>
       </div>
       {/* modal necesarry  */}(

@@ -1,23 +1,23 @@
 import React, { useState } from "react";
 
-const CryptoModal = ({ onClose, onSubmit }) => {
-  const [bitcoinAddress, setBitcoinAddress] = useState("");
+const EthereumCryptoModal = ({ onClose, onSubmit }) => {
+  const [ethereumAddress, setEthereumAddress] = useState("");
   const [amountUSD, setAmountUSD] = useState(0);
-  const BTC_RATE = 90455.59; // Example BTC rate
+  const ETH_RATE = 1800.45; // Example ETH rate
   const MIN_WITHDRAWAL = 5;
-  const FEE = 1.56; // Example fee
+  const FEE = 2.0; // Example fee for Ethereum
   const BONUS = 0;
 
-  const calculateBTC = () => {
+  const calculateETH = () => {
     if (amountUSD < MIN_WITHDRAWAL) return 0;
-    return ((amountUSD - FEE) / BTC_RATE).toFixed(8);
+    return ((amountUSD - FEE) / ETH_RATE).toFixed(8);
   };
 
   const handleWithdraw = () => {
     const data = {
-      bitcoinAddress,
+      ethereumAddress,
       amountUSD,
-      btcAmount: calculateBTC(),
+      ethAmount: calculateETH(),
     };
 
     onSubmit(data); // Pass the data to the parent
@@ -29,10 +29,10 @@ const CryptoModal = ({ onClose, onSubmit }) => {
         {/* Header Section */}
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center space-x-3">
-            <div className="bg-orange-600 p-2 rounded-full">
-              <span className="text-white text-xl">₿</span>
+            <div className="bg-blue-600 p-2 rounded-full">
+              <span className="text-white text-xl">Ξ</span>
             </div>
-            <h2 className="text-xl font-semibold">Bitcoin</h2>
+            <h2 className="text-xl font-semibold">Ethereum</h2>
           </div>
           <button
             onClick={onClose}
@@ -48,20 +48,20 @@ const CryptoModal = ({ onClose, onSubmit }) => {
           earn $2.00 to make their first withdrawal.
         </div>
 
-        {/* Bitcoin Address Input */}
+        {/* Ethereum Address Input */}
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2">
-            Bitcoin Address
+            Ethereum Address
           </label>
           <input
             type="text"
-            value={bitcoinAddress}
-            onChange={(e) => setBitcoinAddress(e.target.value)}
-            placeholder="Enter Bitcoin Address..."
+            value={ethereumAddress}
+            onChange={(e) => setEthereumAddress(e.target.value)}
+            placeholder="Enter Ethereum Address..."
             className="w-full px-4 py-2 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <small className="text-gray-400">
-            The Bitcoin Address for your Bitcoin Wallet.
+            The Ethereum Address for your Ethereum Wallet.
           </small>
         </div>
 
@@ -79,7 +79,7 @@ const CryptoModal = ({ onClose, onSubmit }) => {
               className="w-full px-4 py-2 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button
-              onClick={() => setAmountUSD(100)} // Set to max amount (replace 100 with your logic if needed)
+              onClick={() => setAmountUSD(100)} // Set to max amount
               className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-green-600 px-3 py-1 rounded-md text-sm font-medium text-white"
             >
               Max amount
@@ -88,11 +88,11 @@ const CryptoModal = ({ onClose, onSubmit }) => {
           <small className="text-gray-400">Minimum $5.00</small>
         </div>
 
-        {/* BTC Rate and Fee Section */}
+        {/* ETH Rate and Fee Section */}
         <div className="flex items-center justify-between mb-6">
           <p>
-            <span className="text-gray-400">BTC rate:</span>{" "}
-            <span className="text-white font-semibold">{BTC_RATE}</span>
+            <span className="text-gray-400">ETH rate:</span>{" "}
+            <span className="text-white font-semibold">{ETH_RATE}</span>
           </p>
           <p>
             <span className="text-gray-400">Withdrawal Fee:</span>{" "}
@@ -103,17 +103,17 @@ const CryptoModal = ({ onClose, onSubmit }) => {
         {/* You'll Receive Section */}
         <div className="mb-6 text-center">
           <p className="text-lg font-semibold">
-            You’ll receive (BTC):{" "}
-            <span className="text-green-400">{calculateBTC()}</span>
+            You’ll receive (ETH):{" "}
+            <span className="text-green-400">{calculateETH()}</span>
           </p>
         </div>
 
         {/* Withdraw Button */}
         <button
           onClick={handleWithdraw}
-          disabled={!bitcoinAddress || amountUSD < MIN_WITHDRAWAL}
+          disabled={!ethereumAddress || amountUSD < MIN_WITHDRAWAL}
           className={`w-full py-3 rounded-md text-lg font-semibold ${
-            bitcoinAddress && amountUSD >= MIN_WITHDRAWAL
+            ethereumAddress && amountUSD >= MIN_WITHDRAWAL
               ? "bg-green-600 hover:bg-green-700"
               : "bg-gray-700 cursor-not-allowed"
           }`}
@@ -125,4 +125,4 @@ const CryptoModal = ({ onClose, onSubmit }) => {
   );
 };
 
-export default CryptoModal;
+export default EthereumCryptoModal;
