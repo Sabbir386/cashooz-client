@@ -42,6 +42,8 @@ import PaypalBox from "../pages/Payment/PaypalBox";
 import ResetPasswod from "../auth/ResetPasswod";
 import ConfirmReset from "../auth/ConfirmReset";
 import WithdrawlHistory from "../pages/Withdrawl/WithdrawlHistory";
+import PrivecyPolicy from "../pages/PrivecyPolicy/PrivecyPolicy";
+import Aboutus from "../pages/Aboutus/Aboutus";
 
 export const router = createBrowserRouter([
   {
@@ -72,6 +74,14 @@ export const router = createBrowserRouter([
   {
     path: "/advertiser-register",
     element: <AdvertiserRegister></AdvertiserRegister>,
+  },
+  {
+    path: "/privecy-policy",
+    element: <PrivecyPolicy></PrivecyPolicy>,
+  },
+  {
+    path: "/aboutus",
+    element: <Aboutus></Aboutus>,
   },
   {
     path: "/termsncondition",

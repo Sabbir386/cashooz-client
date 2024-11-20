@@ -16,6 +16,7 @@ import Amazon from '../../assets/img/Amazon.png';
 import Spotify from '../../assets/img/Spotify.png';
 import Netflix from '../../assets/img/Netflix.png';
 import UberEats from '../../assets/img/UberEats.png';
+import DashboardFooter from "../../layouts/sidebar/DashboardFooter";
 
 const Landing = () => {
   const [open, setOpen] = useState(false);
@@ -643,148 +644,7 @@ const Landing = () => {
         </section>
         {/* live cashout section  */}
         {/* footer section  */}
-        <footer className="bg-[#1C1B29] text-gray-400 p-8 mt-10">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              {/* Logo and Trustpilot Section */}
-              <div className="col-span-2">
-                <div className="flex items-center mb-4">
-                  <img
-                    src="https://i.ibb.co/bzNx8tb/co-logo.png"
-                    alt="Cashoooz Logo"
-                    className="mr-2 w-20 h-20 object-cover"
-                  />
-                  <h1 className="text-white text-xl font-bold">CASHOOZ</h1>
-                </div>
-                <p>© 2020 - 2024 Cashoooz. All rights reserved.</p>
-                <p className="mt-2">
-                  See our <span className="text-white font-bold">111,982</span>{" "}
-                  reviews on{" "}
-                  <span className="text-green-400 font-bold">Trustpilot</span>
-                </p>
-              </div>
-
-              {/* Language Section */}
-              <div className="col-span-1">
-                <h2 className="text-white text-lg mb-4">Language</h2>
-                <div className="flex items-center space-x-2 bg-[#2A2837] p-2 rounded-lg">
-                  <span role="img" aria-label="UK Flag">
-                    🇬🇧
-                  </span>
-                  <span>English</span>
-                </div>
-              </div>
-
-              {/* About Section */}
-              <div className="col-span-1">
-                <h2 className="text-white text-lg mb-4">About</h2>
-                <ul className="space-y-2">
-                  <li>
-                    <a href="#" className="hover:underline">
-                      Blog
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="hover:underline">
-                      Terms of Service
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="hover:underline">
-                      Privacy Policy
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="hover:underline">
-                      Cookie Policy
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Support Section */}
-              <div className="col-span-1">
-                <h2 className="text-white text-lg mb-4">Support</h2>
-                <ul className="space-y-2">
-                  <li>
-                    <a href="#" className="hover:underline">
-                      How does Cashoooz work?
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="hover:underline">
-                      FAQ
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="hover:underline">
-                      Business Inquiries
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="hover:underline">
-                      Support
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Social Media Icons */}
-            <div className="mt-8 flex justify-center space-x-6">
-              {/* Replace these with actual icons */}
-              <a href="#" className="text-gray-400 hover:text-white">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M17 8h2a2 2 0 012 2v10a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4h-4v4a2 2 0 01-2 2H7a2 2 0 01-2-2V10a2 2 0 012-2h2V6a4 4 0 014-4h4a4 4 0 014 4v2h-4a2 2 0 00-2 2v2h4"
-                  />
-                </svg>
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M18 8a3 3 0 01-3 3H9a3 3 0 01-3-3 3 3 0 013-3h6a3 3 0 013 3zm-6 8a6 6 0 00-6-6H3v2a6 6 0 0012 0v-2h-3a6 6 0 00-6 6v2a6 6 0 0012 0v-2h-3a6 6 0 00-6 6z"
-                  />
-                </svg>
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M8 16H6a2 2 0 01-2-2V8a2 2 0 012-2h2a2 2 0 012 2v6a2 2 0 01-2 2zm10 0h-2a2 2 0 01-2-2V8a2 2 0 012-2h2a2 2 0 012 2v6a2 2 0 01-2 2zM7 20h10a2 2 0 002-2v-4H5v4a2 2 0 002 2z"
-                  />
-                </svg>
-              </a>
-              {/* Add more social icons as needed */}
-            </div>
-          </div>
-        </footer>
+        <DashboardFooter></DashboardFooter>
         {/* footer section  */}
       </div>
       {/* main container */}

@@ -84,6 +84,8 @@ export const baseApi = createApi({
     'Reward',
     'leaderboard',
     'SurveyWall',
+    'Withdrawal',
+
 
   ],
   endpoints: () => ({}),

@@ -288,7 +288,7 @@ const Register = () => {
                 and to receive marketing email messages from InboxDollars, and I
                 accept the{" "}
                 <Link
-                  to={"/termsncondition"}
+                  to={"/privecy-policy"}
                   className="text-blue-500 underline"
                 >
                   Privacy Policy
