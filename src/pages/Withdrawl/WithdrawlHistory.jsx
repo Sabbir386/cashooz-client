@@ -27,7 +27,7 @@ const WithdrawlHistory = () => {
   const handleTabClick = (tab, index) => {
     setActiveTab(index);
     if (tab === "all") {
-      setAllWithdrawls(apiResponse?.data || []); // Reset to all data
+      setAllWithdrawls(apiResponse?.data || []); 
     } else {
       setAllWithdrawls(
         (apiResponse?.data || []).filter((item) => tab === item.status)
