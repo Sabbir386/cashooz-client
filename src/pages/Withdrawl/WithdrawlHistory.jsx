@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useViewWithdrawalsQuery } from "./withDrawalApi";
+import {
+  useUpdateWithdrawalStatusMutation,
+  useViewWithdrawalsQuery,
+} from "./withDrawalApi";
+import Swal from "sweetalert2";
 
 const WithdrawlHistory = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -12,7 +16,7 @@ const WithdrawlHistory = () => {
     isError,
     error,
   } = useViewWithdrawalsQuery();
-
+  const [updateWithdrawalStatus] = useUpdateWithdrawalStatusMutation();
   useEffect(() => {
     if (apiResponse?.data) {
       console.log(apiResponse?.data);
@@ -28,6 +32,62 @@ const WithdrawlHistory = () => {
       setAllWithdrawls(
         (apiResponse?.data || []).filter((item) => tab === item.status)
       );
+    }
+  };
+
+  const handleStatusChange = async (id, newStatus) => {
+    try {
+      // Call the API to update the withdrawal status
+      const response = await updateWithdrawalStatus({
+        id,
+        status: newStatus,
+      }).unwrap();
+      console.log("Status updated:", response);
+
+      // Show success message using Swal
+      Swal.fire({
+        title: "Success!",
+        text: "Payment successfully Transfered.",
+        icon: "success",
+        confirmButtonText: "Okay",
+        customClass: {
+          popup: "swal-popup-success",
+        },
+        willOpen: () => {
+          const swalContainer = document.querySelector(".swal-popup-success");
+          if (swalContainer) {
+            swalContainer.style.backgroundColor = "#d4edda";
+          }
+        },
+      });
+
+      // Update the state to reflect the new status locally
+      setAllWithdrawls((prevWithdrawals) =>
+        prevWithdrawals.map((withdrawal) =>
+          withdrawal._id === id
+            ? { ...withdrawal, status: newStatus }
+            : withdrawal
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update status:", error);
+
+      // Show error message using Swal
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to Trasfer Payment",
+        icon: "error",
+        confirmButtonText: "Retry",
+        customClass: {
+          popup: "swal-popup-error",
+        },
+        willOpen: () => {
+          const swalContainer = document.querySelector(".swal-popup-error");
+          if (swalContainer) {
+            swalContainer.style.backgroundColor = "#f8d7da";
+          }
+        },
+      });
     }
   };
 
@@ -92,16 +152,16 @@ const WithdrawlHistory = () => {
                       <div>
                         <img
                           className="h-10 w-10 rounded-full object-cover"
-                          src={row.image_url}
+                          src={row.profileImg}
                           alt=""
                         />
                       </div>
                       <div>
                         <div className="font-semibold text-buttonBackground">
-                          {/* {row.name} */}
+                          {row.userName}
                         </div>
                         <div className="text-gray-300 text-xs  group-hover:text-buttonBackground">
-                          ID: {row.id}
+                          ID:{row.userRegisterId}
                         </div>
                       </div>
                     </div>
@@ -175,7 +235,11 @@ const WithdrawlHistory = () => {
                   >
                     <select
                       className="bg-transparent webkit-appearance-none"
-                      defaultValue={row.status}
+                      value={row.status}
+                      onChange={(e) =>
+                        handleStatusChange(row._id, e.target.value)
+                      }
+                      disabled={row.status === "completed"}
                     >
                       <option value="failed">Failed</option>
                       <option value="completed">Completed</option>

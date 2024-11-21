@@ -22,6 +22,7 @@ import { useGetPaymentInfoQuery } from "../Payment/paymentApi";
 import EditProfile from "./EditProfile";
 import Loader from "../../components/Loader";
 import Swal from "sweetalert2";
+import { useUserMultipleWithdrawalsQuery } from "../Withdrawl/withDrawalApi";
 
 ChartJS.register(
   CategoryScale,
@@ -94,51 +95,75 @@ const TabOneComponent = () => (
     <Line data={data} options={options} />
   </div>
 );
-const TabTwoComponent = ({ payments }) => (
+const TabTwoComponent = ({ withdrawals }) => (
   <div className="w-full overflow-x-scroll p-4 bg-gray-900 rounded-lg">
     <table className="w-full text-left text-sm text-gray-400">
       <thead className="text-xs uppercase text-buttonBackground border-b border-gray-700">
         <tr>
           <th scope="col" className="px-6 py-3">
-            Type
+            Method
           </th>
           <th scope="col" className="px-6 py-3">
             Amount
           </th>
           <th scope="col" className="px-6 py-3">
-            Email/Address
+            Email
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Wallet Address
           </th>
           <th scope="col" className="px-6 py-3">
             Transaction ID
           </th>
           <th scope="col" className="px-6 py-3">
-            Date
+            Status
           </th>
           <th scope="col" className="px-6 py-3">
-            Status
+            Requested Date
           </th>
         </tr>
       </thead>
       <tbody>
-        {payments.length > 0 ? (
-          payments.map((payment) => (
-            <tr key={payment._id} className="bg-gray-800">
-              <td className="px-6 py-4 text-white">{payment.paymentType}</td>
+        {withdrawals.length > 0 ? (
+          withdrawals.map((withdrawal) => (
+            <tr key={withdrawal._id} className="bg-gray-800">
+              <td className="px-6 py-4 text-white">{withdrawal.method}</td>
               <td className="px-6 py-4 text-white">
-                ${payment.amount.toFixed(2)}
+                ${withdrawal.amount.toFixed(2)}
               </td>
-              <td className="px-6 py-4 text-white">{payment.userEmail}</td>
-              <td className="px-6 py-4 text-white">{payment.transactionId}</td>
               <td className="px-6 py-4 text-white">
-                {new Date(payment.createdAt).toLocaleDateString()}
+                {withdrawal.paypalEmail || "N/A"}
               </td>
-              <td className="px-6 py-4 text-green-500">Completed</td>
+              <td className="px-6 py-4 text-white">
+                {withdrawal.btcAddress || "N/A"}
+              </td>
+              <td className="px-6 py-4 text-white">
+                {withdrawal.transactionId}
+              </td>
+              <td
+                className={`px-6 py-4 ${
+                  withdrawal.status === "pending"
+                    ? "text-yellow-500"
+                    : withdrawal.status === "completed"
+                    ? "text-green-500"
+                    : "text-red-500"
+                }`}
+              >
+                {withdrawal.status.charAt(0).toUpperCase() +
+                  withdrawal.status.slice(1)}
+              </td>
+
+              <td className="px-6 py-4 text-white">
+                {new Date(
+                  withdrawal.timestamps.requestedAt
+                ).toLocaleDateString()}
+              </td>
             </tr>
           ))
         ) : (
           <tr className="bg-gray-800">
-            <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
-              No payment records found
+            <td colSpan="7" className="px-6 py-4 text-center text-gray-500">
+              No withdrawal records found
             </td>
           </tr>
         )}
@@ -259,22 +284,27 @@ const Profile = () => {
   let user;
   if (token) {
     user = verifyToken(token);
+    console.log(user?.email);
   }
   // withdraw history
 
-  const { data: paymentsData, error, isLoading } = useGetPaymentInfoQuery();
-  console.log(data.payments);
-  if (isLoading) return <Loader></Loader>;
-  if (error) return <p>Error: {error.message}</p>;
+  const {
+    data: withdrawalData,
+    error: withdrawalError,
+    isLoading: isWithdrawalLoading,
+  } = useUserMultipleWithdrawalsQuery(user?.email);
 
-  const payments = paymentsData?.payments || [];
+  if (isWithdrawalLoading) return <Loader />;
+  if (withdrawalError) return <p>Error: {withdrawalError.message}</p>;
 
-  console.log("Fetched Payment Data:", payments);
+  const withdrawals = withdrawalData?.data || [];
+
+  console.log("Fetched withdraw  Data:", withdrawals);
 
   // Array of components corresponding to each tab
   const tabComponents = [
     <TabOneComponent />,
-    <TabTwoComponent payments={payments} />,
+    <TabTwoComponent withdrawals={withdrawals} />,
     <TabThreeComponent />,
     <TabFourComponent />,
   ];

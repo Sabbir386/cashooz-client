@@ -1,4 +1,5 @@
 import { baseApi } from "../../redux/api/baseApi";
+
 export const withDrawalApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Create a new withdrawal
@@ -17,7 +18,7 @@ export const withDrawalApi = baseApi.injectEndpoints({
         url: "/user/withdrawal",
         method: "GET",
       }),
-      providesTags: ["Withdrawal"], // Cache tagging for updates
+      providesTags: ["Withdrawal"],
     }),
 
     // Get a single withdrawal by ID
@@ -29,15 +30,25 @@ export const withDrawalApi = baseApi.injectEndpoints({
       providesTags: ["Withdrawal"],
     }),
 
+    // Get withdrawal history for a user
+    userMultipleWithdrawals: builder.query({
+      query: (userEmail) => ({
+        url: `/user/withdrawal/history/user-multiple-withdrawal`,
+        method: "GET",
+        params: { userEmail },
+      }),
+      providesTags: ["Withdrawal"],
+    }),
+
     // Update a withdrawal's status (PUT method)
     updateWithdrawalStatus: builder.mutation({
       query: ({ id, status }) => ({
-        url: `/user/withdrawal/${id}/status`,
-        method: "PUT",
-        body: { status },
+        url: `/user/withdrawal/status/${id}?status=${status}`, // Pass status in query
+        method: 'PUT',
       }),
-      invalidatesTags: ["Withdrawal"], // Invalidate cache to reflect updated status
+      invalidatesTags: ['Withdrawal'], // Cache invalidation
     }),
+
 
     // Delete a withdrawal
     deleteWithdrawal: builder.mutation({
@@ -63,6 +74,7 @@ export const {
   useCreateWithdrawalMutation,
   useViewWithdrawalsQuery,
   useSingleWithdrawalQuery,
+  useUserMultipleWithdrawalsQuery, // New hook for user-multiple-withdrawal API
   useUpdateWithdrawalStatusMutation,
   useDeleteWithdrawalMutation,
   useToggleWithdrawalStatusMutation,
