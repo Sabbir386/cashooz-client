@@ -50,16 +50,16 @@ export const withDrawalApi = baseApi.injectEndpoints({
     }),
 
 
-        // Filter withdrawals by status
-        filterWithdrawalsByStatus: builder.query({
-          query: (status) => ({
-            url: `/user/withdrawal/statusFilter/filter-by-status`,
-            method: "GET",
-            params: { status },
-          }),
-          providesTags: ["Withdrawal"],
-        }),
-    
+    // Filter withdrawals by status
+    filterWithdrawalsByStatus: builder.query({
+      query: (status) => ({
+        url: `/user/withdrawal/statusFilter/filter-by-status`,
+        method: "GET",
+        params: { status },
+      }),
+      providesTags: ["Withdrawal"],
+    }),
+
 
     // Delete a withdrawal
     deleteWithdrawal: builder.mutation({
@@ -85,7 +85,7 @@ export const {
   useCreateWithdrawalMutation,
   useViewWithdrawalsQuery,
   useSingleWithdrawalQuery,
-  useUserMultipleWithdrawalsQuery, 
+  useUserMultipleWithdrawalsQuery,
   useUpdateWithdrawalStatusMutation,
   useDeleteWithdrawalMutation,
   useToggleWithdrawalStatusMutation,

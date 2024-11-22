@@ -12,6 +12,12 @@ import { toast } from "sonner";
 import Modal from "react-modal";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { useSingleNormalUserQuery } from "../../redux/features/auth/authApi";
+import { useCreateWithdrawalMutation } from "../Withdrawl/withDrawalApi";
+import { verifyToken } from "../../utils/verifyToken";
+import { useAppSelector } from "../../redux/features/hooks";
+import { useCurrentToken } from "../../redux/features/auth/authSlice";
+import Swal from "sweetalert2";
 
 // Modal Styles
 const customStyles = {
@@ -54,7 +60,21 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   const [savePaymentInfo] = useSavePaymentInfoMutation();
   const [createPaypalOrder] = useCreatePaypalOrderMutation();
   const navigate = useNavigate();
+  const token = useAppSelector(useCurrentToken);
+  let user;
 
+  if (token) {
+    user = verifyToken(token);
+    // console.log(user);
+  }
+  // Mutation hook for the createWithdrawal API
+  const [createWithdrawal, { isLoading }] = useCreateWithdrawalMutation();
+  const {
+    data: userData,
+    isLoading: isUserLoading,
+    error: userError,
+  } = useSingleNormalUserQuery(user?.objectId);
+  // console.log(userData?.data);
   // ehtehrum ..
   const [isEthereumModalOpen, setEthereumModalOpen] = useState(false);
 
@@ -62,25 +82,49 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
     setEthereumModalOpen(true); // Open the EthereumCryptoModal
   };
 
-  const handleEthereumSubmit = (data) => {
+  const handleEthereumSubmit = async(data) => {
     setEthereumModalOpen(false);
     console.log("Ethereum Payment Data:", data);
 
     // Submit the data to the backend or process it
-    fetch("/api/submit-ethereum-payment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const requestBody = {
+      userId: userData?.data?._id,
+      userName: userData?.data?.name,
+      userRegisterId: userData?.data?.id,
+      userEmail: userData?.data?.email,
+      profileImg: userData?.data?.profileImg,
+      paypalEmail: "",
+      btcAddress: data?.ethereumAddress,
+      networkType: "ethereum",
+      description: `Withdrawal request for ${data?.ethAmount} bitcoin payout`,
+      method: "Ethereum",
+      amount: parseFloat(data?.ethAmount || data?.amountUSD),
+      transactionId: "TXN123456789",
+      invoiceId: "",
+      country: userData?.data?.country,
+      status: "pending",
+      timestamps: {
+        requestedAt: new Date(),
+        processedAt: null,
       },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        console.log("Payment submitted successfully:", result);
-      })
-      .catch((error) => {
-        console.error("Error submitting payment:", error);
-      });
+    };
+    //  console.log(requestBody);
+    try {
+      // Send the withdrawal request
+       await createWithdrawal(requestBody).unwrap();
+      Swal.fire(
+        "Success",
+        "Your withdrawal request has been submitted.stay Tuned ! you will got notified within 24 hours.",
+        "success"
+      );
+    } catch (error) {
+      console.log(error)
+      Swal.fire(
+        "Error",
+        "Failed to submit withdrawal request. Please try again.",
+        "error"
+      );
+    }
   };
 
   // btc...
@@ -91,28 +135,51 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
     setCryptoModalOpen(true); // Open the CryptoModal
   };
 
-  const handleCryptoSubmit = (data) => {
+  const handleCryptoSubmit = async (data) => {
     // Close the modal and save the data
     setCryptoModalOpen(false);
     setCryptoData(data);
-    console.log("Crypto Payment Data:", data);
+    // console.log("Crypto Payment Data:", data);
 
     // Submit the data to the backend or process it
-    // Example: send it via API
-    fetch("/api/submit-payment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const requestBody = {
+      userId: userData?.data?._id,
+      userName: userData?.data?.name,
+      userRegisterId: userData?.data?.id,
+      userEmail: userData?.data?.email,
+      profileImg: userData?.data?.profileImg,
+      paypalEmail: "",
+      btcAddress: data?.bitcoinAddress,
+      networkType: "btc",
+      description: `Withdrawal request for ${data?.btcAmount} payout`,
+      method: "Bitcoin",
+      amount: parseFloat(data?.btcAmount || data?.amountUSD),
+      transactionId: "TXN123456789",
+      invoiceId: "",
+      country: userData?.data?.country,
+      status: "pending",
+      timestamps: {
+        requestedAt: new Date(),
+        processedAt: null,
       },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        console.log("Payment submitted successfully:", result);
-      })
-      .catch((error) => {
-        console.error("Error submitting payment:", error);
-      });
+    };
+    // console.log(requestBody);
+    try {
+      // Send the withdrawal request
+      await createWithdrawal(requestBody).unwrap();
+      Swal.fire(
+        "Success",
+        "Your withdrawal request has been submitted.stay Tuned ! you will got notified within 24 hours.",
+        "success"
+      );
+    } catch (error) {
+      console.log(error)
+      Swal.fire(
+        "Error",
+        "Failed to submit withdrawal request. Please try again.",
+        "error"
+      );
+    }
   };
 
   // Handle card click and select amount
@@ -406,7 +473,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             Select PayPal Amount
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 overflow-y-auto">
-            {[5, 10, 20, 30, 40, 50, 100, 200].map((amount, index) => (
+            {[10, 15, 20, 30, 40, 50, 100, 200].map((amount, index) => (
               <div
                 key={index}
                 className={`p-6 bg-gradient-to-r from-[#263b80] to-[#25bcff] rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3 border-2 transition duration-300 ease-in-out ${
