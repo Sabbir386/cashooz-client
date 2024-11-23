@@ -34,7 +34,7 @@ import Payment from "../pages/Payment/payment";
 import Profile from "../pages/Profile/Profile";
 import Leaderboard from "../pages/Leaderboard/Leaderboard";
 import Reward from "../rewards/Reward";
-import Affiliate from "../pages/Affiliate";
+import Affiliate from "../pages/Affiliate/Affiliate";
 import TermsAndConditions from "../pages/Terms&Conditions/TermsAndConditions";
 import EditProfile from "../pages/Profile/EditProfile";
 import NewPayment from "../pages/NewPyment/NewPayment";
@@ -60,7 +60,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/auth/forgot-password",
-    
+
     element: <ResetPasswod></ResetPasswod>,
   },
   {
@@ -188,7 +188,7 @@ export const router = createBrowserRouter([
           </ProtectedRoutes>
         ),
       },
-      
+
       // {
       //   path: "/dashboard/edit-profile",
       //   element: (

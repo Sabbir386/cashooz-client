@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { UAParser } from "ua-parser-js";
+import { useSearchParams } from "react-router-dom";
+
 
 const Register = () => {
   const navigate = useNavigate();
@@ -18,6 +20,8 @@ const Register = () => {
   const [country, setCountry] = useState("");
   const [ip, setIP] = useState("");
   const [CountryCode, setCountryCode] = useState("");
+  const [refId, setrefId] = useState("");
+  const [searchParams] = useSearchParams();
   // device tracking ip address
   useEffect(() => {
     const getDeviceInfo = async () => {
@@ -93,7 +97,13 @@ const Register = () => {
     };
 
     getDeviceInfo();
-  }, []);
+
+    const refIdFromURL = searchParams.get("refId"); // Extract refId from the URL
+    if (refIdFromURL) {
+      setrefId(refIdFromURL); // Set refId to state
+    }
+
+  }, [searchParams]);
 
   if (deviceInfo) {
     console.log("Device Info:", deviceInfo);
@@ -246,12 +256,12 @@ const Register = () => {
                     value: 8,
                     message: "Password must be at least 8 characters",
                   },
-                  pattern: {
-                    value:
-                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                    message:
-                      "Password must contain an uppercase letter, a number, and a special character",
-                  },
+                  // pattern: {
+                  //   value:
+                  //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                  //   message:
+                  //     "Password must contain an uppercase letter, a number, and a special character",
+                  // },
                 })}
                 className="w-full p-3 pr-10 rounded border placeholder-gray-400 focus:outline-none focus:border-cardBackground text-cardBackground"
               />
@@ -270,6 +280,17 @@ const Register = () => {
                 Password must be at least 8 characters long, contain an
                 uppercase letter, a number, and a special character.
               </p>
+            </div>
+
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="refferal ID"
+                {...register("refId")}
+                defaultValue={refId}
+                className="w-full p-3 rounded border placeholder-gray-400 focus:outline-none focus:border-cardBackground text-cardBackground"
+              />
+             
             </div>
 
             <div className="mt-4 flex items-start my-4">
