@@ -132,7 +132,7 @@ const Register = () => {
         name: data.name,
         email: data.email,
         ip: ip || "",
-        country: country,
+        country: country || "USA",
         designation: "Advertiser manager",
         username: "sharukh Khan",
         referredBy: refId || "self",
