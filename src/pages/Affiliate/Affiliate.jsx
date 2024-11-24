@@ -34,7 +34,7 @@ const Affiliate = () => {
     isLoading: isUserLoading,
     error: userError,
   } = useSingleNormalUserQuery(user?.objectId);
-
+   console.log(userData)
   useEffect(() => {
     if (userData?.data?.id) {
       // Dynamically set the referral link when userData is available
@@ -61,7 +61,7 @@ const Affiliate = () => {
           <h3 className="mt-4 text-xl font-semibold">
             {userData?.data?.name || "Guest"}
           </h3>
-          <div className="text-green-300 mt-1">15% Commission</div>
+          <div className="text-green-300 mt-1"> SuccessFully Reffred Per User 15% Commission</div>
           <div className="flex mt-4">
             <p className="text-lg font-bold">CZ-0.00</p>
             <button className="bg-[#01D676] hover:bg-green-600 text-white rounded-md ml-2 px-4 py-1">

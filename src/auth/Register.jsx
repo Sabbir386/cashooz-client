@@ -8,7 +8,6 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { UAParser } from "ua-parser-js";
 import { useSearchParams } from "react-router-dom";
 
-
 const Register = () => {
   const navigate = useNavigate();
   const [registration] = useRegistrationMutation();
@@ -98,11 +97,11 @@ const Register = () => {
 
     getDeviceInfo();
 
-    const refIdFromURL = searchParams.get("refId"); // Extract refId from the URL
+    const refIdFromURL = searchParams.get("refId");
+    console.log(refIdFromURL); // Extract refId from the URL
     if (refIdFromURL) {
-      setrefId(refIdFromURL); // Set refId to state
+      setrefId(refIdFromURL);
     }
-
   }, [searchParams]);
 
   if (deviceInfo) {
@@ -127,16 +126,16 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     const toastId = toast.loading("User Registering...");
-
     const normalUser = {
       password: data.password,
       normalUser: {
         name: data.name,
         email: data.email,
-        ip: ip,
+        ip: ip || "",
         country: country,
         designation: "Advertiser manager",
         username: "sharukh Khan",
+        referredBy: refId || "self",
         gender: "male",
         dateOfBirth: "1985-07-15",
         contactNo: "9876543210",
@@ -153,7 +152,6 @@ const Register = () => {
 
     try {
       const user = await registration(normalUser);
-
       // Check if response contains an error status
       console.log(user);
       if (user?.error?.status == 409) {
@@ -184,7 +182,7 @@ const Register = () => {
       console.error("Registration error:", error);
     }
   };
-
+  // console.log(refId)
   return (
     <div className="bg-secondaryColor h-screen w-full flex justify-center items-center">
       <div className="bg-cardBackground w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded-md">
@@ -285,12 +283,18 @@ const Register = () => {
             <div className="mb-4">
               <input
                 type="text"
-                placeholder="refferal ID"
+                placeholder="Referral ID"
                 {...register("refId")}
-                defaultValue={refId}
-                className="w-full p-3 rounded border placeholder-gray-400 focus:outline-none focus:border-cardBackground text-cardBackground"
+                defaultValue={refId || ""}
+                disabled={!!refId}
+                className={`w-full p-3 rounded border placeholder-gray-400 focus:outline-none text-cardBackground 
+            ${
+              refId
+                ? "cursor-not-allowed bg-gray-200 text-gray-500"
+                : "focus:border-cardBackground"
+            }
+           `}
               />
-             
             </div>
 
             <div className="mt-4 flex items-start my-4">
