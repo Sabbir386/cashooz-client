@@ -13,6 +13,7 @@ import {
 } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDollarSign, faUsers, faCalendar, faChartLine } from "@fortawesome/free-solid-svg-icons";
+import SocialSubmissions from "./SocialSubmissions";
 
 const Affiliate = () => {
   const [referralLink, setReferralLink] = useState("");
@@ -61,7 +62,7 @@ const Affiliate = () => {
           <h3 className="mt-4 text-xl font-semibold">
             {userData?.data?.name || "Guest"}
           </h3>
-          <div className="text-green-300 mt-1"> SuccessFully Reffred Per User 15% Commission</div>
+          <div className="text-green-300 mt-1"> 15% Commission</div>
           <div className="flex mt-4">
             <p className="text-lg font-bold">CZ-0.00</p>
             <button className="bg-[#01D676] hover:bg-green-600 text-white rounded-md ml-2 px-4 py-1">
@@ -95,7 +96,7 @@ const Affiliate = () => {
     <p>0</p>
   </div>
 
-  {/* Earnings Last 30 Days */}
+ 
   <div className="flex justify-between items-center mt-4">
     <div className="flex items-center">
       <FontAwesomeIcon icon={faCalendar} className="text-yellow-500 mr-2" size="lg" />
@@ -167,6 +168,7 @@ const Affiliate = () => {
           </div>
         </div>
       </div>
+      <SocialSubmissions></SocialSubmissions>
     </div>
   );
 };
