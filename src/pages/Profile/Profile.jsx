@@ -269,6 +269,98 @@ const TabFourComponent = () => (
     </table>
   </div>
 );
+const referrals = [
+  {
+    name: "John Doe",
+    email: "john.doe@example.com",
+    date: "2024-11-01",
+    earnings: 15.0,
+    status: "Active",
+  },
+  {
+    name: "Jane Smith",
+    email: "jane.smith@example.com",
+    date: "2024-10-28",
+    earnings: 7.5,
+    status: "Inactive",
+  },
+];
+const TabFiveComponent = () => (
+  <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full overflow-x-auto box-border">
+    <h3 className="text-white text-lg font-bold mb-4">Referrals</h3>
+
+    {referrals.length > 0 ? (
+      <>
+        {/* Summary Section */}
+        <div className="flex justify-between items-center bg-gray-700 p-4 rounded-lg mb-6">
+          <div className="text-center">
+            <h4 className="text-white text-sm font-medium">Total Referrals</h4>
+            <p className="text-green-400 text-xl font-bold">{referrals.length}</p>
+          </div>
+          <div className="text-center">
+            <h4 className="text-white text-sm font-medium">Total Earnings</h4>
+            <p className="text-green-400 text-xl font-bold">
+              ${referrals.reduce((sum, ref) => sum + ref.earnings, 0).toFixed(2)}
+            </p>
+          </div>
+          <div className="text-center">
+            <h4 className="text-white text-sm font-medium">Active Referrals</h4>
+            <p className="text-green-400 text-xl font-bold">
+              {referrals.filter((ref) => ref.status === "Active").length}
+            </p>
+          </div>
+        </div>
+
+        {/* Referral List */}
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-left text-sm text-white">
+            <thead className="bg-gray-700">
+              <tr>
+                <th className="px-4 py-2">Name</th>
+                <th className="px-4 py-2">Email</th>
+                <th className="px-4 py-2">Date</th>
+                <th className="px-4 py-2">Earnings</th>
+                <th className="px-4 py-2">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {referrals.map((ref, index) => (
+                <tr
+                  key={index}
+                  className={`${
+                    index % 2 === 0 ? "bg-gray-600" : "bg-gray-700"
+                  } hover:bg-gray-500`}
+                >
+                  <td className="px-4 py-2">{ref.name}</td>
+                  <td className="px-4 py-2">{ref.email}</td>
+                  <td className="px-4 py-2">{ref.date}</td>
+                  <td className="px-4 py-2">${ref.earnings.toFixed(2)}</td>
+                  <td
+                    className={`px-4 py-2 font-bold ${
+                      ref.status === "Active"
+                        ? "text-green-400"
+                        : "text-red-400"
+                    }`}
+                  >
+                    {ref.status}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </>
+    ) : (
+      // No referrals fallback
+      <div className="text-center text-white text-lg font-medium">
+        No referral earnings yet
+      </div>
+    )}
+  </div>
+
+
+);
+
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -307,6 +399,7 @@ const Profile = () => {
     <TabTwoComponent withdrawals={withdrawals} />,
     <TabThreeComponent />,
     <TabFourComponent />,
+    <TabFiveComponent />,
   ];
 
   return (
@@ -450,7 +543,7 @@ const Profile = () => {
 
         <div>
           <div className="flex flex-wrap gap-4">
-            {["Earnings", "Withdraw", "Rewards", "Survey"].map(
+            {["Earnings", "Withdraw", "Rewards", "Survey", "Referrals"].map(
               (tabTitle, index) => (
                 <button
                   key={index}

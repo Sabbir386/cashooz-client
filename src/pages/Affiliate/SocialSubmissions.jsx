@@ -8,6 +8,8 @@ import {
   FaTwitter,
   FaRegCopy,
   FaCheck,
+  FaTelegram,
+  FaPinterest,
 } from "react-icons/fa";
 import Swal from "sweetalert2";
 
@@ -54,6 +56,20 @@ const platforms = [
     reward: "CZ 50",
     color: "text-blue-400",
     icon: <FaTwitter size={28} />,
+  },
+  {
+    name: "Telegram",
+    description: "Submit spotlights and more.",
+    reward: "CZ 55",
+    color: "text-blue-400",
+    icon: <FaTelegram size={28} />,
+  },
+  {
+    name: "Pinterest",
+    description: "Submit spotlights and more.",
+    reward: "CZ 50",
+    color: "text-blue-400",
+    icon: <FaPinterest size={28} />,
   },
 ];
 

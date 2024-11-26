@@ -335,6 +335,18 @@ const Sidebar = () => {
         ],
       },
       {
+        id: "SocialMedia",
+        name: "Social-Media",
+        icon: HiOutlineUsers,
+        menus: [
+          {
+            id: "superadmin-social-media-post",
+            path: "social-media-post",
+            name: "Social-Media",
+          },
+        ],
+      },
+      {
         id: "Withdrawl",
         name: "withdrawl",
         icon: HiOutlineUsers,
@@ -344,7 +356,6 @@ const Sidebar = () => {
             path: "withdrawl-list",
             name: "Withdrawl History",
           },
-        
         ],
       },
     ];
@@ -436,7 +447,7 @@ const Sidebar = () => {
                   className="mb-1 text-grayColor hover:text-buttonBackground"
                 >
                   <Link
-                  onClick={() => setOpen(false)}
+                    onClick={() => setOpen(false)}
                     to={`/dashboard/${menu.path}`}
                     className={`p-2.5 flex rounded-md gap-6 items-center md:cursor-pointer cursor-default duration-300 font-medium hover:text-buttonBackground hover:bg-hoverBgColor`}
                   >

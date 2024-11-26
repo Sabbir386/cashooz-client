@@ -44,6 +44,7 @@ import ConfirmReset from "../auth/ConfirmReset";
 import WithdrawlHistory from "../pages/Withdrawl/WithdrawlHistory";
 import PrivecyPolicy from "../pages/PrivecyPolicy/PrivecyPolicy";
 import Aboutus from "../pages/Aboutus/Aboutus";
+import SocialMediaPage from "../pages/SocialMedia/SocialMedia";
 
 export const router = createBrowserRouter([
   {
@@ -177,6 +178,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoutes>
             <EditAdmin></EditAdmin>
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/dashboard/social-media-post",
+        element: (
+          <ProtectedRoutes>
+            <SocialMediaPage></SocialMediaPage>
           </ProtectedRoutes>
         ),
       },

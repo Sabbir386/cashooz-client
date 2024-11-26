@@ -26,6 +26,33 @@ const Reward = () => {
   const token = useAppSelector(useCurrentToken);
   const [taskCompleted] = useTaskCompletedMutation();
   const [isLoading, setIsLoading] = useState(false);
+  const [referrals, setReferrals] = useState([]);
+  const [claimedBonuses, setClaimedBonuses] = useState([]);
+  const bonusTiers = [
+    { referrals: 5, bonus: 20 },
+    { referrals: 10, bonus: 40 },
+    { referrals: 25, bonus: 100 },
+    { referrals: 100, bonus: 1000 },
+  ];
+
+  useEffect(() => {
+    // Example: Set referrals data after an API call or from local storage
+    const fetchedReferrals = [
+      // Simulated referral data
+      { id: 1, name: "John Doe", email: "john@example.com", status: "Active" },
+      { id: 2, name: "Jane Doe", email: "jane@example.com", status: "Active" },
+    ];
+    setReferrals(fetchedReferrals);
+  }, []);
+
+  // Handle the claim bonus action
+  const handleReferralsClaimBonus = (referralCount, bonusAmount) => {
+    if (!claimedBonuses.includes(referralCount)) {
+      setClaimedBonuses((prevClaimed) => [...prevClaimed, referralCount]);
+      // Here you can handle the logic for awarding the bonus
+      console.log(`Claimed ${bonusAmount} CZ for ${referralCount} referrals`);
+    }
+  };
 
   let user = null;
   if (token) {
@@ -370,12 +397,79 @@ const Reward = () => {
   };
 
   const renderAffiliatedBonus = () => (
-    <div className="flex justify-center items-center">
-      <div className="text-center p-10 rounded-lg bg-gray-800 shadow-md text-white">
+    <div className="flex justify-start items-center">
+      <div className="text-center p-6 md:p-10 rounded-lg bg-gray-800 shadow-md text-white w-full">
         <h3 className="text-2xl font-bold">Affiliated Bonus</h3>
         <p className="mt-4">
           Earn more bonuses by referring others to our platform!
         </p>
+
+        {referrals.length > 0 ? (
+          <div className="mt-6">
+            {/* Bonus Table */}
+            <div className="overflow-x-auto">
+              {" "}
+              {/* Make the table scrollable on small screens */}
+              <table className="min-w-full text-left text-sm text-white border-collapse border border-gray-700">
+                <thead>
+                  <tr className="bg-gray-700">
+                    <th className="px-4 py-2 border border-gray-600">
+                      Referral Count
+                    </th>
+                    <th className="px-4 py-2 border border-gray-600">
+                      Bonus (CZ)
+                    </th>
+                    <th className="px-4 py-2 border border-gray-600 text-center">Claim</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {bonusTiers.map((tier, index) => (
+                    <tr
+                      key={index}
+                      className={`${
+                        index % 2 === 0 ? "bg-gray-600" : "bg-gray-700"
+                      } hover:bg-gray-500`}
+                    >
+                      <td className="px-4 py-2 border border-gray-600">
+                        {tier.referrals}
+                      </td>
+                      <td className="px-4 py-2 border border-gray-600">
+                        {tier.bonus} CZ
+                      </td>
+                      <td className="px-4 py-2 border border-gray-600 text-center">
+                        {referrals.length >= tier.referrals &&
+                        !claimedBonuses.includes(tier.referrals) ? (
+                          <button
+                            className="bg-green-500 hover:bg-green-600 text-white font-medium py-1 px-4 rounded"
+                            onClick={() =>
+                              handleReferralsClaimBonus(
+                                tier.referrals,
+                                tier.bonus
+                              )
+                            }
+                          >
+                            Claim
+                          </button>
+                        ) : (
+                          <span className="text-gray-400">
+                            {claimedBonuses.includes(tier.referrals)
+                              ? "Claimed"
+                              : "Not Eligible"}
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : (
+          // No referrals fallback
+          <div className="mt-6 text-center text-gray-400">
+            No referrals yet. Start sharing your link to earn bonuses!
+          </div>
+        )}
       </div>
     </div>
   );
