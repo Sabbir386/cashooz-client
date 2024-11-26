@@ -63,6 +63,7 @@ const SocialMediaPage = () => {
                   >
                     <option value="Pending">Pending</option>
                     <option value="Completed">Completed</option>
+                    <option value="Link-Invalid">Link-Invalid</option>
                   </select>
                 </td>
                 <td className="px-4 py-2 border border-gray-600">
