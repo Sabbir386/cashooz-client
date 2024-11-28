@@ -12,7 +12,12 @@ import {
   FaRegCopy,
 } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDollarSign, faUsers, faCalendar, faChartLine } from "@fortawesome/free-solid-svg-icons";
+import {
+  faDollarSign,
+  faUsers,
+  faCalendar,
+  faChartLine,
+} from "@fortawesome/free-solid-svg-icons";
 import SocialSubmissions from "./SocialSubmissions";
 
 const Affiliate = () => {
@@ -35,11 +40,13 @@ const Affiliate = () => {
     isLoading: isUserLoading,
     error: userError,
   } = useSingleNormalUserQuery(user?.objectId);
-   console.log(userData)
+  console.log(userData);
   useEffect(() => {
     if (userData?.data?.id) {
       // Dynamically set the referral link when userData is available
-      setReferralLink(`http://localhost:5173/register?refId=CZ${userData?.data?.id}`);
+      setReferralLink(
+        `https://cashooz-838b0.web.app/register?refId=CZ${userData?.data?.id}`
+      );
     }
   }, [userData]);
 
@@ -48,7 +55,6 @@ const Affiliate = () => {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000); // Reset after 2 seconds
   };
-
 
   return (
     <div className="bg-gray-900 min-h-screen p-6">
@@ -73,39 +79,53 @@ const Affiliate = () => {
 
         {/* Statistics */}
         <div className="bg-gray-800 p-4 rounded-lg text-white">
-        <div className="flex items-center mb-2">
-        <FontAwesomeIcon icon={faChartLine} className="text-[#FFFFFF] mr-2" size="lg" />
-        <h3 className="font-semibold text-lg text-[#01D676]">Statistics</h3>
-  </div>
+          <div className="flex items-center mb-2">
+            <FontAwesomeIcon
+              icon={faChartLine}
+              className="text-[#FFFFFF] mr-2"
+              size="lg"
+            />
+            <h3 className="font-semibold text-lg text-[#01D676]">Statistics</h3>
+          </div>
 
-  {/* Total Earnings */}
-  <div className="flex justify-between items-center mb-4">
-    <div className="flex items-center">
-      <FontAwesomeIcon icon={faDollarSign} className="text-green-500 mr-2" size="lg" />
-      <p>Total Earnings</p>
-    </div>
-    <p>$0.00</p>
-  </div>
+          {/* Total Earnings */}
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center">
+              <FontAwesomeIcon
+                icon={faDollarSign}
+                className="text-green-500 mr-2"
+                size="lg"
+              />
+              <p>Total Earnings</p>
+            </div>
+            <p>$0.00</p>
+          </div>
 
-  {/* Users Referred */}
-  <div className="flex justify-between items-center">
-    <div className="flex items-center">
-      <FontAwesomeIcon icon={faUsers} className="text-blue-400 mr-2" size="lg" />
-      <p>Users Referred</p>
-    </div>
-    <p>0</p>
-  </div>
+          {/* Users Referred */}
+          <div className="flex justify-between items-center">
+            <div className="flex items-center">
+              <FontAwesomeIcon
+                icon={faUsers}
+                className="text-blue-400 mr-2"
+                size="lg"
+              />
+              <p>Users Referred</p>
+            </div>
+            <p>{userData?.data?.refferCount}</p>
+          </div>
 
- 
-  <div className="flex justify-between items-center mt-4">
-    <div className="flex items-center">
-      <FontAwesomeIcon icon={faCalendar} className="text-yellow-500 mr-2" size="lg" />
-      <p>Earnings Last 30 Days</p>
-    </div>
-    <p>$0.00</p>
-  </div>
-</div>
-
+          <div className="flex justify-between items-center mt-4">
+            <div className="flex items-center">
+              <FontAwesomeIcon
+                icon={faCalendar}
+                className="text-yellow-500 mr-2"
+                size="lg"
+              />
+              <p>Earnings Last 30 Days</p>
+            </div>
+            <p>$0.00</p>
+          </div>
+        </div>
       </div>
 
       {/* Referral Section */}

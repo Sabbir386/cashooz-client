@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { FaCcPaypal, FaCcStripe, FaPaypal, FaStripeS } from "react-icons/fa";
+import {
+  FaBitcoin,
+  FaCcPaypal,
+  FaCcStripe,
+  FaEthereum,
+  FaPaypal,
+  FaStripeS,
+} from "react-icons/fa";
 import {
   BarChart,
   Bar,
@@ -44,14 +51,19 @@ import { logOut, useCurrentToken } from "../redux/features/auth/authSlice";
 import { HiOutlineStar } from "react-icons/hi";
 // import SurveyList from "./SurveyList";
 import OfferView from "./OfferView/OfferView";
-import { useGetAllPaymentsQuery } from "./Leaderboard/leaderBoardApi";
+// import { useGetAllPaymentsQuery } from "./Leaderboard/leaderBoardApi";
+import { useViewWithdrawalsQuery } from "./Withdrawl/withDrawalApi";
 const AdminDashboard = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [cpaOffers, setCpaOffers] = useState([]);
 
   //moments js on dashbaord top
-  const { data: paymentsResponse, error, isLoading } = useGetAllPaymentsQuery();
-  const paymentsData = paymentsResponse?.payments || [];
+  const {
+    data: paymentsResponse,
+    error,
+    isLoading,
+  } = useViewWithdrawalsQuery();
+  const paymentsData = paymentsResponse?.data || [];
   console.log(paymentsData);
 
   useEffect(() => {
@@ -350,12 +362,14 @@ const AdminDashboard = () => {
               <div>
                 <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
                   {
-                    payment.paymentType === "paypal" ? (
+                    payment.method === "paypal" ? (
                       <FaCcPaypal />
-                    ) : payment.paymentType === "stripe" ? (
-                      <FaCcStripe />
-                    ) : payment.name ? (
-                      payment.name.charAt(0)
+                    ) : payment.method === "Bitcoin" ? (
+                      <FaBitcoin />
+                    ) : payment.method === "Ethereum" ? (
+                      <FaEthereum />
+                    ) : payment.method ? (
+                      payment.method.charAt(0)
                     ) : (
                       "C"
                     ) // Default to initials if no match
@@ -366,16 +380,24 @@ const AdminDashboard = () => {
               {/* Display first name */}
               <div>
                 <h5 className="text-sm">
-                  {payment.name ? payment.name.split(" ")[0] : "Unknown"}
+                  {payment.userName
+                    ? payment.userName.split(" ")[0]
+                    : "Unknown"}
                 </h5>
-                <h6 className="text-xs mt-1">{payment.paymentType}</h6>
+                <h6 className="text-xs mt-1">{payment.country}</h6>
               </div>
 
               {/* Display payment amount */}
               <div>
                 <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                  ${parseFloat(payment.amount / 100).toFixed(2)}{" "}
-                  {/* Convert amount to dollars */}
+                  $
+                  {
+                    payment.networkType === "btc"
+                      ? (payment.amount * 95305).toFixed(2) // Convert BTC to USD (example rate)
+                      : payment.networkType === "ethereum"
+                      ? (payment.amount * 1640).toFixed(2) // Convert ETH to USD (example rate)
+                      : payment.amount.toFixed(2) // Default for PayPal or already in USD
+                  }
                 </span>
               </div>
             </div>

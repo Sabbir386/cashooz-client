@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaFacebook,
   FaInstagram,
@@ -78,6 +78,7 @@ const SocialSubmissions = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Manage modal visibility
   const [isCopied, setIsCopied] = useState(false);
   const [postURL, setPostURL] = useState(""); // Manage post URL input
+  const [imagePreview, setImagePreview] = useState(null);
 
   // Open modal with the selected platform's data
   const handleCardClick = (platform) => {
@@ -92,12 +93,34 @@ const SocialSubmissions = () => {
     setPostURL(""); // Reset post URL on close
   };
 
+  // Get Open Graph image from URL (This is a simplified approach)
+  const fetchImagePreview = async () => {
+    try {
+      const response = await fetch(`https://opengraph.io/api/og?url=${encodeURIComponent(postUrl)}`);
+      const data = await response.json();
+      setImagePreview(data.ogImage?.url); // This returns the Open Graph image URL
+    } catch (error) {
+      console.error("Failed to fetch image preview:", error);
+    }
+  };
+  useEffect(() => {
+    if (postURL) {
+      fetchImagePreview();
+    }
+  }, [postURL]);
+
   const copyToClipboard = () => {
     const textToCopy = `Ready to earn big? Check out ${selectedPlatform.name}! Earn ${selectedPlatform.reward} today. Click here to get started.`;
     navigator.clipboard.writeText(textToCopy).then(() => {
       setIsCopied(true); // Update state to show the check mark
       setTimeout(() => setIsCopied(false), 2000); // Reset to copy icon after 2 seconds
     });
+
+    const postUrl = `https://cashooz-838b0.web.app/register?refId=`; // Replace with the URL of the post you want to share
+    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`;
+
+    // Open Facebook share modal
+    window.open(facebookShareUrl, "_blank", "width=600,height=400");
   };
   const handleSubmitPost = async () => {
     if (!postURL) return; // Don't submit if URL is empty
