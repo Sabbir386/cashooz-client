@@ -12,6 +12,11 @@ import {
   FaPinterest,
 } from "react-icons/fa";
 import Swal from "sweetalert2";
+import { useCreateSocialMediaPostMutation } from "../SocialMedia/socialmediaPostApi";
+import { verifyToken } from "../../utils/verifyToken";
+import { useAppSelector } from "../../redux/features/hooks";
+import { useCurrentToken } from "../../redux/features/auth/authSlice";
+import { useSingleNormalUserQuery } from "../../redux/features/auth/authApi";
 
 // Platform data
 const platforms = [
@@ -79,10 +84,42 @@ const SocialSubmissions = () => {
   const [isCopied, setIsCopied] = useState(false);
   const [postURL, setPostURL] = useState(""); // Manage post URL input
   const [imagePreview, setImagePreview] = useState(null);
+  const [referralLink, setReferralLink] = useState("");
+  const [createSocialMediaPost, { isLoading, isError, isSuccess }] =
+    useCreateSocialMediaPostMutation();
+  const token = useAppSelector(useCurrentToken);
+  let user;
 
+  if (token) {
+    try {
+      user = verifyToken(token);
+      // console.log(user)
+    } catch (error) {
+      console.error("Invalid token:", error);
+    }
+  }
+
+  const {
+    data: userData,
+    isLoading: isUserLoading,
+    error: userError,
+  } = useSingleNormalUserQuery(user?.objectId);
+  console.log(userData);
+  useEffect(() => {
+    if (userData?.data?.id) {
+      // Dynamically set the referral link when userData is available
+      setReferralLink(
+        `https://cashooz-838b0.web.app/register?refId=CZ${userData?.data?.id}`
+      );
+    }
+  }, [userData]);
+  if (referralLink) {
+    console.log(referralLink);
+  }
   // Open modal with the selected platform's data
   const handleCardClick = (platform) => {
     setSelectedPlatform(platform);
+    // console.log(selectedPlatform)
     setIsModalOpen(true);
   };
 
@@ -96,7 +133,9 @@ const SocialSubmissions = () => {
   // Get Open Graph image from URL (This is a simplified approach)
   const fetchImagePreview = async () => {
     try {
-      const response = await fetch(`https://opengraph.io/api/og?url=${encodeURIComponent(postUrl)}`);
+      const response = await fetch(
+        `https://opengraph.io/api/og?url=${encodeURIComponent(postUrl)}`
+      );
       const data = await response.json();
       setImagePreview(data.ogImage?.url); // This returns the Open Graph image URL
     } catch (error) {
@@ -117,46 +156,58 @@ const SocialSubmissions = () => {
     });
 
     const postUrl = `https://cashooz-838b0.web.app/register?refId=`; // Replace with the URL of the post you want to share
-    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`;
+    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      postUrl
+    )}`;
 
     // Open Facebook share modal
     window.open(facebookShareUrl, "_blank", "width=600,height=400");
   };
   const handleSubmitPost = async () => {
-    if (!postURL) return; // Don't submit if URL is empty
+    if (!postURL) return; // Don't proceed if the URL is empty
 
+    const postDetails = {
+      userName: userData?.data?.name,
+      email: user?.email,
+      userId: user?.objectId,
+      link: postURL,
+      platform: selectedPlatform.name,
+      status: "pending",
+    };
+
+    console.log(postDetails);
     try {
-      // const response = await submitPost({ postURL }); // Call the submitPost mutation
-      if (response?.data?.success) {
-        // Show success alert
+      const response = await createSocialMediaPost(postDetails).unwrap();
+      console.log(response);
+      if (response.message) {
         Swal.fire({
           icon: "success",
           title: "Success!",
           text: "Your post was successfully submitted.",
-          background: "#2e3b4e", // Custom background color
-          confirmButtonColor: "#4CAF50", // Green confirm button
+          background: "#2e3b4e",
+          confirmButtonColor: "#4CAF50", // Button background color
           confirmButtonText: "Great!",
+          customClass: {
+            confirmButton: "text-white", // Button text color
+            title: "text-white", // Title text color
+            htmlContainer: "text-white", // Text content color
+          },
         });
+        closeModal();
       } else {
-        // Show error alert
-        Swal.fire({
-          icon: "error",
-          title: "Submission Failed",
-          text: "Failed to submit post. Please try again.",
-          confirmButtonText: "OK",
-        });
+        throw new Error(response.message || "Submission failed");
       }
     } catch (err) {
       console.error("Error submitting post:", err);
-      // Show error alert in case of any error
       Swal.fire({
         icon: "error",
-        title: "Error",
-        text: "An error occurred while submitting your post.",
+        title: "Submission Failed",
+        text: err.message || "Failed to submit post. Please try again.",
         confirmButtonText: "OK",
       });
     }
   };
+
   return (
     <div className="mt-6 shadow-lg bg-gray-800 text-white p-6 rounded-lg">
       <div className="max-w-6xl mx-auto">
@@ -267,10 +318,10 @@ Join now at https://cashooz-838b0.web.app/register and get ${selectedPlatform.re
                 onClick={() => {
                   // Logic for URL submission (e.g., save the URL, claim reward)
                   handleSubmitPost();
-                  closeModal(); // Close modal after submission
+                  // closeModal(); // Close modal after submission
                 }}
               >
-                Submit Post
+                {isLoading ? "Submitting..." : "Submit Post"}
               </button>
             </div>
           </div>
