@@ -23,6 +23,7 @@ import EditProfile from "./EditProfile";
 import Loader from "../../components/Loader";
 import Swal from "sweetalert2";
 import { useUserMultipleWithdrawalsQuery } from "../Withdrawl/withDrawalApi";
+import { useGetAllSocialMediaPostsQuery, useGetUserSpecificPostsQuery } from "../SocialMedia/socialmediaPostApi";
 
 ChartJS.register(
   CategoryScale,
@@ -295,12 +296,15 @@ const TabFiveComponent = () => (
         <div className="flex justify-between items-center bg-gray-700 p-4 rounded-lg mb-6">
           <div className="text-center">
             <h4 className="text-white text-sm font-medium">Total Referrals</h4>
-            <p className="text-green-400 text-xl font-bold">{referrals.length}</p>
+            <p className="text-green-400 text-xl font-bold">
+              {referrals.length}
+            </p>
           </div>
           <div className="text-center">
             <h4 className="text-white text-sm font-medium">Total Earnings</h4>
             <p className="text-green-400 text-xl font-bold">
-              ${referrals.reduce((sum, ref) => sum + ref.earnings, 0).toFixed(2)}
+              $
+              {referrals.reduce((sum, ref) => sum + ref.earnings, 0).toFixed(2)}
             </p>
           </div>
           <div className="text-center">
@@ -357,16 +361,68 @@ const TabFiveComponent = () => (
       </div>
     )}
   </div>
-
-
 );
 
+
+const TabSixComponent = ({socialMediaLinks}) => (
+  <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full overflow-x-auto">
+    <h3 className="text-white text-2xl font-bold mb-6">Social Media Rewards</h3>
+
+    <div className="overflow-x-auto">
+      <table className="min-w-full text-left text-sm text-white border-collapse border border-gray-700">
+        <thead>
+          <tr className="bg-gray-700">
+            <th className="px-4 py-2 border border-gray-600">User Name</th>
+            <th className="px-4 py-2 border border-gray-600">Platform</th>
+            <th className="px-4 py-2 border border-gray-600">Link</th>
+            <th className="px-4 py-2 border border-gray-600">RewardPoints</th>
+            <th className="px-4 py-2 border border-gray-600">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {socialMediaLinks?.posts.map((link) => (
+            <tr
+              key={link._id}
+              className={`${
+                link._id % 2 === 0 ? "bg-gray-600" : "bg-gray-700"
+              } hover:bg-gray-500`}
+            >
+              <td className="px-4 py-2 border border-gray-600">
+                {link.userName || "N/A"}
+              </td>
+              
+              <td className="px-4 py-2 border border-gray-600">
+                {link.platform || "Unknown"}
+              </td>
+              <td className="px-4 py-2 border border-gray-600">
+                <a
+                  href={link.link}
+                  className="text-blue-400"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {link.link || "No link available"}
+                </a>
+              </td>
+              <td className="px-4 py-2 border border-gray-600">
+                {link.rewardPoint || "N/A"}
+              </td>
+              <td className="px-4 py-2 border border-gray-600">
+                {link.status || "Pending"}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+);
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const token = useAppSelector(useCurrentToken);
-
+  
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -378,6 +434,17 @@ const Profile = () => {
     user = verifyToken(token);
     console.log(user?.email);
   }
+
+
+  const {
+    data: socialMediaLinks,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useGetUserSpecificPostsQuery(user?.objectId, {
+    skip: !user?.objectId, // Skip the query if userId is not available
+  });
   // withdraw history
 
   const {
@@ -400,6 +467,7 @@ const Profile = () => {
     <TabThreeComponent />,
     <TabFourComponent />,
     <TabFiveComponent />,
+    <TabSixComponent socialMediaLinks={socialMediaLinks} />,
   ];
 
   return (
@@ -543,21 +611,26 @@ const Profile = () => {
 
         <div>
           <div className="flex flex-wrap gap-4">
-            {["Earnings", "Withdraw", "Rewards", "Survey", "Referrals"].map(
-              (tabTitle, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveTab(index)}
-                  className={`px-4 py-2 text-sm -mb-px transition-colors duration-300 ease-in-out ${
-                    activeTab === index
-                      ? "text-buttonBackground bg-buttonBackground bg-opacity-20 border-buttonBackground border-b-2"
-                      : "text-gray-400 bg-gray-700 hover:text-buttonBackground hover:bg-buttonBackground hover:bg-opacity-20"
-                  }`}
-                >
-                  {tabTitle}
-                </button>
-              )
-            )}
+            {[
+              "Earnings",
+              "Withdraw",
+              "Rewards",
+              "Survey",
+              "Referrals",
+              "SocialMedia-Rewards",
+            ].map((tabTitle, index) => (
+              <button
+                key={index}
+                onClick={() => setActiveTab(index)}
+                className={`px-4 py-2 text-sm -mb-px transition-colors duration-300 ease-in-out ${
+                  activeTab === index
+                    ? "text-buttonBackground bg-buttonBackground bg-opacity-20 border-buttonBackground border-b-2"
+                    : "text-gray-400 bg-gray-700 hover:text-buttonBackground hover:bg-buttonBackground hover:bg-opacity-20"
+                }`}
+              >
+                {tabTitle}
+              </button>
+            ))}
           </div>
         </div>
 

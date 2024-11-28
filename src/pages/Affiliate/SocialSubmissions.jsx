@@ -167,11 +167,13 @@ const SocialSubmissions = () => {
     if (!postURL) return; // Don't proceed if the URL is empty
 
     const postDetails = {
+
       userName: userData?.data?.name,
       email: user?.email,
       userId: user?.objectId,
       link: postURL,
       platform: selectedPlatform.name,
+      rewardPoint:selectedPlatform.reward,
       status: "pending",
     };
 

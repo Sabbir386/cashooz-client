@@ -102,7 +102,9 @@ const SocialMediaPage = () => {
               <th className="px-4 py-2 border border-gray-600">User Email</th>
               <th className="px-4 py-2 border border-gray-600">Platform</th>
               <th className="px-4 py-2 border border-gray-600">Link</th>
+              <th className="px-4 py-2 border border-gray-600">RewardPoints</th>
               <th className="px-4 py-2 border border-gray-600">Status</th>
+              
               <th className="px-4 py-2 border border-gray-600">Actions</th>
             </tr>
           </thead>
@@ -123,6 +125,7 @@ const SocialMediaPage = () => {
                 <td className="px-4 py-2 border border-gray-600">
                   {link.platform}
                 </td>
+
                 <td className="px-4 py-2 border border-gray-600">
                   <a
                     href={link.link}
@@ -132,6 +135,9 @@ const SocialMediaPage = () => {
                   >
                     {link.link}
                   </a>
+                </td>
+                <td className="px-4 py-2 border border-gray-600">
+                  {link.rewardPoint}
                 </td>
                 <td className="px-4 py-2 border border-gray-600">
                   <select

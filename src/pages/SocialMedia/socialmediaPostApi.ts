@@ -24,7 +24,7 @@ export const socialMediaPostApi = baseApi.injectEndpoints({
         // 3. Get User-Specific Social Media Posts
         getUserSpecificPosts: builder.query({
             query: (userId) => ({
-                url: `/user/social-media`,
+                url: `/user/social-media/user-posted`,
                 method: "GET",
                 params: { userId },
             }),
