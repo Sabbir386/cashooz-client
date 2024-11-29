@@ -23,7 +23,10 @@ import EditProfile from "./EditProfile";
 import Loader from "../../components/Loader";
 import Swal from "sweetalert2";
 import { useUserMultipleWithdrawalsQuery } from "../Withdrawl/withDrawalApi";
-import { useGetAllSocialMediaPostsQuery, useGetUserSpecificPostsQuery } from "../SocialMedia/socialmediaPostApi";
+import {
+  useGetAllSocialMediaPostsQuery,
+  useGetUserSpecificPostsQuery,
+} from "../SocialMedia/socialmediaPostApi";
 
 ChartJS.register(
   CategoryScale,
@@ -363,8 +366,7 @@ const TabFiveComponent = () => (
   </div>
 );
 
-
-const TabSixComponent = ({socialMediaLinks}) => (
+const TabSixComponent = ({ socialMediaLinks }) => (
   <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full overflow-x-auto">
     <h3 className="text-white text-2xl font-bold mb-6">Social Media Rewards</h3>
 
@@ -390,7 +392,7 @@ const TabSixComponent = ({socialMediaLinks}) => (
               <td className="px-4 py-2 border border-gray-600">
                 {link.userName || "N/A"}
               </td>
-              
+
               <td className="px-4 py-2 border border-gray-600">
                 {link.platform || "Unknown"}
               </td>
@@ -422,7 +424,7 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const token = useAppSelector(useCurrentToken);
-  
+
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -434,7 +436,6 @@ const Profile = () => {
     user = verifyToken(token);
     console.log(user?.email);
   }
-
 
   const {
     data: socialMediaLinks,

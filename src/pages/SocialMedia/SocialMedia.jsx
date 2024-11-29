@@ -5,6 +5,7 @@ import {
   useDeleteSocialMediaPostMutation,
   useUpdateSocialMediaPostStatusMutation,
 } from "./socialmediaPostApi";
+import { useSocialMediaPostRewardsMutation } from "../../rewards/rewardApi";
 
 const SocialMediaPage = () => {
   const {
@@ -17,15 +18,42 @@ const SocialMediaPage = () => {
   const [deleteSocialMediaPost] = useDeleteSocialMediaPostMutation();
   const [updateSocialMediaPostStatus] =
     useUpdateSocialMediaPostStatusMutation();
-
-  const handleStatusChange = async (id, newStatus) => {
-    console.log(id, newStatus);
+  const [socialMediaPostRewards] = useSocialMediaPostRewardsMutation();
+  const handleStatusChange = async (id, userId, rewardPoint, newStatus) => {
+    console.log(id, newStatus, rewardPoint); // Debugging log
     try {
+      // Update the social media post status
       await updateSocialMediaPostStatus({
         postId: id,
         status: newStatus,
       }).unwrap();
+  
+      // If the status is "completed", call the socialMediaPostRewards API
+      if (newStatus === "completed") {
 
+        const reward = parseInt(rewardPoint.replace(/[^0-9]/g, ""), 10);
+        
+        // Validate rewardPoint before API call
+        if (isNaN(reward) || reward <= 0) {
+          throw new Error("Invalid reward point value");
+        }
+  
+        await socialMediaPostRewards({
+          userId: userId, // Replace with the actual user ID
+          socialMediaReward: reward, // Send the validated reward points
+        }).unwrap();
+  
+        // Notify the user about the reward
+        Swal.fire({
+          icon: "success",
+          title: "Reward Claimed",
+          text: "The reward for completing the post has been successfully claimed!",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      }
+  
+      // Show success notification for the status update
       Swal.fire({
         icon: "success",
         title: "Status Updated",
@@ -33,16 +61,17 @@ const SocialMediaPage = () => {
         timer: 2000,
         showConfirmButton: false,
       });
-
-      refetch(); // Refetch to reflect the updated status
     } catch (error) {
+      // Handle errors for both the status update and reward API
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Failed to update the status. Please try again later.",
+        text: "Failed to update the status or claim the reward. Please try again later.",
       });
+      console.error("Error:", error);
     }
   };
+  
 
   const handleDeleteLink = async (id) => {
     Swal.fire({
@@ -77,7 +106,7 @@ const SocialMediaPage = () => {
       }
     });
   };
-
+  // console.log(socialMediaLinks);
   if (isLoading) {
     return <p className="text-white">Loading...</p>;
   }
@@ -104,7 +133,7 @@ const SocialMediaPage = () => {
               <th className="px-4 py-2 border border-gray-600">Link</th>
               <th className="px-4 py-2 border border-gray-600">RewardPoints</th>
               <th className="px-4 py-2 border border-gray-600">Status</th>
-              
+
               <th className="px-4 py-2 border border-gray-600">Actions</th>
             </tr>
           </thead>
@@ -143,12 +172,18 @@ const SocialMediaPage = () => {
                   <select
                     value={link.status}
                     onChange={
-                      (e) => handleStatusChange(link._id, e.target.value) // Use _id here
+                      (e) =>
+                        handleStatusChange(
+                          link._id,
+                          link.userId,
+                          link.rewardPoint,
+                          e.target.value
+                        ) // Use _id here
                     }
                     className={`bg-gray-700 text-white border border-gray-600 rounded p-1 ${
                       link.status === "completed" ? "cursor-not-allowed" : ""
                     }`}
-                    disabled={link.status === "completed"}
+                    // disabled={link.status === "completed"}
                   >
                     <option value="Pending">Pending</option>
                     <option value="completed">Completed</option>

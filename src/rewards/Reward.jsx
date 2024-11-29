@@ -22,6 +22,7 @@ const Reward = () => {
 
   const { data: rewardData, refetch: refetchRewardData } =
     useGetUserRewardQuery();
+    console.log(rewardData)
   const [claimBonus] = useClaimBonusMutation();
   const token = useAppSelector(useCurrentToken);
   const [taskCompleted] = useTaskCompletedMutation();
@@ -67,7 +68,7 @@ const Reward = () => {
   } = useViewCompletedOfferQuery(userId, {
     skip: !userId,
   });
-
+console.log(completedOfferData)
   useEffect(() => {
     if (completedOfferData) {
       setUserCompletedTask(completedOfferData.data.length);

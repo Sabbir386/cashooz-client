@@ -30,7 +30,13 @@ export const rewardApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['Reward'],
         }),
-
+        socialMediaPostRewards: builder.mutation({
+            query: ({ userId, socialMediaReward }) => ({
+                url: `/reward/socialMediaPostRewards?userId=${userId}&socialMediaReward=${socialMediaReward}`,
+                method: 'POST',
+            }),
+            invalidatesTags: ['Reward'],
+        }),
         userTotalRewards: builder.query({
             query: (userId) => ({
                 url: `/reward/userTotalRewards?userId=${userId}`,
@@ -47,4 +53,5 @@ export const {
     useTaskCompletedMutation,
     useSurveyCompletedMutation,
     useUserTotalRewardsQuery,
+    useSocialMediaPostRewardsMutation,
 } = rewardApi;
