@@ -45,49 +45,58 @@ import WithdrawlHistory from "../pages/Withdrawl/WithdrawlHistory";
 import PrivecyPolicy from "../pages/PrivecyPolicy/PrivecyPolicy";
 import Aboutus from "../pages/Aboutus/Aboutus";
 import SocialMediaPage from "../pages/SocialMedia/SocialMedia";
+import LandingLayout from "../layouts/LandingLayout";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Landing></Landing>,
+    element: <LandingLayout></LandingLayout>,
+    children: [
+      {
+        path: "/",
+        element: <Landing></Landing>,
+      },
+      {
+        path: "/login",
+        element: (
+          <ProtectedRoutes>
+            <Login></Login>
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/auth/forgot-password",
+    
+        element: <ResetPasswod></ResetPasswod>,
+      },
+      {
+        path: "/auth/reset-password",
+        element: <ConfirmReset></ConfirmReset>,
+      },
+      {
+        path: "/register",
+        element: <Register></Register>,
+      },
+      {
+        path: "/advertiser-register",
+        element: <AdvertiserRegister></AdvertiserRegister>,
+      },
+      {
+        path: "/privecy-policy",
+        element: <PrivecyPolicy></PrivecyPolicy>,
+      },
+      {
+        path: "/aboutus",
+        element: <Aboutus></Aboutus>,
+      },
+      {
+        path: "/termsncondition",
+        element: <TermsAndConditions></TermsAndConditions>,
+      },
+      
+    ]
   },
-  {
-    path: "/login",
-    element: (
-      <ProtectedRoutes>
-        <Login></Login>
-      </ProtectedRoutes>
-    ),
-  },
-  {
-    path: "/auth/forgot-password",
-
-    element: <ResetPasswod></ResetPasswod>,
-  },
-  {
-    path: "/auth/reset-password",
-    element: <ConfirmReset></ConfirmReset>,
-  },
-  {
-    path: "/register",
-    element: <Register></Register>,
-  },
-  {
-    path: "/advertiser-register",
-    element: <AdvertiserRegister></AdvertiserRegister>,
-  },
-  {
-    path: "/privecy-policy",
-    element: <PrivecyPolicy></PrivecyPolicy>,
-  },
-  {
-    path: "/aboutus",
-    element: <Aboutus></Aboutus>,
-  },
-  {
-    path: "/termsncondition",
-    element: <TermsAndConditions></TermsAndConditions>,
-  },
+ 
   {
     path: "/dashboard",
     element: <RootLayout></RootLayout>,

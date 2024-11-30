@@ -11,7 +11,7 @@ import { FaArrowLeft, FaArrowRight, FaStar, FaStarHalf } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import Loader from "../../components/Loader";
-import { useTaskCompletedMutation } from "../../rewards/rewardApi";
+import { useOfferCompletedRewardsMutation } from "../../rewards/rewardApi";
 
 const OfferView = () => {
   const [networkOffers, setNetworkOffers] = useState([]);
@@ -32,7 +32,7 @@ const OfferView = () => {
     error: offerError,
   } = useOfferByNetworkQuery();
   const [createCompletedOffer] = useCreateCompletedOfferMutation();
-  const [taskCompleted] = useTaskCompletedMutation();
+  const [offerCompletedRewards] = useOfferCompletedRewardsMutation();
   useEffect(() => {
     if (offers?.data) {
       setNetworkOffers(offers.data);
@@ -81,10 +81,11 @@ const OfferView = () => {
         confirmButtonText: "OK",
       });
 
-      await taskCompleted({
+      const response =await offerCompletedRewards({
         userId: user?.objectId, // Assuming `user` contains the logged-in user's details
-        taskReward: selectedOffer?.points, // Use the points as the task reward
+        offerReward: selectedOffer?.points, // Use the points as the task reward
       }).unwrap();
+      // console.log('response offer',response)
     } catch (err) {
       Swal.fire({
         title: "Error!",
