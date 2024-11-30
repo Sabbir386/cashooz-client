@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   useClaimBonusMutation,
   useGetUserRewardQuery,
+  useReferralCompletedRewardsMutation,
   useTaskCompletedMutation,
 } from "./rewardApi";
 import Swal from "sweetalert2";
@@ -9,6 +10,7 @@ import { verifyToken } from "../utils/verifyToken";
 import { useViewCompletedOfferQuery } from "../pages/completedOfferApi";
 import { useAppSelector } from "../redux/features/hooks";
 import { useCurrentToken } from "../redux/features/auth/authSlice";
+import { useSingleNormalUserQuery } from "../redux/features/auth/authApi";
 
 const Reward = () => {
   const [activeTab, setActiveTab] = useState(1);
@@ -22,36 +24,59 @@ const Reward = () => {
 
   const { data: rewardData, refetch: refetchRewardData } =
     useGetUserRewardQuery();
-    console.log(rewardData)
+  console.log("rewardData", rewardData);
   const [claimBonus] = useClaimBonusMutation();
   const token = useAppSelector(useCurrentToken);
   const [taskCompleted] = useTaskCompletedMutation();
   const [isLoading, setIsLoading] = useState(false);
   const [referrals, setReferrals] = useState([]);
   const [claimedBonuses, setClaimedBonuses] = useState([]);
-  const bonusTiers = [
-    { referrals: 5, bonus: 20 },
+  const [claimedReferralBonuses, setClaimedReferralBonuses] = useState([]);
+  const [referralData, setReferralData] = useState([]);
+  const [referralCompletedRewards] = useReferralCompletedRewardsMutation();
+  const referralBonusTiers = [
+    { referrals: 1, bonus: 20 },
     { referrals: 10, bonus: 40 },
     { referrals: 25, bonus: 100 },
     { referrals: 100, bonus: 1000 },
   ];
 
   useEffect(() => {
-    // Example: Set referrals data after an API call or from local storage
-    const fetchedReferrals = [
-      // Simulated referral data
-      { id: 1, name: "John Doe", email: "john@example.com", status: "Active" },
-      { id: 2, name: "Jane Doe", email: "jane@example.com", status: "Active" },
-    ];
-    setReferrals(fetchedReferrals);
-  }, []);
+    if (rewardData?.referralClaimCount) {
+      // Initialize claimed bonuses based on referralClaimCount from backend
+      const initialClaimedBonuses = referralBonusTiers
+        .filter((tier, index) => index < rewardData.referralClaimCount)
+        .map((tier) => tier.referrals); // Correct key for referral counts
+      setClaimedReferralBonuses(initialClaimedBonuses);
+    }
+  }, [rewardData]);
 
-  // Handle the claim bonus action
-  const handleReferralsClaimBonus = (referralCount, bonusAmount) => {
-    if (!claimedBonuses.includes(referralCount)) {
-      setClaimedBonuses((prevClaimed) => [...prevClaimed, referralCount]);
-      // Here you can handle the logic for awarding the bonus
-      console.log(`Claimed ${bonusAmount} CZ for ${referralCount} referrals`);
+  const handleReferralsClaimBonus = async (referralCount, bonusAmount) => {
+    // Prevent duplicate claims
+    if (!claimedReferralBonuses.includes(referralCount)) {
+      try {
+        await referralCompletedRewards({
+          userId: userId,
+          referralReward: bonusAmount,
+        });
+
+        // Add claimed tier to state
+        setClaimedReferralBonuses((prev) => [...prev, referralCount]);
+
+        Swal.fire(
+          "Success!",
+          `You have claimed ${bonusAmount} CZ for ${referralCount} referrals.`,
+          "success"
+        );
+
+        refetchRewardData(); // Update reward data from backend
+      } catch (error) {
+        Swal.fire(
+          "Error!",
+          "Failed to claim bonus. Please try again.",
+          "error"
+        );
+      }
     }
   };
 
@@ -61,6 +86,13 @@ const Reward = () => {
   }
 
   const userId = user?.objectId || "";
+
+  const {
+    data: userData,
+    isLoading: isUserLoading,
+    error: userError,
+  } = useSingleNormalUserQuery(user?.objectId);
+  console.log(userData);
   const {
     data: completedOfferData,
     isLoading: isOffersLoading,
@@ -68,7 +100,8 @@ const Reward = () => {
   } = useViewCompletedOfferQuery(userId, {
     skip: !userId,
   });
-console.log(completedOfferData)
+  // console.log(completedOfferData)
+
   useEffect(() => {
     if (completedOfferData) {
       setUserCompletedTask(completedOfferData.data.length);
@@ -81,7 +114,7 @@ console.log(completedOfferData)
       setUserReward(rewardData);
       setUserTaskClaimCount(userReward?.taskClaimCount);
       setClaimedDays(rewardData.claimedDays || []);
-      setClaimedTasks(rewardData.taskClaimCount || []);
+      setClaimedTasks(rewardData?.taskClaimCount || []);
       setIsLoading(false);
     }
   }, [rewardData]);
@@ -207,31 +240,6 @@ console.log(completedOfferData)
                   : "Claim Bonus"}
               </button>
             )}
-            {/* {idx + 1 <= userReward?.claimCount ||
-            idx + 1 > userReward?.claimCount + 1 ? (
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded mt-2 opacity-50 cursor-not-allowed"
-                onClick={() => handleClaimBonus(day)}
-                disabled
-              >
-                {idx + 1 <= userReward?.claimCount
-                  ? "Claimed"
-                  : idx + 1 > userReward?.claimCount + 1
-                  ? "Not Available"
-                  : ""}
-              </button>
-            ) : (
-              <button
-                className={`bg-blue-500 text-white px-4 py-2 rounded mt-2`}
-                onClick={() => handleClaimBonus(day)}
-              >
-                {isClaiming
-                  ? "Claiming..."
-                  : claimedDays.includes(day)
-                  ? "Claimed"
-                  : "Claim Bonus"}
-              </button>
-            )} */}
           </div>
         ))}
       </div>
@@ -309,7 +317,7 @@ console.log(completedOfferData)
               Tasks Completed
             </div>
             {userCompletedTask >= task.requiredTasks ? (
-              rewardData.taskClaimCount < task.totalClaimCount ? (
+              rewardData?.taskClaimCount < task.totalClaimCount ? (
                 <button
                   className={`bg-blue-500 text-white px-4 py-2 rounded mt-2 cursor-pointer`}
                   onClick={() => handleClaimTaskBonus(task.id, task.reward)}
@@ -336,61 +344,6 @@ console.log(completedOfferData)
                   : "Claimed"}
               </button>
             )}
-            {/* {rewardData.taskClaimCount === 0 && idx === 0 ? (
-              <button
-                className={`bg-blue-500 text-white px-4 py-2 rounded mt-2 cursor-pointer`}
-                onClick={() => handleClaimTaskBonus(task.id, task.reward)}
-              >
-                Claim Task Bonus
-              </button>
-            ) : userCompletedTask >= task.requiredTasks &&
-              (rewardData.taskClaimCount === task.id ||
-                rewardData.taskClaimCount === 0) ? (
-              <button
-                className={`bg-blue-500 text-white px-4 py-2 rounded mt-2 cursor-pointer`}
-                onClick={() => handleClaimTaskBonus(task.id, task.reward)}
-              >
-                Claim Task Bonus
-              </button>
-            ) : (
-              <button
-                className={`bg-blue-500 text-white px-4 py-2 rounded mt-2 opacity-50 cursor-not-allowed"
-              `}
-                disabled
-              >
-                {userCompletedTask < task.requiredTasks
-                  ? "Not Available"
-                  : "Claimed"}
-              </button>
-            )} */}
-            {/* {
-               userCompletedTask >= task.requiredTasks &&  (rewardData.taskClaimCount === task.id || rewardData.taskClaimCount === 0) ? (
-
-                <button
-                className={`bg-blue-500 text-white px-4 py-2 rounded mt-2 cursor-pointer`}
-                onClick={() => handleClaimTaskBonus(task.id, task.reward)}
-                
-              >
-               
-                Claim Task Bonus
-              </button>
-               ) : 
-               
-               
-               
-               
-               (
-                <button
-                className={`bg-blue-500 text-white px-4 py-2 rounded mt-2 opacity-50 cursor-not-allowed"
-                `}
-                disabled
-              >
-               
-                  Claimed
-                
-              </button>
-               )
-            } */}
           </div>
         ))}
       </div>
@@ -404,73 +357,64 @@ console.log(completedOfferData)
         <p className="mt-4">
           Earn more bonuses by referring others to our platform!
         </p>
-
-        {referrals.length > 0 ? (
-          <div className="mt-6">
-            {/* Bonus Table */}
-            <div className="overflow-x-auto">
-              {" "}
-              {/* Make the table scrollable on small screens */}
-              <table className="min-w-full text-left text-sm text-white border-collapse border border-gray-700">
-                <thead>
-                  <tr className="bg-gray-700">
-                    <th className="px-4 py-2 border border-gray-600">
-                      Referral Count
-                    </th>
-                    <th className="px-4 py-2 border border-gray-600">
-                      Bonus (CZ)
-                    </th>
-                    <th className="px-4 py-2 border border-gray-600 text-center">Claim</th>
+        <div className="mt-6">
+          {/* Bonus Table */}
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-left text-sm text-white border-collapse border border-gray-700">
+              <thead>
+                <tr className="bg-gray-700">
+                  <th className="px-4 py-2 border border-gray-600">
+                    Referral Count
+                  </th>
+                  <th className="px-4 py-2 border border-gray-600">
+                    Bonus (CZ)
+                  </th>
+                  <th className="px-4 py-2 border border-gray-600 text-center">
+                    Claim
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {referralBonusTiers.map((tier, index) => (
+                  <tr
+                    key={index}
+                    className={`${
+                      index % 2 === 0 ? "bg-gray-600" : "bg-gray-700"
+                    } hover:bg-gray-500`}
+                  >
+                    <td className="px-4 py-2 border border-gray-600">
+                      {tier.referrals}
+                    </td>
+                    <td className="px-4 py-2 border border-gray-600">
+                      {tier.bonus} CZ
+                    </td>
+                    <td className="px-4 py-2 border border-gray-600 text-center">
+                      {/* Display claim button or status */}
+                      {userData?.data?.refferCount >= tier.referrals &&
+                      !claimedReferralBonuses.includes(tier.referrals) ? (
+                        <button
+                          className="bg-green-500 hover:bg-green-600 text-white font-medium py-1 px-4 rounded"
+                          onClick={() =>
+                            handleReferralsClaimBonus(
+                              tier.referrals,
+                              tier.bonus
+                            )
+                          }
+                        >
+                          Claim
+                        </button>
+                      ) : claimedReferralBonuses.includes(tier.referrals) ? (
+                        <span className="text-gray-400">Claimed</span>
+                      ) : (
+                        <span className="text-gray-400">Not Eligible</span>
+                      )}
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {bonusTiers.map((tier, index) => (
-                    <tr
-                      key={index}
-                      className={`${
-                        index % 2 === 0 ? "bg-gray-600" : "bg-gray-700"
-                      } hover:bg-gray-500`}
-                    >
-                      <td className="px-4 py-2 border border-gray-600">
-                        {tier.referrals}
-                      </td>
-                      <td className="px-4 py-2 border border-gray-600">
-                        {tier.bonus} CZ
-                      </td>
-                      <td className="px-4 py-2 border border-gray-600 text-center">
-                        {referrals.length >= tier.referrals &&
-                        !claimedBonuses.includes(tier.referrals) ? (
-                          <button
-                            className="bg-green-500 hover:bg-green-600 text-white font-medium py-1 px-4 rounded"
-                            onClick={() =>
-                              handleReferralsClaimBonus(
-                                tier.referrals,
-                                tier.bonus
-                              )
-                            }
-                          >
-                            Claim
-                          </button>
-                        ) : (
-                          <span className="text-gray-400">
-                            {claimedBonuses.includes(tier.referrals)
-                              ? "Claimed"
-                              : "Not Eligible"}
-                          </span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
-        ) : (
-          // No referrals fallback
-          <div className="mt-6 text-center text-gray-400">
-            No referrals yet. Start sharing your link to earn bonuses!
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );

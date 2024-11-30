@@ -44,6 +44,14 @@ export const rewardApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['Reward'],
         }),
+        // Add referralCompletedRewards mutation
+        referralCompletedRewards: builder.mutation({
+            query: ({ userId, referralReward }) => ({
+                url: `/reward/referralCompletedRewards?userId=${userId}&referralReward=${referralReward}`,
+                method: 'POST',
+            }),
+            invalidatesTags: ['Reward'],
+        }),
         userTotalRewards: builder.query({
             query: (userId) => ({
                 url: `/reward/userTotalRewards?userId=${userId}`,
@@ -62,4 +70,5 @@ export const {
     useSocialMediaPostRewardsMutation,
     useOfferCompletedRewardsMutation,
     useUserTotalRewardsQuery,
+    useReferralCompletedRewardsMutation,
 } = rewardApi;
