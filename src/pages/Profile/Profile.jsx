@@ -27,6 +27,8 @@ import {
   useGetAllSocialMediaPostsQuery,
   useGetUserSpecificPostsQuery,
 } from "../SocialMedia/socialmediaPostApi";
+import { useGetReferredUsersQuery } from "../Affiliate/affiliateApi";
+import { useSingleNormalUserQuery } from "../../redux/features/auth/authApi";
 
 ChartJS.register(
   CategoryScale,
@@ -273,47 +275,32 @@ const TabFourComponent = () => (
     </table>
   </div>
 );
-const referrals = [
-  {
-    name: "John Doe",
-    email: "john.doe@example.com",
-    date: "2024-11-01",
-    earnings: 15.0,
-    status: "Active",
-  },
-  {
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    date: "2024-10-28",
-    earnings: 7.5,
-    status: "Inactive",
-  },
-];
-const TabFiveComponent = () => (
+
+const TabFiveComponent = ({ referrals }) => (
   <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full overflow-x-auto box-border">
     <h3 className="text-white text-lg font-bold mb-4">Referrals</h3>
 
-    {referrals.length > 0 ? (
+    {referrals?.referredUsers?.length > 0 ? (
       <>
         {/* Summary Section */}
         <div className="flex justify-between items-center bg-gray-700 p-4 rounded-lg mb-6">
           <div className="text-center">
             <h4 className="text-white text-sm font-medium">Total Referrals</h4>
             <p className="text-green-400 text-xl font-bold">
-              {referrals.length}
+              {referrals.totalReferrals}
             </p>
           </div>
+          
           <div className="text-center">
             <h4 className="text-white text-sm font-medium">Total Earnings</h4>
             <p className="text-green-400 text-xl font-bold">
-              $
-              {referrals.reduce((sum, ref) => sum + ref.earnings, 0).toFixed(2)}
+              {referrals.totalEarnings.toFixed(2)} CZ
             </p>
           </div>
           <div className="text-center">
-            <h4 className="text-white text-sm font-medium">Active Referrals</h4>
+            <h4 className="text-white text-sm font-medium">Active Users</h4>
             <p className="text-green-400 text-xl font-bold">
-              {referrals.filter((ref) => ref.status === "Active").length}
+              {referrals.totalReferrals}
             </p>
           </div>
         </div>
@@ -324,14 +311,13 @@ const TabFiveComponent = () => (
             <thead className="bg-gray-700">
               <tr>
                 <th className="px-4 py-2">Name</th>
-                <th className="px-4 py-2">Email</th>
-                <th className="px-4 py-2">Date</th>
+                <th className="px-4 py-2">Country</th>
                 <th className="px-4 py-2">Earnings</th>
                 <th className="px-4 py-2">Status</th>
               </tr>
             </thead>
             <tbody>
-              {referrals.map((ref, index) => (
+              {referrals.referredUsers.map((ref, index) => (
                 <tr
                   key={index}
                   className={`${
@@ -339,17 +325,13 @@ const TabFiveComponent = () => (
                   } hover:bg-gray-500`}
                 >
                   <td className="px-4 py-2">{ref.name}</td>
-                  <td className="px-4 py-2">{ref.email}</td>
-                  <td className="px-4 py-2">{ref.date}</td>
-                  <td className="px-4 py-2">${ref.earnings.toFixed(2)}</td>
-                  <td
-                    className={`px-4 py-2 font-bold ${
-                      ref.status === "Active"
-                        ? "text-green-400"
-                        : "text-red-400"
-                    }`}
-                  >
-                    {ref.status}
+                  <td className="px-4 py-2">{ref.country}</td>
+                  <td className="px-4 py-2">
+                    ${ref.fifteenPercentOfRewards?.toFixed(2) || "0.00"}
+                  </td>
+                  <td className="px-4 py-2 flex items-center">
+                    <span className="w-2.5 h-2.5 rounded-full bg-blue-500 mr-2"></span>
+                    Active
                   </td>
                 </tr>
               ))}
@@ -431,35 +413,76 @@ const Profile = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+  // Decode the token to get user information
   let user;
   if (token) {
     user = verifyToken(token);
-    console.log(user?.email);
+    console.log("User email:", user?.email);
   }
 
+  // Fetch user's specific posts
   const {
     data: socialMediaLinks,
-    isLoading,
-    isError,
-    error,
+    isLoading: isPostsLoading,
+    isError: isPostsError,
+    error: postsError,
     refetch,
   } = useGetUserSpecificPostsQuery(user?.objectId, {
     skip: !user?.objectId, // Skip the query if userId is not available
   });
-  // withdraw history
 
+  // Fetch withdrawal history
   const {
     data: withdrawalData,
     error: withdrawalError,
     isLoading: isWithdrawalLoading,
   } = useUserMultipleWithdrawalsQuery(user?.email);
 
-  if (isWithdrawalLoading) return <Loader />;
-  if (withdrawalError) return <p>Error: {withdrawalError.message}</p>;
+  // Fetch single normal user data
+  const {
+    data: userData,
+    isLoading: isUserLoading,
+    error: userError,
+  } = useSingleNormalUserQuery(user?.objectId);
+
+  console.log("User data:", userData);
+
+  // Fetch referrals
+  const {
+    data: referralData,
+    isLoading: isReferralsLoading,
+    error: referralsError,
+  } = useGetReferredUsersQuery({
+    referralId: userData?.data?.referralId || "", // Ensure referralId is passed correctly
+  });
+
+  // console.log("Referrals:", referralData);
+
+  // Handle loading states
+  if (
+    isPostsLoading ||
+    isWithdrawalLoading ||
+    isUserLoading ||
+    isReferralsLoading
+  ) {
+    return <Loader />;
+  }
+
+  // Handle errors
+  if (isPostsError || withdrawalError || userError || referralsError) {
+    return (
+      <p>
+        Error:{" "}
+        {postsError?.message ||
+          withdrawalError?.message ||
+          userError?.message ||
+          referralsError?.message}
+      </p>
+    );
+  }
 
   const withdrawals = withdrawalData?.data || [];
-
-  console.log("Fetched withdraw  Data:", withdrawals);
+  const referrals = referralData?.data || [];
 
   // Array of components corresponding to each tab
   const tabComponents = [
@@ -467,7 +490,7 @@ const Profile = () => {
     <TabTwoComponent withdrawals={withdrawals} />,
     <TabThreeComponent />,
     <TabFourComponent />,
-    <TabFiveComponent />,
+    <TabFiveComponent referrals={referrals} />,
     <TabSixComponent socialMediaLinks={socialMediaLinks} />,
   ];
 
