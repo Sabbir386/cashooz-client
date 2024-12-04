@@ -15,7 +15,7 @@ module.exports = {
         grayColor: "#a9a9ca",
       },
       animation: {
-        'infinite-scroll': 'infinite-scroll 5s linear infinite',
+        'infinite-scroll': 'infinite-scroll 20s linear infinite',
       },
       keyframes: {
         'infinite-scroll': {

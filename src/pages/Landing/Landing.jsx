@@ -18,512 +18,312 @@ import UberEats from "../../assets/img/UberEats.png";
 import { FaCheck } from "react-icons/fa";
 
 const Landing = () => {
-  const cards = [
+  const items = [
     {
-      image: "https://freecash.com/public/img/homepage/netflix.png",
-      title: "Netflix",
-      description: "Start a trial month",
-      price: "5.00",
-      rating: "5.0",
+      title: "SIGN UP",
+      description: "Create a new account and login to get started.",
+      icon: "https://via.placeholder.com/50", // Replace with actual icon URL
     },
     {
-      image: "https://freecash.com/public/img/homepage/dice-dreams.png",
-      title: "Dice Dreams",
-      description: "Reach level 10",
-      price: "119.47",
-      rating: "5.0",
+      title: "PLAY THE MULTIPLIER",
+      description: "Multiply your Coins up to 6x.",
+      icon: "https://via.placeholder.com/50", // Replace with actual icon URL
     },
     {
-      image: "https://freecash.com/public/img/homepage/tiktok.png",
-      title: "TikTok",
-      description: "Sign up",
-      price: "2.00",
-      rating: "5.0",
+      title: "COMPLETE TASKS",
+      description: "Complete tasks to level up and earn reward points.",
+      icon: "https://via.placeholder.com/50", // Replace with actual icon URL
+    },
+    {
+      title: "COMPLETE OFFERS",
+      description: "Complete quick offers to earn even more Bitcoin each day.",
+      icon: "https://via.placeholder.com/50", // Replace with actual icon URL
+    },
+    {
+      title: "DO SURVEYS",
+      description: "Complete surveys every day to earn thousands of Coins.",
+      icon: "https://via.placeholder.com/50", // Replace with actual icon URL
+    },
+    {
+      title: "WATCH VIDEOS",
+      description: "Watch videos and earn Coins.",
+      icon: "https://via.placeholder.com/50", // Replace with actual icon URL
     },
   ];
-  const cashouts = [
-    { id: 1, name: "missa48", country: "US", amount: "$5.00" },
-    { id: 2, name: "gracerozza", country: "UK", amount: "$5.00" },
-    { id: 3, name: "Rashid", country: "US", amount: "$5.00" },
-    { id: 4, name: "Bethany", country: "UK", amount: "$5.00" },
+  const cards = [
+    {
+      title: "SURVEYS",
+      description: "Get paid for your opinion",
+      buttonText: "Answer now",
+      imageSrc: "https://via.placeholder.com/150", // Replace with actual image URL
+    },
+    {
+      title: "GAMES",
+      description: "Earn by playing games",
+      buttonText: "Play now",
+      imageSrc: "https://via.placeholder.com/150", // Replace with actual image URL
+    },
+    {
+      title: "QUICK POINTS",
+      description: "Quick tasks for easy points",
+      buttonText: "Start now",
+      imageSrc: "https://via.placeholder.com/150", // Replace with actual image URL
+    },
+    {
+      title: "OFFER WALLS",
+      description: "Complete online offers",
+      buttonText: "Start now",
+      imageSrc: "https://via.placeholder.com/150", // Replace with actual image URL
+    },
+  ];
+  const features = [
+    {
+      title: "LOYALTY BONUS",
+      description:
+        "Login each day to boost your loyalty bonus all the way to 100%.",
+      icon: "🎯", // Replace with actual icons if needed
+    },
+    {
+      title: "REWARD POINTS",
+      description:
+        "Earn reward points by completing tasks and boosting your level. Cash in reward points for real prizes.",
+      icon: "💎",
+    },
+    {
+      title: "FAST PAYMENTS",
+      description:
+        "Withdraw your Coins any time to FaucetHub or your Bitcoin or Doge Wallet.",
+      icon: "⚡",
+    },
+    {
+      title: "EARN INTEREST",
+      description:
+        "Earn 5% interest on your Coin balance when you reach 35,000 Coins.",
+      icon: "💰",
+    },
+    {
+      title: "MULTIPLY YOUR COINS",
+      description:
+        "Play our unique sci-fi themed multiplier game to boost your Coin balance.",
+      icon: "🎮",
+    },
+    {
+      title: "EXPERT SUPPORT",
+      description:
+        "Our support team is the best in the business and is always available to help.",
+      icon: "🛠️",
+    },
+    {
+      title: "DEPOSIT COINS",
+      description:
+        "Send Bitcoin directly to your Cointiply account to earn even more interest.",
+      icon: "💵",
+    },
+    {
+      title: "COMMUNITY",
+      description:
+        "Chat & share your progress with other like-minded Cointiply users.",
+      icon: "🤝",
+    },
+    {
+      title: "25% FOR REFERRALS",
+      description:
+        "Earn 25% of all your referrals claims and 10% of their offer earnings.",
+      icon: "👥",
+    },
+  ];
+  const points = [
+    { label: "10 POINTS = $0.1", bgColor: "bg-green-500" },
+    { label: "100 POINTS = $1", bgColor: "bg-red-500" },
+    { label: "1,000 POINTS = $10", bgColor: "bg-black" },
+    { label: "10,000 POINTS = $100", bgColor: "bg-blue-500" },
   ];
   return (
     <>
-      {/* banner section  */}
-      {/* hero section  */}
-      <section className="py-24 flex flex-col md:flex-row relative z-10">
-        <div className="py-8 text-left w-full md:w-5/12">
-          {/* <small className="bg-buttonBackground px-2 py-1 rounded-full text-white font-semibold text-xs">
-              Cashooz
-            </small> */}
-          <h1 className="text-6xl font-bold mt-5 text-white">
-            <span className="text-buttonBackground">Get paid </span>
-            for testing apps, games & surveys
-          </h1>
-          <p className="text-white text-sm my-4 leading-6">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro
-            accusamus error pariatur laborum cumque iste commodi ipsa debitis
-            excepturi sint. Nisi quos asperiores repellendus quod voluptas dolor
-            ex impedit aliquam recusandae laudantium beatae repellat atque
-            voluptatem
-          </p>
-
-          <div className="flex gap-5 justify-start items-center mt-5">
+      {/* bannner section   */}
+      <div className="relative bg-gray-100">
+        <img
+          src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="Background"
+          className="w-full h-auto object-cover"
+        />
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="text-center max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+              EARN MONEY EVERY TIME YOU GO ONLINE!
+            </h1>
+            <p className="text-white text-base sm:text-lg lg:text-xl mb-6">
+              Earn GPT points for simple tasks such as completing surveys,
+              playing games, watching videos, and more!
+            </p>
             <Link
               to={"/register"}
-              className="px-10 py-2 rounded-full border border-buttonBackground inline-block mt-4 bg-buttonBackground text-white duration-75 hover:shadow-md"
+              className="bg-buttonBackground text-white text-lg sm:text-xl font-semibold py-3 px-6 rounded-lg hover:bg-green-600 transition duration-300"
             >
-              Registration
+              JOIN FREE TODAY
             </Link>
-            <Link
-              to={"/login"}
-              className="px-10 py-2 rounded-full border text-white border-buttonBackground inline-block mt-4 hover:bg-buttonBackground hover:text-white duration-75 hover:shadow-md"
-            >
-              Login
-            </Link>
-          </div>
-
-          <div className="mt-7 flex gap-5 py-4 text-white opacity-50">
-            <p className="text-xs flex items-center gap-2">
-              <span>
-                <FaCheck className="text-buttonBackground" />
-              </span>{" "}
-              <span>Lorem ipsum dolor sit amet.</span>
-            </p>
-            <p className="text-xs flex items-center gap-2">
-              <span>
-                <FaCheck className="text-buttonBackground" />
-              </span>{" "}
-              <span>Lorem ipsum dolor sit amet.</span>
-            </p>
           </div>
         </div>
-        <div className="w-full md:w-7/12 md:px-16">
-          <div className="flex flex-wrap justify-center space-x-4  p-8">
-            {cards.map((card, index) => (
-              <Card
+      </div>
+      {/* how works section  */}
+      <div className="bg-gray-100 py-12">
+        <div className="max-w-7xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+            How Cashooz Works
+          </h2>
+          <p className="text-gray-600 mb-8">
+            We give away thousands of dollars of free money every day.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {items.map((item, index) => (
+              <div
                 key={index}
-                image={card.image}
-                title={card.title}
-                description={card.description}
-                price={card.price}
-                rating={card.rating}
-              />
+                className="flex flex-col items-center text-center space-y-4"
+              >
+                <img
+                  src={item.icon}
+                  alt={item.title}
+                  className="w-16 h-16 object-contain"
+                />
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {item.title}
+                </h3>
+                <p className="text-gray-600">{item.description}</p>
+              </div>
             ))}
           </div>
-          <div className="overflow-hidden mt-4 mb-6 z-[97]">
-            <div className="text-white p-2 rounded shadow-sm inline-flex flex-nowrap gap-5 overflow-hidden animate-infinite-scroll">
-              <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-                <div>
-                  <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                    A
-                  </div>
-                </div>
-                <div>
-                  <h5 className="text-sm">Payout</h5>
-                  <h6 className="text-xs mt-1">Game</h6>
-                </div>
-                <div>
-                  <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                    $18.52
-                  </span>
-                </div>
-              </div>
-              <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-                <div>
-                  <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                    A
-                  </div>
-                </div>
-                <div>
-                  <h5 className="text-sm">Payout</h5>
-                  <h6 className="text-xs mt-1">Game</h6>
-                </div>
-                <div>
-                  <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                    $18.52
-                  </span>
-                </div>
-              </div>
-              <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-                <div>
-                  <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                    A
-                  </div>
-                </div>
-                <div>
-                  <h5 className="text-sm">Payout</h5>
-                  <h6 className="text-xs mt-1">Game</h6>
-                </div>
-                <div>
-                  <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                    $18.52
-                  </span>
-                </div>
-              </div>
-              <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-                <div>
-                  <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                    A
-                  </div>
-                </div>
-                <div>
-                  <h5 className="text-sm">Payout</h5>
-                  <h6 className="text-xs mt-1">Game</h6>
-                </div>
-                <div>
-                  <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                    $18.52
-                  </span>
-                </div>
-              </div>
-              <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-                <div>
-                  <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                    A
-                  </div>
-                </div>
-                <div>
-                  <h5 className="text-sm">Payout</h5>
-                  <h6 className="text-xs mt-1">Game</h6>
-                </div>
-                <div>
-                  <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                    $18.52
-                  </span>
-                </div>
-              </div>
-              <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-                <div>
-                  <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                    A
-                  </div>
-                </div>
-                <div>
-                  <h5 className="text-sm">Payout</h5>
-                  <h6 className="text-xs mt-1">Game</h6>
-                </div>
-                <div>
-                  <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                    $18.52
-                  </span>
-                </div>
-              </div>
-              <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-                <div>
-                  <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                    A
-                  </div>
-                </div>
-                <div>
-                  <h5 className="text-sm">Payout</h5>
-                  <h6 className="text-xs mt-1">Game</h6>
-                </div>
-                <div>
-                  <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                    $18.52
-                  </span>
-                </div>
-              </div>
-              <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-                <div>
-                  <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                    A
-                  </div>
-                </div>
-                <div>
-                  <h5 className="text-sm">Payout</h5>
-                  <h6 className="text-xs mt-1">Game</h6>
-                </div>
-                <div>
-                  <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                    $18.52
-                  </span>
-                </div>
-              </div>
-              <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-                <div>
-                  <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                    A
-                  </div>
-                </div>
-                <div>
-                  <h5 className="text-sm">Payout</h5>
-                  <h6 className="text-xs mt-1">Game</h6>
-                </div>
-                <div>
-                  <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                    $18.52
-                  </span>
-                </div>
-              </div>
-              <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-                <div>
-                  <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                    A
-                  </div>
-                </div>
-                <div>
-                  <h5 className="text-sm">Payout</h5>
-                  <h6 className="text-xs mt-1">Game</h6>
-                </div>
-                <div>
-                  <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                    $18.52
-                  </span>
-                </div>
-              </div>
-              <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-                <div>
-                  <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                    A
-                  </div>
-                </div>
-                <div>
-                  <h5 className="text-sm">Payout</h5>
-                  <h6 className="text-xs mt-1">Game</h6>
-                </div>
-                <div>
-                  <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                    $18.52
-                  </span>
-                </div>
-              </div>
-              <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-                <div>
-                  <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                    A
-                  </div>
-                </div>
-                <div>
-                  <h5 className="text-sm">Payout</h5>
-                  <h6 className="text-xs mt-1">Game</h6>
-                </div>
-                <div>
-                  <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                    $18.52
-                  </span>
-                </div>
-              </div>
-              <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-                <div>
-                  <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                    A
-                  </div>
-                </div>
-                <div>
-                  <h5 className="text-sm">Payout</h5>
-                  <h6 className="text-xs mt-1">Game</h6>
-                </div>
-                <div>
-                  <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                    $18.52
-                  </span>
-                </div>
-              </div>
-              <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-                <div>
-                  <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                    A
-                  </div>
-                </div>
-                <div>
-                  <h5 className="text-sm">Payout</h5>
-                  <h6 className="text-xs mt-1">Game</h6>
-                </div>
-                <div>
-                  <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                    $18.52
-                  </span>
-                </div>
-              </div>
-              <div className="w-[200px] flex gap-3 justify-center items-center border-r-2">
-                <div>
-                  <div className="w-8 h-8 grid justify-center items-center rounded bg-secondaryColor">
-                    A
-                  </div>
-                </div>
-                <div>
-                  <h5 className="text-sm">Payout</h5>
-                  <h6 className="text-xs mt-1">Game</h6>
-                </div>
-                <div>
-                  <span className="px-4 py-2 bg-secondaryColor rounded text-buttonBackground">
-                    $18.52
-                  </span>
-                </div>
-              </div>
+        </div>
+      </div>
+      {/* cards section  */}
+      <div className="bg-green-100">
+        {/* Header Navigation */}
+        <div className="bg-green-500 text-white py-4">
+          <div className="flex justify-center space-x-6 text-lg font-medium">
+            <a href="#!" className="hover:underline">
+              Download Apps
+            </a>
+            <a href="#!" className="hover:underline">
+              Watch Videos
+            </a>
+            <a href="#!" className="hover:underline">
+              Paid Surveys
+            </a>
+            <a href="#!" className="hover:underline">
+              Complete Offers
+            </a>
+            <a href="#!" className="hover:underline">
+              Play Games
+            </a>
+          </div>
+        </div>
 
-              {/* Repeat the inner divs as necessary */}
+        {/* Cards Section */}
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-10 px-4">
+          {cards.map((card, index) => (
+            <div
+              key={index}
+              className="bg-white shadow-md rounded-md overflow-hidden text-center"
+            >
+              <img
+                src={card.imageSrc}
+                alt={card.title}
+                className="w-full h-40 object-cover"
+              />
+              <div className="p-4">
+                <h3 className="text-lg font-bold text-green-600">
+                  {card.title}
+                </h3>
+                <p className="text-gray-600 text-sm mt-2">{card.description}</p>
+                <button className="bg-green-500 text-white py-2 px-4 rounded-md mt-4 hover:bg-green-600">
+                  {card.buttonText}
+                </button>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
-      </section>
-      {/* hero section  */}
-      {/* info section  */}
-      <section className="bg-[#15172b] p-8 rounded-lg flex flex-col sm:flex-row justify-between items-center text-white gap-4">
-        {/* Card 1 */}
-        <div className="flex flex-col justify-center items-center  text-center">
-          <div className="flex justify-center items-center text-2xl font-bold">
-            <span className="mr-2">⏱️</span>
-            <span>0h 17m 16s</span>
-          </div>
-          <p className="text-gray-400 mt-2">
-            Average time until user makes first cashout
-          </p>
-        </div>
-
-        {/* Divider for larger screens */}
-        <div className="hidden sm:block h-16 border-l border-gray-600"></div>
-
-        {/* Card 2 */}
-        <div className="flex flex-col justify-center items-center  text-center">
-          <div className="text-2xl font-bold">$49.50</div>
-          <p className="text-gray-400 mt-2">
-            Average money earned by users yesterday
-          </p>
-        </div>
-
-        {/* Divider for larger screens */}
-        <div className="hidden sm:block h-16 border-l border-gray-600"></div>
-
-        {/* Card 3 */}
-        <div className="flex flex-col justify-center items-center  text-center">
-          <div className="text-2xl font-bold">$140,215,322</div>
-          <p className="text-gray-400 mt-2">Total USD earned on Freecash</p>
-        </div>
-      </section>
-      {/* info section  */}
-      {/* featured section  */}
-      <section className=" p-8 rounded-lg text-white">
-        <h2 className="text-center text-3xl font-bold mb-8">
-          We’re the #1 site to make money.{" "}
-          <span className="text-green-500">Here’s why</span>
+      </div>
+      {/* features section  */}
+      <div className="bg-gray-100 py-12">
+        {/* Section Header */}
+        <h2 className="text-center text-2xl font-bold text-gray-800 mb-8">
+          COINTIPLY FEATURES
         </h2>
-
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-8">
-          {/* Feature 1 */}
-          <div className="bg-[#1b1e36] p-6 rounded-lg flex flex-col items-center text-center">
-            <img src={One} alt="Highest payouts icon" className="h-16 mb-4" />
-            <h3 className="text-xl font-bold">Highest payouts</h3>
-            <p className="text-gray-400 mt-2">
-              Earn way more than on other sites. It’s our goal to help you make
-              as much money as possible.
-            </p>
-          </div>
-
-          {/* Feature 2 */}
-          <div className="bg-[#1b1e36] p-6 rounded-lg flex flex-col items-center text-center">
-            <img src={Two} alt="Instant cashouts icon" className="h-16 mb-4" />
-            <h3 className="text-xl font-bold">Instant cashouts</h3>
-            <p className="text-gray-400 mt-2">
-              Need your earnings now? No problem. You can withdraw them almost
-              instantly starting at $2.00.
-            </p>
-          </div>
-
-          {/* Feature 3 */}
-          <div className="bg-[#1b1e36] p-6 rounded-lg flex flex-col items-center text-center">
-            <img src={Three} alt="Daily bonuses icon" className="h-16 mb-4" />
-            <h3 className="text-xl font-bold">Daily bonuses</h3>
-            <p className="text-gray-400 mt-2">
-              Climb the daily bonus ladder, reach the leaderboard, or start a
-              streak to earn extra rewards, for free.
-            </p>
-          </div>
-        </div>
-      </section>
-      {/* featured section  */}
-      {/* cashout section  */}
-      <section className="p-8 text-white flex flex-col items-center">
-        <h2 className="text-xl font-bold mb-4">Cashout via</h2>
-        <div className="w-full py-6 flex flex-wrap justify-between gap-6">
-          <img src={LiteCoin} alt="Litecoin" className="h-12" />
-          <img src={Visa} alt="Visa" className="h-12" />
-          <img src={Bitcoin} alt="Bitcoin" className="h-12" />
-          <img src={GooglePlay} alt="Google Play" className="h-12" />
-          <img src={AppleApple} alt="Apple" className="h-12" />
-          <img src={Ethereum} alt="Ethereum" className="h-12" />
-          <img src={Amazon} alt="Amazon" className="h-12" />
-          <img src={Spotify} alt="Spotify" className="h-12" />
-          <img src={Netflix} alt="Netflix" className="h-12" />
-          <img src={UberEats} alt="Uber Eats" className="h-12" />
-        </div>
-      </section>
-      {/* cashout section  */}
-      {/* live cashout section  */}
-      <section className="bg-sidebarBackground p-4 rounded-lg max-w-4xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-4">
-          {/* Left Side - Stats */}
-          <div className="bg-[#2A2837] p-6 rounded-lg flex flex-col justify-center items-center">
-            <h2 className="text-white text-lg mb-4">
-              This month users cashed out
-            </h2>
-            <p className="text-4xl font-bold text-white mb-4">$1,101,030.19</p>
-            <div className="flex space-x-2">
-              {/* Add any icons or graphics as needed here */}
-              <div className="w-10 h-10 bg-yellow-400 rounded-full"></div>
-              <div className="w-10 h-10 bg-yellow-400 rounded-full"></div>
-              <div className="w-10 h-10 bg-yellow-400 rounded-full"></div>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+          {features.map((feature, index) => (
+            <div
+              key={index}
+              className="flex items-start p-4 bg-white rounded-lg shadow-md"
+            >
+              {/* Icon */}
+              <div className="text-pink-500 text-3xl mr-4">{feature.icon}</div>
+              {/* Content */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 text-sm">{feature.description}</p>
+              </div>
             </div>
+          ))}
+        </div>
+      </div>
+      {/* earning section  */}
+      <div className="bg-gray-100 py-12">
+        {/* Header Section */}
+        <div className="text-center max-w-3xl mx-auto px-4">
+          <div className="flex justify-center mb-4">
+            {/* Replace with actual image */}
+            <img
+              src="https://via.placeholder.com/80"
+              alt="Icon"
+              className="w-20 h-20"
+            />
           </div>
+          <h2 className="text-2xl font-bold text-gray-800">
+            how much can I earn?
+          </h2>
+          <p className="text-gray-600 mt-4">
+            When we say your opinions are valuable, we mean it.
+            <br />
+            Every time you complete one of our surveys, you’ll earn **Opinion
+            Points**.
+          </p>
+          <p className="text-gray-600 mt-2">
+            An average survey pays out around 10 points but can be worth as much
+            as 250 points.
+          </p>
+        </div>
 
-          {/* Right Side - Live Cashouts */}
-          <div className="p-6 rounded-lg">
-            <h2 className="text-white text-lg mb-4">Live cashouts</h2>
-            <ul className="space-y-4">
-              {cashouts.map((cashout) => (
-                <li
-                  key={cashout.id}
-                  className="flex justify-between items-center bg-cardBackground py-1 px-4 rounded-lg"
-                >
-                  <div className="flex items-center space-x-2">
-                    <div className="w-10 h-10 bg-gray-600 rounded-full overflow-hidden flex items-center justify-center text-white">
-                      <img
-                        src={`https://avatars.steamstatic.com/770f2404ed922fa6adf220e5b7876d094a81411a.jpg`}
-                        alt={cashout.name}
-                        className="w-10 h-10 object-cover"
-                      />
-                    </div>
-                    <div>
-                      <p className="text-white flex flex-col space-x-1">
-                        <h5>{cashout.name}</h5>
-                        {/* <span className="text-lg">{cashout.flag}</span> */}
-                        <span className="text-gray-400">
-                          (less than a minute ago)
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <span className="text-white font-bold">
-                      {cashout.amount}
-                    </span>
-                    <button className="bg-blue-600 p-2 rounded-sm">
-                      {/* Replace with the correct icon */}
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-2 w-2 text-white"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 12l5 5L20 7"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
+        {/* Points Worth Section */}
+        <div className="mt-12">
+          <h3 className="text-center font-bold text-gray-800 text-lg">
+            POINTS WORTH IN USD
+          </h3>
+          <div className="flex flex-wrap justify-center gap-4 mt-6 px-4">
+            {points.map((point, index) => (
+              <div
+                key={index}
+                className={`${point.bgColor} text-white py-4 px-8 rounded-md shadow-md`}
+              >
+                {point.label}
+              </div>
+            ))}
           </div>
         </div>
-      </section>
-      {/* live cashout section  */}
+
+        {/* Payment Section */}
+        <div className="mt-12 text-center">
+          <div className="bg-white border-2 border-blue-500 py-6 px-8 inline-block rounded-md shadow-md">
+            <p className="text-blue-500 font-medium text-lg">
+              We have paid our members
+            </p>
+            <p className="text-green-500 text-4xl font-bold mt-2">
+              $3,724,318.37
+            </p>
+          </div>
+        </div>
+      </div>
+      {/* all points section  */}
     </>
   );
 };

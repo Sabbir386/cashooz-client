@@ -19,6 +19,12 @@ import {
   faChartLine,
 } from "@fortawesome/free-solid-svg-icons";
 import SocialSubmissions from "./SocialSubmissions";
+import {
+  useClaimAffiliateRewardsQuery,
+  useCreateAffiliateRewardMutation,
+  useGetReferredUsersQuery,
+} from "./affiliateApi";
+import Swal from "sweetalert2";
 
 const Affiliate = () => {
   const [referralLink, setReferralLink] = useState("");
@@ -35,25 +41,99 @@ const Affiliate = () => {
     }
   }
 
-  const {
-    data: userData,
-    isLoading: isUserLoading,
-    error: userError,
-  } = useSingleNormalUserQuery(user?.objectId);
-  console.log(userData);
+  // Fetch user data
+  const { data: userData, isLoading: isUserLoading } = useSingleNormalUserQuery(
+    user?.objectId
+  );
+
   useEffect(() => {
     if (userData?.data?.id) {
-      // Dynamically set the referral link when userData is available
       setReferralLink(
-        `https://cashooz-838b0.web.app/register?refId=CZ${userData?.data?.id}`
+        `https://cashooz-838b0.web.app/register?refId=CZ${userData.data.id}`
       );
     }
   }, [userData]);
 
+  // Fetch referrals
+  const { data: referralData } = useGetReferredUsersQuery({
+    referralId: userData?.data?.referralId || "",
+  });
+  const referrals = referralData?.data || [];
+
+  // Claim affiliate rewards
+  const { data: totalReferralRewards, refetch: refetchClaimedRewards } =
+    useClaimAffiliateRewardsQuery(
+      { userId: userData?.data?.user },
+      { skip: !userData?.data?.user } // Skip the query if userId is not defined
+    );
+  console.log(totalReferralRewards);
+
   const copyToClipboard = () => {
     navigator.clipboard.writeText(referralLink);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000); // Reset after 2 seconds
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  // Use the mutation hook
+  const [createAffiliateReward, { isLoading: isCreating, error: createError }] =
+    useCreateAffiliateRewardMutation();
+
+  const handleClaimRewards = async () => {
+    // Check if user data and total earnings are present
+    if (!userData?.data?.user || !referrals?.totalEarnings) {
+      Swal.fire({
+        icon: "warning",
+        title: "Incomplete Data",
+        text: "User ID or earnings data is missing. Cannot proceed with claiming rewards.",
+        confirmButtonColor: "#d33",
+      });
+      return; // Exit early if the required data is not available
+    }
+
+    try {
+      // Log the data you're sending to the API for debugging purposes
+      const userId = userData?.data?.user;
+      const referralId = userData?.data?.referralId;
+      const claimedAmount = referrals?.totalEarnings;
+
+      console.log("API Request Data:", { userId, referralId, claimedAmount });
+
+      // Make the API call to claim rewards
+      const response = await createAffiliateReward({
+        userId: userId,
+        referralId: referralId,
+        claimedAmount: claimedAmount,
+      }).unwrap();
+
+      // Log the API response for debugging
+      console.log("API Response:", response);
+
+      // Success alert on successful API call
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: "Reward claimed successfully!",
+        confirmButtonColor: "#01D676",
+      });
+    } catch (error) {
+      console.error("Error claiming reward:", error);
+
+      // Display the error message from the API or a general failure message
+      let errorMessage = "Failed to claim reward. Please try again.";
+
+      // Check if the error object contains response data with a message
+      if (error?.response?.data?.message) {
+        errorMessage = error.response.data.message; // Show specific error from the API
+      }
+
+      // Error alert for API failure
+      Swal.fire({
+        icon: "error",
+        title: "Failed!",
+        text: errorMessage,
+        confirmButtonColor: "#d33",
+      });
+    }
   };
 
   return (
@@ -68,11 +148,35 @@ const Affiliate = () => {
           <h3 className="mt-4 text-xl font-semibold">
             {userData?.data?.name || "Guest"}
           </h3>
-          <div className="text-green-300 mt-1"> 15% Commission</div>
+          <div className="text-green-300 mt-1 text-center">
+            You'll get 15% of your friend's task reward as referral commission
+          </div>
           <div className="flex mt-4">
-            <p className="text-lg font-bold">CZ-0.00</p>
-            <button className="bg-[#01D676] hover:bg-green-600 text-white rounded-md ml-2 px-4 py-1">
-              Claim
+            <p className="text-lg font-bold">
+              CZ{" "}
+              {(referrals?.totalEarnings ?? 0) -
+                (totalReferralRewards?.data?.totalRewards ?? 0).toFixed(2)}
+            </p>
+
+            <button
+              onClick={handleClaimRewards}
+              className={`bg-[#01D676] hover:bg-green-600 text-white rounded-md ml-2 px-4 py-1 ${
+                isCreating ||
+                (referrals?.totalEarnings ?? 0) -
+                  (totalReferralRewards?.data?.totalRewards ?? 0) ===
+                  0
+                  ? "cursor-not-allowed opacity-50" // Add opacity for a disabled appearance
+                  : ""
+              }`}
+              disabled={
+                isCreating ||
+                !(referrals?.totalEarnings ?? 0) || // Disable if no earnings
+                (referrals?.totalEarnings ?? 0) -
+                  (totalReferralRewards?.data?.totalRewards ?? 0) ===
+                  0 // Disable if the difference is 0
+              }
+            >
+              {isCreating ? "Claiming..." : "Claim"}
             </button>
           </div>
         </div>
@@ -98,7 +202,7 @@ const Affiliate = () => {
               />
               <p>Total Earnings</p>
             </div>
-            <p>$0.00</p>
+            <p>{totalReferralRewards?.data?.totalRewards} CZ</p>
           </div>
 
           {/* Users Referred */}
@@ -114,7 +218,7 @@ const Affiliate = () => {
             <p>{userData?.data?.refferCount}</p>
           </div>
 
-          <div className="flex justify-between items-center mt-4">
+          {/* <div className="flex justify-between items-center mt-4">
             <div className="flex items-center">
               <FontAwesomeIcon
                 icon={faCalendar}
@@ -124,7 +228,7 @@ const Affiliate = () => {
               <p>Earnings Last 30 Days</p>
             </div>
             <p>$0.00</p>
-          </div>
+          </div> */}
         </div>
       </div>
 

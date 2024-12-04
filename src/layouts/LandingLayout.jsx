@@ -11,7 +11,7 @@ const LandingLayout = () => {
     <div className="bg-gradient-radial  from-[#141523] via-[#212134] to-[#222339]">
       <ScrollToTop />
       {/* main container */}
-      <div className="max-w-[1440px] mx-auto px-2 md:px-0  py-10">
+      <div className="max-w-full mx-auto px-2 md:px-0  py-10">
         {/* banner section  */}
         <div className="">
           {/* naver section  */}
@@ -42,10 +42,10 @@ const LandingLayout = () => {
                 <li className="mx-2 my-4 md:my-0 ">
                   <Link
                     onClick={() => setOpen(!open)}
-                    to={"/"}
+                    to={"/login"}
                     className="text-base hover:text-buttonBackground text-white duration"
                   >
-                    Home
+                    Login
                   </Link>
                 </li>
 

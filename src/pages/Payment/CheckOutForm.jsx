@@ -18,6 +18,7 @@ import { verifyToken } from "../../utils/verifyToken";
 import { useAppSelector } from "../../redux/features/hooks";
 import { useCurrentToken } from "../../redux/features/auth/authSlice";
 import Swal from "sweetalert2";
+import LitecoinCryptoModal from "./LitecoinCryptoModal";
 
 // Modal Styles
 const customStyles = {
@@ -82,7 +83,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
     setEthereumModalOpen(true); // Open the EthereumCryptoModal
   };
 
-  const handleEthereumSubmit = async(data) => {
+  const handleEthereumSubmit = async (data) => {
     setEthereumModalOpen(false);
     console.log("Ethereum Payment Data:", data);
 
@@ -111,14 +112,14 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
     //  console.log(requestBody);
     try {
       // Send the withdrawal request
-       await createWithdrawal(requestBody).unwrap();
+      await createWithdrawal(requestBody).unwrap();
       Swal.fire(
         "Success",
         "Your withdrawal request has been submitted.stay Tuned ! you will got notified within 24 hours.",
         "success"
       );
     } catch (error) {
-      console.log(error)
+      console.log(error);
       Swal.fire(
         "Error",
         "Failed to submit withdrawal request. Please try again.",
@@ -126,6 +127,58 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
       );
     }
   };
+
+  // Litecoin functinality
+  const [isLitecoinModalOpen, setLitecoinModalOpen] = useState(false);
+
+const handleLitecoinPayment = () => {
+  setLitecoinModalOpen(true); // Open the LitecoinCryptoModal
+};
+
+const handleLitecoinSubmit = async (data) => {
+  setLitecoinModalOpen(false);
+  console.log("Litecoin Payment Data:", data);
+
+  // Prepare request payload
+  const requestBody = {
+    userId: userData?.data?._id,
+    userName: userData?.data?.name,
+    userRegisterId: userData?.data?.id,
+    userEmail: userData?.data?.email,
+    profileImg: userData?.data?.profileImg,
+    paypalEmail: "",
+    btcAddress: data?.litecoinAddress,
+    networkType: "litecoin",
+    description: `Withdrawal request for ${data?.litecoinAmount} Litecoin payout`,
+    method: "Litecoin",
+    amount: parseFloat(data?.litecoinAmount || data?.amountUSD),
+    transactionId: "TXN987654321",
+    invoiceId: "",
+    country: userData?.data?.country,
+    status: "pending",
+    timestamps: {
+      requestedAt: new Date(),
+      processedAt: null,
+    },
+  };
+
+  try {
+    await createWithdrawal(requestBody).unwrap();
+    Swal.fire(
+      "Success",
+      "Your Litecoin withdrawal request has been submitted. Stay tuned! You will be notified within 24 hours.",
+      "success"
+    );
+  } catch (error) {
+    console.error(error);
+    Swal.fire(
+      "Error",
+      "Failed to submit Litecoin withdrawal request. Please try again.",
+      "error"
+    );
+  }
+};
+
 
   // btc...
   const [isCryptoModalOpen, setCryptoModalOpen] = useState(false);
@@ -173,7 +226,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         "success"
       );
     } catch (error) {
-      console.log(error)
+      console.log(error);
       Swal.fire(
         "Error",
         "Failed to submit withdrawal request. Please try again.",
@@ -357,13 +410,13 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         </h3>
         <p className="text-lg mt-2 mb-3 pl-4">Amount: ${price.toFixed(2)}</p>
       </div>
-      <div className="xl:max-w-[65%] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5  gap-4">
+      <div className="xl:max-w-[80%] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6  gap-4">
         <div
           className="p-6 py-10 bg-[#259CDF] border border-gray-700 rounded-lg  cursor-pointer text-center flex flex-col items-center justify-center gap-3"
           onClick={toggleModal} // Open modal on click
         >
           <img
-            src="https://freecash.com/public/img/cashout/paypal.png"
+            src="https://i.ibb.co.com/r7MhRfy/paypal.png"
             alt="Pay with PayPal"
             className="w-16 h-16 mb-3"
           />
@@ -377,7 +430,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             onClick={handleCryptoPayment}
           >
             <img
-              src="https://freecash.com/public/img/cashout/bitcoin.png"
+              src="https://i.ibb.co.com/4WM0hGp/bitcoin.png"
               alt="Pay with Bitcoin"
               className="w-16 h-16 mb-3"
             />
@@ -399,7 +452,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           onClick={handleEthereumPayment}
         >
           <img
-            src="https://freecash.com/public/img/cashout/ethereum.png"
+            src="https://i.ibb.co.com/mR6CCpf/ethereum.png"
             alt="Pay with Ethereum"
             className="w-16 h-16 mb-3"
           />
@@ -414,10 +467,40 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             onSubmit={handleEthereumSubmit}
           />
         )}
+     {/* litecoin payment  */}
+     <div
+  className="bg-[#A6A9AA] p-6 py-10 border border-gray-700 rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3"
+  onClick={handleLitecoinPayment}
+>
+  <img
+    src="https://i.ibb.co/5s34CR5/litecoin.png"
+    alt="Pay with Litecoin"
+    className="w-16 h-16 mb-3"
+  />
+  <p className="text-white text-xl font-semibold">Pay with Litecoin</p>
+  <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
+</div>
 
+{/* Render the LitecoinCryptoModal */}
+{isLitecoinModalOpen && (
+  <LitecoinCryptoModal
+    onClose={() => setLitecoinModalOpen(false)}
+    onSubmit={handleLitecoinSubmit}
+  />
+)}
+
+
+        {/* Render the LitecoinCryptoModal */}
+        {isLitecoinModalOpen && (
+          <LitecoinCryptoModal
+            onClose={() => setLitecoinModalOpen(false)}
+            onSubmit={handleLitecoinSubmit}
+          />
+        )}
+{/* stake payment  */}
         <div className="relative bg-[#31414B] p-6 py-10 border border-gray-700 rounded-lg cursor-not-allowed text-center flex flex-col items-center justify-center gap-3 opacity-50">
           <img
-            src="https://freecash.com/public/img/cashout/stake.png"
+            src="https://i.ibb.co.com/Bq95hgQ/stake.png"
             alt="Pay with Stake"
             className="w-16 h-16 mb-3"
           />
@@ -431,7 +514,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
 
         <div className="relative bg-[#F7C97A] p-6 py-10 border border-gray-700 rounded-lg cursor-not-allowed text-center flex flex-col items-center justify-center gap-3 opacity-50">
           <img
-            src="https://freecash.com/public/img/cashout/dogecoin.png"
+            src="https://i.ibb.co.com/7JNd9f4/dogecoin.png"
             alt="Pay with Dogecoin"
             className="w-16 h-16 mb-3"
           />

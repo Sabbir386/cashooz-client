@@ -278,7 +278,7 @@ const TabFourComponent = () => (
 
 const TabFiveComponent = ({ referrals }) => (
   <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full overflow-x-auto box-border">
-    <h3 className="text-white text-lg font-bold mb-4">Referrals</h3>
+    <h3 className="text-white text-lg font-bold mb-4">Referrals History</h3>
 
     {referrals?.referredUsers?.length > 0 ? (
       <>
@@ -312,7 +312,7 @@ const TabFiveComponent = ({ referrals }) => (
               <tr>
                 <th className="px-4 py-2">Name</th>
                 <th className="px-4 py-2">Country</th>
-                <th className="px-4 py-2">Earnings</th>
+                <th className="px-4 py-2">Commission Earnings</th>
                 <th className="px-4 py-2">Status</th>
               </tr>
             </thead>
@@ -327,7 +327,7 @@ const TabFiveComponent = ({ referrals }) => (
                   <td className="px-4 py-2">{ref.name}</td>
                   <td className="px-4 py-2">{ref.country}</td>
                   <td className="px-4 py-2">
-                    ${ref.fifteenPercentOfRewards?.toFixed(2) || "0.00"}
+                    CZ {ref.fifteenPercentOfRewards?.toFixed(2) || "0.00"}
                   </td>
                   <td className="px-4 py-2 flex items-center">
                     <span className="w-2.5 h-2.5 rounded-full bg-blue-500 mr-2"></span>
