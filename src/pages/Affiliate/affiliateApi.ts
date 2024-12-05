@@ -18,7 +18,7 @@ export const affiliateApi = baseApi.injectEndpoints({
                 method: "POST",
                 body: { userId, referralId, claimedAmount },
             }),
-            invalidatesTags: ["Affiliate"], // Invalidate cache if necessary
+            invalidatesTags: ["Reward","Affiliate"], // Invalidate cache if necessary
         }),
 
         // Claim total rewards for a user

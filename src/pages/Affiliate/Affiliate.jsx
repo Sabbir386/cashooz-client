@@ -162,18 +162,20 @@ const Affiliate = () => {
               onClick={handleClaimRewards}
               className={`bg-[#01D676] hover:bg-green-600 text-white rounded-md ml-2 px-4 py-1 ${
                 isCreating ||
-                (referrals?.totalEarnings ?? 0) -
-                  (totalReferralRewards?.data?.totalRewards ?? 0) ===
-                  0
+                Number(
+                  (referrals?.totalEarnings ?? 0) -
+                    (totalReferralRewards?.data?.totalRewards ?? 0)
+                ).toFixed(2) === "0.00"
                   ? "cursor-not-allowed opacity-50" // Add opacity for a disabled appearance
                   : ""
               }`}
               disabled={
                 isCreating ||
                 !(referrals?.totalEarnings ?? 0) || // Disable if no earnings
-                (referrals?.totalEarnings ?? 0) -
-                  (totalReferralRewards?.data?.totalRewards ?? 0) ===
-                  0 // Disable if the difference is 0
+                Number(
+                  (referrals?.totalEarnings ?? 0) -
+                    (totalReferralRewards?.data?.totalRewards ?? 0)
+                ).toFixed(2) === "0.00" // Disable if the difference is 0
               }
             >
               {isCreating ? "Claiming..." : "Claim"}
