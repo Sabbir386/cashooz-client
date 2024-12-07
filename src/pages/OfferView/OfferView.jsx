@@ -188,7 +188,7 @@ const OfferView = () => {
 
                   {/* Results Info */}
                   <span className="text-white font-semibold">
-                    1 - {networkOffer.offers.length} of results
+                    {/* 1 - {networkOffer.offers.length} of results */}
                   </span>
 
                   {/* Next Button */}

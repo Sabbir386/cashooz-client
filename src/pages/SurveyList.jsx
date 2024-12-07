@@ -140,11 +140,12 @@ const SurveyList = () => {
                     className="h-36 w-full object-cover rounded-md mb-3"
                   />
                 )}
-
+                
                 <h4 className="font-bold text-base">
                   {offer?.name ? offer.name.slice(0, 11) : "Offer Name"}
                   {offer.name.length > 11 && "..."}
                 </h4>
+                <h5>CZ {offer?.points}</h5>
               </div>
             </SwiperSlide>
           ))}

@@ -290,7 +290,7 @@ const TabFiveComponent = ({ referrals }) => (
               {referrals.totalReferrals}
             </p>
           </div>
-          
+
           <div className="text-center">
             <h4 className="text-white text-sm font-medium">Total Earnings</h4>
             <p className="text-green-400 text-xl font-bold">
@@ -528,14 +528,20 @@ const Profile = () => {
         <div className="py-4 flex flex-col lg:flex-row gap-3">
           <div>
             <img
-              src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt=""
-              className="w-24 h-24 rounded-full object-cover"
+              src={
+                userData?.data?.profileImg
+                  ? userData.data.profileImg
+                  : "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              }
+              alt="Profile"
+              className="w-24 h-24 rounded-full object-cover object-fill"
             />
           </div>
+
           <div>
             <h4 className="text-xl text-white font-bold">
-              {user.email.match(/^([^@]*)@/)[1]}
+              {/* {user.email.match(/^([^@]*)@/)[1]} */}
+              {userData?.data?.name}
             </h4>
             <div className="flex flex-col md:flex-row gap-10 my-5">
               {/* <div>
@@ -549,7 +555,7 @@ const Profile = () => {
                   Phone Number
                 </h5>
                 <h6 className="font-semibold text-white text-base capitalize">
-                  +880 174 093 454
+                  {userData?.data?.contactNo}
                 </h6>
               </div>
               <div>
@@ -557,7 +563,7 @@ const Profile = () => {
                   Email Address
                 </h5>
                 <h6 className="font-semibold text-white text-base capitalize">
-                  {user.email}
+                  {userData?.data?.email}
                 </h6>
               </div>
             </div>
