@@ -2,7 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { HiOutlineStar } from "react-icons/hi";
 import { FaArrowLeft, FaArrowRight, FaPlay } from "react-icons/fa";
 import { FcSurvey } from "react-icons/fc";
-import { useGetFilteredSurveysQuery } from "./surveyWallApi";
+import {
+  useCreateSurveyCompletedMutation,
+  useGetFilteredSurveysQuery,
+} from "./surveyWallApi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import "swiper/css";
@@ -31,6 +34,7 @@ const SurveyList = () => {
   const nextRef = useRef(null);
   const token = useAppSelector(useCurrentToken);
   const user = token ? verifyToken(token) : null;
+  const [createSurveyCompleted] = useCreateSurveyCompletedMutation();
   console.log(user);
   useEffect(() => {
     if (Array.isArray(offers) && offers.length) {
@@ -51,7 +55,7 @@ const SurveyList = () => {
     window.open("https://www.toluna.com/", "_blank");
 
     // Display success notification with specific offer details
-
+    console.log("survey", offer);
     try {
       console.log(offer?._id, user?.objectId, offer?.points);
       await createCompletedOffer({
@@ -65,7 +69,25 @@ const SurveyList = () => {
         userId: user?.objectId,
         surveyReward: offer?.points,
       }).unwrap();
+      /// survey cololecton adding
+      // console.log("Survey Data:", {
+      //   name: offer?.name,
+      //   offerId: offer?._id,
+      //   userId: user?.objectId,
+      //   points: offer?.points,
+      //   network: offer?.network,
+      //   category: offer?.category,
+      // });
+      const response = await createSurveyCompleted({
+        name: offer?.name,
+        offerId: offer?._id,
+        userId: user?.objectId,
+        points: offer?.points,
+        network: offer?.network,
+        category: offer?.category,
+      }).unwrap();
 
+      console.log("Response:", response);
       Swal.fire({
         icon: "success",
         title: `Survey Completed!`,
@@ -73,6 +95,7 @@ const SurveyList = () => {
         confirmButtonText: "Claim",
       });
     } catch (err) {
+      console.log(err);
       Swal.fire({
         title: "Error!",
         text: "Failed to complete offer.",
@@ -140,7 +163,7 @@ const SurveyList = () => {
                     className="h-36 w-full object-cover rounded-md mb-3"
                   />
                 )}
-                
+
                 <h4 className="font-bold text-base">
                   {offer?.name ? offer.name.slice(0, 11) : "Offer Name"}
                   {offer.name.length > 11 && "..."}

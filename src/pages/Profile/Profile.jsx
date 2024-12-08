@@ -29,8 +29,8 @@ import {
 } from "../SocialMedia/socialmediaPostApi";
 import { useGetReferredUsersQuery } from "../Affiliate/affiliateApi";
 import { useSingleNormalUserQuery } from "../../redux/features/auth/authApi";
-import { useGetUserRewardQuery, useUserTotalRewardsQuery } from "../../rewards/rewardApi";
-
+import { useUserTotalRewardsQuery } from "../../rewards/rewardApi";
+import { useGetAllSurveyCompletedQuery } from "../surveyWallApi";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -46,26 +46,27 @@ const TabOneComponent = ({ userEarningFieldData }) => {
 
   // Generate dynamic labels and data
   const labels = Object.keys(userEarningFieldData)
-  .filter(
-    (key) =>
-      key !== "message" && // Exclude message field
-      key !== "userTotalRewards" && // Exclude userTotalRewards field
-      typeof userEarningFieldData[key] === "number" // Only include numeric fields
-  )
-  .map((key) =>
-    key
-      .replace(/([A-Z])/g, " $1") // Convert camelCase to spaced text
-      .replace(/^./, (str) => str.toUpperCase()) // Capitalize first letter
-  );
+    .filter(
+      (key) =>
+        key !== "message" &&
+        key !== "userTotalRewards" &&
+        typeof userEarningFieldData[key] === "number"
+    )
+    .map(
+      (key) =>
+        key
+          .replace(/([A-Z])/g, " $1") // Convert camelCase to spaced text
+          .replace(/^./, (str) => str.toUpperCase()) // Capitalize first letter
+    );
 
-const values = Object.keys(userEarningFieldData)
-  .filter(
-    (key) =>
-      key !== "message" &&
-      key !== "userTotalRewards" && // Exclude userTotalRewards field
-      typeof userEarningFieldData[key] === "number"
-  )
-  .map((key) => userEarningFieldData[key]);
+  const values = Object.keys(userEarningFieldData)
+    .filter(
+      (key) =>
+        key !== "message" &&
+        key !== "userTotalRewards" && // Exclude userTotalRewards field
+        typeof userEarningFieldData[key] === "number"
+    )
+    .map((key) => userEarningFieldData[key]);
 
   const data = {
     labels,
@@ -119,7 +120,6 @@ const values = Object.keys(userEarningFieldData)
       },
     },
   };
-  
 
   return (
     <div className="w-full p-4 bg-gray-900 rounded-lg h-72">
@@ -252,7 +252,7 @@ const TabThreeComponent = () => (
     </table>
   </div>
 );
-const TabFourComponent = () => (
+const TabFourComponent = ({ surveys }) => (
   <div className="w-full overflow-x-scroll p-4 bg-gray-900 rounded-lg">
     <table className="w-full text-left text-sm text-gray-400">
       <thead className="text-xs uppercase text-buttonBackground border-b border-gray-700">
@@ -266,38 +266,24 @@ const TabFourComponent = () => (
           <th scope="col" className="px-6 py-3">
             Reward Status
           </th>
-          <th scope="col" className="px-6 py-3">
-            Survey Partner
-          </th>
+
           <th scope="col" className="px-6 py-3">
             Date
           </th>
         </tr>
       </thead>
-      {/* <tbody>
-        {payments.length > 0 ? (
-          payments.map((payment) => (
-            <tr key={payment._id} className="bg-gray-800">
-              <td className="px-6 py-4 text-white">{payment.paymentType}</td>
-              <td className="px-6 py-4 text-white">
-                ${payment.amount.toFixed(2)}
-              </td>
-              <td className="px-6 py-4 text-white">{payment.userEmail}</td>
-              <td className="px-6 py-4 text-white">{payment.transactionId}</td>
-              <td className="px-6 py-4 text-white">
-                {new Date(payment.createdAt).toLocaleDateString()}
-              </td>
-              <td className="px-6 py-4 text-green-500">Completed</td>
-            </tr>
-          ))
-        ) : (
-          <tr className="bg-gray-800">
-            <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
-              No payment records found
+      <tbody>
+        {surveys.map((survey) => (
+          <tr key={survey._id} className="border-b border-gray-700">
+            <td className="px-6 py-3">{survey.name || "N/A"}</td>
+            <td className="px-6 py-3">{survey.points || "N/A"} points</td>
+            <td className="px-6 py-3">{survey.rewardStatus || "N/A"}</td>
+            <td className="px-6 py-3">
+              {new Date(survey.createdAt).toLocaleDateString() || "N/A"}
             </td>
           </tr>
-        )}
-      </tbody> */}
+        ))}
+      </tbody>
     </table>
   </div>
 );
@@ -483,21 +469,34 @@ const Profile = () => {
   });
 
   // console.log("Referrals:", referralData);
-  const { 
-    data: userEarningFieldData, 
-    error: userEarningFieldError, 
-    isLoading: isUserEarningFieldLoading 
+  const {
+    data: userEarningFieldData,
+    error: userEarningFieldError,
+    isLoading: isUserEarningFieldLoading,
   } = useUserTotalRewardsQuery(user?.objectId, {
-    skip: user?.role !== 'user', 
+    skip: user?.role !== "user",
   });
-  
-console.log('userEarningFieldData',userEarningFieldData)
+
+  console.log("userEarningFieldData", userEarningFieldData);
+  //survey completed data user
+  const {
+    data: surveysData,
+    isLoading: issurveysDataLoading,
+    isError: isSurveysDataError,
+    error: surveysDataError,
+  } = useGetAllSurveyCompletedQuery(
+    { userId: user?.objectId }, // Ensure this parameter matches the API signature
+    { skip: !user?.objectId || user?.role !== "user" }
+  );
+
   // Handle loading states
   if (
     isPostsLoading ||
     isWithdrawalLoading ||
     isUserLoading ||
-    isReferralsLoading || isUserEarningFieldLoading
+    isReferralsLoading ||
+    issurveysDataLoading ||
+    isUserEarningFieldLoading
   ) {
     return <Loader />;
   }
@@ -509,7 +508,9 @@ console.log('userEarningFieldData',userEarningFieldData)
         Error:{" "}
         {postsError?.message ||
           withdrawalError?.message ||
-          userError?.message || userEarningFieldError||
+          userError?.message ||
+          userEarningFieldError ||
+          isSurveysDataError ||
           referralsError?.message}
       </p>
     );
@@ -517,13 +518,15 @@ console.log('userEarningFieldData',userEarningFieldData)
 
   const withdrawals = withdrawalData?.data || [];
   const referrals = referralData?.data || [];
+  const surveys = surveysData?.data || [];
 
+  console.log("Surveys Data:", surveys);
   // Array of components corresponding to each tab
   const tabComponents = [
     <TabOneComponent userEarningFieldData={userEarningFieldData} />,
     <TabTwoComponent withdrawals={withdrawals} />,
     <TabThreeComponent />,
-    <TabFourComponent />,
+    <TabFourComponent surveys={surveys} />,
     <TabFiveComponent referrals={referrals} />,
     <TabSixComponent socialMediaLinks={socialMediaLinks} />,
   ];
