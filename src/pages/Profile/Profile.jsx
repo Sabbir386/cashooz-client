@@ -29,6 +29,7 @@ import {
 } from "../SocialMedia/socialmediaPostApi";
 import { useGetReferredUsersQuery } from "../Affiliate/affiliateApi";
 import { useSingleNormalUserQuery } from "../../redux/features/auth/authApi";
+import { useGetUserRewardQuery, useUserTotalRewardsQuery } from "../../rewards/rewardApi";
 
 ChartJS.register(
   CategoryScale,
@@ -40,67 +41,92 @@ ChartJS.register(
   Legend
 );
 
-const data = {
-  labels: [
-    "Jul 30",
-    "Aug 02",
-    "Aug 05",
-    "Aug 08",
-    "Aug 11",
-    "Aug 14",
-    "Aug 17",
-    "Aug 20",
-    "Aug 23",
-    "Aug 26",
-  ],
-  datasets: [
-    {
-      label: "Earnings",
-      data: [0, 0, 0, 0, 0, 0, 400, 0, 0, 0],
-      borderColor: "rgba(16, 185, 129, 1)",
-      backgroundColor: "rgba(16, 185, 129, 0.2)",
-      tension: 0.1,
-      fill: false,
-      pointBorderColor: "rgba(16, 185, 129, 1)",
-      pointBackgroundColor: "rgba(16, 185, 129, 1)",
-      pointHoverBackgroundColor: "rgba(16, 185, 129, 1)",
-      pointHoverBorderColor: "rgba(16, 185, 129, 1)",
-    },
-  ],
-};
+const TabOneComponent = ({ userEarningFieldData }) => {
+  if (!userEarningFieldData) return null;
 
-const options = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      display: false,
-    },
-    title: {
-      display: true,
-      text: "Recent Earnings (30 days)",
-      color: "#ffffff",
-    },
-  },
-  scales: {
-    x: {
-      ticks: { color: "#94a3b8" },
-      grid: { display: false },
-    },
-    y: {
-      ticks: { color: "#94a3b8" },
-      grid: {
-        color: "#334155",
+  // Generate dynamic labels and data
+  const labels = Object.keys(userEarningFieldData)
+  .filter(
+    (key) =>
+      key !== "message" && // Exclude message field
+      key !== "userTotalRewards" && // Exclude userTotalRewards field
+      typeof userEarningFieldData[key] === "number" // Only include numeric fields
+  )
+  .map((key) =>
+    key
+      .replace(/([A-Z])/g, " $1") // Convert camelCase to spaced text
+      .replace(/^./, (str) => str.toUpperCase()) // Capitalize first letter
+  );
+
+const values = Object.keys(userEarningFieldData)
+  .filter(
+    (key) =>
+      key !== "message" &&
+      key !== "userTotalRewards" && // Exclude userTotalRewards field
+      typeof userEarningFieldData[key] === "number"
+  )
+  .map((key) => userEarningFieldData[key]);
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "Earnings",
+        data: values,
+        borderColor: "rgba(16, 185, 129, 1)",
+        backgroundColor: "rgba(16, 185, 129, 0.2)",
+        tension: 0.1,
+        fill: false,
+        pointBorderColor: "rgba(16, 185, 129, 1)",
+        pointBackgroundColor: "rgba(16, 185, 129, 1)",
+        pointHoverBackgroundColor: "rgba(16, 185, 129, 1)",
+        pointHoverBorderColor: "rgba(16, 185, 129, 1)",
+      },
+    ],
+  };
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      title: {
+        display: true,
+        text: "Recent Earnings (30 days)",
+        color: "#ffffff",
       },
     },
-  },
-};
+    scales: {
+      x: {
+        ticks: { color: "#94a3b8" },
+        grid: { display: false },
+      },
+      y: {
+        ticks: {
+          color: "#94a3b8",
+          callback: function (value) {
+            // Custom labels for y-axis
+            if (value === 0) return "0";
+            if (value <= 500) return `${value}`;
+            if (value <= 1000) return "500";
+            return value;
+          },
+        },
+        grid: {
+          color: "#334155",
+        },
+      },
+    },
+  };
+  
 
-const TabOneComponent = () => (
-  <div className="w-full p-4 bg-gray-900 rounded-lg h-72">
-    <Line data={data} options={options} />
-  </div>
-);
+  return (
+    <div className="w-full p-4 bg-gray-900 rounded-lg h-72">
+      <Line data={data} options={options} />
+    </div>
+  );
+};
 const TabTwoComponent = ({ withdrawals }) => (
   <div className="w-full overflow-x-scroll p-4 bg-gray-900 rounded-lg">
     <table className="w-full text-left text-sm text-gray-400">
@@ -457,13 +483,21 @@ const Profile = () => {
   });
 
   // console.log("Referrals:", referralData);
-
+  const { 
+    data: userEarningFieldData, 
+    error: userEarningFieldError, 
+    isLoading: isUserEarningFieldLoading 
+  } = useUserTotalRewardsQuery(user?.objectId, {
+    skip: user?.role !== 'user', 
+  });
+  
+console.log('userEarningFieldData',userEarningFieldData)
   // Handle loading states
   if (
     isPostsLoading ||
     isWithdrawalLoading ||
     isUserLoading ||
-    isReferralsLoading
+    isReferralsLoading || isUserEarningFieldLoading
   ) {
     return <Loader />;
   }
@@ -475,7 +509,7 @@ const Profile = () => {
         Error:{" "}
         {postsError?.message ||
           withdrawalError?.message ||
-          userError?.message ||
+          userError?.message || userEarningFieldError||
           referralsError?.message}
       </p>
     );
@@ -486,7 +520,7 @@ const Profile = () => {
 
   // Array of components corresponding to each tab
   const tabComponents = [
-    <TabOneComponent />,
+    <TabOneComponent userEarningFieldData={userEarningFieldData} />,
     <TabTwoComponent withdrawals={withdrawals} />,
     <TabThreeComponent />,
     <TabFourComponent />,
