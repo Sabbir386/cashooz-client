@@ -31,6 +31,7 @@ import { useGetReferredUsersQuery } from "../Affiliate/affiliateApi";
 import { useSingleNormalUserQuery } from "../../redux/features/auth/authApi";
 import { useUserTotalRewardsQuery } from "../../rewards/rewardApi";
 import { useGetAllSurveyCompletedQuery } from "../surveyWallApi";
+import { useBonusRewardByUserQuery } from "../BonusReward/bonusRewardApi";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -203,52 +204,39 @@ const TabTwoComponent = ({ withdrawals }) => (
     </table>
   </div>
 );
-const TabThreeComponent = () => (
+const TabThreeComponent = ({ bonusReward }) => (
   <div className="w-full overflow-x-scroll p-4 bg-gray-900 rounded-lg">
     <table className="w-full text-left text-sm text-gray-400">
       <thead className="text-xs uppercase text-buttonBackground border-b border-gray-700">
         <tr>
-          <th scope="col" className="px-6 py-3">
-            Reward Name
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Reward
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Reward Status
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Reward From
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Date
-          </th>
+          <th scope="col" className="px-6 py-3">Reward Name</th>
+          <th scope="col" className="px-6 py-3">Reward Points</th>
+          <th scope="col" className="px-6 py-3">Reward Status</th>
+          <th scope="col" className="px-6 py-3">Reward From</th>
+          <th scope="col" className="px-6 py-3">Date</th>
         </tr>
       </thead>
-      {/* <tbody>
-        {payments.length > 0 ? (
-          payments.map((payment) => (
-            <tr key={payment._id} className="bg-gray-800">
-              <td className="px-6 py-4 text-white">{payment.paymentType}</td>
+      <tbody>
+        {bonusReward && bonusReward.length > 0 ? (
+          bonusReward.map((reward) => (
+            <tr key={reward._id} className="bg-gray-800">
+              <td className="px-6 py-4 text-white">{reward.rewardName}</td>
+              <td className="px-6 py-4 text-white">{reward.rewardPoints}</td>
+              <td className="px-6 py-4 text-white">{reward.rewardStatus}</td>
+              <td className="px-6 py-4 text-white">{reward.rewardFrom}</td>
               <td className="px-6 py-4 text-white">
-                ${payment.amount.toFixed(2)}
+                {new Date(reward.createdAt).toLocaleDateString()}
               </td>
-              <td className="px-6 py-4 text-white">{payment.userEmail}</td>
-              <td className="px-6 py-4 text-white">{payment.transactionId}</td>
-              <td className="px-6 py-4 text-white">
-                {new Date(payment.createdAt).toLocaleDateString()}
-              </td>
-              <td className="px-6 py-4 text-green-500">Completed</td>
             </tr>
           ))
         ) : (
           <tr className="bg-gray-800">
-            <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
-              No payment records found
+            <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
+              No bonus rewards found.
             </td>
           </tr>
         )}
-      </tbody> */}
+      </tbody>
     </table>
   </div>
 );
@@ -489,20 +477,30 @@ const Profile = () => {
     { skip: !user?.objectId || user?.role !== "user" }
   );
 
+  //reward tabThree
+  const {
+    data: bonusRewardsData,
+    isLoading: isBonusRewardsLoading,
+    isError: isBonusRewardsError,
+    error: bonusRewardsError,
+  } = useBonusRewardByUserQuery( user?.objectId ,
+    { skip: !user?.objectId || user?.role !== "user" });
+  
+
   // Handle loading states
   if (
     isPostsLoading ||
     isWithdrawalLoading ||
     isUserLoading ||
     isReferralsLoading ||
-    issurveysDataLoading ||
+    issurveysDataLoading || isBonusRewardsLoading||
     isUserEarningFieldLoading
   ) {
     return <Loader />;
   }
 
   // Handle errors
-  if (isPostsError || withdrawalError || userError || referralsError) {
+  if (isPostsError || withdrawalError || userError || referralsError || isBonusRewardsError) {
     return (
       <p>
         Error:{" "}
@@ -510,7 +508,7 @@ const Profile = () => {
           withdrawalError?.message ||
           userError?.message ||
           userEarningFieldError ||
-          isSurveysDataError ||
+          isSurveysDataError ||isBonusRewardsError||
           referralsError?.message}
       </p>
     );
@@ -519,13 +517,14 @@ const Profile = () => {
   const withdrawals = withdrawalData?.data || [];
   const referrals = referralData?.data || [];
   const surveys = surveysData?.data || [];
-
+  const bonusReward = bonusRewardsData?.rewards || [];
+  console.log('bonusRewardsData',bonusReward)
   console.log("Surveys Data:", surveys);
   // Array of components corresponding to each tab
   const tabComponents = [
     <TabOneComponent userEarningFieldData={userEarningFieldData} />,
     <TabTwoComponent withdrawals={withdrawals} />,
-    <TabThreeComponent />,
+    <TabThreeComponent bonusReward={bonusReward}/>,
     <TabFourComponent surveys={surveys} />,
     <TabFiveComponent referrals={referrals} />,
     <TabSixComponent socialMediaLinks={socialMediaLinks} />,

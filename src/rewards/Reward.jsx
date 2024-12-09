@@ -11,6 +11,7 @@ import { useViewCompletedOfferQuery } from "../pages/completedOfferApi";
 import { useAppSelector } from "../redux/features/hooks";
 import { useCurrentToken } from "../redux/features/auth/authSlice";
 import { useSingleNormalUserQuery } from "../redux/features/auth/authApi";
+import { useCreateBonusRewardMutation } from "../pages/BonusReward/bonusRewardApi";
 
 const Reward = () => {
   const [activeTab, setActiveTab] = useState(1);
@@ -34,6 +35,20 @@ const Reward = () => {
   const [claimedReferralBonuses, setClaimedReferralBonuses] = useState([]);
   const [referralData, setReferralData] = useState([]);
   const [referralCompletedRewards] = useReferralCompletedRewardsMutation();
+  const [createBonusReward] = useCreateBonusRewardMutation();
+  let user = null;
+  if (token) {
+    user = verifyToken(token);
+  }
+
+  const userId = user?.objectId || "";
+
+  const {
+    data: userData,
+    isLoading: isUserLoading,
+    error: userError,
+  } = useSingleNormalUserQuery(user?.objectId);
+  console.log(userData);
   const referralBonusTiers = [
     { referrals: 1, bonus: 20 },
     { referrals: 10, bonus: 40 },
@@ -59,7 +74,13 @@ const Reward = () => {
           userId: userId,
           referralReward: bonusAmount,
         });
-
+        const bonusRewardData = {
+          userId: user?.objectId,
+          rewardName: "referral",
+          rewardPoints: bonusAmount,
+          rewardFrom: "referralBonus",
+        };
+        await createBonusReward(bonusRewardData).unwrap();
         // Add claimed tier to state
         setClaimedReferralBonuses((prev) => [...prev, referralCount]);
 
@@ -80,19 +101,6 @@ const Reward = () => {
     }
   };
 
-  let user = null;
-  if (token) {
-    user = verifyToken(token);
-  }
-
-  const userId = user?.objectId || "";
-
-  const {
-    data: userData,
-    isLoading: isUserLoading,
-    error: userError,
-  } = useSingleNormalUserQuery(user?.objectId);
-  console.log(userData);
   const {
     data: completedOfferData,
     isLoading: isOffersLoading,
@@ -123,7 +131,13 @@ const Reward = () => {
     try {
       setIsClaiming(true); // Set loading state
       const response = await claimBonus().unwrap();
-
+      const bonusRewardData = {
+        userId: user?.objectId,
+        rewardName: "login",
+        rewardPoints: 5,
+        rewardFrom: "loginBonus",
+      };
+      await createBonusReward(bonusRewardData).unwrap();
       Swal.fire({
         icon: "success",
         title: "Bonus Claimed!",
@@ -157,7 +171,13 @@ const Reward = () => {
     try {
       setIsClaiming(true); // Set loading state
       const response = await taskCompleted({ userId, taskReward }).unwrap();
-
+      const bonusRewardData = {
+        userId: user?.objectId,
+        rewardName: "taskReward",
+        rewardPoints: taskReward,
+        rewardFrom: "taskBonus",
+      };
+      await createBonusReward(bonusRewardData).unwrap();
       Swal.fire({
         icon: "success",
         title: "Bonus Claimed!",

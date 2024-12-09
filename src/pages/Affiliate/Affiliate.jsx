@@ -152,30 +152,37 @@ const Affiliate = () => {
             You'll get 15% of your friend's task reward as referral commission
           </div>
           <div className="flex mt-4">
+            {/* Display the value with proper formatting */}
             <p className="text-lg font-bold">
               CZ{" "}
-              {(referrals?.totalEarnings ?? 0) -
-                (totalReferralRewards?.data?.totalRewards ?? 0).toFixed(2)}
+              {(
+                (referrals?.totalEarnings ?? 0) -
+                (totalReferralRewards?.data?.totalRewards ?? 0)
+              ).toFixed(2)}
             </p>
 
+            {/* Claim Button */}
             <button
               onClick={handleClaimRewards}
               className={`bg-[#01D676] hover:bg-green-600 text-white rounded-md ml-2 px-4 py-1 ${
                 isCreating ||
                 Number(
-                  (referrals?.totalEarnings ?? 0) -
+                  (
+                    (referrals?.totalEarnings ?? 0) -
                     (totalReferralRewards?.data?.totalRewards ?? 0)
-                ).toFixed(2) === "0.00"
-                  ? "cursor-not-allowed opacity-50" // Add opacity for a disabled appearance
+                  ).toFixed(2)
+                ) === 0
+                  ? "cursor-not-allowed opacity-50"
                   : ""
               }`}
               disabled={
                 isCreating ||
-                !(referrals?.totalEarnings ?? 0) || // Disable if no earnings
                 Number(
-                  (referrals?.totalEarnings ?? 0) -
+                  (
+                    (referrals?.totalEarnings ?? 0) -
                     (totalReferralRewards?.data?.totalRewards ?? 0)
-                ).toFixed(2) === "0.00" // Disable if the difference is 0
+                  ).toFixed(2)
+                ) === 0
               }
             >
               {isCreating ? "Claiming..." : "Claim"}
@@ -204,7 +211,10 @@ const Affiliate = () => {
               />
               <p>Total Earnings</p>
             </div>
-            <p>{totalReferralRewards?.data?.totalRewards} CZ</p>
+            <p>
+              {totalReferralRewards?.data?.totalRewards?.toFixed(2) ?? "0.00"}{" "}
+              CZ
+            </p>
           </div>
 
           {/* Users Referred */}
@@ -219,18 +229,6 @@ const Affiliate = () => {
             </div>
             <p>{userData?.data?.refferCount}</p>
           </div>
-
-          {/* <div className="flex justify-between items-center mt-4">
-            <div className="flex items-center">
-              <FontAwesomeIcon
-                icon={faCalendar}
-                className="text-yellow-500 mr-2"
-                size="lg"
-              />
-              <p>Earnings Last 30 Days</p>
-            </div>
-            <p>$0.00</p>
-          </div> */}
         </div>
       </div>
 
