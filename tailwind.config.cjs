@@ -16,11 +16,16 @@ module.exports = {
       },
       animation: {
         'infinite-scroll': 'infinite-scroll 45s linear infinite',
+        clicking: 'clicking 1s ease-in-out infinite',
       },
       keyframes: {
         'infinite-scroll': {
           from: { transform: 'translateX(0)' },
           to: { transform: 'translateX(calc(-100% + 16rem))' },
+        },
+        clicking: { // Add this section
+          '0%, 100%': { transform: 'scale(1)' }, // Normal size
+          '50%': { transform: 'scale(0.9)' },   // Slightly smaller
         },
       },
       backgroundImage: {
