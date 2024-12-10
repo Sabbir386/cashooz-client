@@ -10,6 +10,7 @@ import {
   FaFacebook,
   FaTelegram,
   FaRegCopy,
+  FaShareAlt,
 } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -233,9 +234,9 @@ const Affiliate = () => {
       </div>
 
       {/* Referral Section */}
-      <div className="bg-gray-800 text-white p-6 mt-6 rounded-lg flex flex-col md:flex-row items-center justify-between">
-        {/* Referral Link Section */}
-        <div className="flex flex-col items-start">
+      {/* <div className="bg-gray-800 text-white p-6 mt-6 rounded-lg flex flex-col md:flex-row items-center justify-between"> */}
+      {/* Referral Link Section */}
+      {/* <div className="flex flex-col items-start">
           <p className="text-sm font-medium text-gray-400 mb-1">
             Your referral link
           </p>
@@ -251,10 +252,10 @@ const Affiliate = () => {
           {copied && (
             <span className="text-green-500 text-xs mt-1">Copied!</span>
           )}
-        </div>
+        </div> */}
 
-        {/* Social Sharing Section */}
-        <div className="flex items-center space-x-3 mt-4 md:mt-0">
+      {/* Social Sharing Section */}
+      {/* <div className="flex items-center space-x-3 mt-4 md:mt-0">
           <p className="text-sm font-medium text-gray-400">
             Share your referral link
           </p>
@@ -290,8 +291,58 @@ const Affiliate = () => {
               <FaTelegram size={20} className="text-gray-200" />
             </a>
           </div>
+        </div> */}
+      {/* </div> */}
+
+      <div className="bg-gray-800 text-white p-6 mt-6 rounded-lg flex flex-col md:flex-row items-center justify-between">
+        {/* Referral Link Section */}
+        <div className="flex flex-col items-start">
+          <p className="text-sm font-medium text-gray-400 mb-1">
+            Your referral link
+          </p>
+          <div className="flex items-center bg-gray-700 p-2 rounded-md">
+            <span className="text-gray-300 text-sm">{referralLink}</span>
+            <button
+              className="ml-2 p-2 bg-gray-600 hover:bg-gray-500 text-gray-200 rounded-md"
+              onClick={copyToClipboard}
+            >
+              <FaRegCopy size={20} className="text-[#01D676]" />
+            </button>
+          </div>
+          {copied && (
+            <span className="text-green-500 text-xs mt-1">Copied!</span>
+          )}
+        </div>
+
+        {/* Social Sharing Section */}
+        <div className="flex flex-col md:flex-row items-center space-y-3 md:space-y-0 md:space-x-3 mt-4 md:mt-0">
+          <p className="text-sm font-medium text-gray-400">
+            Share your referral link
+          </p>
+          {/* Share Referral Link Button */}
+          <button
+            className="p-2 bg-gray-600 hover:bg-gray-500 rounded-md text-gray-200 flex items-center"
+            onClick={() => {
+              if (navigator.share) {
+                navigator
+                  .share({
+                    title: "Join me on Cashooz",
+                    text: "Earn rewards by completing simple tasks!",
+                    url: referralLink,
+                  })
+                  .then(() => console.log("Shared successfully"))
+                  .catch((error) => console.error("Sharing failed", error));
+              } else {
+                alert("Sharing not supported on this browser.");
+              }
+            }}
+          >
+            <FaShareAlt size={20} className="mr-2" />
+            Share referral link
+          </button>
         </div>
       </div>
+
       <SocialSubmissions></SocialSubmissions>
     </div>
   );
