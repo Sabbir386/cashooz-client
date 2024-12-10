@@ -16,7 +16,7 @@ module.exports = {
       },
       animation: {
         'infinite-scroll': 'infinite-scroll 45s linear infinite',
-        clicking: 'clicking 1s ease-in-out infinite',
+        clicking: 'clicking .5s ease-in-out infinite',
       },
       keyframes: {
         'infinite-scroll': {

@@ -354,7 +354,7 @@ const Affiliate = () => {
             <div className="flex items-center space-x-2">
               {/* Hand Icon with Clicking Animation */}
               <FaHandPointRight
-                size={24}
+                size={28}
                 className="text-green-400 animate-clicking"
               />
               <p className="text-sm font-medium text-gray-400">Share via</p>

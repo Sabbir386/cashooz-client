@@ -105,14 +105,22 @@ const UserDashboard = () => {
   let LoggedData = [];
   if (userRole === "user" || userRole === "advertiser") {
     LoggedData = CountLoggedUserTotalCompletedOffer?.data ?? [];
-    console.log("loged", LoggedData);
+    // console.log("loged", LoggedData);
   }
   const transformedData = LoggedData.flatMap((entry) =>
     entry.offerInfo.map((info) => ({
       date: info.date,
       count: info.count,
     }))
-  );
+  ).sort((a, b) => {
+    // Parse the dates if necessary (assume ISO date format)
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+
+    // Sort by ascending order of the date
+    return dateA - dateB;
+  });
+  // console.log("Sorted Transformed Data:", transformedData);
 
   const data2 = [
     { name: "Page A", uv: 4000, pv: 2400, amt: 2400 },
@@ -142,7 +150,7 @@ const UserDashboard = () => {
           value: info.count,
         }))
       : [];
-  
+
   const data02 = [
     { name: "A1", value: 100 },
     { name: "A2", value: 300 },
