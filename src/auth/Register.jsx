@@ -138,7 +138,7 @@ const Register = () => {
         referredBy: refId || "self",
         gender: "male",
         dateOfBirth: "1985-07-15",
-        contactNo: "9876543210",
+        contactNo: "......",
         emergencyContactNo: "1234567890",
         bloodGroup: "A+",
         presentAddress: "456 Elm Street, Cityville, Country",
