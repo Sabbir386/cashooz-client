@@ -7,9 +7,8 @@ import {
   useViewAdvertiserQuery,
 } from "./advertiserApi";
 import { toast } from "sonner";
-import Swal from "sweetalert2";
-
 import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
+import CustomSwal from "../customSwal/customSwal";
 
 const ViewAdvertiserList = () => {
   // Use the Redux query hook to fetch data
@@ -38,7 +37,7 @@ const ViewAdvertiserList = () => {
   const handleDelete = (_id) => {
     // Implement your logic to delete advertiser with ID 'id'
     // console.log("Delete advertiser with ID:", _id);
-    Swal.fire({
+    CustomSwal.fire({
       title: "Are you sure you want to delete this Advertiser?",
       icon: "warning",
       showCancelButton: true,

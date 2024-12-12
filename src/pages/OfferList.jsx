@@ -16,11 +16,11 @@ import { toast } from "sonner";
 import { verifyToken } from "../utils/verifyToken";
 import { useAppSelector } from "../redux/features/hooks";
 import { useCurrentToken } from "../redux/features/auth/authSlice";
-import Swal from "sweetalert2";
 import ReactModal from "react-modal";
 import "./modal/ModalStyles.css";
 import OfferView from "./OfferView/OfferView";
 import Loader from "../components/Loader";
+import CustomSwal from "../customSwal/customSwal";
 
 const OfferList = () => {
   const [data, setData] = useState([]);
@@ -171,7 +171,7 @@ const OfferList = () => {
   // const [createCompletedOffer] = useCreateCompletedOfferMutation();
   const handleDeleteOffer = async (_id) => {
     // console.log(_id);
-    Swal.fire({
+    CustomSwal.fire({
       title: "Are you sure you want to delete this offer?",
       icon: "warning",
       showCancelButton: true,

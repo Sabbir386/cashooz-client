@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-
-import Swal from "sweetalert2";
 import { useCreateWithdrawalMutation } from "../Withdrawl/withDrawalApi";
 import { useSingleNormalUserQuery } from "../../redux/features/auth/authApi";
 import { verifyToken } from "../../utils/verifyToken";
 import { useAppSelector } from "../../redux/features/hooks";
 import { useCurrentToken } from "../../redux/features/auth/authSlice";
+import CustomSwal from "../../customSwal/customSwal";
 
 const PaypalBox = () => {
   const location = useLocation();
@@ -57,13 +56,13 @@ const PaypalBox = () => {
     try {
       // Send the withdrawal request
       await createWithdrawal(requestBody).unwrap();
-      Swal.fire(
+      CustomSwal.fire(
         "Success",
         "Your withdrawal request has been submitted.stay Tuned ! you will got notified within 24 hours.",
         "success"
       );
     } catch (error) {
-      Swal.fire(
+      CustomSwal.fire(
         "Error",
         "Failed to submit withdrawal request. Please try again.",
         "error"

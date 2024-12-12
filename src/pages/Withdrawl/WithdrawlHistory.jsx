@@ -3,7 +3,7 @@ import {
   useUpdateWithdrawalStatusMutation,
   useViewWithdrawalsQuery,
 } from "./withDrawalApi";
-import Swal from "sweetalert2";
+import CustomSwal from "../../customSwal/customSwal";
 
 const WithdrawlHistory = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -27,7 +27,7 @@ const WithdrawlHistory = () => {
   const handleTabClick = (tab, index) => {
     setActiveTab(index);
     if (tab === "all") {
-      setAllWithdrawls(apiResponse?.data || []); 
+      setAllWithdrawls(apiResponse?.data || []);
     } else {
       setAllWithdrawls(
         (apiResponse?.data || []).filter((item) => tab === item.status)
@@ -45,7 +45,7 @@ const WithdrawlHistory = () => {
       console.log("Status updated:", response);
 
       // Show success message using Swal
-      Swal.fire({
+      CustomSwal.fire({
         title: "Success!",
         text: "Payment successfully Transfered.",
         icon: "success",
@@ -73,7 +73,7 @@ const WithdrawlHistory = () => {
       console.error("Failed to update status:", error);
 
       // Show error message using Swal
-      Swal.fire({
+      CustomSwal.fire({
         title: "Error!",
         text: "Failed to Trasfer Payment",
         icon: "error",

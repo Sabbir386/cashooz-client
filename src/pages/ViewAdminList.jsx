@@ -4,8 +4,8 @@ import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
 import { useDeleteAdminMutation, useViewAdminQuery } from "./adminApi";
 import { toast } from "sonner";
-import Swal from "sweetalert2";
 import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
+import CustomSwal from "../customSwal/customSwal";
 
 const ViewAdminList = () => {
   // Use the Redux query hook to fetch data
@@ -23,7 +23,7 @@ const ViewAdminList = () => {
 
   const handleDeleteAdmin = async (_id) => {
     // console.log(_id);
-    Swal.fire({
+    CustomSwal.fire({
       title: "Are you sure you want to delete this Admin?",
       icon: "warning",
       showCancelButton: true,

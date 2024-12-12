@@ -3,9 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import { useViewNetworkQuery, useDeleteNetworkMutation } from "./networkApi";
 import { toast } from "sonner";
-import Swal from "sweetalert2";
 import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 import Product from "../assets/img/cashooz.png"; // Make sure this import is necessary for your component
+import CustomSwal from "../customSwal/customSwal";
 
 const ViewNetwork = () => {
   const { data: networks, error, isLoading } = useViewNetworkQuery();
@@ -28,7 +28,7 @@ const ViewNetwork = () => {
   };
 
   const handleDelete = async (id) => {
-    Swal.fire({
+    CustomSwal.fire({
       title: "Are you sure you want to delete this Network?",
       icon: "warning",
       showCancelButton: true,

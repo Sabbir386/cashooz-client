@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
-import Swal from "sweetalert2";
 import { useForgetPasswordMutation } from "./loginApi";
 import { useNavigate } from "react-router-dom";
+import CustomSwal from "../customSwal/customSwal";
 
 const ForgotPasswordModal = ({ onClose }) => {
   const {
@@ -14,7 +14,7 @@ const ForgotPasswordModal = ({ onClose }) => {
   const navigate = useNavigate();
 
   const sendMail = async (data) => {
-    const { email } = data; // Extract email from form data
+    const { email } = data; // Extract email from form datahh
     try {
       // Call the forgetPassword mutation
       const response = await forgetPassword({ email }).unwrap();
@@ -22,7 +22,7 @@ const ForgotPasswordModal = ({ onClose }) => {
 
       // Handle success response
       if (response?.success) {
-        Swal.fire({
+        CustomSwal.fire({
           title: "Success!",
           text: response.message || "Password reset email has been sent.",
           icon: "success",
@@ -36,7 +36,7 @@ const ForgotPasswordModal = ({ onClose }) => {
         const errorMessage =
           response?.errorSources?.[0]?.message ||
           "Something went wrong. Please try again.";
-        Swal.fire({
+        CustomSwal.fire({
           title: "Error",
           text: errorMessage,
           icon: "error",
@@ -50,7 +50,7 @@ const ForgotPasswordModal = ({ onClose }) => {
       const errorMessage =
         err?.data?.errorSources?.[0]?.message ||
         "Something went wrong. Please try again.";
-      Swal.fire({
+      CustomSwal.fire({
         title: "Error",
         text: errorMessage,
         icon: "error",

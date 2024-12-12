@@ -12,12 +12,12 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/scrollbar";
 import Loader from "../components/Loader";
-import Swal from "sweetalert2";
 import { useCurrentToken } from "../redux/features/auth/authSlice";
 import { verifyToken } from "../utils/verifyToken";
 import { useAppSelector } from "../redux/features/hooks";
 import { useCreateCompletedOfferMutation } from "./completedOfferApi";
 import { useSurveyCompletedMutation } from "../rewards/rewardApi";
+import CustomSwal from "../customSwal/customSwal";
 const SurveyList = () => {
   const {
     data: surveys,
@@ -88,7 +88,7 @@ const SurveyList = () => {
       }).unwrap();
 
       console.log("Response:", response);
-      Swal.fire({
+      CustomSwal.fire({
         icon: "success",
         title: `Survey Completed!`,
         html: `<strong>${offer.name}</strong><br>You earned <strong>${offer.points} CZ</strong> for completing this survey!`,
@@ -96,7 +96,7 @@ const SurveyList = () => {
       });
     } catch (err) {
       console.log(err);
-      Swal.fire({
+      CustomSwal.fire({
         title: "Error!",
         text: "Failed to complete offer.",
         icon: "error",
@@ -148,27 +148,32 @@ const SurveyList = () => {
             1024: { slidesPerView: 5, spaceBetween: 10 },
             768: { slidesPerView: 3, spaceBetween: 25 },
             510: { slidesPerView: 2, spaceBetween: 20 },
+            0: { slidesPerView: 2, spaceBetween: 5 },
+           
+
           }}
         >
           {surveyOffers.map((offer) => (
             <SwiperSlide key={offer._id} className="text-white">
               <div
-                className="p-5 rounded-xl shadow-lg bg-gradient-to-b from-[#1f1f2e] to-[#0f0f1f] transition-transform duration-300 hover:scale-105 cursor-pointer"
+                className="p-2 md:p-5 rounded-xl shadow-lg bg-gradient-to-b from-[#1f1f2e] to-[#0f0f1f] transition-transform duration-300 hover:scale-105 cursor-pointer flex flex-row sm:flex-col gap-3 items-center"
                 onClick={() => handleSurveyCompletion(offer)}
               >
                 {offer.image && (
                   <img
                     src={offer.image}
                     alt={offer.name}
-                    className="h-36 w-full object-cover rounded-md mb-3"
+                    className="w-12 h-12 md:h-36 md:w-full object-cover rounded-md "
                   />
                 )}
 
-                <h4 className="font-bold text-base">
-                  {offer?.name ? offer.name.slice(0, 11) : "Offer Name"}
-                  {offer.name.length > 11 && "..."}
-                </h4>
-                <h5>CZ {offer?.points}</h5>
+                <div className="text-left">
+                  <h4 className="font-bold text-xs">
+                    {offer?.name ? offer.name.slice(0, 11) : "Offer Name"}
+                    {offer.name.length > 11 && "..."}
+                  </h4>
+                  <h5 className="text-sm">CZ {offer?.points}</h5>
+                </div>
               </div>
             </SwiperSlide>
           ))}

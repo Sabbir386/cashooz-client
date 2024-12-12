@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useSingleAdminQuery, useUpdateAdminMutation } from "./adminApi";
 import { toast } from "sonner";
-import Swal from "sweetalert2";
+import CustomSwal from "../customSwal/customSwal";
 
 const EditAdmin = () => {
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const EditAdmin = () => {
   }, [adminData, setValue]);
 
   const onSubmit = async (data) => {
-    Swal.fire({
+    CustomSwal.fire({
       title: "Are you sure you want to update this Admin?",
       icon: "warning",
       showCancelButton: true,

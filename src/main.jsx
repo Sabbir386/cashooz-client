@@ -14,7 +14,6 @@ import { persistor, store } from "./redux/features/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { Toaster } from "sonner";
 import Modal from "react-modal";
-
 // Set the app element for react-modal
 Modal.setAppElement("#root");
 // import { router } from "./routes/Routes";

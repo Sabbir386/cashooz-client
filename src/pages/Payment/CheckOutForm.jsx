@@ -17,8 +17,8 @@ import { useCreateWithdrawalMutation } from "../Withdrawl/withDrawalApi";
 import { verifyToken } from "../../utils/verifyToken";
 import { useAppSelector } from "../../redux/features/hooks";
 import { useCurrentToken } from "../../redux/features/auth/authSlice";
-import Swal from "sweetalert2";
 import LitecoinCryptoModal from "./LitecoinCryptoModal";
+import CustomSwal from "../../customSwal/customSwal";
 
 // Modal Styles
 const customStyles = {
@@ -113,14 +113,14 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
     try {
       // Send the withdrawal request
       await createWithdrawal(requestBody).unwrap();
-      Swal.fire(
+      CustomSwal.fire(
         "Success",
         "Your withdrawal request has been submitted.stay Tuned ! you will got notified within 24 hours.",
         "success"
       );
     } catch (error) {
       console.log(error);
-      Swal.fire(
+      CustomSwal.fire(
         "Error",
         "Failed to submit withdrawal request. Please try again.",
         "error"
@@ -131,54 +131,53 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   // Litecoin functinality
   const [isLitecoinModalOpen, setLitecoinModalOpen] = useState(false);
 
-const handleLitecoinPayment = () => {
-  setLitecoinModalOpen(true); // Open the LitecoinCryptoModal
-};
-
-const handleLitecoinSubmit = async (data) => {
-  setLitecoinModalOpen(false);
-  console.log("Litecoin Payment Data:", data);
-
-  // Prepare request payload
-  const requestBody = {
-    userId: userData?.data?._id,
-    userName: userData?.data?.name,
-    userRegisterId: userData?.data?.id,
-    userEmail: userData?.data?.email,
-    profileImg: userData?.data?.profileImg,
-    paypalEmail: "",
-    btcAddress: data?.litecoinAddress,
-    networkType: "litecoin",
-    description: `Withdrawal request for ${data?.litecoinAmount} Litecoin payout`,
-    method: "Litecoin",
-    amount: parseFloat(data?.litecoinAmount || data?.amountUSD),
-    transactionId: "TXN987654321",
-    invoiceId: "",
-    country: userData?.data?.country,
-    status: "pending",
-    timestamps: {
-      requestedAt: new Date(),
-      processedAt: null,
-    },
+  const handleLitecoinPayment = () => {
+    setLitecoinModalOpen(true); // Open the LitecoinCryptoModal
   };
 
-  try {
-    await createWithdrawal(requestBody).unwrap();
-    Swal.fire(
-      "Success",
-      "Your Litecoin withdrawal request has been submitted. Stay tuned! You will be notified within 24 hours.",
-      "success"
-    );
-  } catch (error) {
-    console.error(error);
-    Swal.fire(
-      "Error",
-      "Failed to submit Litecoin withdrawal request. Please try again.",
-      "error"
-    );
-  }
-};
+  const handleLitecoinSubmit = async (data) => {
+    setLitecoinModalOpen(false);
+    console.log("Litecoin Payment Data:", data);
 
+    // Prepare request payload
+    const requestBody = {
+      userId: userData?.data?._id,
+      userName: userData?.data?.name,
+      userRegisterId: userData?.data?.id,
+      userEmail: userData?.data?.email,
+      profileImg: userData?.data?.profileImg,
+      paypalEmail: "",
+      btcAddress: data?.litecoinAddress,
+      networkType: "litecoin",
+      description: `Withdrawal request for ${data?.litecoinAmount} Litecoin payout`,
+      method: "Litecoin",
+      amount: parseFloat(data?.litecoinAmount || data?.amountUSD),
+      transactionId: "TXN987654321",
+      invoiceId: "",
+      country: userData?.data?.country,
+      status: "pending",
+      timestamps: {
+        requestedAt: new Date(),
+        processedAt: null,
+      },
+    };
+
+    try {
+      await createWithdrawal(requestBody).unwrap();
+      CustomSwal.fire(
+        "Success",
+        "Your Litecoin withdrawal request has been submitted. Stay tuned! You will be notified within 24 hours.",
+        "success"
+      );
+    } catch (error) {
+      console.error(error);
+      CustomSwal.fire(
+        "Error",
+        "Failed to submit Litecoin withdrawal request. Please try again.",
+        "error"
+      );
+    }
+  };
 
   // btc...
   const [isCryptoModalOpen, setCryptoModalOpen] = useState(false);
@@ -220,14 +219,14 @@ const handleLitecoinSubmit = async (data) => {
     try {
       // Send the withdrawal request
       await createWithdrawal(requestBody).unwrap();
-      Swal.fire(
+      CustomSwal.fire(
         "Success",
         "Your withdrawal request has been submitted.stay Tuned ! you will got notified within 24 hours.",
         "success"
       );
     } catch (error) {
       console.log(error);
-      Swal.fire(
+      CustomSwal.fire(
         "Error",
         "Failed to submit withdrawal request. Please try again.",
         "error"
@@ -467,28 +466,19 @@ const handleLitecoinSubmit = async (data) => {
             onSubmit={handleEthereumSubmit}
           />
         )}
-     {/* litecoin payment  */}
-     <div
-  className="bg-[#A6A9AA] p-6 py-10 border border-gray-700 rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3"
-  onClick={handleLitecoinPayment}
->
-  <img
-    src="https://i.ibb.co/5s34CR5/litecoin.png"
-    alt="Pay with Litecoin"
-    className="w-16 h-16 mb-3"
-  />
-  <p className="text-white text-xl font-semibold">Pay with Litecoin</p>
-  <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
-</div>
-
-{/* Render the LitecoinCryptoModal */}
-{isLitecoinModalOpen && (
-  <LitecoinCryptoModal
-    onClose={() => setLitecoinModalOpen(false)}
-    onSubmit={handleLitecoinSubmit}
-  />
-)}
-
+        {/* litecoin payment  */}
+        <div
+          className="bg-[#A6A9AA] p-6 py-10 border border-gray-700 rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3"
+          onClick={handleLitecoinPayment}
+        >
+          <img
+            src="https://i.ibb.co/5s34CR5/litecoin.png"
+            alt="Pay with Litecoin"
+            className="w-16 h-16 mb-3"
+          />
+          <p className="text-white text-xl font-semibold">Pay with Litecoin</p>
+          <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
+        </div>
 
         {/* Render the LitecoinCryptoModal */}
         {isLitecoinModalOpen && (
@@ -497,7 +487,15 @@ const handleLitecoinSubmit = async (data) => {
             onSubmit={handleLitecoinSubmit}
           />
         )}
-{/* stake payment  */}
+
+        {/* Render the LitecoinCryptoModal */}
+        {isLitecoinModalOpen && (
+          <LitecoinCryptoModal
+            onClose={() => setLitecoinModalOpen(false)}
+            onSubmit={handleLitecoinSubmit}
+          />
+        )}
+        {/* stake payment  */}
         <div className="relative bg-[#31414B] p-6 py-10 border border-gray-700 rounded-lg cursor-not-allowed text-center flex flex-col items-center justify-center gap-3 opacity-50">
           <img
             src="https://i.ibb.co.com/Bq95hgQ/stake.png"

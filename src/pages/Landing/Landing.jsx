@@ -16,6 +16,8 @@ import Spotify from "../../assets/img/Spotify.png";
 import Netflix from "../../assets/img/Netflix.png";
 import UberEats from "../../assets/img/UberEats.png";
 import { FaCheck } from "react-icons/fa";
+import InfiniteScroll from "./component/InfiniteScroll";
+import Hero from "./component/Hero";
 
 const Landing = () => {
   const items = [
@@ -139,8 +141,9 @@ const Landing = () => {
     { label: "10,000 POINTS = $100", bgColor: "bg-blue-500" },
   ];
   return (
-    <>
+    <div className="bg-white">
       {/* bannner section   */}
+     
       <div className="relative bg-gray-100">
         <img
           src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -195,53 +198,7 @@ const Landing = () => {
         </div>
       </div>
       {/* cards section  */}
-      <div className="bg-green-100">
-        {/* Header Navigation */}
-        <div className="bg-green-500 text-white py-4">
-          <div className="flex justify-center space-x-6 text-lg font-medium">
-            <a href="#!" className="hover:underline">
-              Download Apps
-            </a>
-            <a href="#!" className="hover:underline">
-              Watch Videos
-            </a>
-            <a href="#!" className="hover:underline">
-              Paid Surveys
-            </a>
-            <a href="#!" className="hover:underline">
-              Complete Offers
-            </a>
-            <a href="#!" className="hover:underline">
-              Play Games
-            </a>
-          </div>
-        </div>
-
-        {/* Cards Section */}
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-10 px-4">
-          {cards.map((card, index) => (
-            <div
-              key={index}
-              className="bg-white shadow-md rounded-md overflow-hidden text-center"
-            >
-              <img
-                src={card.imageSrc}
-                alt={card.title}
-                className="w-full h-40 object-cover"
-              />
-              <div className="p-4">
-                <h3 className="text-lg font-bold text-green-600">
-                  {card.title}
-                </h3>
-                <p className="text-gray-600 text-sm mt-2">{card.description}</p>
-                <button className="bg-green-500 text-white py-2 px-4 rounded-md mt-4 hover:bg-green-600">
-                  {card.buttonText}
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <InfiniteScroll></InfiniteScroll>
       {/* features section  */}
       <div className="bg-gray-100 py-12">
         {/* Section Header */}
@@ -324,7 +281,7 @@ const Landing = () => {
         </div>
       </div>
       {/* all points section  */}
-    </>
+    </div>
   );
 };
 

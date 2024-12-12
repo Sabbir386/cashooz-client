@@ -26,7 +26,7 @@ import {
   useCreateAffiliateRewardMutation,
   useGetReferredUsersQuery,
 } from "./affiliateApi";
-import Swal from "sweetalert2";
+import CustomSwal from "../../customSwal/customSwal";
 
 const Affiliate = () => {
   const [referralLink, setReferralLink] = useState("");
@@ -83,7 +83,7 @@ const Affiliate = () => {
   const handleClaimRewards = async () => {
     // Check if user data and total earnings are present
     if (!userData?.data?.user || !referrals?.totalEarnings) {
-      Swal.fire({
+      CustomSwal.fire({
         icon: "warning",
         title: "Incomplete Data",
         text: "User ID or earnings data is missing. Cannot proceed with claiming rewards.",
@@ -111,7 +111,7 @@ const Affiliate = () => {
       console.log("API Response:", response);
 
       // Success alert on successful API call
-      Swal.fire({
+      CustomSwal.fire({
         icon: "success",
         title: "Success!",
         text: "Reward claimed successfully!",
@@ -129,7 +129,7 @@ const Affiliate = () => {
       }
 
       // Error alert for API failure
-      Swal.fire({
+      CustomSwal.fire({
         icon: "error",
         title: "Failed!",
         text: errorMessage,
@@ -301,7 +301,7 @@ const Affiliate = () => {
           <p className="text-sm font-medium text-gray-400 mb-1">
             Your referral link
           </p>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center bg-gray-700 p-3 rounded-md w-full">
+          <div className="flex flex-row sm:flex-row justify-between items-start sm:items-center bg-gray-700 p-3 rounded-md w-full">
             <span className="text-gray-300 text-sm break-words w-full sm:w-auto flex-1">
               {referralLink}
             </span>

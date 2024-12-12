@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useOfferByNetworkQuery } from "../dashboardApi";
 import { useSingleOfferQuery } from "../offerApi";
 import { useCreateCompletedOfferMutation } from "../completedOfferApi";
-import Swal from "sweetalert2";
 import { verifyToken } from "../../utils/verifyToken";
 import { useAppSelector } from "../../redux/features/hooks";
 import { useCurrentToken } from "../../redux/features/auth/authSlice";
@@ -12,6 +11,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import Loader from "../../components/Loader";
 import { useOfferCompletedRewardsMutation } from "../../rewards/rewardApi";
+import CustomSwal from "../../customSwal/customSwal";
 
 const OfferView = () => {
   const [networkOffers, setNetworkOffers] = useState([]);
@@ -74,7 +74,7 @@ const OfferView = () => {
         points: selectedOffer?.points,
       }).unwrap();
 
-      Swal.fire({
+      CustomSwal.fire({
         title: "Success!",
         text: "Offer completed successfully!",
         icon: "success",
@@ -87,7 +87,7 @@ const OfferView = () => {
       }).unwrap();
       // console.log('response offer',response)
     } catch (err) {
-      Swal.fire({
+      CustomSwal.fire({
         title: "Error!",
         text: "Failed to complete offer.",
         icon: "error",

@@ -3,9 +3,9 @@ import { TagsInput } from "react-tag-input-component";
 import JoditEditor from "jodit-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import Swal from "sweetalert2";
 import { useUpdateOfferMutation, useSingleOfferQuery } from "./offerApi";
 import { useParams } from "react-router-dom";
+import CustomSwal from "../customSwal/customSwal";
 
 const EditOffer = () => {
   const { id } = useParams(); // Get the id from the route parameters
@@ -39,7 +39,7 @@ const EditOffer = () => {
   }, [singleOffer, setValue]);
 
   const onSubmit = async (data) => {
-    Swal.fire({
+    CustomSwal.fire({
       title: "Are you sure you want to edit this offer?",
       icon: "warning",
       showCancelButton: true,

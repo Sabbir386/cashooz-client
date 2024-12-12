@@ -21,7 +21,6 @@ import {
 import { useGetPaymentInfoQuery } from "../Payment/paymentApi";
 import EditProfile from "./EditProfile";
 import Loader from "../../components/Loader";
-import Swal from "sweetalert2";
 import { useUserMultipleWithdrawalsQuery } from "../Withdrawl/withDrawalApi";
 import {
   useGetAllSocialMediaPostsQuery,

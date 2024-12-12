@@ -5,13 +5,13 @@ import {
   useReferralCompletedRewardsMutation,
   useTaskCompletedMutation,
 } from "./rewardApi";
-import Swal from "sweetalert2";
 import { verifyToken } from "../utils/verifyToken";
 import { useViewCompletedOfferQuery } from "../pages/completedOfferApi";
 import { useAppSelector } from "../redux/features/hooks";
 import { useCurrentToken } from "../redux/features/auth/authSlice";
 import { useSingleNormalUserQuery } from "../redux/features/auth/authApi";
 import { useCreateBonusRewardMutation } from "../pages/BonusReward/bonusRewardApi";
+import CustomSwal from "../customSwal/customSwal";
 
 const Reward = () => {
   const [activeTab, setActiveTab] = useState(1);
@@ -84,15 +84,15 @@ const Reward = () => {
         // Add claimed tier to state
         setClaimedReferralBonuses((prev) => [...prev, referralCount]);
 
-        Swal.fire(
+        CustomSwal.fire(
           "Success!",
           `You have claimed ${bonusAmount} CZ for ${referralCount} referrals.`,
           "success"
         );
 
-        refetchRewardData(); // Update reward data from backend
+        // Update reward data from backend
       } catch (error) {
-        Swal.fire(
+        CustomSwal.fire(
           "Error!",
           "Failed to claim bonus. Please try again.",
           "error"
@@ -138,7 +138,7 @@ const Reward = () => {
         rewardFrom: "loginBonus",
       };
       await createBonusReward(bonusRewardData).unwrap();
-      Swal.fire({
+      CustomSwal.fire({
         icon: "success",
         title: "Bonus Claimed!",
         text: response.message,
@@ -148,7 +148,7 @@ const Reward = () => {
       setClaimedDays([...claimedDays, day]);
       setCurrentDay(rewardData.currentDay || 1);
     } catch (error) {
-      Swal.fire({
+      CustomSwal.fire({
         icon: "error",
         title: "Oops...",
         text: error.message || "Failed to claim bonus! Try Again Tomorrow",
@@ -160,7 +160,7 @@ const Reward = () => {
 
   const handleClaimTaskBonus = async (taskId, taskReward) => {
     if (!userId) {
-      Swal.fire({
+      CustomSwal.fire({
         icon: "error",
         title: "User ID Not Found",
         text: "Unable to claim task bonus. Please try logging in again.",
@@ -178,7 +178,7 @@ const Reward = () => {
         rewardFrom: "taskBonus",
       };
       await createBonusReward(bonusRewardData).unwrap();
-      Swal.fire({
+      CustomSwal.fire({
         icon: "success",
         title: "Bonus Claimed!",
         text: response.message,
@@ -192,7 +192,7 @@ const Reward = () => {
       // Refetch user rewards to get updated claimedTasks from the server
       await refetchRewardData();
     } catch (error) {
-      Swal.fire({
+      CustomSwal.fire({
         icon: "error",
         title: "Oops...",
         text: error.message || "Failed to claim task reward!",

@@ -11,12 +11,12 @@ import {
   FaTelegram,
   FaPinterest,
 } from "react-icons/fa";
-import Swal from "sweetalert2";
 import { useCreateSocialMediaPostMutation } from "../SocialMedia/socialmediaPostApi";
 import { verifyToken } from "../../utils/verifyToken";
 import { useAppSelector } from "../../redux/features/hooks";
 import { useCurrentToken } from "../../redux/features/auth/authSlice";
 import { useSingleNormalUserQuery } from "../../redux/features/auth/authApi";
+import CustomSwal from "../../customSwal/customSwal";
 
 // Platform data
 const platforms = [
@@ -149,31 +149,22 @@ const SocialSubmissions = () => {
   }, [postURL]);
 
   const copyToClipboard = () => {
-    const textToCopy = `Ready to earn big? Check out ${selectedPlatform.name}! Earn ${selectedPlatform.reward} today. Click here to get started.`;
+    const textToCopy = `Earn money from 💲Cashooz.com💰 where you can earn cash by completing various tasks like games, surveys, installation, watching, and shopping that you already do online every day. It's free. Start earning now. Check out ${selectedPlatform.name}! Earn ${selectedPlatform.reward} today. Click here to get started.`;
     navigator.clipboard.writeText(textToCopy).then(() => {
       setIsCopied(true); // Update state to show the check mark
       setTimeout(() => setIsCopied(false), 2000); // Reset to copy icon after 2 seconds
     });
-
-    const postUrl = `https://cashooz-838b0.web.app/register?refId=`; // Replace with the URL of the post you want to share
-    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-      postUrl
-    )}`;
-
-    // Open Facebook share modal
-    window.open(facebookShareUrl, "_blank", "width=600,height=400");
   };
   const handleSubmitPost = async () => {
     if (!postURL) return; // Don't proceed if the URL is empty
 
     const postDetails = {
-
       userName: userData?.data?.name,
       email: user?.email,
       userId: user?.objectId,
       link: postURL,
       platform: selectedPlatform.name,
-      rewardPoint:selectedPlatform.reward,
+      rewardPoint: selectedPlatform.reward,
       status: "pending",
     };
 
@@ -182,7 +173,7 @@ const SocialSubmissions = () => {
       const response = await createSocialMediaPost(postDetails).unwrap();
       console.log(response);
       if (response.message) {
-        Swal.fire({
+        CustomSwal.fire({
           icon: "success",
           title: "Success!",
           text: "Your post was successfully submitted.",
@@ -201,13 +192,22 @@ const SocialSubmissions = () => {
       }
     } catch (err) {
       console.error("Error submitting post:", err);
-      Swal.fire({
+      CustomSwal.fire({
         icon: "error",
         title: "Submission Failed",
         text: err.message || "Failed to submit post. Please try again.",
         confirmButtonText: "OK",
       });
     }
+  };
+  const sharePost = () => {
+    const postUrl = `https://cashooz-838b0.web.app/register?refId=`; // Replace with the URL of the post you want to share
+    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      postUrl
+    )}`;
+
+    // Open Facebook share modal
+    window.open(facebookShareUrl, "_blank", "width=600,height=400");
   };
 
   return (
@@ -274,9 +274,9 @@ const SocialSubmissions = () => {
             </div>
             <p className="text-gray-300 mb-4">{selectedPlatform.description}</p>
 
-            {/* Step 2: Copy Caption Instructions */}
+            {/* Step 1: Copy Caption Instructions */}
             <p className="text-sm text-gray-400 mb-4">
-              <strong>Step 2:</strong> Use this caption for your post on
+              <strong>Step 1:</strong> Use this caption for your post on
               Facebook, Instagram, or any social platform.
             </p>
             <div className="mb-4">
@@ -284,8 +284,7 @@ const SocialSubmissions = () => {
                 className="w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-green-500 text-gray-300 bg-[#121A25] cursor-not-allowed"
                 rows="4"
                 readOnly
-                value={`Join Cashooz now and start cashing in! Cashooz is the way to go. 
-Join now at https://cashooz-838b0.web.app/register and get ${selectedPlatform.reward} bonus #Cashooz #so #easymoney #viral #explore #fyp`}
+                value={`Earn money from 💲Cashooz.com💰 where you can earn cash by completing various tasks like games, surveys, installation, watching, and shopping that you already do online every day. It's free. Start earning now. Join now at https://cashooz-838b0.web.app/register and get ${selectedPlatform.reward} bonus #Cashooz #so #easymoney #viral #explore #fyp`}
               ></textarea>
               <button
                 className="mt-2 text-sm font-semibold text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg"
@@ -299,7 +298,18 @@ Join now at https://cashooz-838b0.web.app/register and get ${selectedPlatform.re
                 {isCopied ? "Copied!" : "Copy Post Caption"}
               </button>
             </div>
-
+            {/* Step 2: Copy Caption Instructions */}
+            <div className="flex gap-4 justify-between items-center py-4">
+              <p className="text-sm text-gray-400">
+                <strong>Step 2:</strong> Share to {selectedPlatform.name}
+              </p>
+              <button
+                className="bg-buttonBackground px-3 py-1 rounded-lg text-sm"
+                onClick={sharePost}
+              >
+                share
+              </button>
+            </div>
             {/* Step 3: Provide URL to Claim Reward */}
             <p className="text-sm text-gray-400">
               <strong>Step 3:</strong> After you've posted, simply provide the
@@ -315,7 +325,7 @@ Join now at https://cashooz-838b0.web.app/register and get ${selectedPlatform.re
             />
             <div className="flex justify-end mt-4">
               <button
-                className="w-1/4 bg-[#01D676] hover:bg-green-600 text-white py-2 rounded-lg"
+                className="w-full md:w-1/4 bg-[#01D676] hover:bg-green-600 text-white py-2 rounded-lg"
                 disabled={!postURL} // Disable button if URL is empty
                 onClick={() => {
                   // Logic for URL submission (e.g., save the URL, claim reward)

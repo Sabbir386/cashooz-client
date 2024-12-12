@@ -2,12 +2,11 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import Swal from "sweetalert2";
-
 import {
   useSingleNormalUserQuery,
   useUpdateNormalUserMutation,
 } from "../redux/features/auth/authApi";
+import CustomSwal from "../customSwal/customSwal";
 
 const EditUser = () => {
   const navigate = useNavigate();
@@ -36,7 +35,7 @@ const EditUser = () => {
   }, [userData, setValue]);
 
   const onSubmit = async (data) => {
-    Swal.fire({
+    CustomSwal.fire({
       title: "Are you sure you want to update this User?",
       icon: "warning",
       showCancelButton: true,

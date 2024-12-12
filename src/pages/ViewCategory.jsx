@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import { useViewCategoryQuery, useDeleteCategoryMutation } from "./CategoryApi";
 import { toast } from "sonner";
-import Swal from "sweetalert2";
+import CustomSwal from "../customSwal/customSwal";
 import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 
 const ViewCategory = () => {
@@ -26,7 +26,7 @@ const ViewCategory = () => {
   };
 
   const handleDelete = async (id) => {
-    Swal.fire({
+    CustomSwal.fire({
       title: "Are you sure you want to delete this Category?",
       icon: "warning",
       showCancelButton: true,
@@ -48,7 +48,7 @@ const ViewCategory = () => {
             id: toastId,
             duration: 2000,
           });
-          // console.log("Error:", error);
+          // console.log("Error:", error);d
         }
       }
     });

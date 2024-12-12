@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useResetPasswordMutation } from "./loginApi";
-import Swal from "sweetalert2";
 import { logOut } from "../redux/features/auth/authSlice";
 import { useAppDispatch } from "../redux/features/hooks";
+import CustomSwal from "../customSwal/customSwal";
 
 const ConfirmReset = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -59,7 +59,7 @@ const ConfirmReset = () => {
       }).unwrap();
 
       if (response) {
-        Swal.fire({
+        CustomSwal.fire({
           title: "Success!",
           text: "Password reset successfully. You can now log in with your new password.",
           icon: "success",
@@ -72,7 +72,7 @@ const ConfirmReset = () => {
       }
     } catch (err) {
       console.error("Error resetting password:", err);
-      Swal.fire({
+      CustomSwal.fire({
         title: "Error",
         text: "An error occurred while resetting your password. Please try again.",
         icon: "error",

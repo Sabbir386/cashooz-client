@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import Swal from "sweetalert2";
 import {
   useGetSingleNetworkQuery,
   useUpdateNetworkMutation,
 } from "./networkApi";
+import CustomSwal from "../customSwal/customSwal";
 
 const EditNetwork = () => {
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const EditNetwork = () => {
   }, [networkData, setValue]);
 
   const onSubmit = async (data) => {
-    Swal.fire({
+    CustomSwal.fire({
       title: "Are you sure you want to update this Network?",
       icon: "warning",
       showCancelButton: true,

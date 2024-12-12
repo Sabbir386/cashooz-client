@@ -7,8 +7,8 @@ import {
   useDeleteNormalUserMutation,
 } from "../redux/features/auth/authApi";
 import { toast } from "sonner";
-import Swal from "sweetalert2";
 import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
+import CustomSwal from "../customSwal/customSwal";
 
 const ViewUserList = () => {
   // Use the Redux query hook to fetch data
@@ -35,7 +35,7 @@ const ViewUserList = () => {
 
   // Handle deletion of a normal user
   const handleDelete = (_id) => {
-    Swal.fire({
+    CustomSwal.fire({
       title: "Are you sure you want to delete this user?",
       icon: "warning",
       showCancelButton: true,

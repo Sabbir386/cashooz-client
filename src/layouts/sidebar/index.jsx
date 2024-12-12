@@ -22,7 +22,6 @@ import { MdMenu } from "react-icons/md";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/features/hooks";
 import { logOut, useCurrentToken } from "../../redux/features/auth/authSlice";
-import Swal from "sweetalert2";
 import { verifyToken } from "../../utils/verifyToken";
 
 const Sidebar = () => {

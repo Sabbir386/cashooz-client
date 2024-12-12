@@ -6,7 +6,7 @@ import {
 import { useAppSelector } from "../../redux/features/hooks";
 import { useCurrentToken } from "../../redux/features/auth/authSlice";
 import { verifyToken } from "../../utils/verifyToken";
-import Swal from "sweetalert2";
+import CustomSwal from "../../customSwal/customSwal";
 const EditProfile = ({ onClose }) => {
   const token = useAppSelector(useCurrentToken);
   let user;
@@ -84,7 +84,7 @@ const EditProfile = ({ onClose }) => {
         console.log("Full response:", response);
 
         if (response.success) {
-          Swal.fire({
+          CustomSwal.fire({
             icon: "success",
             title: "Profile updated successfully",
             // confirmButtonColor: "#3085d6",
@@ -188,7 +188,7 @@ const EditProfile = ({ onClose }) => {
               />
             </div>
 
-            <div className="flex space-x-2">
+            <div className="flex flex-col md:flex-row space-x-0 md:space-x-2">
               <select
                 name="countryCode"
                 onChange={(e) =>
@@ -415,7 +415,7 @@ const EditProfile = ({ onClose }) => {
                   console.log(userCountry);
                   return countryToCodeMap[userCountry] || "+1"; // Default to +1 if country not found
                 })()}
-                className="border border-gray-300 rounded-lg px-2 py-1 w-2/6"
+                className="border border-gray-300 rounded-lg px-2 py-1 w-full md:w-2/6"
               >
                 <option value="+93">+93 (AF)</option>
                 <option value="+355">+355 (AL)</option>

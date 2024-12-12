@@ -1,11 +1,11 @@
 import React from "react";
-import Swal from "sweetalert2";
 import {
   useGetAllSocialMediaPostsQuery,
   useDeleteSocialMediaPostMutation,
   useUpdateSocialMediaPostStatusMutation,
 } from "./socialmediaPostApi";
 import { useSocialMediaPostRewardsMutation } from "../../rewards/rewardApi";
+import CustomSwal from "../../customSwal/customSwal";
 
 const SocialMediaPage = () => {
   const {
@@ -27,24 +27,23 @@ const SocialMediaPage = () => {
         postId: id,
         status: newStatus,
       }).unwrap();
-  
+
       // If the status is "completed", call the socialMediaPostRewards API
       if (newStatus === "completed") {
-
         const reward = parseInt(rewardPoint.replace(/[^0-9]/g, ""), 10);
-        
+
         // Validate rewardPoint before API call
         if (isNaN(reward) || reward <= 0) {
           throw new Error("Invalid reward point value");
         }
-  
+
         await socialMediaPostRewards({
           userId: userId, // Replace with the actual user ID
           socialMediaReward: reward, // Send the validated reward points
         }).unwrap();
-  
+
         // Notify the user about the reward
-        Swal.fire({
+        CustomSwal.fire({
           icon: "success",
           title: "Reward Claimed",
           text: "The reward for completing the post has been successfully claimed!",
@@ -52,9 +51,9 @@ const SocialMediaPage = () => {
           showConfirmButton: false,
         });
       }
-  
+
       // Show success notification for the status update
-      Swal.fire({
+      CustomSwal.fire({
         icon: "success",
         title: "Status Updated",
         text: `The status has been successfully updated to "${newStatus}".`,
@@ -63,7 +62,7 @@ const SocialMediaPage = () => {
       });
     } catch (error) {
       // Handle errors for both the status update and reward API
-      Swal.fire({
+      CustomSwal.fire({
         icon: "error",
         title: "Error",
         text: "Failed to update the status or claim the reward. Please try again later.",
@@ -71,10 +70,9 @@ const SocialMediaPage = () => {
       console.error("Error:", error);
     }
   };
-  
 
   const handleDeleteLink = async (id) => {
-    Swal.fire({
+    CustomSwal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
       icon: "warning",
@@ -87,7 +85,7 @@ const SocialMediaPage = () => {
         try {
           await deleteSocialMediaPost(id).unwrap();
 
-          Swal.fire({
+          CustomSwal.fire({
             icon: "success",
             title: "Deleted",
             text: "The post has been deleted successfully.",
@@ -97,7 +95,7 @@ const SocialMediaPage = () => {
 
           refetch(); // Refetch to update the table
         } catch (error) {
-          Swal.fire({
+          CustomSwal.fire({
             icon: "error",
             title: "Error",
             text: "Failed to delete the post. Please try again later.",
