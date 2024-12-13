@@ -244,36 +244,36 @@ const TabFourComponent = ({ surveys }) => (
     <table className="w-full text-left text-sm text-gray-400">
       <thead className="text-xs uppercase text-buttonBackground border-b border-gray-700">
         <tr>
-          <th scope="col" className="px-6 py-3">
-            Survey Name
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Reward
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Reward Status
-          </th>
-
-          <th scope="col" className="px-6 py-3">
-            Date
-          </th>
+          <th scope="col" className="px-6 py-3">Survey Name</th>
+          <th scope="col" className="px-6 py-3">Reward</th>
+          <th scope="col" className="px-6 py-3">Reward Status</th>
+          <th scope="col" className="px-6 py-3">Date</th>
         </tr>
       </thead>
       <tbody>
-        {surveys.map((survey) => (
-          <tr key={survey._id} className="border-b border-gray-700">
-            <td className="px-6 py-3">{survey.name || "N/A"}</td>
-            <td className="px-6 py-3">{survey.points || "N/A"} points</td>
-            <td className="px-6 py-3">{survey.rewardStatus || "N/A"}</td>
-            <td className="px-6 py-3">
-              {new Date(survey.createdAt).toLocaleDateString() || "N/A"}
+        {surveys && surveys.length > 0 ? (
+          surveys.map((survey) => (
+            <tr key={survey._id} className="bg-gray-800">
+              <td className="px-6 py-4 text-white">{survey.name || "N/A"}</td>
+              <td className="px-6 py-4 text-white">{survey.points || "N/A"} points</td>
+              <td className="px-6 py-4 text-white">{survey.rewardStatus || "N/A"}</td>
+              <td className="px-6 py-4 text-white">
+                {new Date(survey.createdAt).toLocaleDateString() || "N/A"}
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr className="bg-gray-800">
+            <td colSpan="4" className="px-6 py-4 text-center text-gray-500">
+              No surveys found.
             </td>
           </tr>
-        ))}
+        )}
       </tbody>
     </table>
   </div>
 );
+
 
 const TabFiveComponent = ({ referrals }) => (
   <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full overflow-x-auto box-border">
@@ -348,58 +348,49 @@ const TabFiveComponent = ({ referrals }) => (
 );
 
 const TabSixComponent = ({ socialMediaLinks }) => (
-  <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full overflow-x-auto">
-    <h3 className="text-white text-2xl font-bold mb-6">Social Media Rewards</h3>
-
-    <div className="overflow-x-auto">
-      <table className="min-w-full text-left text-sm text-white border-collapse border border-gray-700">
-        <thead>
-          <tr className="bg-gray-700">
-            <th className="px-4 py-2 border border-gray-600">User Name</th>
-            <th className="px-4 py-2 border border-gray-600">Platform</th>
-            <th className="px-4 py-2 border border-gray-600">Link</th>
-            <th className="px-4 py-2 border border-gray-600">RewardPoints</th>
-            <th className="px-4 py-2 border border-gray-600">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {socialMediaLinks?.posts.map((link) => (
-            <tr
-              key={link._id}
-              className={`${
-                link._id % 2 === 0 ? "bg-gray-600" : "bg-gray-700"
-              } hover:bg-gray-500`}
-            >
-              <td className="px-4 py-2 border border-gray-600">
-                {link.userName || "N/A"}
-              </td>
-
-              <td className="px-4 py-2 border border-gray-600">
-                {link.platform || "Unknown"}
-              </td>
-              <td className="px-4 py-2 border border-gray-600">
+  <div className="w-full overflow-x-scroll p-4 bg-gray-900 rounded-lg">
+    <table className="w-full text-left text-sm text-gray-400">
+      <thead className="text-xs uppercase text-buttonBackground border-b border-gray-700">
+        <tr>
+          <th scope="col" className="px-6 py-3">User Name</th>
+          <th scope="col" className="px-6 py-3">Platform</th>
+          <th scope="col" className="px-6 py-3">Link</th>
+          <th scope="col" className="px-6 py-3">Reward Points</th>
+          <th scope="col" className="px-6 py-3">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {socialMediaLinks?.posts && socialMediaLinks.posts.length > 0 ? (
+          socialMediaLinks.posts.map((link) => (
+            <tr key={link._id} className="bg-gray-800">
+              <td className="px-6 py-4 text-white">{link.userName || "N/A"}</td>
+              <td className="px-6 py-4 text-white">{link.platform || "Unknown"}</td>
+              <td className="px-6 py-4 text-blue-400">
                 <a
                   href={link.link}
-                  className="text-blue-400"
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="underline"
                 >
                   {link.link || "No link available"}
                 </a>
               </td>
-              <td className="px-4 py-2 border border-gray-600">
-                {link.rewardPoint || "N/A"}
-              </td>
-              <td className="px-4 py-2 border border-gray-600">
-                {link.status || "Pending"}
-              </td>
+              <td className="px-6 py-4 text-white">{link.rewardPoint || "N/A"}</td>
+              <td className="px-6 py-4 text-white">{link.status || "Pending"}</td>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          ))
+        ) : (
+          <tr className="bg-gray-800">
+            <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
+              No social media rewards found.
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
   </div>
 );
+
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState(0);

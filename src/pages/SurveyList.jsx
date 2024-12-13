@@ -149,30 +149,30 @@ const SurveyList = () => {
             768: { slidesPerView: 3, spaceBetween: 25 },
             510: { slidesPerView: 2, spaceBetween: 20 },
             0: { slidesPerView: 2, spaceBetween: 5 },
-           
-
           }}
         >
           {surveyOffers.map((offer) => (
             <SwiperSlide key={offer._id} className="text-white">
               <div
-                className="p-2 md:p-5 rounded-xl shadow-lg bg-gradient-to-b from-[#1f1f2e] to-[#0f0f1f] transition-transform duration-300 hover:scale-105 cursor-pointer flex flex-row sm:flex-col gap-3 items-center"
+                className="p-4 rounded-lg shadow-md bg-gradient-to-b from-[#1f1f2e] to-[#0f0f1f] transition-transform duration-300 hover:scale-105 cursor-pointer flex flex-col items-center gap-3"
                 onClick={() => handleSurveyCompletion(offer)}
               >
                 {offer.image && (
                   <img
                     src={offer.image}
                     alt={offer.name}
-                    className="w-12 h-12 md:h-36 md:w-full object-cover rounded-md "
+                    className="w-24 h-24 md:w-36 md:h-36 object-cover rounded-md border border-gray-700"
                   />
                 )}
 
-                <div className="text-left">
-                  <h4 className="font-bold text-xs">
-                    {offer?.name ? offer.name.slice(0, 11) : "Offer Name"}
-                    {offer.name.length > 11 && "..."}
+                <div className="text-center text-white">
+                  <h4 className="font-bold text-sm truncate max-w-[100px] sm:max-w-[120px] md:max-w-full">
+                    {offer?.name ? offer.name.slice(0, 15) : "Offer Name"}
+                    {offer.name.length > 15 && "..."}
                   </h4>
-                  <h5 className="text-sm">CZ {offer?.points}</h5>
+                  <h5 className="text-base font-semibold text-green-400 mt-1">
+                    CZ {offer?.points || "0"}
+                  </h5>
                 </div>
               </div>
             </SwiperSlide>
@@ -194,9 +194,9 @@ const SurveyList = () => {
         </button>
 
         {/* Results Info */}
-        <span className="text-white font-semibold">
-          1 - {surveyOffers.length} of results
-        </span>
+        {/* <span className="text-white font-semibold">
+          1 - {surveyOffers.length} 
+        </span> */}
 
         {/* Next Button */}
         <button

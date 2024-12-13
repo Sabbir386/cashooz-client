@@ -50,10 +50,12 @@ const Reward = () => {
   } = useSingleNormalUserQuery(user?.objectId);
   console.log(userData);
   const referralBonusTiers = [
-    { referrals: 1, bonus: 20 },
-    { referrals: 10, bonus: 40 },
-    { referrals: 25, bonus: 100 },
-    { referrals: 100, bonus: 1000 },
+    { referrals: 10, bonus: 100 },
+    { referrals: 25, bonus: 150 },
+    { referrals: 40, bonus: 200 },
+    { referrals: 60, bonus: 250 },
+    { referrals: 80, bonus: 300 },
+    { referrals: 100, bonus: 350 },
   ];
 
   useEffect(() => {
@@ -272,10 +274,12 @@ const Reward = () => {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {[
-          { id: 1, reward: 20, requiredTasks: 10, totalClaimCount: 1 },
-          { id: 2, reward: 30, requiredTasks: 15, totalClaimCount: 2 },
-          { id: 3, reward: 40, requiredTasks: 20, totalClaimCount: 3 },
-          { id: 4, reward: 60, requiredTasks: 30, totalClaimCount: 4 },
+          { id: 1, reward: 100, requiredTasks: 10, totalClaimCount: 1 },
+          { id: 2, reward: 250, requiredTasks: 25, totalClaimCount: 2 },
+          { id: 3, reward: 400, requiredTasks: 40, totalClaimCount: 3 },
+          { id: 4, reward: 600, requiredTasks: 60, totalClaimCount: 4 },
+          { id: 5, reward: 800, requiredTasks: 80, totalClaimCount: 5 },
+          { id: 6, reward: 1000, requiredTasks: 100, totalClaimCount: 6 },
         ].map((task, idx) => (
           <div
             key={task.id}
