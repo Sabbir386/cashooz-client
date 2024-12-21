@@ -110,9 +110,14 @@ const OfferView = () => {
         {networkOffers.length > 0 ? (
           networkOffers.map((networkOffer, idx) => (
             <div key={idx} className="my-8">
-              <h2 className="text-3xl font-bold text-white border-b-[1px] border-b-secondaryColor pb-4">
+             <div className="flex items-center justify-between">
+             <h2 className="text-3xl font-bold text-white border-b-[1px] border-b-secondaryColor pb-4">
                 {networkOffer.networkName}
               </h2>
+               <Link to={`/dashboard/offers/${networkOffer._id}`} className="text-white flex justify-center items-center gap-3 hover:text-buttonBackground">
+                <span>View All</span>
+                <FaArrowRight className="" /></Link>
+             </div>
 
               <div className="relative w-full">
                 <Swiper
@@ -232,19 +237,19 @@ const OfferView = () => {
 
             <div className="flex flex-col mb-4  h-[430px] overflow-y-auto ">
               {/* Offer Image */}
-              <div className="flex items-center justify-start gap-3 mb-4">
+              <div className="flex flex-col items-start justify-between gap-3 mb-4">
                 <img
                   src={
                     selectedOffer.image ||
                     "https://i.ibb.co/JjrS14H/cashooz.png"
                   }
                   alt="Offer"
-                  className="w-14 h-14 rounded-full mr-4"
+                  className="block mx-auto w-32 h-40 object-cover rounded-full"
                 />
                 <div>
-                  <p className="text-white text-2xl font-bold">
+                  {/* <p className="text-white text-2xl font-bold">
                     CZ {selectedOffer.points || "0"}
-                  </p>{" "}
+                  </p>{" "} */}
                   <div className="text-cyan-400 text-sm">
                     <div className="text-yellow-400 flex gap-1">
                       <FaStar />
@@ -271,16 +276,16 @@ const OfferView = () => {
                   ></p>
                 </div>
 
-                <div
+                {/* <div
                   className="text-blue-400 cursor-pointer flex items-center"
                   onClick={toggleMoreInfo}
                 >
                   <span>{isMoreInfoOpen ? "Less Info" : "More Info"}</span>
                   <span className="ml-1">{isMoreInfoOpen ? "▲" : "▼"}</span>
-                </div>
+                </div> */}
 
                 {/* Display additional info (e.g., Status, Category, Provider) when expanded */}
-                {isMoreInfoOpen && (
+                {/* {isMoreInfoOpen && (
                   <div className="text-gray-400 mt-2">
                     <div className="flex justify-between text-sm mb-4 mt-2">
                       <div className="text-center">
@@ -299,11 +304,11 @@ const OfferView = () => {
                       </div>
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
 
-              {/* Rewards Section */}
-              <div className="mb-4">
+              {/* Rewards Section */}   
+              {/* <div className="mb-4">
                 <p className="text-white font-semibold">Rewards</p>
                 <div className="flex justify-between items-center bg-gray-700 p-2 rounded-md">
                   <p className="text-green-400 font-bold">
@@ -311,7 +316,7 @@ const OfferView = () => {
                   </p>
                   <p className="text-white">Complete Quiz - (15 questions)</p>
                 </div>
-              </div>
+              </div> */}
 
               {/* Status, Category, Provider */}
               <div className="mb-4">

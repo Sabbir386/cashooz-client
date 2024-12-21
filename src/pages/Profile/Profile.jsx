@@ -276,7 +276,7 @@ const TabFourComponent = ({ surveys }) => (
 
 
 const TabFiveComponent = ({ referrals }) => (
-  <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full overflow-x-auto box-border">
+  <div className="bg-gray-900  p-6 rounded-lg shadow-md w-full overflow-x-auto box-border">
     <h3 className="text-white text-lg font-bold mb-4">Referrals History</h3>
 
     {referrals?.referredUsers?.length > 0 ? (
@@ -536,16 +536,16 @@ const Profile = () => {
             >
               <CiSettings className="block hover:rotate-45 transition-transform duration-300" />
 
-              <small className="block">Edit profile</small>
+              <small className="block text-sm">Edit profile</small>
             </div>
-            <select
+            {/* <select
               name=""
               id=""
               className="w-[190px] cursor-pointer bg-transparent border py-2 px-4 rounded-md text-sm text-white text-center"
             >
               <option value="">this year</option>
-            </select>
-            <button className="w-[190px] bg-buttonBackground px-4 py-3 text-sm text-white rounded-md font-semibold flex items-center justify-center gap-2">
+            </select> */}
+            <button className="w-[190px] bg-buttonBackground px-4 py-3 text-sm text-white rounded-md font-semibold flex items-center justify-center gap-2 cursor-not-allowed">
               {" "}
               <span>Download Info</span> <FaArrowAltCircleDown />
             </button>
@@ -560,7 +560,7 @@ const Profile = () => {
                   : "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               }
               alt="Profile"
-              className="w-24 h-24 rounded-full object-cover object-fill"
+              className="w-24 h-24 rounded-full object-cover"
             />
           </div>
 

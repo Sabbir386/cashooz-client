@@ -46,6 +46,7 @@ import PrivecyPolicy from "../pages/PrivecyPolicy/PrivecyPolicy";
 import Aboutus from "../pages/Aboutus/Aboutus";
 import SocialMediaPage from "../pages/SocialMedia/SocialMedia";
 import LandingLayout from "../layouts/LandingLayout";
+import ViewAllNetworkOffers from "../pages/OfferView/ViewAllNetworkOffers";
 
 export const router = createBrowserRouter([
   {
@@ -106,6 +107,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoutes>
             <AdminDashboard></AdminDashboard>
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/dashboard/offers/:networkId",
+        element: (
+          <ProtectedRoutes>
+            <ViewAllNetworkOffers></ViewAllNetworkOffers>
           </ProtectedRoutes>
         ),
       },

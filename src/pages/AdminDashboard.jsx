@@ -351,12 +351,12 @@ const AdminDashboard = () => {
 
   return (
     <div className="container mx-auto">
-      <div className="overflow-hidden mt-4 mb-6 z-[97]">
+      <div className="overflow-hidden mt-4 mb-0 z-[97]">
         <div className="text-white p-2 rounded shadow-sm inline-flex flex-nowrap gap-5 overflow-hidden animate-infinite-scroll">
           {paymentsData.map((payment, index) => (
             <div
               key={payment._id}
-              className="w-[200px] flex gap-3 justify-center items-center border-r-2"
+              className="px-5 flex gap-3 justify-center items-center border-r-2"
             >
               {/* Conditionally render icons based on paymentType */}
               <div>

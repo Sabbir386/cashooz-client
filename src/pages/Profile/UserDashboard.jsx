@@ -239,7 +239,9 @@ const UserDashboard = () => {
       <div className="grid gap-4 mt-5 grid-cols-1 md:grid-cols-2">
         {(userRole === "user" || userRole === "advertiser") && (
           <div className="bg-cardBackground px-4 py-6 rounded shadow-sm">
-            <ResponsiveContainer width="100%" height={200}>
+            <h3 className="text-white text-2xl mb-6 text-center">Daily Completed Offer</h3>
+            {
+              transformedData.length > 0 ?  <ResponsiveContainer width="100%" height={200}>
               <BarChart data={transformedData}>
                 <XAxis dataKey="date" stroke="#8884d8" />
                 <YAxis />
@@ -261,12 +263,18 @@ const UserDashboard = () => {
                 <Bar dataKey="count" fill="#8884d8" barSize={30} />
               </BarChart>
             </ResponsiveContainer>
+            :<p className="text-buttonBackground font-bold text-center">No Record found</p>
+            }
+           
           </div>
         )}
 
         {(userRole === "user" || userRole === "advertiser") && (
           <div className="bg-cardBackground px-4 py-6 rounded shadow-sm">
-            <ResponsiveContainer width="100%" height={250}>
+            <h3 className="text-white text-2xl mb-6 text-center">Task Completion</h3>
+            {
+              transformedLoggedDatawithNameAndCount.length > 0 ?  
+              <ResponsiveContainer width="100%" height={250}>
               <PieChart width={400} height={400}>
                 <Pie
                   data={transformedLoggedDatawithNameAndCount}
@@ -288,6 +296,9 @@ const UserDashboard = () => {
                 <Tooltip />
               </PieChart>
             </ResponsiveContainer>
+            : <p className="text-buttonBackground font-bold text-center">No Record found</p>
+            }
+          
           </div>
         )}
       </div>

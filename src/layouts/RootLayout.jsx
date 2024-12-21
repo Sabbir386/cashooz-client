@@ -20,6 +20,7 @@ import DashboardFooter from "./sidebar/DashboardFooter";
 import { useRef } from "react";
 import { useUserTotalRewardsQuery } from "../rewards/rewardApi";
 import CustomSwal from "../customSwal/customSwal";
+import ScrollToTop from "./ScrollToTop";
 function RootLayout() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -95,6 +96,7 @@ function RootLayout() {
 
   return (
     <div className="flex">
+      <ScrollToTop/>
       <Sidebar />
       <main className="min-h-screen ml-0 md:ml-[16rem] flex-1 mx-auto py-4 w-5 md:w-[100% - 16rem] bg-primaryColor px-3 relative">
         <div

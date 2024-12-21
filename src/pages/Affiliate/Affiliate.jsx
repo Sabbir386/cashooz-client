@@ -156,11 +156,11 @@ const Affiliate = () => {
           <div className="flex mt-4">
             {/* Display the value with proper formatting */}
             <p className="text-lg font-bold">
-              CZ{" "}
+             
               {(
                 (referrals?.totalEarnings ?? 0) -
                 (totalReferralRewards?.data?.totalRewards ?? 0)
-              ).toFixed(2)}
+              ).toFixed(2)}  CZ
             </p>
 
             {/* Claim Button */}

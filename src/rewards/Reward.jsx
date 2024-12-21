@@ -270,7 +270,7 @@ const Reward = () => {
   const renderTaskBonuses = () => {
     // Ensure claimedTasks is an array (default to an empty array if undefined)
     const validClaimedTasks = Array.isArray(claimedTasks) ? claimedTasks : [];
-
+  
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {[
@@ -283,19 +283,22 @@ const Reward = () => {
         ].map((task, idx) => (
           <div
             key={task.id}
-            className={`p-5 rounded-lg shadow-md transition-transform transform hover:scale-105 ${
+            className={`relative flex flex-col justify-between items-center p-5 rounded-lg shadow-md transition-transform transform hover:scale-105 ${
               validClaimedTasks.includes(task.id) ||
               userTaskClaimCount === task.id
                 ? "opacity-50"
                 : ""
-            } flex flex-col items-center justify-center bg-gradient-to-b from-gray-800 to-gray-900`}
+            } bg-gradient-to-b from-gray-800 to-gray-900`}
           >
-            <div className="text-lg font-bold text-yellow-400 mb-2">
-              {task.requiredTasks}-Task Bonus
+            {/* Task Details */}
+            <div>
+              <div className="text-lg font-bold text-yellow-400 mb-2">
+                {task.requiredTasks}-Task Bonus
+              </div>
+              <div className="text-white text-2xl">Reward: {task.reward} CZ</div>
             </div>
-
-            <div className="text-white text-2xl">Reward: {task.reward} CZ</div>
-
+  
+            {/* Task Progress */}
             <div className="flex justify-center items-center mt-4 mb-4">
               <div className="grid grid-cols-10 gap-2">
                 {[...Array(task.requiredTasks)].map((_, index) => {
@@ -332,47 +335,49 @@ const Reward = () => {
                 })}
               </div>
             </div>
-
-            <div className="text-sm text-gray-400 text-center mt-4">
-              <span className="font-bold text-green-300">
-                {Math.min(userCompletedTask, task.requiredTasks)}
-              </span>
-              /<span className="text-yellow-400">{task.requiredTasks}</span>{" "}
-              Tasks Completed
-            </div>
-            {userCompletedTask >= task.requiredTasks ? (
-              rewardData?.taskClaimCount < task.totalClaimCount ? (
-                <button
-                  className={`bg-blue-500 text-white px-4 py-2 rounded mt-2 cursor-pointer`}
-                  onClick={() => handleClaimTaskBonus(task.id, task.reward)}
-                >
-                  Claim
-                </button>
+  
+            {/* Tasks Completed and Claim Button */}
+            <div className="w-full text-center mt-auto">
+              <div className="text-sm text-gray-400">
+                <span className="font-bold text-green-300">
+                  {Math.min(userCompletedTask, task.requiredTasks)}
+                </span>
+                /<span className="text-yellow-400">{task.requiredTasks}</span>{" "}
+                Tasks Completed
+              </div>
+              {userCompletedTask >= task.requiredTasks ? (
+                rewardData?.taskClaimCount < task.totalClaimCount ? (
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded mt-2 cursor-pointer"
+                    onClick={() => handleClaimTaskBonus(task.id, task.reward)}
+                  >
+                    Claim
+                  </button>
+                ) : (
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded mt-2 opacity-50 cursor-not-allowed"
+                    disabled
+                  >
+                    Claimed
+                  </button>
+                )
               ) : (
                 <button
-                  className={`bg-blue-500 text-white px-4 py-2 rounded mt-2 opacity-50 cursor-not-allowed"
-              `}
+                  className="bg-blue-500 text-white px-4 py-2 rounded mt-2 opacity-50 cursor-not-allowed"
                   disabled
                 >
-                  Claimed
+                  {userCompletedTask < task.requiredTasks
+                    ? "Not Available"
+                    : "Claimed"}
                 </button>
-              )
-            ) : (
-              <button
-                className={`bg-blue-500 text-white px-4 py-2 rounded mt-2 opacity-50 cursor-not-allowed"
-              `}
-                disabled
-              >
-                {userCompletedTask < task.requiredTasks
-                  ? "Not Available"
-                  : "Claimed"}
-              </button>
-            )}
+              )}
+            </div>
           </div>
         ))}
       </div>
     );
   };
+  
 
   const renderAffiliatedBonus = () => (
     <div className="flex justify-start items-center">

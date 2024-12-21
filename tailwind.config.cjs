@@ -17,6 +17,7 @@ module.exports = {
       animation: {
         'infinite-scroll': 'infinite-scroll 45s linear infinite',
         clicking: 'clicking .5s ease-in-out infinite',
+          'up-down': 'upDown 0.5s ease-in-out',
       },
       keyframes: {
         'infinite-scroll': {
@@ -26,6 +27,11 @@ module.exports = {
         clicking: { // Add this section
           '0%, 100%': { transform: 'scale(1)' }, // Normal size
           '50%': { transform: 'scale(0.9)' },   // Slightly smaller
+        },
+        upDown: {
+          '0%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },  // Move up
+          '100%': { transform: 'translateY(0)' },      // Move back down
         },
       },
       backgroundImage: {
