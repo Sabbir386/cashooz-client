@@ -364,7 +364,8 @@ const Affiliate = () => {
             <div className="flex space-x-3">
               {/* Email Share */}
               <a
-                href={`mailto:?subject=Join me on Cashooz&body=Earn rewards by completing simple tasks! Use my referral link: ${referralLink}`}
+                href={`mailto:?subject=Turn Your Spare Time Into Cash with Cashooz
+Earn Extra Income from Home - Start Now&body=💲Cashooz.com💰 is one of the web's leading rewards platforms, with a vibrant and rapidly growing community. It's a completely free program that lets you earn real money by completing everyday online tasks and activities. Whether you're browsing, shopping, or engaging with content, you can make money from home. Once you've earned, simply redeem your rewards through one of our supported payout methods—no personal investment required. Start earning today: ${referralLink}`}
                 className="p-2 bg-gray-600 hover:bg-gray-500 rounded-md"
               >
                 <FaEnvelope size={20} className="text-gray-200" />

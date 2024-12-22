@@ -149,7 +149,9 @@ const SocialSubmissions = () => {
   }, [postURL]);
 
   const copyToClipboard = () => {
-    const textToCopy = `Earn money from 💲Cashooz.com💰 where you can earn cash by completing various tasks like games, surveys, installation, watching, and shopping that you already do online every day. It's free. Start earning now. Check out ${selectedPlatform.name}! Earn ${selectedPlatform.reward} today. Click here to get started.`;
+    const textToCopy = `Earn money from 
+💲Cashooz.com💰 where you can earn cash by completing various tasks like games, survey, install, watching, shopping that you already do online everyday. It's free. Start earning now...
+${selectedPlatform.name}! Earn ${selectedPlatform.reward} #Cashooz #workfromhome #earnmoney #makemoney #easymoney #makemoneyonline #earnmoneyonline`;
     navigator.clipboard.writeText(textToCopy).then(() => {
       setIsCopied(true); // Update state to show the check mark
       setTimeout(() => setIsCopied(false), 2000); // Reset to copy icon after 2 seconds
@@ -284,7 +286,9 @@ const SocialSubmissions = () => {
                 className="w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-green-500 text-gray-300 bg-[#121A25] cursor-not-allowed"
                 rows="4"
                 readOnly
-                value={`Earn money from 💲Cashooz.com💰 where you can earn cash by completing various tasks like games, surveys, installation, watching, and shopping that you already do online every day. It's free. Start earning now. Join now at https://cashooz-838b0.web.app/register and get ${selectedPlatform.reward} bonus #Cashooz #so #easymoney #viral #explore #fyp`}
+                value={`Earn money from 
+💲Cashooz.com💰 where you can earn cash by completing various tasks like games, survey, install, watching, shopping that you already do online everyday. It's free. Start earning now...
+#Cashooz #workfromhome #earnmoney #makemoney #easymoney #makemoneyonline #earnmoneyonline ${selectedPlatform.reward} bonus #Cashooz #so #easymoney #viral #explore #fyp`}
               ></textarea>
               <button
                 className="mt-2 text-sm font-semibold text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg"

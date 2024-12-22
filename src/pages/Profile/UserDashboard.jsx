@@ -239,66 +239,85 @@ const UserDashboard = () => {
       <div className="grid gap-4 mt-5 grid-cols-1 md:grid-cols-2">
         {(userRole === "user" || userRole === "advertiser") && (
           <div className="bg-cardBackground px-4 py-6 rounded shadow-sm">
-            <h3 className="text-white text-2xl mb-6 text-center">Daily Completed Offer</h3>
-            {
-              transformedData.length > 0 ?  <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={transformedData}>
-                <XAxis dataKey="date" stroke="#8884d8" />
-                <YAxis />
-                <Tooltip
-                  wrapperStyle={{ width: 100, backgroundColor: "#ccc" }}
-                />
-                <Legend
-                  width={100}
-                  wrapperStyle={{
-                    top: 40,
-                    right: 20,
-                    backgroundColor: "#f5f5f5",
-                    border: "1px solid #d5d5d5",
-                    borderRadius: 3,
-                    lineHeight: "40px",
-                  }}
-                />
-                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                <Bar dataKey="count" fill="#8884d8" barSize={30} />
-              </BarChart>
-            </ResponsiveContainer>
-            :<p className="text-buttonBackground font-bold text-center">No Record found</p>
-            }
-           
+            <h3 className="text-white text-2xl mb-6 text-center">
+              Daily Completion
+            </h3>
+            {transformedData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={200}>
+                <BarChart data={transformedData}>
+                  <XAxis dataKey="date" stroke="#8884d8" />
+                  <YAxis />
+                  <Tooltip
+                    wrapperStyle={{ width: 100, backgroundColor: "#ccc" }}
+                  />
+                  <Legend
+                    width={100}
+                    wrapperStyle={{
+                      top: 40,
+                      right: 20,
+                      backgroundColor: "#f5f5f5",
+                      border: "1px solid #d5d5d5",
+                      borderRadius: 3,
+                      lineHeight: "40px",
+                    }}
+                  />
+                  <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                  <Bar dataKey="count" fill="#8884d8" barSize={30} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <>
+                <p className="text-buttonBackground font-bold text-center">
+                  No Task found
+                </p>
+                <p className="text-white font-bold text-center">
+                  Complete Any Task...
+                </p>
+              </>
+            )}
           </div>
         )}
 
         {(userRole === "user" || userRole === "advertiser") && (
           <div className="bg-cardBackground px-4 py-6 rounded shadow-sm">
-            <h3 className="text-white text-2xl mb-6 text-center">Task Completion</h3>
-            {
-              transformedLoggedDatawithNameAndCount.length > 0 ?  
+            <h3 className="text-white text-2xl mb-6 text-center">
+              Task Completion
+            </h3>
+            {transformedLoggedDatawithNameAndCount.length > 0 ? (
               <ResponsiveContainer width="100%" height={250}>
-              <PieChart width={400} height={400}>
-                <Pie
-                  data={transformedLoggedDatawithNameAndCount}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={renderCustomizedLabel}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {transformedLoggedDatawithNameAndCount.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-            : <p className="text-buttonBackground font-bold text-center">No Record found</p>
-            }
-          
+                <PieChart width={400} height={400}>
+                  <Pie
+                    data={transformedLoggedDatawithNameAndCount}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={renderCustomizedLabel}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {transformedLoggedDatawithNameAndCount.map(
+                      (entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      )
+                    )}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <>
+                <p className="text-buttonBackground font-bold text-center">
+                  No Task found
+                </p>
+                <p className="text-white font-bold text-center">
+                  Complete Any Task...
+                </p>
+              </>
+            )}
           </div>
         )}
       </div>

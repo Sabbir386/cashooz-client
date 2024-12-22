@@ -208,11 +208,21 @@ const TabThreeComponent = ({ bonusReward }) => (
     <table className="w-full text-left text-sm text-gray-400">
       <thead className="text-xs uppercase text-buttonBackground border-b border-gray-700">
         <tr>
-          <th scope="col" className="px-6 py-3">Reward Name</th>
-          <th scope="col" className="px-6 py-3">Reward Points</th>
-          <th scope="col" className="px-6 py-3">Reward Status</th>
-          <th scope="col" className="px-6 py-3">Reward From</th>
-          <th scope="col" className="px-6 py-3">Date</th>
+          <th scope="col" className="px-6 py-3">
+            Reward Name
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Reward Points
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Reward Status
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Reward From
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Date
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -244,10 +254,18 @@ const TabFourComponent = ({ surveys }) => (
     <table className="w-full text-left text-sm text-gray-400">
       <thead className="text-xs uppercase text-buttonBackground border-b border-gray-700">
         <tr>
-          <th scope="col" className="px-6 py-3">Survey Name</th>
-          <th scope="col" className="px-6 py-3">Reward</th>
-          <th scope="col" className="px-6 py-3">Reward Status</th>
-          <th scope="col" className="px-6 py-3">Date</th>
+          <th scope="col" className="px-6 py-3">
+            Survey Name
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Reward
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Reward Status
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Date
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -255,8 +273,12 @@ const TabFourComponent = ({ surveys }) => (
           surveys.map((survey) => (
             <tr key={survey._id} className="bg-gray-800">
               <td className="px-6 py-4 text-white">{survey.name || "N/A"}</td>
-              <td className="px-6 py-4 text-white">{survey.points || "N/A"} points</td>
-              <td className="px-6 py-4 text-white">{survey.rewardStatus || "N/A"}</td>
+              <td className="px-6 py-4 text-white">
+                {survey.points || "N/A"} points
+              </td>
+              <td className="px-6 py-4 text-white">
+                {survey.rewardStatus || "N/A"}
+              </td>
               <td className="px-6 py-4 text-white">
                 {new Date(survey.createdAt).toLocaleDateString() || "N/A"}
               </td>
@@ -273,7 +295,6 @@ const TabFourComponent = ({ surveys }) => (
     </table>
   </div>
 );
-
 
 const TabFiveComponent = ({ referrals }) => (
   <div className="bg-gray-900  p-6 rounded-lg shadow-md w-full overflow-x-auto box-border">
@@ -352,11 +373,21 @@ const TabSixComponent = ({ socialMediaLinks }) => (
     <table className="w-full text-left text-sm text-gray-400">
       <thead className="text-xs uppercase text-buttonBackground border-b border-gray-700">
         <tr>
-          <th scope="col" className="px-6 py-3">User Name</th>
-          <th scope="col" className="px-6 py-3">Platform</th>
-          <th scope="col" className="px-6 py-3">Link</th>
-          <th scope="col" className="px-6 py-3">Reward Points</th>
-          <th scope="col" className="px-6 py-3">Status</th>
+          <th scope="col" className="px-6 py-3">
+            User Name
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Platform
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Link
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Reward Points
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Status
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -364,7 +395,9 @@ const TabSixComponent = ({ socialMediaLinks }) => (
           socialMediaLinks.posts.map((link) => (
             <tr key={link._id} className="bg-gray-800">
               <td className="px-6 py-4 text-white">{link.userName || "N/A"}</td>
-              <td className="px-6 py-4 text-white">{link.platform || "Unknown"}</td>
+              <td className="px-6 py-4 text-white">
+                {link.platform || "Unknown"}
+              </td>
               <td className="px-6 py-4 text-blue-400">
                 <a
                   href={link.link}
@@ -375,8 +408,12 @@ const TabSixComponent = ({ socialMediaLinks }) => (
                   {link.link || "No link available"}
                 </a>
               </td>
-              <td className="px-6 py-4 text-white">{link.rewardPoint || "N/A"}</td>
-              <td className="px-6 py-4 text-white">{link.status || "Pending"}</td>
+              <td className="px-6 py-4 text-white">
+                {link.rewardPoint || "N/A"}
+              </td>
+              <td className="px-6 py-4 text-white">
+                {link.status || "Pending"}
+              </td>
             </tr>
           ))
         ) : (
@@ -390,7 +427,6 @@ const TabSixComponent = ({ socialMediaLinks }) => (
     </table>
   </div>
 );
-
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -473,9 +509,9 @@ const Profile = () => {
     isLoading: isBonusRewardsLoading,
     isError: isBonusRewardsError,
     error: bonusRewardsError,
-  } = useBonusRewardByUserQuery( user?.objectId ,
-    { skip: !user?.objectId || user?.role !== "user" });
-  
+  } = useBonusRewardByUserQuery(user?.objectId, {
+    skip: !user?.objectId || user?.role !== "user",
+  });
 
   // Handle loading states
   if (
@@ -483,14 +519,21 @@ const Profile = () => {
     isWithdrawalLoading ||
     isUserLoading ||
     isReferralsLoading ||
-    issurveysDataLoading || isBonusRewardsLoading||
+    issurveysDataLoading ||
+    isBonusRewardsLoading ||
     isUserEarningFieldLoading
   ) {
     return <Loader />;
   }
 
   // Handle errors
-  if (isPostsError || withdrawalError || userError || referralsError || isBonusRewardsError) {
+  if (
+    isPostsError ||
+    withdrawalError ||
+    userError ||
+    referralsError ||
+    isBonusRewardsError
+  ) {
     return (
       <p>
         Error:{" "}
@@ -498,7 +541,8 @@ const Profile = () => {
           withdrawalError?.message ||
           userError?.message ||
           userEarningFieldError ||
-          isSurveysDataError ||isBonusRewardsError||
+          isSurveysDataError ||
+          isBonusRewardsError ||
           referralsError?.message}
       </p>
     );
@@ -508,13 +552,13 @@ const Profile = () => {
   const referrals = referralData?.data || [];
   const surveys = surveysData?.data || [];
   const bonusReward = bonusRewardsData?.rewards || [];
-  console.log('bonusRewardsData',bonusReward)
+  console.log("bonusRewardsData", bonusReward);
   console.log("Surveys Data:", surveys);
   // Array of components corresponding to each tab
   const tabComponents = [
     <TabOneComponent userEarningFieldData={userEarningFieldData} />,
     <TabTwoComponent withdrawals={withdrawals} />,
-    <TabThreeComponent bonusReward={bonusReward}/>,
+    <TabThreeComponent bonusReward={bonusReward} />,
     <TabFourComponent surveys={surveys} />,
     <TabFiveComponent referrals={referrals} />,
     <TabSixComponent socialMediaLinks={socialMediaLinks} />,
@@ -545,10 +589,16 @@ const Profile = () => {
             >
               <option value="">this year</option>
             </select> */}
-            <button className="w-[190px] bg-buttonBackground px-4 py-3 text-sm text-white rounded-md font-semibold flex items-center justify-center gap-2 cursor-not-allowed">
-              {" "}
-              <span>Download Info</span> <FaArrowAltCircleDown />
-            </button>
+            <div className="relative group">
+              {/* Button */}
+              <button className="w-[190px] bg-buttonBackground px-4 py-3 text-sm text-white rounded-md font-semibold flex items-center justify-center gap-2">
+                <span>Download Info</span> <FaArrowAltCircleDown />
+              </button>
+              {/* Tooltip */}
+              <div className="absolute top-full mt-2 right-0 hidden group-hover:flex w-max bg-gray-800 text-red-500 rounded-md py-1 px-2 border border-yellow-500">
+                Complete at least 1 withdraw
+              </div>
+            </div>
           </div>
         </div>
         <div className="py-4 flex flex-col lg:flex-row gap-3">
