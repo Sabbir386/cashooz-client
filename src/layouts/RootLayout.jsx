@@ -21,6 +21,7 @@ import { useRef } from "react";
 import { useUserTotalRewardsQuery } from "../rewards/rewardApi";
 import CustomSwal from "../customSwal/customSwal";
 import ScrollToTop from "./ScrollToTop";
+import { useSingleNormalUserQuery } from "../redux/features/auth/authApi";
 function RootLayout() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -40,8 +41,14 @@ function RootLayout() {
   } = useUserTotalRewardsQuery(user?.objectId, {
     skip: user?.role !== "user",
   });
-
   console.log(totalRewards);
+    const {
+      data: userData,
+      isLoading: isUserLoading,
+      error: userError,
+    } = useSingleNormalUserQuery(user?.objectId);
+
+
 
   useEffect(() => {
     if (token) {
@@ -135,7 +142,7 @@ function RootLayout() {
               {/* Profile Image */}
               <img
                 className="w-8 h-8 rounded-full object-cover"
-                src="https://i.ibb.co.com/5j1jKyC/images.png" // Replace with your profile image URL
+                src={userData?.data?.profileImg} // Replace with your profile image URL
                 alt="Profile"
               />
               {/* Username */}

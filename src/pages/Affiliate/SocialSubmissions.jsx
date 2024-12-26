@@ -202,14 +202,43 @@ ${selectedPlatform.name}! Earn ${selectedPlatform.reward} #Cashooz #workfromhome
       });
     }
   };
-  const sharePost = () => {
-    const postUrl = `https://cashooz-838b0.web.app/register?refId=`; // Replace with the URL of the post you want to share
-    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-      postUrl
-    )}`;
+  // const sharePost = (platform) => {
+  //   console.log(platform)
+  //   const postUrl = `https://cashooz-838b0.web.app/register?refId=`; // Replace with the URL of the post you want to share
+  //   const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+  //     postUrl
+  //   )}`;
 
-    // Open Facebook share modal
-    window.open(facebookShareUrl, "_blank", "width=600,height=400");
+  //   // Open Facebook share modal
+  //   window.open(facebookShareUrl, "_blank", "width=600,height=400");
+  // };
+
+  const sharePost = (platformName) => {
+    const postUrl = `https://cashooz-838b0.web.app/register?refId=`; // Base URL for sharing
+  
+    // Define share URLs for each platform
+    const platformShareUrls = {
+      Facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`,
+      Instagram: `https://www.instagram.com/?url=${encodeURIComponent(postUrl)}`, // Instagram doesn't support direct sharing via URL
+      YouTube: `https://www.youtube.com/share?url=${encodeURIComponent(postUrl)}`, // Hypothetical sharing URL
+      TikTok: `https://www.tiktok.com/share?url=${encodeURIComponent(postUrl)}`, // Hypothetical sharing URL
+      Snapchat: `https://www.snapchat.com/share?url=${encodeURIComponent(postUrl)}`, // Hypothetical sharing URL
+      Twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=Check+this+out!`,
+      Telegram: `https://t.me/share/url?url=${encodeURIComponent(postUrl)}&text=Check+this+out!`,
+      Pinterest: `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(postUrl)}&description=Check+this+out!`,
+    };
+  
+    // Get the share URL for the selected platform
+    const shareUrl = platformShareUrls[platformName];
+  
+    if (shareUrl) {
+      console.log(`Sharing on ${platformName}: ${shareUrl}`);
+      // Optionally open the share URL in a new tab
+      // window.open(shareUrl, "_blank");
+      window.open(shareUrl, "_blank", "width=600,height=400");
+    } else {
+      console.log(`Platform "${platformName}" is not supported for sharing.`);
+    }
   };
 
   return (
@@ -309,7 +338,7 @@ ${selectedPlatform.name}! Earn ${selectedPlatform.reward} #Cashooz #workfromhome
               </p>
               <button
                 className="bg-buttonBackground px-3 py-1 rounded-lg text-sm"
-                onClick={sharePost}
+                onClick={() =>sharePost(selectedPlatform.name)}
               >
                 share
               </button>

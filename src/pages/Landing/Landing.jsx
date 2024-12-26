@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Card from "./component/Card";
 import One from "../../assets/img/one.svg";
@@ -18,8 +18,12 @@ import UberEats from "../../assets/img/UberEats.png";
 import { FaCheck } from "react-icons/fa";
 import InfiniteScroll from "./component/InfiniteScroll";
 import Hero from "./component/Hero";
+import HowWorks from "./component/HowWorks";
+import ClientsSection from "./component/ClientsSection ";
+import Counter from "./component/Counter";
 
 const Landing = () => {
+
   const items = [
     {
       title: "SIGN UP",
@@ -140,10 +144,12 @@ const Landing = () => {
     { label: "1,000 POINTS = $10", bgColor: "bg-black" },
     { label: "10,000 POINTS = $100", bgColor: "bg-blue-500" },
   ];
+
+
   return (
     <div className="bg-white">
       {/* bannner section   */}
-     
+
       <div className="relative bg-gray-100">
         <img
           src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -169,34 +175,11 @@ const Landing = () => {
         </div>
       </div>
       {/* how works section  */}
-      <div className="bg-gray-100 py-12">
-        <div className="max-w-7xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">
-            How Cashooz Works
-          </h2>
-          <p className="text-gray-600 mb-8">
-            We give away thousands of dollars of free money every day.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {items.map((item, index) => (
-              <div
-                key={index}
-                className="flex flex-col items-center text-center space-y-4"
-              >
-                <img
-                  src={item.icon}
-                  alt={item.title}
-                  className="w-16 h-16 object-contain"
-                />
-                <h3 className="text-lg font-semibold text-gray-800">
-                  {item.title}
-                </h3>
-                <p className="text-gray-600">{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <HowWorks />
+      {/* clients section  */}
+      <ClientsSection />
+      {/*counter section  */}
+      <Counter/>
       {/* cards section  */}
       <InfiniteScroll></InfiniteScroll>
       {/* features section  */}

@@ -207,6 +207,30 @@ const Register = () => {
               </div>
             </div>
           </div>
+          <div className="mt-4 flex items-start my-4">
+              <div className="mr-2 text-green-500 text-2xl">➜</div>
+              <input
+                type="checkbox"
+                checked={isChecked}
+                onChange={handleCheckboxChange}
+                className="mr-2 mt-1 h-5 w-5 border-gray-300 rounded"
+              />
+              <div className="text-xs text-gray-700">
+                I agree to the{" "}
+                <Link to="/termsncondition" className="text-blue-500 underline">
+                  Terms of Use
+                </Link>{" "}
+                and to receive marketing email messages from Cashooz, and I
+                accept the{" "}
+                <Link
+                  to={"/privecy-policy"}
+                  className="text-blue-500 underline"
+                >
+                  Privacy Policy
+                </Link>
+                .
+              </div>
+            </div>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="w-full flex flex-col justify-center"
@@ -297,30 +321,7 @@ const Register = () => {
               />
             </div>
 
-            <div className="mt-4 flex items-start my-4">
-              <div className="mr-2 text-green-500 text-2xl">➜</div>
-              <input
-                type="checkbox"
-                checked={isChecked}
-                onChange={handleCheckboxChange}
-                className="mr-2 mt-1 h-5 w-5 border-gray-300 rounded"
-              />
-              <div className="text-xs text-gray-700">
-                I agree to the{" "}
-                <Link to="/termsncondition" className="text-blue-500 underline">
-                  Terms of Use
-                </Link>{" "}
-                and to receive marketing email messages from InboxDollars, and I
-                accept the{" "}
-                <Link
-                  to={"/privecy-policy"}
-                  className="text-blue-500 underline"
-                >
-                  Privacy Policy
-                </Link>
-                .
-              </div>
-            </div>
+           
             <button
               disabled={!isChecked}
               className={`font-bold text-white uppercase focus:outline-none rounded p-3 ${

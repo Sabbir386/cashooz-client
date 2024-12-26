@@ -7,28 +7,16 @@ import { useAppSelector } from "../../redux/features/hooks";
 import { useCurrentToken } from "../../redux/features/auth/authSlice";
 import { verifyToken } from "../../utils/verifyToken";
 import CustomSwal from "../../customSwal/customSwal";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 const EditProfile = ({ onClose }) => {
   const token = useAppSelector(useCurrentToken);
   let user;
-
   if (token) {
     user = verifyToken(token);
   }
 
-  const [profileImage, setProfileImage] = useState(
-    "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=1889&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  );
-
-  const handleChangePhoto = () => {
-    console.log("Change Photo clicked");
-  };
-
-  const handleDeletePhoto = () => {
-    setProfileImage(
-      "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=1889&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-    );
-  };
-
+  
   const [updateNormalUser, { isLoading, isSuccess, isError, error }] =
     useUpdateNormalUserMutation();
   const {
@@ -36,6 +24,19 @@ const EditProfile = ({ onClose }) => {
     isLoading: isUserLoading,
     error: userError,
   } = useSingleNormalUserQuery(user?.objectId);
+
+  const [profileImage, setProfileImage] = useState(
+    userData?.data?.profileImg || ""
+  );
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm();
+
 
   console.log("User data:", userData);
   const [formData, setFormData] = useState({
@@ -101,6 +102,85 @@ const EditProfile = ({ onClose }) => {
       });
   };
 
+  const handleImage = (event) => {
+    console.log(event);
+    if (event.target.files && event.target.files[0]) {
+      setProfileImage(URL.createObjectURL(event.target.files[0]));
+    }
+  };
+
+  const watchedImage = watch("image"); // Watching the image field
+
+  const onSubmit = async (data) => {
+    const toastId = toast.loading("Image Uploading....");
+    console.log("Watched Image:", watchedImage); // Debugging log
+    console.log("Submitted Data:", data); // Debugging log
+
+    try {
+      const image = data.image?.[0]; // Get the first file
+      if (!image) {
+        toast.error("No image selected", { id: toastId });
+        console.error("No image found in form data");
+        return;
+      }
+
+      // Prepare the form data for upload
+      const formData = new FormData();
+      formData.append("file", image);
+      formData.append("upload_preset", "cashooz");
+      formData.append("cloud_name", "dmnl8yjw9");
+
+      console.log("Uploading image to Cloudinary...");
+
+      const url = `https://api.cloudinary.com/v1_1/dmnl8yjw9/image/upload`;
+      const response = await fetch(url, {
+        method: "POST",
+        body: formData,
+      });
+
+      const imageData = await response.json();
+      console.log("Image Upload Response:", imageData);
+
+      if (imageData.url) {
+        const normalUser = {
+          normalUser: {
+            profileImg: imageData.url,
+          },
+        };
+
+        updateNormalUser({ id: user?.objectId, normalUser })
+          .unwrap()
+          .then((response) => {
+            console.log("Update User Response:", response);
+            if (response.success) {
+              toast.success("Profile Image Updated successfully", {
+                id: toastId,
+              });
+              CustomSwal.fire({
+                icon: "success",
+                title: "Profile Image Updated successfully",
+                timer: 1800,
+              });
+              console.log(user);
+            } else {
+              console.error("Update failed:", response.message);
+              toast.error("Failed to update profile image", { id: toastId });
+            }
+          })
+          .catch((err) => {
+            console.error("Error updating user:", err);
+            toast.error("Error updating user profile", { id: toastId });
+          });
+      } else {
+        console.error("Image upload failed:", imageData);
+        toast.error("Image upload failed", { id: toastId });
+      }
+    } catch (error) {
+      console.error("Error during image upload:", error);
+      toast.error("Something went wrong", { id: toastId });
+    }
+  };
+
   // UseEffect to trigger onClose after successful save
   useEffect(() => {
     if (isSuccess) {
@@ -137,22 +217,31 @@ const EditProfile = ({ onClose }) => {
               alt="Profile"
               className="w-32 h-32 rounded-full object-cover border-2 border-gray-300"
             />
-            <div className="flex space-x-2">
-              <button
-                onClick={handleChangePhoto}
-                className="bg-purple-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-purple-600 transition"
-              >
+            <form onSubmit={handleSubmit(onSubmit)} className="flex space-x-2">
+              <label className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded cursor-pointer">
                 Change photo
-              </button>
+                <input
+                  type="file"
+                  accept="image/*"
+                  {...register("image", {
+                    required: "Photo is Required",
+                    onChange: handleImage, 
+                  })}
+                  className="hidden"
+                />
+              </label>
+              {errors.image && (
+                <p className="text-red-500">{errors.image.message}</p>
+              )}
               <button
-                onClick={handleDeletePhoto}
-                className="bg-white text-red-500 px-4 py-2 rounded-lg shadow-md border border-gray-300 hover:bg-gray-100 transition"
+                type="submit"
+                className="text-white bg-buttonBackground px-4 py-2 rounded-lg shadow-md border border-white hover:border-buttonBackground transition duration-300"
               >
                 <span className="flex items-center space-x-1">
-                  <span>🗑️</span> <span>Delete</span>
+                  <span>Save Photo</span>
                 </span>
               </button>
-            </div>
+            </form>
             <p className="text-gray-500 text-sm">
               Cashooz keeps your profile private
             </p>

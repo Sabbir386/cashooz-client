@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaBars, FaCheck, FaWindowClose } from "react-icons/fa";
 import { Outlet } from "react-router-dom";
@@ -7,15 +7,33 @@ import ScrollToTop from "./ScrollToTop";
 
 const LandingLayout = () => {
   const [open, setOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true); // Add class when scrolled
+      } else {
+        setIsScrolled(false); // Remove class when at the top
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
     <div className="bg-gradient-radial  from-[#141523] via-[#212134] to-[#222339]">
       <ScrollToTop />
       {/* main container */}
-      <div className="max-w-full mx-auto px-2 md:px-0  py-10">
+      <div className="max-w-full mx-auto px-2 md:px-0">
         {/* banner section  */}
         <div className="">
           {/* naver section  */}
-          <header className="z-[999] bg-cardBackground fixed w-full left-0 top-0">
+          <header className={`z-[999] ${isScrolled ? "bg-cardBackground" : ""} fixed w-full left-0 top-0`}>
             <nav className="md:w-[1440px] mx-auto  md:flex md:items-center md:justify-between md:place-items-center">
               <div className="flex justify-between place-items-center">
                 <Link to={"/"} className="text-3xl font-semibold">

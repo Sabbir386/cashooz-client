@@ -11,11 +11,7 @@ const Payment = () => {
   return (
     <div className="min-h-screen">
       {/* Removed sunHeading and heading props from div */}
-      <div className="text-white">
-        <h1>Payment</h1> {/* You can use heading here */}
-        <p>Please provide the necessary information.</p>{" "}
-        {/* You can use sunHeading here */}
-      </div>
+   
       <Elements stripe={stripePromise}>
         <CheckOutForm
           price={price}

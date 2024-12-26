@@ -407,7 +407,9 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         <h3 className="text-xl font-bold text-white border-l-4 border-buttonBackground pl-3">
           Withdraw Cash
         </h3>
-        <p className="text-lg mt-2 mb-3 pl-4">Amount: ${price.toFixed(2)}</p>
+        <p className="text-lg mt-2 mb-3 pl-4">Your Balance: ${price.toFixed(2)}</p>
+        <small className="pl-4 text-blue-500">100 points equivalent to $1</small>
+        <p className="text-red-400 mb-2 font-bold">Minimum withdrawal: <span className="animate-pulse text-green-600">$20</span></p>
       </div>
       <div className="xl:max-w-[80%] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6  gap-4">
         <div
@@ -554,7 +556,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             Select PayPal Amount
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 overflow-y-auto">
-            {[10, 15, 20, 30, 40, 50, 100, 200].map((amount, index) => (
+            {[ 20, 30, 40,60,70,80, 90, 100].map((amount, index) => (
               <div
                 key={index}
                 className={`p-6 bg-gradient-to-r from-[#263b80] to-[#25bcff] rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3 border-2 transition duration-300 ease-in-out ${

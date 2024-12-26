@@ -332,8 +332,8 @@ const Affiliate = () => {
                 if (navigator.share) {
                   navigator
                     .share({
-                      title: "Join me on Cashooz",
-                      text: "Earn rewards by completing simple tasks!",
+                      title: "Turn Your Spare Time Into Cash with Cashooz Earn Extra Income from Home - Start Now",
+                      text:  `💲Cashooz.com💰 is one of the web's leading rewards platforms, with a vibrant and rapidly growing community. It's a completely free program that lets you earn real money by completing everyday online tasks and activities. Whether you're browsing, shopping, or engaging with content, you can make money from home. Once you've earned, simply redeem your rewards through one of our supported payout methods—no personal investment required. Start earning today: ${referralLink}`,
                       url: referralLink,
                     })
                     .then(() => console.log("Shared successfully"))

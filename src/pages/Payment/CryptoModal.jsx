@@ -94,10 +94,10 @@ const CryptoModal = ({ onClose, onSubmit }) => {
             <span className="text-gray-400">BTC rate:</span>{" "}
             <span className="text-white font-semibold">{BTC_RATE}</span>
           </p>
-          <p>
+          {/* <p>
             <span className="text-gray-400">Withdrawal Fee:</span>{" "}
             <span className="text-green-500 font-semibold">${FEE}</span>
-          </p>
+          </p> */}
         </div>
 
         {/* You'll Receive Section */}
