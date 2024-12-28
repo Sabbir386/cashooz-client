@@ -5,7 +5,7 @@ const EthereumCryptoModal = ({ onClose, onSubmit }) => {
   const [amountUSD, setAmountUSD] = useState(0);
   const ETH_RATE = 1800.45; // Example ETH rate
   const MIN_WITHDRAWAL = 5;
-  const FEE = 2.0; // Example fee for Ethereum
+  const FEE = 0.00; // Example fee for Ethereum
   const BONUS = 0;
 
   const calculateETH = () => {
@@ -93,10 +93,10 @@ const EthereumCryptoModal = ({ onClose, onSubmit }) => {
             <span className="text-gray-400">ETH rate:</span>{" "}
             <span className="text-white font-semibold">{ETH_RATE}</span>
           </p>
-          {/* <p>
+          <p>
             <span className="text-gray-400">Withdrawal Fee:</span>{" "}
             <span className="text-green-500 font-semibold">${FEE}</span>
-          </p> */}
+          </p>
         </div>
 
         {/* You'll Receive Section */}

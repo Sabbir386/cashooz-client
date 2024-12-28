@@ -64,6 +64,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   const navigate = useNavigate();
   const token = useAppSelector(useCurrentToken);
   let user;
+  const withdrawCount = 0;
 
   if (token) {
     user = verifyToken(token);
@@ -197,50 +198,101 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   };
 
   const handleCryptoSubmit = async (data) => {
-    // Close the modal and save the data
-    setCryptoModalOpen(false);
-    setCryptoData(data);
-    // console.log("Crypto Payment Data:", data);
+    let myCurrentBalance = Math.floor(totalRewards?.userTotalRewards) / 100;
 
-    // Submit the data to the backend or process it
-    const requestBody = {
-      userId: userData?.data?._id,
-      userName: userData?.data?.name,
-      userRegisterId: userData?.data?.id,
-      userEmail: userData?.data?.email,
-      profileImg: userData?.data?.profileImg,
-      paypalEmail: "",
-      btcAddress: data?.bitcoinAddress,
-      networkType: "btc",
-      description: `Withdrawal request for ${data?.btcAmount} payout`,
-      method: "Bitcoin",
-      amount: parseFloat(data?.btcAmount || data?.amountUSD),
-      transactionId: "TXN123456789",
-      invoiceId: "",
-      country: userData?.data?.country,
-      status: "pending",
-      timestamps: {
-        requestedAt: new Date(),
-        processedAt: null,
-      },
-    };
-    // console.log(requestBody);
-    try {
-      // Send the withdrawal request
-      await createWithdrawal(requestBody).unwrap();
-      CustomSwal.fire(
-        "Success",
-        "Your withdrawal request has been submitted.stay Tuned ! you will got notified within 24 hours.",
-        "success"
-      );
-    } catch (error) {
-      console.log(error);
-      CustomSwal.fire(
-        "Error",
-        "Failed to submit withdrawal request. Please try again.",
-        "error"
-      );
-    }
+    if (myCurrentBalance <= 0) {
+      CustomSwal.fire({
+        title: "You dont have enough balance",
+      });
+    } else{
+      if (myCurrentBalance >= 10) {
+        const amount = parseFloat(data?.amountUSD);
+      // console.log(amount)
+        if (withdrawCount>0 ) {
+          if(amount<=myCurrentBalance){
+            
+            CustomSwal.fire({
+              title: "sucess",
+            });
+
+          }
+          else{
+            CustomSwal.fire({
+              title: "withdraw amount must be smaller then current balance",
+            });
+          }
+         
+        } else {
+          console.log('cccc')
+          if(withdrawCount<1){
+            if(myCurrentBalance>=20){
+              if( amount<=myCurrentBalance){
+                CustomSwal.fire({
+                  title: "sucess",
+                });
+              }
+              else if(amount>myCurrentBalance){
+                console.log('435435')
+                CustomSwal.fire({
+                  title: "withdraw amount must be smaller then current balance",
+                });
+              }
+            }
+            else{
+              CustomSwal.fire({
+                title: "withdraw amount must be smaller then current balance",
+              });
+            }
+            
+          
+        }
+      } 
+    }}
+
+    // // Close the modal and save the data
+    // setCryptoModalOpen(false);
+    // setCryptoData(data);
+    // // console.log("Crypto Payment Data:", data);
+
+    // // Submit the data to the backend or process it
+    // const requestBody = {
+    //   userId: userData?.data?._id,
+    //   userName: userData?.data?.name,
+    //   userRegisterId: userData?.data?.id,
+    //   userEmail: userData?.data?.email,
+    //   profileImg: userData?.data?.profileImg,
+    //   paypalEmail: "",
+    //   btcAddress: data?.bitcoinAddress,
+    //   networkType: "btc",
+    //   description: `Withdrawal request for ${data?.btcAmount} payout`,
+    //   method: "Bitcoin",
+    //   amount: parseFloat(data?.btcAmount || data?.amountUSD),
+    //   transactionId: "TXN123456789",
+    //   invoiceId: "",
+    //   country: userData?.data?.country,
+    //   status: "pending",
+    //   timestamps: {
+    //     requestedAt: new Date(),
+    //     processedAt: null,
+    //   },
+    // };
+    // // console.log(requestBody);
+    // try {
+    //   // Send the withdrawal request
+    //   await createWithdrawal(requestBody).unwrap();
+    //   CustomSwal.fire(
+    //     "Success",
+    //     "Your withdrawal request has been submitted.stay Tuned ! you will got notified within 24 hours.",
+    //     "success"
+    //   );
+    // } catch (error) {
+    //   console.log(error);
+    //   CustomSwal.fire(
+    //     "Error",
+    //     "Failed to submit withdrawal request. Please try again.",
+    //     "error"
+    //   );
+    // }
   };
 
   // Handle card click and select amount
@@ -248,6 +300,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
     setSelectedAmount(amount);
     console.log(`Selected PayPal amount: $${amount}`);
   };
+  // from api count withdrawData of user
 
   // Handle Stripe Payment Intent
   useEffect(() => {
@@ -418,28 +471,29 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         </h3>
         {/* <p className="text-lg mt-2 mb-3 pl-4">Balance: ${price.toFixed(2)}</p>
         <small className="pl-4 text-blue-500">100 points equivalent to $1</small> */}
-        <p className="text-red-400 mb-2 font-bold">
+        {/* <p className="text-red-400 mb-2 font-bold">
           Minimum withdrawal:{" "}
           <span className="animate-pulse text-green-600">$20</span>
-        </p>
+        </p> */}
+
+        <div className="bg-blue-600 text-center text-sm rounded-md p-3 mb-6 mt-3">
+          New user have to earn $20 to make their first withdrawal.Afer this the
+          minimum will be $10.
+        </div>
       </div>
-      <div className="bg-gray-700 p-4 mt-3 mb-3 rounded-lg flex items-center justify-between">
+      <div className="bg-gray-700 py-[1px] px-4 mt-3 mb-3 rounded-lg flex items-center justify-between">
         {/* Left Section: Numeric Balance */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-left">
           {/* Icon or Decorative Circle */}
-          <div className="bg-yellow-400 h-6 w-6 rounded-full flex items-center justify-center"></div>
+          {/* <div className="bg-yellow-400 w-6 rounded-full flex items-center justify-center"></div> */}
 
           {/* Balance and Label */}
           <div>
-            <p className="text-white text-2xl font-bold">
-              Points:{" "}
+            <h4 className="text-white font-bold">Points</h4>
+            <p className="text-buttonBackground text-2xl font-bold">
               {totalRewards?.userTotalRewards
-                ? Math.floor(totalRewards.userTotalRewards) + " CZ"
+                ? Math.floor(totalRewards?.userTotalRewards) + " CZ"
                 : "No rewards available"}
-            </p>
-
-            <p className="text-gray-400 text-sm">
-              Current Balance :${price.toFixed(2)}
             </p>
           </div>
         </div>
@@ -449,12 +503,16 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
 
         {/* Right Section: Equivalent Balance */}
         <div>
-          <p className="text-gray-300 text-sm">
-            Equivalent Balance: {price.toFixed(2)} units
+          <h4 className="text-white font-bold text-right">USD</h4>
+          <p className="text-buttonBackground text-2xl font-bold">
+            {totalRewards?.userTotalRewards
+              ? "$" + Math.floor(totalRewards?.userTotalRewards) / 100
+              : ""}
           </p>
         </div>
       </div>
-      <div className="xl:max-w-[80%] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6  gap-4">
+      <p className="text-gray-400 text-sm text-right">100 CZ = $1</p>
+      <div className="xl:max-w-[80%] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6  gap-4 mt-6">
         <div
           className="p-6 py-10 bg-[#259CDF] border border-gray-700 rounded-lg  cursor-pointer text-center flex flex-col items-center justify-center gap-3"
           onClick={toggleModal} // Open modal on click
@@ -465,7 +523,9 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             className="w-16 h-16 mb-3"
           />
           <p className="text-white text-xl font-semibold">Cash with PayPal</p>
-          <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
+          <p className="text-gray-200 text-sm">
+            Amount: ${Math.floor(totalRewards?.userTotalRewards) / 100}
+          </p>
         </div>
         {/* Other payment options */}
         <div>
@@ -481,7 +541,9 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             <p className="text-white text-xl font-semibold">
               Cash with Bitcoin
             </p>
-            <p className="text-gray-200 text-sm">Amount: $100.00</p>
+            <p className="text-gray-200 text-sm">
+              Amount: {Math.floor(totalRewards?.userTotalRewards) / 100}
+            </p>
           </div>
 
           {/* Render the CryptoModal */}
@@ -503,7 +565,9 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             className="w-16 h-16 mb-3"
           />
           <p className="text-white text-xl font-semibold">Cash with Ethereum</p>
-          <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
+          <p className="text-gray-200 text-sm">
+            Amount: ${Math.floor(totalRewards?.userTotalRewards) / 100}
+          </p>
         </div>
 
         {/* Render the EthereumCryptoModal */}
@@ -524,7 +588,9 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             className="w-16 h-16 mb-3"
           />
           <p className="text-white text-xl font-semibold">Cash with Litecoin</p>
-          <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
+          <p className="text-gray-200 text-sm">
+            Amount: ${Math.floor(totalRewards?.userTotalRewards) / 100}
+          </p>
         </div>
 
         {/* Render the LitecoinCryptoModal */}
@@ -550,7 +616,9 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             className="w-16 h-16 mb-3"
           />
           <p className="text-white text-xl font-semibold">Cash with Stake</p>
-          <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
+          <p className="text-gray-200 text-sm">
+            Amount: ${Math.floor(totalRewards?.userTotalRewards) / 100}
+          </p>
 
           <div className="absolute top-4 right-5 bg-[#01D676] text-white text-sm font-bold px-3 py-1 rounded-md  shadow-lg animate-pulse">
             Coming Soon
@@ -564,7 +632,9 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             className="w-16 h-16 mb-3"
           />
           <p className="text-white text-xl font-semibold">Cash with Dogecoin</p>
-          <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
+          <p className="text-gray-200 text-sm">
+            Amount: ${Math.floor(totalRewards?.userTotalRewards) / 100}
+          </p>
 
           {/* Coming Soon Stamp */}
           <div className="absolute top-4 right-5 bg-[#01D676] text-white text-sm font-bold px-3 py-1 rounded-md  shadow-lg animate-pulse">

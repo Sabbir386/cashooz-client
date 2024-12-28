@@ -5,7 +5,7 @@ const LitecoinCryptoModal = ({ onClose, onSubmit }) => {
   const [amountUSD, setAmountUSD] = useState(0);
   const LTC_RATE = 95.34; // Example LTC rate
   const MIN_WITHDRAWAL = 5;
-  const FEE = 1.5; // Example fee for Litecoin
+  const FEE = 0.00; // Example fee for Litecoin
 
   const calculateLitecoin = () => {
     if (amountUSD < MIN_WITHDRAWAL) return 0;
@@ -92,10 +92,10 @@ const LitecoinCryptoModal = ({ onClose, onSubmit }) => {
             <span className="text-gray-400">LTC rate:</span>{" "}
             <span className="text-white font-semibold">{LTC_RATE}</span>
           </p>
-          {/* <p>
+          <p>
             <span className="text-gray-400">Withdrawal Fee:</span>{" "}
             <span className="text-green-500 font-semibold">${FEE}</span>
-          </p> */}
+          </p>
         </div>
 
         {/* You'll Receive Section */}
