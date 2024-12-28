@@ -1,96 +1,110 @@
 import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Autoplay,
+} from "swiper/modules";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
+  const swiperSlides = [
+    {
+      id: 1,
+      backgroundImage:
+        "https://images.unsplash.com/photo-1515180711443-f8685c6d6a74?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      title: "make money",
+      subtitle: "CASHOOZ",
+      description:
+        "💲Cashooz.com💰 is one of the web's leading rewards platforms, with a vibrant and rapidly growing community. It's a completely free program that lets you earn real money by completing everyday online tasks and activities. Whether you're browsing, shopping, or engaging with content, you can make money from home. Once you've earned, simply redeem your rewards through one of our supported payout methods—no personal investment required. Start earning today",
+      link: "/register",
+      rightImage:
+        "https://i.ibb.co.com/LZXSC9P/The-Little-Things-Business-Planning.png",
+    },
+    {
+      id: 2,
+      backgroundImage:
+        "https://images.unsplash.com/photo-1515180711443-f8685c6d6a74?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      title: "make money",
+      subtitle: "CASHOOZ",
+      description:
+        "💲Cashooz.com💰 is one of the web's leading rewards platforms, with a vibrant and rapidly growing community. It's a completely free program that lets you earn real money by completing everyday online tasks and activities. Whether you're browsing, shopping, or engaging with content, you can make money from home. Once you've earned, simply redeem your rewards through one of our supported payout methods—no personal investment required. Start earning today",
+      link: "/register",
+      rightImage: "https://i.ibb.co.com/nrDjzdN/Humaaans-2-Characters.png",
+    },
+    {
+      id: 3,
+      backgroundImage:
+        "https://images.unsplash.com/photo-1515180711443-f8685c6d6a74?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      title: "make money",
+      subtitle: "CASHOOZ",
+      description:
+        "💲Cashooz.com💰 is one of the web's leading rewards platforms, with a vibrant and rapidly growing community. It's a completely free program that lets you earn real money by completing everyday online tasks and activities. Whether you're browsing, shopping, or engaging with content, you can make money from home. Once you've earned, simply redeem your rewards through one of our supported payout methods—no personal investment required. Start earning today",
+      link: "/register",
+      rightImage: "https://i.ibb.co.com/ZLGm4Jn/Humaaans-Friend-Meeting.png",
+    },
+  ];
   return (
-    <div className="bg-white font-sans">
-      {/* Header Section */}
-      <div className="text-center py-12 px-6 bg-gray-50">
-        <h1 className="text-4xl font-bold mb-4">
-          Swift <span className="text-blue-600">recruitment</span> for current
-          pace of work
-        </h1>
-        <p className="text-gray-600 text-lg mb-6">
-          An all-encompassing remote hiring solution to help modern businesses
-          grow with Virtual Assistants.
-        </p>
-        <button className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-blue-700">
-          Get Started
-        </button>
-      </div>
-
-      {/* Features Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-6 md:px-20 py-12">
-        {/* Profile Cards */}
-        <div className="bg-white shadow-lg p-4 rounded-lg">
-          <div className="flex items-center mb-4">
-            <img
-              src="https://via.placeholder.com/40"
-              alt="Profile"
-              className="w-10 h-10 rounded-full"
-            />
-            <div className="ml-3">
-              <p className="font-semibold">Olivia Wouters</p>
-              <p className="text-gray-500 text-sm">Product Designer</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <Swiper
+        modules={[Autoplay, Navigation, Pagination, Scrollbar, A11y]}
+        spaceBetween={10}
+        slidesPerView={1}
+        pagination={{ clickable: true }}
+        className="w-full"
+        autoplay={{
+          delay: 3000, // Delay between slides in milliseconds
+          disableOnInteraction: false, // Continue autoplay after user interaction
+        }}
+      >
+        {swiperSlides.map((slide) => (
+          <SwiperSlide key={slide.id}>
+            <div className="relative min-h-[110vh] md:min-h-screen bg-cover">
+              <img
+                src={slide.backgroundImage}
+                alt=""
+                className="absolute w-full h-full object-cover top-0 left-0 z-10"
+              />
+              <div className="absolute w-full h-full top-0 left-0 z-20 bg-primaryColor bg-opacity-50 grid justify-center items-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 items-center justify-between px-16 py-20">
+                  {/* Left Text Section */}
+                  <div>
+                    <h4 className="inline-block text-sm font-bold tracking-wide text-white bg-buttonBackground px-3 py-1 rounded-full">
+                      {slide.subtitle}
+                    </h4>
+                    <h1 className="mt-2 text-5xl font-bold tracking-wide text-white">
+                      {slide.title}
+                    </h1>
+                    <p className="text-sm text-justify mt-4 text-gray-300">
+                      {slide.description}
+                    </p>
+                    <Link
+                      to={slide.link}
+                      className="inline-block mt-6 px-6 py-3 text-white bg-buttonBackground rounded-lg hover:bg-buttonBackground hover:bg-opacity-75"
+                    >
+                      Register Now
+                    </Link>
+                  </div>
+                  {/* Decorative Right Section */}
+                  <div className="hidden md:block">
+                    <div className="w-72 h-auto ml-auto">
+                      <img
+                        src={slide.rightImage}
+                        alt="Decoration"
+                        className="w-auto object-cover"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-          <p className="text-gray-700 text-sm mb-4">
-            As you are reviewing candidates for the open customer service
-            position, we...
-          </p>
-          <p className="text-gray-600 text-xs">
-            Full Time | Senior Level | Montreal
-          </p>
-        </div>
+          </SwiperSlide>
+        ))}
 
-        <div className="bg-white shadow-lg p-4 rounded-lg">
-          <div className="flex items-center mb-4">
-            <img
-              src="https://via.placeholder.com/40"
-              alt="Profile"
-              className="w-10 h-10 rounded-full"
-            />
-            <div className="ml-3">
-              <p className="font-semibold">Natalie Monet</p>
-              <p className="text-gray-500 text-sm">Recruiter</p>
-            </div>
-          </div>
-          <p className="text-gray-700 text-sm mb-4">
-            Hey, we've got a hot referral for your sales team!
-          </p>
-        </div>
-
-        <div className="bg-white shadow-lg p-4 rounded-lg">
-          <div className="flex items-center mb-4">
-            <img
-              src="https://via.placeholder.com/40"
-              alt="Profile"
-              className="w-10 h-10 rounded-full"
-            />
-            <div className="ml-3">
-              <p className="font-semibold">Alex Jordan</p>
-              <p className="text-gray-500 text-sm">Contractor</p>
-            </div>
-          </div>
-          <p className="text-gray-700 text-sm mb-4">
-            Task progress - 70% completed.
-          </p>
-        </div>
-      </div>
-
-      {/* Trusted Section */}
-      <div className="text-center py-12 bg-gray-50">
-        <p className="text-gray-600">Trusted by the best</p>
-        <div className="flex justify-center space-x-6 mt-4">
-          <img src="/loom.png" alt="Loom" className="h-6" />
-          <img src="/hubspot.png" alt="Hubspot" className="h-6" />
-          <img src="/ramp.png" alt="Ramp" className="h-6" />
-        </div>
-      </div>
-
-      {/* Footer Section */}
-      <div className="text-center py-6 bg-gray-800 text-white">
-        <p>&copy; 2024 Recruitment Platform. All rights reserved.</p>
-      </div>
+        {/* Additional slides can go here */}
+      </Swiper>
     </div>
   );
 };

@@ -19,6 +19,7 @@ import { useAppSelector } from "../../redux/features/hooks";
 import { useCurrentToken } from "../../redux/features/auth/authSlice";
 import LitecoinCryptoModal from "./LitecoinCryptoModal";
 import CustomSwal from "../../customSwal/customSwal";
+import { useUserTotalRewardsQuery } from "../../rewards/rewardApi";
 
 // Modal Styles
 const customStyles = {
@@ -70,6 +71,14 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   }
   // Mutation hook for the createWithdrawal API
   const [createWithdrawal, { isLoading }] = useCreateWithdrawalMutation();
+  const {
+    data: totalRewards,
+    error,
+    isLoading: isTotalRewardsLoading,
+  } = useUserTotalRewardsQuery(user?.objectId, {
+    skip: user?.role !== "user",
+  });
+  // console.log(totalRewards);
   const {
     data: userData,
     isLoading: isUserLoading,
@@ -407,9 +416,43 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         <h3 className="text-xl font-bold text-white border-l-4 border-buttonBackground pl-3">
           Withdraw Cash
         </h3>
-        <p className="text-lg mt-2 mb-3 pl-4">Your Balance: ${price.toFixed(2)}</p>
-        <small className="pl-4 text-blue-500">100 points equivalent to $1</small>
-        <p className="text-red-400 mb-2 font-bold">Minimum withdrawal: <span className="animate-pulse text-green-600">$20</span></p>
+        {/* <p className="text-lg mt-2 mb-3 pl-4">Balance: ${price.toFixed(2)}</p>
+        <small className="pl-4 text-blue-500">100 points equivalent to $1</small> */}
+        <p className="text-red-400 mb-2 font-bold">
+          Minimum withdrawal:{" "}
+          <span className="animate-pulse text-green-600">$20</span>
+        </p>
+      </div>
+      <div className="bg-gray-700 p-4 mt-3 mb-3 rounded-lg flex items-center justify-between">
+        {/* Left Section: Numeric Balance */}
+        <div className="flex items-center space-x-4">
+          {/* Icon or Decorative Circle */}
+          <div className="bg-yellow-400 h-6 w-6 rounded-full flex items-center justify-center"></div>
+
+          {/* Balance and Label */}
+          <div>
+            <p className="text-white text-2xl font-bold">
+              Points:{" "}
+              {totalRewards?.userTotalRewards
+                ? Math.floor(totalRewards.userTotalRewards) + " CZ"
+                : "No rewards available"}
+            </p>
+
+            <p className="text-gray-400 text-sm">
+              Current Balance :${price.toFixed(2)}
+            </p>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="h-12 w-[1px] bg-gray-500"></div>
+
+        {/* Right Section: Equivalent Balance */}
+        <div>
+          <p className="text-gray-300 text-sm">
+            Equivalent Balance: {price.toFixed(2)} units
+          </p>
+        </div>
       </div>
       <div className="xl:max-w-[80%] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6  gap-4">
         <div
@@ -418,10 +461,10 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         >
           <img
             src="https://i.ibb.co.com/r7MhRfy/paypal.png"
-            alt="Pay with PayPal"
+            alt="Cash with PayPal"
             className="w-16 h-16 mb-3"
           />
-          <p className="text-white text-xl font-semibold">Pay with PayPal</p>
+          <p className="text-white text-xl font-semibold">Cash with PayPal</p>
           <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
         </div>
         {/* Other payment options */}
@@ -432,10 +475,12 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           >
             <img
               src="https://i.ibb.co.com/4WM0hGp/bitcoin.png"
-              alt="Pay with Bitcoin"
+              alt="Cash with Bitcoin"
               className="w-16 h-16 mb-3"
             />
-            <p className="text-white text-xl font-semibold">Pay with Bitcoin</p>
+            <p className="text-white text-xl font-semibold">
+              Cash with Bitcoin
+            </p>
             <p className="text-gray-200 text-sm">Amount: $100.00</p>
           </div>
 
@@ -454,10 +499,10 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         >
           <img
             src="https://i.ibb.co.com/mR6CCpf/ethereum.png"
-            alt="Pay with Ethereum"
+            alt="Cash with Ethereum"
             className="w-16 h-16 mb-3"
           />
-          <p className="text-white text-xl font-semibold">Pay with Ethereum</p>
+          <p className="text-white text-xl font-semibold">Cash with Ethereum</p>
           <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
         </div>
 
@@ -475,10 +520,10 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         >
           <img
             src="https://i.ibb.co/5s34CR5/litecoin.png"
-            alt="Pay with Litecoin"
+            alt="Cash with Litecoin"
             className="w-16 h-16 mb-3"
           />
-          <p className="text-white text-xl font-semibold">Pay with Litecoin</p>
+          <p className="text-white text-xl font-semibold">Cash with Litecoin</p>
           <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
         </div>
 
@@ -501,10 +546,10 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         <div className="relative bg-[#31414B] p-6 py-10 border border-gray-700 rounded-lg cursor-not-allowed text-center flex flex-col items-center justify-center gap-3 opacity-50">
           <img
             src="https://i.ibb.co.com/Bq95hgQ/stake.png"
-            alt="Pay with Stake"
+            alt="Cash with Stake"
             className="w-16 h-16 mb-3"
           />
-          <p className="text-white text-xl font-semibold">Pay with Stake</p>
+          <p className="text-white text-xl font-semibold">Cash with Stake</p>
           <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
 
           <div className="absolute top-4 right-5 bg-[#01D676] text-white text-sm font-bold px-3 py-1 rounded-md  shadow-lg animate-pulse">
@@ -515,10 +560,10 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         <div className="relative bg-[#F7C97A] p-6 py-10 border border-gray-700 rounded-lg cursor-not-allowed text-center flex flex-col items-center justify-center gap-3 opacity-50">
           <img
             src="https://i.ibb.co.com/7JNd9f4/dogecoin.png"
-            alt="Pay with Dogecoin"
+            alt="Cash with Dogecoin"
             className="w-16 h-16 mb-3"
           />
-          <p className="text-white text-xl font-semibold">Pay with Dogecoin</p>
+          <p className="text-white text-xl font-semibold">Cash with Dogecoin</p>
           <p className="text-gray-200 text-sm">Amount: ${price.toFixed(2)}</p>
 
           {/* Coming Soon Stamp */}
@@ -556,7 +601,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             Select PayPal Amount
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 overflow-y-auto">
-            {[ 20, 30, 40,60,70,80, 90, 100].map((amount, index) => (
+            {[20, 30, 40, 60, 70, 80, 90, 100].map((amount, index) => (
               <div
                 key={index}
                 className={`p-6 bg-gradient-to-r from-[#263b80] to-[#25bcff] rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3 border-2 transition duration-300 ease-in-out ${

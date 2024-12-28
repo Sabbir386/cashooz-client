@@ -43,9 +43,8 @@ const CryptoModal = ({ onClose, onSubmit }) => {
         </div>
 
         {/* Notice Section */}
-        <div className="bg-blue-600 text-sm rounded-md p-3 mb-6">
-          Crypto withdrawals take a few minutes to be sent. New users have to
-          earn $2.00 to make their first withdrawal.
+        <div className="bg-blue-600 text-sm rounded-md p-3 mb-6 text-center">
+          New user have to earn 2000 CZ to make their first withdrawal.Afer this the minimum will be 1000 CZ.
         </div>
 
         {/* Bitcoin Address Input */}

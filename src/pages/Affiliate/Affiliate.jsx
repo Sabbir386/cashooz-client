@@ -144,9 +144,20 @@ const Affiliate = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Profile */}
         <div className="bg-gray-800 p-4 rounded-lg flex flex-col items-center text-white">
-          <div className="rounded-full bg-[#01D676] h-16 w-16 flex items-center justify-center text-3xl font-bold">
-            {userData?.data?.name?.charAt(0).toUpperCase() || "N/A"}
+          <div className="rounded-full bg-[#01D676] h-16 w-16 flex items-center justify-center">
+            {userData?.data?.profileImg ? (
+              <img
+                src={userData.data.profileImg}
+                alt="User Profile"
+                className="rounded-full h-full w-full object-cover"
+              />
+            ) : (
+              <span className="text-3xl font-bold text-white">
+                {userData?.data?.name?.charAt(0).toUpperCase() || "N/A"}
+              </span>
+            )}
           </div>
+
           <h3 className="mt-4 text-xl font-semibold">
             {userData?.data?.name || "Guest"}
           </h3>
@@ -156,11 +167,11 @@ const Affiliate = () => {
           <div className="flex mt-4">
             {/* Display the value with proper formatting */}
             <p className="text-lg font-bold">
-             
               {(
                 (referrals?.totalEarnings ?? 0) -
                 (totalReferralRewards?.data?.totalRewards ?? 0)
-              ).toFixed(2)}  CZ
+              ).toFixed(2)}{" "}
+              CZ
             </p>
 
             {/* Claim Button */}
@@ -332,8 +343,9 @@ const Affiliate = () => {
                 if (navigator.share) {
                   navigator
                     .share({
-                      title: "Turn Your Spare Time Into Cash with Cashooz Earn Extra Income from Home - Start Now",
-                      text:  `💲Cashooz.com💰 is one of the web's leading rewards platforms, with a vibrant and rapidly growing community. It's a completely free program that lets you earn real money by completing everyday online tasks and activities. Whether you're browsing, shopping, or engaging with content, you can make money from home. Once you've earned, simply redeem your rewards through one of our supported payout methods—no personal investment required. Start earning today: ${referralLink}`,
+                      title:
+                        "Turn Your Spare Time Into Cash with Cashooz Earn Extra Income from Home - Start Now",
+                      text: `💲Cashooz.com💰 is one of the web's leading rewards platforms, with a vibrant and rapidly growing community. It's a completely free program that lets you earn real money by completing everyday online tasks and activities. Whether you're browsing, shopping, or engaging with content, you can make money from home. Once you've earned, simply redeem your rewards through one of our supported payout methods—no personal investment required. Start earning today: ${referralLink}`,
                       url: referralLink,
                     })
                     .then(() => console.log("Shared successfully"))

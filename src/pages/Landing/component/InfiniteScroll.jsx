@@ -45,7 +45,7 @@ const InfiniteScroll = () => {
       }, [scrollSpeed, items]);
 
   return (
-    <div className="bg-white mb-10">
+    <div className="bg-white my-10">
       <div
         ref={scrollContainerRef}
         className="overflow-x-hidden whitespace-nowrap scrollbar-hide -skew-y-2 w-full p-4 bg-gray-800"

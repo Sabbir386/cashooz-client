@@ -1,0 +1,63 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [-180, 20],
+              [-70, 20],
+              [-70, 50],
+              [-180, 50],
+              [-180, 20]
+            ]
+          ]
+        },
+        "properties": {
+          "name": "Country A",
+          "id": "A"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [70, 20],
+              [140, 20],
+              [140, 50],
+              [70, 50],
+              [70, 20]
+            ]
+          ]
+        },
+        "properties": {
+          "name": "Country B",
+          "id": "B"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [-50, -10],
+              [50, -10],
+              [50, 10],
+              [-50, 10],
+              [-50, -10]
+            ]
+          ]
+        },
+        "properties": {
+          "name": "Country C",
+          "id": "C"
+        }
+      }
+    ]
+  }
+  

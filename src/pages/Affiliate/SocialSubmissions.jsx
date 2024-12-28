@@ -317,7 +317,8 @@ ${selectedPlatform.name}! Earn ${selectedPlatform.reward} #Cashooz #workfromhome
                 readOnly
                 value={`Earn money from 
 💲Cashooz.com💰 where you can earn cash by completing various tasks like games, survey, install, watching, shopping that you already do online everyday. It's free. Start earning now...
-#Cashooz #workfromhome #earnmoney #makemoney #easymoney #makemoneyonline #earnmoneyonline ${selectedPlatform.reward} bonus #Cashooz #so #easymoney #viral #explore #fyp`}
+#Cashooz #workfromhome #earnmoney #makemoney #easymoney #makemoneyonline #earnmoneyonline 
+${selectedPlatform.reward} bonus`}
               ></textarea>
               <button
                 className="mt-2 text-sm font-semibold text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg"

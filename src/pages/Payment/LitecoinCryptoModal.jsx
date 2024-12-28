@@ -42,9 +42,8 @@ const LitecoinCryptoModal = ({ onClose, onSubmit }) => {
         </div>
 
         {/* Notice Section */}
-        <div className="bg-gray-600 text-sm rounded-md p-3 mb-6">
-          Crypto withdrawals take a few minutes to process. New users must earn
-          $2.00 to make their first withdrawal.
+        <div className="bg-blue-600 text-center text-sm rounded-md p-3 mb-6">
+        New user have to earn 2000 CZ to make their first withdrawal.Afer this the minimum will be 1000 CZ.
         </div>
 
         {/* Litecoin Address Input */}

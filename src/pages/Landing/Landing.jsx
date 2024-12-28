@@ -21,6 +21,7 @@ import Hero from "./component/Hero";
 import HowWorks from "./component/HowWorks";
 import ClientsSection from "./component/ClientsSection ";
 import Counter from "./component/Counter";
+import MapData from "./component/MapData";
 
 const Landing = () => {
 
@@ -149,37 +150,15 @@ const Landing = () => {
   return (
     <div className="bg-white">
       {/* bannner section   */}
-
-      <div className="relative bg-gray-100">
-        <img
-          src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="Background"
-          className="w-full h-auto object-cover"
-        />
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="text-center max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-              EARN MONEY EVERY TIME YOU GO ONLINE!
-            </h1>
-            <p className="text-white text-base sm:text-lg lg:text-xl mb-6">
-              Earn GPT points for simple tasks such as completing surveys,
-              playing games, watching videos, and more!
-            </p>
-            <Link
-              to={"/register"}
-              className="bg-buttonBackground text-white text-lg sm:text-xl font-semibold py-3 px-6 rounded-lg hover:bg-green-600 transition duration-300"
-            >
-              JOIN FREE TODAY
-            </Link>
-          </div>
-        </div>
-      </div>
+      <Hero />
       {/* how works section  */}
       <HowWorks />
       {/* clients section  */}
       <ClientsSection />
       {/*counter section  */}
       <Counter/>
+      {/* map section  */}
+      <MapData/>
       {/* cards section  */}
       <InfiniteScroll></InfiniteScroll>
       {/* features section  */}

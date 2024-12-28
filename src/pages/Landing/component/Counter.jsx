@@ -28,22 +28,26 @@ const Counter = () => {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 p-8" ref={ref}>
-      {stats.map((stat, index) => (
-        <div key={index} className="text-center text-gray-800 font-sans">
-          <div className="text-5xl font-bold text-blue-900">
-            {inView ? (
-              <CountUp start={0} end={stat.count} duration={2} />
-            ) : (
-              0
-            )}
-            k+
+    <div>
+      <div>
+        <h2 className="text-4xl font-bold text-center">Our Stats</h2>
+      </div>
+      <div
+        className="grid grid-cols-1 sm:grid-cols-2 gap-8 px-8 py-20"
+        ref={ref}
+      >
+        {stats.map((stat, index) => (
+          <div key={index} className="text-center text-gray-800 font-sans">
+            <div className="text-5xl font-bold text-blue-900">
+              {inView ? <CountUp start={0} end={stat.count} duration={2} /> : 0}
+              k+
+            </div>
+            <p className="mt-2 text-sm font-medium leading-relaxed">
+              {stat.text}
+            </p>
           </div>
-          <p className="mt-2 text-sm font-medium leading-relaxed">
-            {stat.text}
-          </p>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
