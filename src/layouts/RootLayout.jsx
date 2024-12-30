@@ -126,7 +126,7 @@ function RootLayout() {
                 ) : (
                   <span className="text-buttonBackground animate-pulse font-bold text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
                     {/* {totalRewards?.userTotalRewards || "0"} CZ  */}
-                    {Math.floor(totalRewards?.userTotalRewards || 0)} CZ
+                    {Math.floor((totalRewards?.userTotalRewards-totalRewards?.totalWithdrawal) || 0)} CZ
                   </span>
                 )}
               </>

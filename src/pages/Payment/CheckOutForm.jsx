@@ -65,7 +65,6 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   const token = useAppSelector(useCurrentToken);
   let user;
   const withdrawCount = 0;
-
   if (token) {
     user = verifyToken(token);
     // console.log(user);
@@ -492,7 +491,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             <h4 className="text-white font-bold">Points</h4>
             <p className="text-buttonBackground text-2xl font-bold">
               {totalRewards?.userTotalRewards
-                ? Math.floor(totalRewards?.userTotalRewards) + " CZ"
+                ? Math.floor((totalRewards?.userTotalRewards-totalRewards?.totalWithdrawal)) + " CZ"
                 : "No rewards available"}
             </p>
           </div>
@@ -506,7 +505,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           <h4 className="text-white font-bold text-right">USD</h4>
           <p className="text-buttonBackground text-2xl font-bold">
             {totalRewards?.userTotalRewards
-              ? "$" + Math.floor(totalRewards?.userTotalRewards) / 100
+              ? "$" + Math.floor((totalRewards?.userTotalRewards-totalRewards?.totalWithdrawal)) / 100
               : ""}
           </p>
         </div>

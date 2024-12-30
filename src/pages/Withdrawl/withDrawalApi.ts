@@ -42,12 +42,18 @@ export const withDrawalApi = baseApi.injectEndpoints({
 
     // Update a withdrawal's status (PUT method)
     updateWithdrawalStatus: builder.mutation({
-      query: ({ id, status }) => ({
-        url: `/user/withdrawal/status/${id}?status=${status}`, // Pass status in query
-        method: 'PUT',
-      }),
+      query: ({ id, status, amount }) => {
+        // Build the query string dynamically based on the presence of `amount`
+        const queryString = new URLSearchParams({ status, ...(amount && { amount }) }).toString();
+    
+        return {
+          url: `/user/withdrawal/status/${id}?${queryString}`, // Append query parameters
+          method: 'PUT',
+        };
+      },
       invalidatesTags: ['Withdrawal'], // Cache invalidation
     }),
+    
 
 
     // Filter withdrawals by status
