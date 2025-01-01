@@ -3,6 +3,7 @@ import {
   useGetAllSocialMediaPostsQuery,
   useDeleteSocialMediaPostMutation,
   useUpdateSocialMediaPostStatusMutation,
+  useGetUserSpecificPostsQuery,
 } from "./socialmediaPostApi";
 import { useSocialMediaPostRewardsMutation } from "../../rewards/rewardApi";
 import CustomSwal from "../../customSwal/customSwal";
@@ -14,7 +15,8 @@ const SocialMediaPage = () => {
     isError,
     refetch,
   } = useGetAllSocialMediaPostsQuery();
-  console.log(socialMediaLinks);
+  // console.log('socialMediaLinks',socialMediaLinks);
+
   const [deleteSocialMediaPost] = useDeleteSocialMediaPostMutation();
   const [updateSocialMediaPostStatus] =
     useUpdateSocialMediaPostStatusMutation();

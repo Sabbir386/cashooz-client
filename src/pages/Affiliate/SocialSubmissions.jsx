@@ -11,7 +11,10 @@ import {
   FaTelegram,
   FaPinterest,
 } from "react-icons/fa";
-import { useCreateSocialMediaPostMutation } from "../SocialMedia/socialmediaPostApi";
+import {
+  useCreateSocialMediaPostMutation,
+  useGetUserSpecificPostsQuery,
+} from "../SocialMedia/socialmediaPostApi";
 import { verifyToken } from "../../utils/verifyToken";
 import { useAppSelector } from "../../redux/features/hooks";
 import { useCurrentToken } from "../../redux/features/auth/authSlice";
@@ -98,6 +101,31 @@ const SocialSubmissions = () => {
       console.error("Invalid token:", error);
     }
   }
+  // Fetch user's specific posts
+  const {
+    data: userCompletedSocialMediaLinks,
+    isLoading: isPostsLoading,
+    isError: isPostsError,
+    error: postsError,
+  } = useGetUserSpecificPostsQuery(user?.objectId, {
+    skip: !user?.objectId, // Skip the query if userId is not available
+  });
+  // console.log("userCompletedSocialMediaLinks", userCompletedSocialMediaLinks);
+
+  // Function to match platforms with posts
+  const getMatchedPosts = (platformName) => {
+    return (
+      userCompletedSocialMediaLinks?.posts?.filter(
+        (post) => post.platform === platformName
+      ) || []
+    );
+  };
+  const isCardDisabled = (platformName) => {
+    const matchedPosts = getMatchedPosts(platformName);
+    return matchedPosts.some(
+      (post) => post.status === "completed" || post.status === "pending"
+    );
+  };
 
   const {
     data: userData,
@@ -118,9 +146,13 @@ const SocialSubmissions = () => {
   }
   // Open modal with the selected platform's data
   const handleCardClick = (platform) => {
-    setSelectedPlatform(platform);
-    // console.log(selectedPlatform)
-    setIsModalOpen(true);
+    // setSelectedPlatform(platform);
+    // // console.log(selectedPlatform)
+    // setIsModalOpen(true);
+    if (!isCardDisabled(platform.name)) {
+      setSelectedPlatform(platform);
+      setIsModalOpen(true);
+    }
   };
 
   // Close modal
@@ -177,7 +209,7 @@ ${selectedPlatform.name}! Earn ${selectedPlatform.reward} #Cashooz #workfromhome
       if (response.message) {
         CustomSwal.fire({
           icon: "success",
-          title: "Success!",
+          title: "Pending!",
           text: "Your post was successfully submitted.",
           background: "#2e3b4e",
           confirmButtonColor: "#4CAF50", // Button background color
@@ -185,9 +217,11 @@ ${selectedPlatform.name}! Earn ${selectedPlatform.reward} #Cashooz #workfromhome
           customClass: {
             confirmButton: "text-white", // Button text color
             title: "text-white", // Title text color
-            htmlContainer: "text-white", // Text content color
+            text: "text-blue-400", // Change text color for message
+            htmlContainer: "text-blue-400", // Ensure content text matches
           },
         });
+        
         closeModal();
       } else {
         throw new Error(response.message || "Submission failed");
@@ -215,22 +249,36 @@ ${selectedPlatform.name}! Earn ${selectedPlatform.reward} #Cashooz #workfromhome
 
   const sharePost = (platformName) => {
     const postUrl = `https://cashooz-838b0.web.app/register?refId=`; // Base URL for sharing
-  
+
     // Define share URLs for each platform
     const platformShareUrls = {
-      Facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`,
-      Instagram: `https://www.instagram.com/?url=${encodeURIComponent(postUrl)}`, // Instagram doesn't support direct sharing via URL
-      YouTube: `https://www.youtube.com/share?url=${encodeURIComponent(postUrl)}`, // Hypothetical sharing URL
+      Facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        postUrl
+      )}`,
+      Instagram: `https://www.instagram.com/?url=${encodeURIComponent(
+        postUrl
+      )}`, // Instagram doesn't support direct sharing via URL
+      YouTube: `https://www.youtube.com/share?url=${encodeURIComponent(
+        postUrl
+      )}`, // Hypothetical sharing URL
       TikTok: `https://www.tiktok.com/share?url=${encodeURIComponent(postUrl)}`, // Hypothetical sharing URL
-      Snapchat: `https://www.snapchat.com/share?url=${encodeURIComponent(postUrl)}`, // Hypothetical sharing URL
-      Twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=Check+this+out!`,
-      Telegram: `https://t.me/share/url?url=${encodeURIComponent(postUrl)}&text=Check+this+out!`,
-      Pinterest: `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(postUrl)}&description=Check+this+out!`,
+      Snapchat: `https://www.snapchat.com/share?url=${encodeURIComponent(
+        postUrl
+      )}`, // Hypothetical sharing URL
+      Twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+        postUrl
+      )}&text=Check+this+out!`,
+      Telegram: `https://t.me/share/url?url=${encodeURIComponent(
+        postUrl
+      )}&text=Check+this+out!`,
+      Pinterest: `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(
+        postUrl
+      )}&description=Check+this+out!`,
     };
-  
+
     // Get the share URL for the selected platform
     const shareUrl = platformShareUrls[platformName];
-  
+
     if (shareUrl) {
       console.log(`Sharing on ${platformName}: ${shareUrl}`);
       // Optionally open the share URL in a new tab
@@ -256,36 +304,58 @@ ${selectedPlatform.name}! Earn ${selectedPlatform.reward} #Cashooz #workfromhome
 
         {/* Cards Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {platforms.map((platform) => (
-            <div
-              key={platform.name}
-              className="flex flex-col justify-between items-start p-6 rounded-lg shadow-lg bg-[#374151] bg-opacity-50 hover:shadow-2xl hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer"
-              onClick={() => handleCardClick(platform)} // Handle card click
-            >
-              {/* Icon Section */}
-              <div className="flex items-center gap-6 mb-4">
-                <div
-                  className={`w-14 h-14 rounded-full flex items-center justify-center shadow-md bg-gray-800 CZ ${platform.color}`}
-                >
-                  {platform.icon}
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-white">
-                    {platform.name}
-                  </h3>
-                  <p className="text-sm text-gray-400">
-                    {platform.description}
-                  </p>
-                </div>
-              </div>
+  {platforms.map((platform) => {
+    const matchedPosts = getMatchedPosts(platform.name);
+    const status = matchedPosts.find(
+      (post) => post.status === "completed" || post.status === "pending"
+    )?.status;
 
-              {/* Reward Button */}
-              <button className="w-1/2 text-sm font-semibold text-white bg-[#01D676] hover:bg-green-600 px-2 py-3 rounded-lg shadow-md transition-colors duration-300 mx-auto">
-                Earn {platform.reward}
-              </button>
-            </div>
-          ))}
+    const buttonText =
+      status === "completed"
+        ? "Completed"
+        : status === "pending"
+        ? "Pending"
+        : `Earn ${platform.reward}`;
+
+    const disabled = status === "completed" || status === "pending";
+
+    return (
+      <div
+        key={platform.name}
+        className={`flex flex-col justify-between items-start p-6 rounded-lg shadow-lg ${
+          disabled
+            ? "bg-gray-600 cursor-not-allowed opacity-50"
+            : "bg-[#374151] bg-opacity-50 hover:shadow-2xl hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer"
+        }`}
+        onClick={() => !disabled && handleCardClick(platform)} // Handle card click if not disabled
+      >
+        {/* Platform Icon and Details */}
+        <div className="flex items-center gap-6 mb-4">
+          <div
+            className={`w-14 h-14 rounded-full flex items-center justify-center shadow-md bg-gray-800 ${platform.color}`}
+          >
+            {platform.icon}
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold text-white">
+              {platform.name}
+            </h3>
+            <p className="text-sm text-gray-400">{platform.description}</p>
+          </div>
         </div>
+        <button
+          className={`w-1/2 text-sm font-semibold text-white px-2 py-3 rounded-lg shadow-md mx-auto ${
+            disabled ? "bg-gray-500 cursor-not-allowed" : "bg-[#01D676] hover:bg-green-600"
+          }`}
+          disabled={disabled} // Disable button if status is completed or pending
+        >
+          {buttonText} {/* Dynamically display the button text */}
+        </button>
+      </div>
+    );
+  })}
+</div>
+
       </div>
 
       {/* Modal Section */}
@@ -339,7 +409,7 @@ ${selectedPlatform.reward} bonus`}
               </p>
               <button
                 className="bg-buttonBackground px-3 py-1 rounded-lg text-sm"
-                onClick={() =>sharePost(selectedPlatform.name)}
+                onClick={() => sharePost(selectedPlatform.name)}
               >
                 share
               </button>
