@@ -4,7 +4,7 @@ const LitecoinCryptoModal = ({ onClose, onSubmit }) => {
   const [litecoinAddress, setLitecoinAddress] = useState("");
   const [amountUSD, setAmountUSD] = useState(0);
   const LTC_RATE = 95.34; // Example LTC rate
-  const MIN_WITHDRAWAL = 5;
+  const MIN_WITHDRAWAL = 10;
   const FEE = 0.00; // Example fee for Litecoin
 
   const calculateLitecoin = () => {
@@ -43,7 +43,7 @@ const LitecoinCryptoModal = ({ onClose, onSubmit }) => {
 
         {/* Notice Section */}
         <div className="bg-blue-600 text-center text-sm rounded-md p-3 mb-6">
-        New user have to earn 2000 CZ to make their first withdrawal.Afer this the minimum will be 1000 CZ.
+        New users have to earn 2000 CZ to make their first withdrawal.Afer this the minimum will be 1000 CZ.
         </div>
 
         {/* Litecoin Address Input */}
@@ -83,7 +83,7 @@ const LitecoinCryptoModal = ({ onClose, onSubmit }) => {
               Max amount
             </button>
           </div>
-          <small className="text-gray-400">Minimum $5.00</small>
+          <small className="text-gray-400">Minimum $10.00</small>
         </div>
 
         {/* LTC Rate and Fee Section */}

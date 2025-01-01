@@ -4,7 +4,7 @@ const CryptoModal = ({ onClose, onSubmit }) => {
   const [bitcoinAddress, setBitcoinAddress] = useState("");
   const [amountUSD, setAmountUSD] = useState(0);
   const BTC_RATE = 90455.59; // Example BTC rate
-  const MIN_WITHDRAWAL = 5;
+  const MIN_WITHDRAWAL = 10;
   const FEE = 0.00; // Example fee
   const BONUS = 0;
 
@@ -44,7 +44,7 @@ const CryptoModal = ({ onClose, onSubmit }) => {
 
         {/* Notice Section */}
         <div className="bg-blue-600 text-sm rounded-md p-3 mb-6 text-center">
-          New user have to earn 2000 CZ to make their first withdrawal.Afer this the minimum will be 1000 CZ.
+          New users have to earn 2000 CZ to make their first withdrawal.Afer this the minimum will be 1000 CZ.
         </div>
 
         {/* Bitcoin Address Input */}
@@ -84,7 +84,7 @@ const CryptoModal = ({ onClose, onSubmit }) => {
               Max amount
             </button>
           </div>
-          <small className="text-gray-400">Minimum $5.00</small>
+          <small className="text-gray-400">Minimum $10.00</small>
         </div>
 
         {/* BTC Rate and Fee Section */}

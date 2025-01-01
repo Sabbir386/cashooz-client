@@ -9,7 +9,7 @@ export const withDrawalApi = baseApi.injectEndpoints({
         method: "POST",
         body: withdrawalData,
       }),
-      invalidatesTags: ["Withdrawal"], // Cache invalidation for data consistency
+      invalidatesTags: ["Withdrawal", "Reward"], // Cache invalidation for data consistency
     }),
 
     // Get all withdrawals
@@ -45,7 +45,7 @@ export const withDrawalApi = baseApi.injectEndpoints({
       query: ({ id, status, amount }) => {
         // Build the query string dynamically based on the presence of `amount`
         const queryString = new URLSearchParams({ status, ...(amount && { amount }) }).toString();
-    
+
         return {
           url: `/user/withdrawal/status/${id}?${queryString}`, // Append query parameters
           method: 'PUT',
@@ -53,7 +53,7 @@ export const withDrawalApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ['Withdrawal'], // Cache invalidation
     }),
-    
+
 
 
     // Filter withdrawals by status

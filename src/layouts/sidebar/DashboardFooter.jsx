@@ -1,5 +1,5 @@
 import React from "react";
-import { FaFacebook, FaInstagramSquare, FaTwitterSquare } from "react-icons/fa";
+import { FaFacebook, FaInstagramSquare, FaPinterestSquare, FaTwitterSquare } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const DashboardFooter = () => {
@@ -13,7 +13,7 @@ const DashboardFooter = () => {
               CASHOOZ
             </span>
             <p className="text-xs text-gray-400">
-              © 2022 - 2024 Cashooz. All rights reserved.
+              © 2022 - 2025 Cashooz. All rights reserved.
             </p>
           </div>
           {/* Info Section */}
@@ -52,23 +52,41 @@ const DashboardFooter = () => {
         <div className="mt-10 flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
           {/* Social Icons */}
           <div className="flex space-x-4">
+            {/* Facebook */}
             <a
-              href="#"
+              href="https://www.facebook.com/cashooz"
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center"
             >
               <FaFacebook />
             </a>
+            {/* Twitter */}
             <a
-              href="#"
+              href="https://x.com/Cashooz_com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-8 h-8 bg-blue-400 rounded flex items-center justify-center"
             >
               <FaTwitterSquare />
             </a>
+            {/* Instagram */}
             <a
-              href="#"
+              href="https://www.instagram.com/cashooz_com/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-8 h-8 bg-pink-600 rounded flex items-center justify-center"
             >
               <FaInstagramSquare />
+            </a>
+            {/* Pinterest */}
+            <a
+              href="https://www.pinterest.com/cashooz_com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 bg-red-600 rounded flex items-center justify-center"
+            >
+              <FaPinterestSquare />
             </a>
           </div>
         </div>

@@ -32,7 +32,7 @@ const PaypalBox = () => {
 
     // Sample backend structure
     const requestBody = {
-      userId: userData?.data?._id,
+      userId: userData?.data?.user,
       userName: userData?.data?.name,
       userRegisterId: userData?.data?.id,
       userEmail: userData?.data?.email,
@@ -42,7 +42,7 @@ const PaypalBox = () => {
       networkType: "paypal",
       description: `Withdrawal request for ${method} payout`,
       method: "paypal",
-      amount: selectedAmount,
+      amount: selectedAmount*100,
       transactionId: "TXN123456789",
       invoiceId: "",
       country: userData?.data?.country,

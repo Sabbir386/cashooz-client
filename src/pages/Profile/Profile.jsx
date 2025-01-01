@@ -161,8 +161,9 @@ const TabTwoComponent = ({ withdrawals }) => (
             <tr key={withdrawal._id} className="bg-gray-800">
               <td className="px-6 py-4 text-white">{withdrawal.method}</td>
               <td className="px-6 py-4 text-white">
-                ${withdrawal.amount.toFixed(2)}
+                ${(withdrawal.amount / 100).toFixed(2)}
               </td>
+
               <td className="px-6 py-4 text-white">
                 {withdrawal.paypalEmail || "N/A"}
               </td>

@@ -64,7 +64,6 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   const navigate = useNavigate();
   const token = useAppSelector(useCurrentToken);
   let user;
-  const withdrawCount = 0;
   if (token) {
     user = verifyToken(token);
     // console.log(user);
@@ -78,7 +77,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   } = useUserTotalRewardsQuery(user?.objectId, {
     skip: user?.role !== "user",
   });
-  // console.log(totalRewards);
+  //  console.log(totalRewards?.totalWithdrawal);
   const {
     data: userData,
     isLoading: isUserLoading,
@@ -93,47 +92,137 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   };
 
   const handleEthereumSubmit = async (data) => {
-    setEthereumModalOpen(false);
-    console.log("Ethereum Payment Data:", data);
+    let myCurrentBalance = Math.floor(
+      (totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal) / 100
+    );
 
-    // Submit the data to the backend or process it
-    const requestBody = {
-      userId: userData?.data?._id,
-      userName: userData?.data?.name,
-      userRegisterId: userData?.data?.id,
-      userEmail: userData?.data?.email,
-      profileImg: userData?.data?.profileImg,
-      paypalEmail: "",
-      btcAddress: data?.ethereumAddress,
-      networkType: "ethereum",
-      description: `Withdrawal request for ${data?.ethAmount} bitcoin payout`,
-      method: "Ethereum",
-      amount: parseFloat(data?.ethAmount || data?.amountUSD),
-      transactionId: "TXN123456789",
-      invoiceId: "",
-      country: userData?.data?.country,
-      status: "pending",
-      timestamps: {
-        requestedAt: new Date(),
-        processedAt: null,
-      },
-    };
-    //  console.log(requestBody);
-    try {
-      // Send the withdrawal request
-      await createWithdrawal(requestBody).unwrap();
-      CustomSwal.fire(
-        "Success",
-        "Your withdrawal request has been submitted.stay Tuned ! you will got notified within 24 hours.",
-        "success"
-      );
-    } catch (error) {
-      console.log(error);
-      CustomSwal.fire(
-        "Error",
-        "Failed to submit withdrawal request. Please try again.",
-        "error"
-      );
+    if (myCurrentBalance <= 0) {
+      CustomSwal.fire({
+        title: "You don't have enough balance",
+      });
+    } else {
+      if (myCurrentBalance >= 10) {
+        const amount = parseFloat(data?.amountUSD);
+        if (totalRewards?.totalWithdrawal > 0) {
+          if (amount <= myCurrentBalance) {
+            // Close the modal and save the data
+            console.log(amount);
+            setEthereumModalOpen(false);
+
+            // Prepare the request body
+            const requestBody = {
+              userId: userData?.data?.user,
+              userName: userData?.data?.name,
+              userRegisterId: userData?.data?.id,
+              userEmail: userData?.data?.email,
+              profileImg: userData?.data?.profileImg,
+              paypalEmail: "",
+              btcAddress: data?.ethereumAddress,
+              networkType: "ethereum",
+              description: `Withdrawal request for ${data?.ethAmount} Ethereum payout`,
+              method: "Ethereum",
+              amount: parseFloat(data?.amountUSD * 100), // Ensuring amount in correct format
+              transactionId: "TXN123456789",
+              invoiceId: "",
+              country: userData?.data?.country,
+              status: "pending",
+              timestamps: {
+                requestedAt: new Date(),
+                processedAt: null,
+              },
+            };
+
+            try {
+              // Submit the withdrawal request
+              await createWithdrawal(requestBody).unwrap();
+              CustomSwal.fire(
+                "Success",
+                "Your withdrawal request has been submitted. Stay tuned! You will be notified within 24 hours.",
+                "success"
+              );
+            } catch (error) {
+              console.error(error);
+              CustomSwal.fire(
+                "Error",
+                "Failed to submit withdrawal request. Please try again.",
+                "error"
+              );
+            }
+          } else {
+            CustomSwal.fire({
+              title: "Withdraw amount must be smaller than the current balance",
+            });
+          }
+        } else {
+          if (totalRewards?.totalWithdrawal < 1) {
+            if (myCurrentBalance >= 20) {
+              if (amount <= myCurrentBalance) {
+                // Close the modal and save the data
+                setEthereumModalOpen(false);
+
+                // Prepare the request body
+                const requestBody = {
+                  userId: userData?.data?.user,
+                  userName: userData?.data?.name,
+                  userRegisterId: userData?.data?.id,
+                  userEmail: userData?.data?.email,
+                  profileImg: userData?.data?.profileImg,
+                  paypalEmail: "",
+                  btcAddress: data?.ethereumAddress,
+                  networkType: "ethereum",
+                  description: `Withdrawal request for ${data?.ethAmount} Ethereum payout`,
+                  method: "Ethereum",
+                  amount: parseFloat(data?.amountUSD * 100),
+                  transactionId: "TXN123456789",
+                  invoiceId: "",
+                  country: userData?.data?.country,
+                  status: "pending",
+                  timestamps: {
+                    requestedAt: new Date(),
+                    processedAt: null,
+                  },
+                };
+
+                try {
+                  // Submit the withdrawal request
+                  await createWithdrawal(requestBody).unwrap();
+                  CustomSwal.fire(
+                    "Success",
+                    "Your withdrawal request has been submitted. Stay tuned! You will be notified within 24 hours.",
+                    "success"
+                  );
+                } catch (error) {
+                  console.error(error);
+                  CustomSwal.fire(
+                    "Error",
+                    "Failed to submit withdrawal request. Please try again.",
+                    "error"
+                  );
+                }
+              } else {
+                CustomSwal.fire({
+                  title:
+                    "Withdraw amount must be smaller than the current balance",
+                });
+              }
+            } else {
+              CustomSwal.fire({
+                title: "You need to earn $20 to make your first withdrawal",
+              });
+            }
+          }
+        }
+      } else {
+        if (totalRewards?.totalWithdrawal > 0) {
+          CustomSwal.fire({
+            title: "You need to earn $10 to make your withdrawal",
+          });
+        } else {
+          CustomSwal.fire({
+            title: "You need to earn $20 to make your first withdrawal",
+          });
+        }
+      }
     }
   };
 
@@ -145,46 +234,137 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   };
 
   const handleLitecoinSubmit = async (data) => {
-    setLitecoinModalOpen(false);
-    console.log("Litecoin Payment Data:", data);
+    let myCurrentBalance = Math.floor(
+      (totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal) / 100
+    );
 
-    // Prepare request payload
-    const requestBody = {
-      userId: userData?.data?._id,
-      userName: userData?.data?.name,
-      userRegisterId: userData?.data?.id,
-      userEmail: userData?.data?.email,
-      profileImg: userData?.data?.profileImg,
-      paypalEmail: "",
-      btcAddress: data?.litecoinAddress,
-      networkType: "litecoin",
-      description: `Withdrawal request for ${data?.litecoinAmount} Litecoin payout`,
-      method: "Litecoin",
-      amount: parseFloat(data?.litecoinAmount || data?.amountUSD),
-      transactionId: "TXN987654321",
-      invoiceId: "",
-      country: userData?.data?.country,
-      status: "pending",
-      timestamps: {
-        requestedAt: new Date(),
-        processedAt: null,
-      },
-    };
+    if (myCurrentBalance <= 0) {
+      CustomSwal.fire({
+        title: "You don't have enough balance",
+      });
+    } else {
+      if (myCurrentBalance >= 10) {
+        const amount = parseFloat(data?.amountUSD);
+        if (totalRewards?.totalWithdrawal > 0) {
+          if (amount <= myCurrentBalance) {
+            // Close the modal and save the data
+            console.log(amount);
+            setLitecoinModalOpen(false);
 
-    try {
-      await createWithdrawal(requestBody).unwrap();
-      CustomSwal.fire(
-        "Success",
-        "Your Litecoin withdrawal request has been submitted. Stay tuned! You will be notified within 24 hours.",
-        "success"
-      );
-    } catch (error) {
-      console.error(error);
-      CustomSwal.fire(
-        "Error",
-        "Failed to submit Litecoin withdrawal request. Please try again.",
-        "error"
-      );
+            // Prepare the request body
+            const requestBody = {
+              userId: userData?.data?.user,
+              userName: userData?.data?.name,
+              userRegisterId: userData?.data?.id,
+              userEmail: userData?.data?.email,
+              profileImg: userData?.data?.profileImg,
+              paypalEmail: "",
+              btcAddress: data?.litecoinAddress,
+              networkType: "litecoin",
+              description: `Withdrawal request for ${data?.litecoinAmount} Litecoin payout`,
+              method: "Litecoin",
+              amount: parseFloat(data?.amountUSD * 100), // Ensuring amount in correct format
+              transactionId: "TXN987654321",
+              invoiceId: "",
+              country: userData?.data?.country,
+              status: "pending",
+              timestamps: {
+                requestedAt: new Date(),
+                processedAt: null,
+              },
+            };
+
+            try {
+              // Submit the withdrawal request
+              await createWithdrawal(requestBody).unwrap();
+              CustomSwal.fire(
+                "Success",
+                "Your Litecoin withdrawal request has been submitted. Stay tuned! You will be notified within 24 hours.",
+                "success"
+              );
+            } catch (error) {
+              console.error(error);
+              CustomSwal.fire(
+                "Error",
+                "Failed to submit Litecoin withdrawal request. Please try again.",
+                "error"
+              );
+            }
+          } else {
+            CustomSwal.fire({
+              title: "Withdraw amount must be smaller than the current balance",
+            });
+          }
+        } else {
+          if (totalRewards?.totalWithdrawal < 1) {
+            if (myCurrentBalance >= 20) {
+              if (amount <= myCurrentBalance) {
+                // Close the modal and save the data
+                setLitecoinModalOpen(false);
+
+                // Prepare the request body
+                const requestBody = {
+                  userId: userData?.data?.user,
+                  userName: userData?.data?.name,
+                  userRegisterId: userData?.data?.id,
+                  userEmail: userData?.data?.email,
+                  profileImg: userData?.data?.profileImg,
+                  paypalEmail: "",
+                  btcAddress: data?.litecoinAddress,
+                  networkType: "litecoin",
+                  description: `Withdrawal request for ${data?.litecoinAmount} Litecoin payout`,
+                  method: "Litecoin",
+                  amount: parseFloat(data?.amountUSD * 100),
+                  transactionId: "TXN987654321",
+                  invoiceId: "",
+                  country: userData?.data?.country,
+                  status: "pending",
+                  timestamps: {
+                    requestedAt: new Date(),
+                    processedAt: null,
+                  },
+                };
+
+                try {
+                  // Submit the withdrawal request
+                  await createWithdrawal(requestBody).unwrap();
+                  CustomSwal.fire(
+                    "Success",
+                    "Your Litecoin withdrawal request has been submitted. Stay tuned! You will be notified within 24 hours.",
+                    "success"
+                  );
+                } catch (error) {
+                  console.error(error);
+                  CustomSwal.fire(
+                    "Error",
+                    "Failed to submit Litecoin withdrawal request. Please try again.",
+                    "error"
+                  );
+                }
+              } else {
+                CustomSwal.fire({
+                  title:
+                    "Withdraw amount must be smaller than the current balance",
+                });
+              }
+            } else {
+              CustomSwal.fire({
+                title: "You need to earn $20 to make your first withdrawal",
+              });
+            }
+          }
+        }
+      } else {
+        if (totalRewards?.totalWithdrawal > 0) {
+          CustomSwal.fire({
+            title: "You need to earn $10 to make your withdrawal",
+          });
+        } else {
+          CustomSwal.fire({
+            title: "You need to earn $20 to make your first withdrawal",
+          });
+        }
+      }
     }
   };
 
@@ -197,101 +377,140 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   };
 
   const handleCryptoSubmit = async (data) => {
-    let myCurrentBalance = Math.floor(totalRewards?.userTotalRewards) / 100;
+    let myCurrentBalance = Math.floor(
+      (totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal) / 100
+    );
 
     if (myCurrentBalance <= 0) {
       CustomSwal.fire({
-        title: "You dont have enough balance",
+        title: "You don't have enough balance",
       });
-    } else{
+    } else {
       if (myCurrentBalance >= 10) {
         const amount = parseFloat(data?.amountUSD);
-      // console.log(amount)
-        if (withdrawCount>0 ) {
-          if(amount<=myCurrentBalance){
-            
-            CustomSwal.fire({
-              title: "sucess",
-            });
+        if (totalRewards?.totalWithdrawal > 0) {
+          if (amount <= myCurrentBalance) {
+            // Close the modal and save the data
+            console.log(amount);
+            setCryptoModalOpen(false);
+            setCryptoData(data);
 
-          }
-          else{
+            // Prepare the request body
+            const requestBody = {
+              userId: userData?.data?.user,
+              userName: userData?.data?.name,
+              userRegisterId: userData?.data?.id,
+              userEmail: userData?.data?.email,
+              profileImg: userData?.data?.profileImg,
+              paypalEmail: "",
+              btcAddress: data?.bitcoinAddress,
+              networkType: "btc",
+              description: `Withdrawal request for ${data?.btcAmount} payout`,
+              method: "Bitcoin",
+              amount: parseFloat(data?.amountUSD * 100),
+              transactionId: "TXN123456789",
+              invoiceId: "",
+              country: userData?.data?.country,
+              status: "pending",
+              timestamps: {
+                requestedAt: new Date(),
+                processedAt: null,
+              },
+            };
+            console.log(requestBody);
+            try {
+              // Submit the withdrawal request
+              await createWithdrawal(requestBody).unwrap();
+              CustomSwal.fire(
+                "Success",
+                "Your withdrawal request has been submitted. Stay tuned! You will be notified within 24 hours.",
+                "success"
+              );
+            } catch (error) {
+              console.error(error);
+              CustomSwal.fire(
+                "Error",
+                "Failed to submit withdrawal request. Please try again.",
+                "error"
+              );
+            }
+          } else {
             CustomSwal.fire({
-              title: "withdraw amount must be smaller then current balance",
+              title: "Withdraw amount must be smaller than the current balance",
             });
           }
-         
         } else {
-          console.log('cccc')
-          if(withdrawCount<1){
-            if(myCurrentBalance>=20){
-              if( amount<=myCurrentBalance){
+          if (totalRewards?.totalWithdrawal < 1) {
+            if (myCurrentBalance >= 20) {
+              if (amount <= myCurrentBalance) {
+                // Close the modal and save the data
+                setCryptoModalOpen(false);
+                setCryptoData(data);
+
+                // Prepare the request body
+                const requestBody = {
+                  userId: userData?.data?.user,
+                  userName: userData?.data?.name,
+                  userRegisterId: userData?.data?.id,
+                  userEmail: userData?.data?.email,
+                  profileImg: userData?.data?.profileImg,
+                  paypalEmail: "",
+                  btcAddress: data?.bitcoinAddress,
+                  networkType: "btc",
+                  description: `Withdrawal request for ${data?.btcAmount} payout`,
+                  method: "Bitcoin",
+                  amount: parseFloat(data?.amountUSD * 100),
+                  transactionId: "TXN123456789",
+                  invoiceId: "",
+                  country: userData?.data?.country,
+                  status: "pending",
+                  timestamps: {
+                    requestedAt: new Date(),
+                    processedAt: null,
+                  },
+                };
+
+                try {
+                  // Submit the withdrawal request
+                  await createWithdrawal(requestBody).unwrap();
+                  CustomSwal.fire(
+                    "Success",
+                    "Your withdrawal request has been submitted. Stay tuned! You will be notified within 24 hours.",
+                    "success"
+                  );
+                } catch (error) {
+                  console.error(error);
+                  CustomSwal.fire(
+                    "Error",
+                    "Failed to submit withdrawal request. Please try again.",
+                    "error"
+                  );
+                }
+              } else {
                 CustomSwal.fire({
-                  title: "sucess",
+                  title:
+                    "Withdraw amount must be smaller than the current balance",
                 });
               }
-              else if(amount>myCurrentBalance){
-                console.log('435435')
-                CustomSwal.fire({
-                  title: "withdraw amount must be smaller then current balance",
-                });
-              }
-            }
-            else{
+            } else {
               CustomSwal.fire({
-                title: "withdraw amount must be smaller then current balance",
+                title: "You need to earn $20 to make your first withdrawal",
               });
             }
-            
-          
+          }
         }
-      } 
-    }}
-
-    // // Close the modal and save the data
-    // setCryptoModalOpen(false);
-    // setCryptoData(data);
-    // // console.log("Crypto Payment Data:", data);
-
-    // // Submit the data to the backend or process it
-    // const requestBody = {
-    //   userId: userData?.data?._id,
-    //   userName: userData?.data?.name,
-    //   userRegisterId: userData?.data?.id,
-    //   userEmail: userData?.data?.email,
-    //   profileImg: userData?.data?.profileImg,
-    //   paypalEmail: "",
-    //   btcAddress: data?.bitcoinAddress,
-    //   networkType: "btc",
-    //   description: `Withdrawal request for ${data?.btcAmount} payout`,
-    //   method: "Bitcoin",
-    //   amount: parseFloat(data?.btcAmount || data?.amountUSD),
-    //   transactionId: "TXN123456789",
-    //   invoiceId: "",
-    //   country: userData?.data?.country,
-    //   status: "pending",
-    //   timestamps: {
-    //     requestedAt: new Date(),
-    //     processedAt: null,
-    //   },
-    // };
-    // // console.log(requestBody);
-    // try {
-    //   // Send the withdrawal request
-    //   await createWithdrawal(requestBody).unwrap();
-    //   CustomSwal.fire(
-    //     "Success",
-    //     "Your withdrawal request has been submitted.stay Tuned ! you will got notified within 24 hours.",
-    //     "success"
-    //   );
-    // } catch (error) {
-    //   console.log(error);
-    //   CustomSwal.fire(
-    //     "Error",
-    //     "Failed to submit withdrawal request. Please try again.",
-    //     "error"
-    //   );
-    // }
+      } else {
+        if (totalRewards?.totalWithdrawal > 0) {
+          CustomSwal.fire({
+            title: "You need to earn $10 to make your withdrawal",
+          });
+        } else {
+          CustomSwal.fire({
+            title: "You need to earn $20 to make your first withdrawal",
+          });
+        }
+      }
+    }
   };
 
   // Handle card click and select amount
@@ -476,8 +695,8 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         </p> */}
 
         <div className="bg-blue-600 text-center text-sm rounded-md p-3 mb-6 mt-3">
-          New user have to earn $20 to make their first withdrawal.Afer this the
-          minimum will be $10.
+          New users have to earn $20 to make their first withdrawal.Afer this
+          the minimum will be $10.
         </div>
       </div>
       <div className="bg-gray-700 py-[1px] px-4 mt-3 mb-3 rounded-lg flex items-center justify-between">
@@ -491,7 +710,10 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             <h4 className="text-white font-bold">Points</h4>
             <p className="text-buttonBackground text-2xl font-bold">
               {totalRewards?.userTotalRewards
-                ? Math.floor((totalRewards?.userTotalRewards-totalRewards?.totalWithdrawal)) + " CZ"
+                ? Math.floor(
+                    totalRewards?.userTotalRewards -
+                      totalRewards?.totalWithdrawal
+                  ) + " CZ"
                 : "No rewards available"}
             </p>
           </div>
@@ -505,7 +727,11 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           <h4 className="text-white font-bold text-right">USD</h4>
           <p className="text-buttonBackground text-2xl font-bold">
             {totalRewards?.userTotalRewards
-              ? "$" + Math.floor((totalRewards?.userTotalRewards-totalRewards?.totalWithdrawal)) / 100
+              ? "$" +
+                Math.floor(
+                  totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal
+                ) /
+                  100
               : ""}
           </p>
         </div>
@@ -523,7 +749,10 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           />
           <p className="text-white text-xl font-semibold">Cash with PayPal</p>
           <p className="text-gray-200 text-sm">
-            Amount: ${Math.floor(totalRewards?.userTotalRewards) / 100}
+            Amount: $
+            {Math.floor(
+              totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal
+            ) / 100}
           </p>
         </div>
         {/* Other payment options */}
@@ -541,7 +770,10 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
               Cash with Bitcoin
             </p>
             <p className="text-gray-200 text-sm">
-              Amount: {Math.floor(totalRewards?.userTotalRewards) / 100}
+              Amount:{" "}
+              {Math.floor(
+                totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal
+              ) / 100}
             </p>
           </div>
 
@@ -565,7 +797,10 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           />
           <p className="text-white text-xl font-semibold">Cash with Ethereum</p>
           <p className="text-gray-200 text-sm">
-            Amount: ${Math.floor(totalRewards?.userTotalRewards) / 100}
+            Amount: $
+            {Math.floor(
+              totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal
+            ) / 100}
           </p>
         </div>
 
@@ -588,7 +823,10 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           />
           <p className="text-white text-xl font-semibold">Cash with Litecoin</p>
           <p className="text-gray-200 text-sm">
-            Amount: ${Math.floor(totalRewards?.userTotalRewards) / 100}
+            Amount: $
+            {Math.floor(
+              totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal
+            ) / 100}
           </p>
         </div>
 
@@ -616,7 +854,10 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           />
           <p className="text-white text-xl font-semibold">Cash with Stake</p>
           <p className="text-gray-200 text-sm">
-            Amount: ${Math.floor(totalRewards?.userTotalRewards) / 100}
+            Amount: $
+            {Math.floor(
+              totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal
+            ) / 100}
           </p>
 
           <div className="absolute top-4 right-5 bg-[#01D676] text-white text-sm font-bold px-3 py-1 rounded-md  shadow-lg animate-pulse">
@@ -632,7 +873,10 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           />
           <p className="text-white text-xl font-semibold">Cash with Dogecoin</p>
           <p className="text-gray-200 text-sm">
-            Amount: ${Math.floor(totalRewards?.userTotalRewards) / 100}
+            Amount: $
+            {Math.floor(
+              totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal
+            ) / 100}
           </p>
 
           {/* Coming Soon Stamp */}
@@ -670,7 +914,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             Select PayPal Amount
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 overflow-y-auto">
-            {[20, 30, 40, 60, 70, 80, 90, 100].map((amount, index) => (
+            {[10, 15, 20, 30, 40, 60, 80, 100].map((amount, index) => (
               <div
                 key={index}
                 className={`p-6 bg-gradient-to-r from-[#263b80] to-[#25bcff] rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3 border-2 transition duration-300 ease-in-out ${
