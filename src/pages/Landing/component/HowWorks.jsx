@@ -7,6 +7,7 @@ import {
   FaEarlybirds,
   FaGifts,
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const HowWorks = () => {
   const services = [
@@ -62,10 +63,10 @@ const HowWorks = () => {
              <p className="text-gray-200 group-hover:text-primaryColor mb-6">
                {service.description}
              </p>
-             <a className="text-buttonBackground font-medium flex items-center space-x-2 hover:text-pink-700 transition-colors">
-               <span>Read More</span>
+             <Link to={'/register'} className="text-buttonBackground font-medium flex items-center space-x-2 hover:text-pink-700 transition-colors">
+               <span>Join Now</span>
                <span>→</span>
-             </a>
+             </Link>
            </div>
           ))}
          

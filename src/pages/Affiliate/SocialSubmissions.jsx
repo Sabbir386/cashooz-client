@@ -182,8 +182,8 @@ const SocialSubmissions = () => {
 
   const copyToClipboard = () => {
     const textToCopy = `Earn money from 
-💲Cashooz.com💰 where you can earn cash by completing various tasks like games, survey, install, watching, shopping that you already do online everyday. It's free. Start earning now...
-${selectedPlatform.name}! Earn ${selectedPlatform.reward} #Cashooz #workfromhome #earnmoney #makemoney #easymoney #makemoneyonline #earnmoneyonline`;
+💲Cashooz.com💰 where you can earn cash by completing various tasks like games, survey, install, watching, shopping that you already do online everyday. It's free. Get your signup bonus ${selectedPlatform.reward} and Start earning now...
+${selectedPlatform.name}!  #Cashooz #workfromhome #earnmoney #makemoney #easymoney #makemoneyonline #earnmoneyonline`;
     navigator.clipboard.writeText(textToCopy).then(() => {
       setIsCopied(true); // Update state to show the check mark
       setTimeout(() => setIsCopied(false), 2000); // Reset to copy icon after 2 seconds
@@ -377,8 +377,8 @@ ${selectedPlatform.name}! Earn ${selectedPlatform.reward} #Cashooz #workfromhome
 
             {/* Step 1: Copy Caption Instructions */}
             <p className="text-sm text-gray-400 mb-4">
-              <strong>Step 1:</strong> Use this caption for your post on
-              Facebook, Instagram, or any social platform.
+              <strong>Step 1:</strong> Use this caption for your post on 
+               {' '+selectedPlatform.name} platform.
             </p>
             <div className="mb-4">
               <textarea
@@ -386,9 +386,9 @@ ${selectedPlatform.name}! Earn ${selectedPlatform.reward} #Cashooz #workfromhome
                 rows="4"
                 readOnly
                 value={`Earn money from 
-💲Cashooz.com💰 where you can earn cash by completing various tasks like games, survey, install, watching, shopping that you already do online everyday. It's free. Start earning now...
+💲Cashooz.com💰 where you can earn cash by completing various tasks like games, survey, install, watching, shopping that you already do online everyday. It's free. Get your bonus ${selectedPlatform.reward} and Start earning now...
 #Cashooz #workfromhome #earnmoney #makemoney #easymoney #makemoneyonline #earnmoneyonline 
-${selectedPlatform.reward} bonus`}
+`}
               ></textarea>
               <button
                 className="mt-2 text-sm font-semibold text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg"

@@ -15,16 +15,32 @@ export default function MapData() {
     { country: "mx", value: '$127' }, // mexico
   ];
   return (
-    <div className="flex flex-col justify-center items-center text-center">
-        <h2 className="text-center text-2xl font-bold">Top 10 Populous Countries by Withdraw</h2>
-      <WorldMap
-        color="red"
-        // title="Top 10 Populous Countries by Withdraw"
-        value-suffix="people"
-        size="lg"
-        data={data}
-        className="mx-auto"
-      />
+    <div className="flex flex-col justify-center items-center text-center bg-secondaryColor py-5">
+     
+        <h2 className="text-lg md:text-4xl font-semibold text-white mb-3">
+        Top 10 Populous Countries by Withdraw
+        </h2>
+        <WorldMap
+      color="#ffffff"
+      backgroundColor="#141523"
+      value-suffix="people"
+      size="lg"
+      data={data}
+      className="mx-auto"
+      richInteraction={true} // Ensures interactivity
+      customComponent={(countryData, color) => (
+        <text
+          x={countryData.coordinates[0]}
+          y={countryData.coordinates[1]}
+          fontSize="12"
+          fill="#01D676"
+          textAnchor="middle"
+          alignmentBaseline="middle"
+        >
+          {countryData.countryCode.toUpperCase()} ({countryData.value.toLocaleString()})
+        </text>
+      )}
+    />
     </div>
   );
 }

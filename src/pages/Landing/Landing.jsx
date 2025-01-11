@@ -22,6 +22,8 @@ import HowWorks from "./component/HowWorks";
 import ClientsSection from "./component/ClientsSection ";
 import Counter from "./component/Counter";
 import MapData from "./component/MapData";
+import Earning from "./component/Earning";
+import Faq from "./component/Faq";
 
 const Landing = () => {
 
@@ -139,12 +141,7 @@ const Landing = () => {
       icon: "👥",
     },
   ];
-  const points = [
-    { label: "10 POINTS = $0.1", bgColor: "bg-green-500" },
-    { label: "100 POINTS = $1", bgColor: "bg-red-500" },
-    { label: "1,000 POINTS = $10", bgColor: "bg-black" },
-    { label: "10,000 POINTS = $100", bgColor: "bg-blue-500" },
-  ];
+
 
 
   return (
@@ -161,88 +158,10 @@ const Landing = () => {
       <MapData/>
       {/* cards section  */}
       <InfiniteScroll></InfiniteScroll>
-      {/* features section  */}
-      <div className="bg-gray-100 py-12">
-        {/* Section Header */}
-        <h2 className="text-center text-2xl font-bold text-gray-800 mb-8">
-          COINTIPLY FEATURES
-        </h2>
-        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="flex items-start p-4 bg-white rounded-lg shadow-md"
-            >
-              {/* Icon */}
-              <div className="text-pink-500 text-3xl mr-4">{feature.icon}</div>
-              {/* Content */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600 text-sm">{feature.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
       {/* earning section  */}
-      <div className="bg-gray-100 py-12">
-        {/* Header Section */}
-        <div className="text-center max-w-3xl mx-auto px-4">
-          <div className="flex justify-center mb-4">
-            {/* Replace with actual image */}
-            <img
-              src="https://via.placeholder.com/80"
-              alt="Icon"
-              className="w-20 h-20"
-            />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-800">
-            how much can I earn?
-          </h2>
-          <p className="text-gray-600 mt-4">
-            When we say your opinions are valuable, we mean it.
-            <br />
-            Every time you complete one of our surveys, you’ll earn **Opinion
-            Points**.
-          </p>
-          <p className="text-gray-600 mt-2">
-            An average survey pays out around 10 points but can be worth as much
-            as 250 points.
-          </p>
-        </div>
-
-        {/* Points Worth Section */}
-        <div className="mt-12">
-          <h3 className="text-center font-bold text-gray-800 text-lg">
-            POINTS WORTH IN USD
-          </h3>
-          <div className="flex flex-wrap justify-center gap-4 mt-6 px-4">
-            {points.map((point, index) => (
-              <div
-                key={index}
-                className={`${point.bgColor} text-white py-4 px-8 rounded-md shadow-md`}
-              >
-                {point.label}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Payment Section */}
-        <div className="mt-12 text-center">
-          <div className="bg-white border-2 border-blue-500 py-6 px-8 inline-block rounded-md shadow-md">
-            <p className="text-blue-500 font-medium text-lg">
-              We have paid our members
-            </p>
-            <p className="text-green-500 text-4xl font-bold mt-2">
-              $3,724,318.37
-            </p>
-          </div>
-        </div>
-      </div>
+     <Earning/>
       {/* all points section  */}
+      <Faq/>
     </div>
   );
 };

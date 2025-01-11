@@ -413,9 +413,14 @@ const Sidebar = () => {
          h-screen "
       >
         <div className="flex items-center gap-2.5 font-medium border-b py-3 border-slate-300 mx-3">
-          <span className="text-buttonBackground font-bold text-4xl whitespace-pre">
-            CASHOOZ
-          </span>
+          <Link to="/dashboard" className="py-4">
+          <img
+            src="https://i.ibb.co.com/T03Qzcd/cashooz-logo.png"
+            alt=""
+            className="w-40 h-auto"
+          />
+          </Link>
+         
         </div>
 
         <div className="flex flex-col h-full">

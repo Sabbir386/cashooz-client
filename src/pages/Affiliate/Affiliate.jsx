@@ -51,7 +51,7 @@ const Affiliate = () => {
   useEffect(() => {
     if (userData?.data?.id) {
       setReferralLink(
-        `https://cashooz-838b0.web.app/register?refId=CZ${userData.data.id}`
+        `${window.location.origin}/register?refId=CZ${userData.data.id}`
       );
     }
   }, [userData]);
@@ -147,14 +147,17 @@ const Affiliate = () => {
           <div className="rounded-full bg-[#01D676] h-16 w-16 flex items-center justify-center">
             {userData?.data?.profileImg ? (
               <img
-                src={userData.data.profileImg}
+                src={userData?.data?.profileImg}
                 alt="User Profile"
                 className="rounded-full h-full w-full object-cover"
               />
             ) : (
-              <span className="text-3xl font-bold text-white">
-                {userData?.data?.name?.charAt(0).toUpperCase() || "N/A"}
-              </span>
+              <img
+                src={'https://i.ibb.co.com/4Fy4ptP/robot.png'}
+                alt="User Profile"
+                className="rounded-full h-full w-full object-cover"
+              />
+              
             )}
           </div>
 
@@ -164,15 +167,20 @@ const Affiliate = () => {
           <div className="text-green-300 mt-1 text-center">
             You'll get 15% of your friend's task reward as referral commission
           </div>
-          <div className="flex mt-4">
+          <div className="flex mt-4 items-center">
             {/* Display the value with proper formatting */}
-            <p className="text-lg font-bold">
+            { 
+              !(referrals && totalReferralRewards) ? <div className="border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full w-5 h-5 animate-spin"></div> : (
+                <p className="text-lg font-bold">
               {(
                 (referrals?.totalEarnings ?? 0) -
                 (totalReferralRewards?.data?.totalRewards ?? 0)
               ).toFixed(2)}{" "}
               CZ
             </p>
+              ) 
+            }
+            
 
             {/* Claim Button */}
             <button

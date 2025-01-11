@@ -29,25 +29,48 @@ const LandingLayout = () => {
     <div className="bg-gradient-radial  from-[#141523] via-[#212134] to-[#222339]">
       <ScrollToTop />
       {/* main container */}
-      <div className="max-w-full mx-auto px-2 md:px-0">
+      <div className="max-w-full mx-auto px-0">
         {/* banner section  */}
         <div className="">
           {/* naver section  */}
-          <header className={`z-[999] ${isScrolled ? "bg-cardBackground" : ""} fixed w-full left-0 top-0`}>
+          <header
+            className={`z-[999] ${
+              isScrolled ? "bg-cardBackground" : ""
+            } fixed w-full left-0 top-0`}
+          >
             <nav className="md:w-[1440px] mx-auto  md:flex md:items-center md:justify-between md:place-items-center">
               <div className="flex justify-between place-items-center">
-                <Link to={"/"} className="text-3xl font-semibold">
+                <Link to={"/"} className="py-4">
                   <img
-                    src="https://i.ibb.co/bzNx8tb/co-logo.png"
+                    src="https://i.ibb.co.com/T03Qzcd/cashooz-logo.png"
                     alt=""
-                    className="w-20"
+                    className="w-40"
                   />
                 </Link>
                 <span
                   onClick={() => setOpen(!open)}
-                  className="md:hidden block text-white"
+                  className="md:hidden flex flex-col justify-center items-center w-8 h-8 cursor-pointer relative z-50"
                 >
-                  {open ? <FaWindowClose></FaWindowClose> : <FaBars></FaBars>}
+                  {/* Top Bar */}
+                  <span
+                    className={`w-6 h-0.5 transition-all duration-300 ${
+                      open ? "rotate-45 translate-y-1 bg-red-500" : "bg-white"
+                    }`}
+                  ></span>
+
+                  {/* Middle Bar (Hidden when open) */}
+                  <span
+                    className={`w-6 h-0.5 my-1 transition-all duration-300 ${
+                      open ? "opacity-0" : "opacity-100 bg-white"
+                    }`}
+                  ></span>
+
+                  {/* Bottom Bar */}
+                  <span
+                    className={`w-6 h-0.5 transition-all duration-300 ${
+                      open ? "-rotate-45 -translate-y-2 bg-red-500" : "bg-white"
+                    }`}
+                  ></span>
                 </span>
               </div>
               <ul
@@ -86,7 +109,7 @@ const LandingLayout = () => {
                 </Link>
               </li> */}
 
-                <li className="mx-2 my-4 md:my-0">
+                {/* <li className="mx-2 my-4 md:my-0">
                   <Link
                     onClick={() => setOpen(!open)}
                     to={"/advertiser-register"}
@@ -94,8 +117,16 @@ const LandingLayout = () => {
                   >
                     Become an Advertiser
                   </Link>
+                </li> */}
+                <li className="mx-2 my-4 md:my-0">
+                <Link
+                    onClick={() => setOpen(!open)}
+                    to={"/aboutus"}
+                    className="text-base hover:text-buttonBackground text-white duration"
+                  >
+                    About
+                  </Link>
                 </li>
-                <li className="mx-2 my-4 md:my-0"></li>
               </ul>
             </nav>
           </header>

@@ -142,7 +142,7 @@ function RootLayout() {
               {/* Profile Image */}
               <img
                 className="w-8 h-8 rounded-full object-cover"
-                src={userData?.data?.profileImg} // Replace with your profile image URL
+                src={userData?.data?.profileImg || 'https://i.ibb.co.com/4Fy4ptP/robot.png'} // Replace with your profile image URL
                 alt="Profile"
               />
               {/* Username */}

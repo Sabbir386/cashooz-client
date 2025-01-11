@@ -10,41 +10,44 @@ const Counter = () => {
 
   const stats = [
     {
-      count: 400,
-      text: "Team member Financial planners help people about wtoio invest",
+      count: 515329,
+      text: "Total User",
     },
     {
-      count: 80,
-      text: "Team member Financial planners help people about wtoio invest",
+      count: 798,
+      text: "Total Offer",
     },
     {
-      count: 10,
-      text: "Team member Financial planners help people about wtoio invest",
+      count: 177804,
+      text: "Offer Completed",
     },
     {
-      count: 40,
-      text: "Team member Financial planners help people about wtoio invest",
+      count: 242580,
+      text: "Paid Out",
     },
   ];
 
   return (
-    <div>
-      <div>
-        <h2 className="text-4xl font-bold text-center">Our Stats</h2>
-      </div>
+    <div className="bg-secondaryColor py-5">
+      {/* <div>
+        <h2 className="text-4xl font-bold text-center text-white">Our Stats</h2>
+      </div> */}
       <div
         className="grid grid-cols-1 sm:grid-cols-2 gap-8 px-8 py-20"
         ref={ref}
       >
         {stats.map((stat, index) => (
           <div key={index} className="text-center text-gray-800 font-sans">
-            <div className="text-5xl font-bold text-blue-900">
-              {inView ? <CountUp start={0} end={stat.count} duration={2} /> : 0}
-              k+
-            </div>
-            <p className="mt-2 text-sm font-medium leading-relaxed">
+            <p className="mt-2 text-4xl font-bold leading-relaxed text-white">
               {stat.text}
             </p>
+            <div className="text-4xl font-bold text-buttonBackground">
+            {stat.text === "Paid Out" ? "$" : ""}
+              {inView ? <CountUp start={0} end={stat.count} duration={2} /> : 0}
+             {stat.text === "Paid Out" ? "+" : "+"}
+              
+            </div>
+            
           </div>
         ))}
       </div>

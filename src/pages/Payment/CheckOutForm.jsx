@@ -739,7 +739,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
       <p className="text-gray-400 text-sm text-right">100 CZ = $1</p>
       <div className="xl:max-w-[80%] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6  gap-4 mt-6">
         <div
-          className="p-6 py-10 bg-[#259CDF] border border-gray-700 rounded-lg  cursor-pointer text-center flex flex-col items-center justify-center gap-3"
+          className="p-6 py-10 bg-[#259CDF] border border-gray-700 rounded-lg  cursor-pointer text-center flex flex-col items-center justify-center gap-3 h-92"
           onClick={toggleModal} // Open modal on click
         >
           <img
@@ -756,9 +756,9 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           </p>
         </div>
         {/* Other payment options */}
-        <div>
+        
           <div
-            className="bg-[#F9A540] p-6 py-10 border border-gray-700 rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3"
+            className="bg-[#F9A540] p-6 py-10 border border-gray-700 rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3 h-92"
             onClick={handleCryptoPayment}
           >
             <img
@@ -784,10 +784,10 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
               onSubmit={handleCryptoSubmit}
             />
           )}
-        </div>
+       
 
         <div
-          className="bg-[#757CBE] p-6 py-10 border border-gray-700 rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3"
+          className="bg-[#757CBE] p-6 py-10 border border-gray-700 rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3 h-92"
           onClick={handleEthereumPayment}
         >
           <img
@@ -813,7 +813,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         )}
         {/* litecoin payment  */}
         <div
-          className="bg-[#A6A9AA] p-6 py-10 border border-gray-700 rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3"
+          className="bg-[#A6A9AA] p-6 py-10 border border-gray-700 rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3 h-92"
           onClick={handleLitecoinPayment}
         >
           <img
@@ -846,7 +846,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           />
         )}
         {/* stake payment  */}
-        <div className="relative bg-[#31414B] p-6 py-10 border border-gray-700 rounded-lg cursor-not-allowed text-center flex flex-col items-center justify-center gap-3 opacity-50">
+        <div className="relative bg-[#31414B] p-6 py-10 border border-gray-700 rounded-lg cursor-not-allowed text-center flex flex-col items-center justify-center gap-3 opacity-50 h-92">
           <img
             src="https://i.ibb.co.com/Bq95hgQ/stake.png"
             alt="Cash with Stake"
@@ -865,7 +865,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           </div>
         </div>
 
-        <div className="relative bg-[#F7C97A] p-6 py-10 border border-gray-700 rounded-lg cursor-not-allowed text-center flex flex-col items-center justify-center gap-3 opacity-50">
+        <div className="relative bg-[#F7C97A] p-6 py-10 border border-gray-700 rounded-lg cursor-not-allowed text-center flex flex-col items-center justify-center gap-3 opacity-50 h-92">
           <img
             src="https://i.ibb.co.com/7JNd9f4/dogecoin.png"
             alt="Cash with Dogecoin"

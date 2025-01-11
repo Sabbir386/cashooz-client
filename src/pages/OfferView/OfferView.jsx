@@ -108,7 +108,7 @@ const OfferView = () => {
   return (
     <>
     <div>
-      <div className="min-h-screen">
+      <div className={`${networkOffers.length > 0 ? 'min-h-screen' : 'auto'}`}>
         {networkOffers.length > 0 ? (
           networkOffers.map((networkOffer, idx) => (
             <div key={idx} className="my-8">
@@ -213,7 +213,7 @@ const OfferView = () => {
             </div>
           ))
         ) : (
-          <p>No offers available.</p>
+          <p className="text-center text-red-400">No offers available...</p>
         )}
       </div>
 

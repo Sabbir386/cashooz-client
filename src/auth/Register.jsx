@@ -184,7 +184,7 @@ const Register = () => {
   };
   // console.log(refId)
   return (
-    <div className="bg-secondaryColor h-screen w-full flex justify-center items-center">
+    <div className="bg-secondaryColor min-h-screen w-full flex justify-center items-center mt-20">
       <div className="bg-cardBackground w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded-md">
         <div className="w-full md:w-1/2 hidden md:flex flex-col justify-center items-center text-white">
           <h1 className="text-3xl">Hello</h1>
@@ -199,8 +199,8 @@ const Register = () => {
           {/* <h3 className="text-3xl font-bold text-buttonBackground mb-4">
             REGISTER
           </h3> */}
-          <div className="flex flex-col items-start p-4  rounded-md bg-white w-80">
-            <div className="w-full flex justify-between">
+          <div className="flex flex-col items-start p-4  rounded-md bg-white w-full">
+            <div className="w-full flex flex-wrap justify-between">
               <div className="text-xl font-semibold">Join for free!</div>
               <div className="text-green-600 text-xl font-bold bg-green-200 px-3 py-1 rounded">
                 500 CZ Bonus
