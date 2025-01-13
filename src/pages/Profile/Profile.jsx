@@ -608,7 +608,7 @@ const Profile = () => {
               src={
                 userData?.data?.profileImg
                   ? userData.data.profileImg
-                  : "https://i.ibb.co.com/4Fy4ptP/robot.png"
+                  : "https://i.ibb.co.com/ckfZGJD/avatar.jpg"
               }
               alt="Profile"
               className="w-24 h-24 rounded-full object-cover"

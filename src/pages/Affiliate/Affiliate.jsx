@@ -153,7 +153,7 @@ const Affiliate = () => {
               />
             ) : (
               <img
-                src={'https://i.ibb.co.com/4Fy4ptP/robot.png'}
+                src={'https://i.ibb.co.com/ckfZGJD/avatar.jpg'}
                 alt="User Profile"
                 className="rounded-full h-full w-full object-cover"
               />
@@ -162,7 +162,7 @@ const Affiliate = () => {
           </div>
 
           <h3 className="mt-4 text-xl font-semibold">
-            {userData?.data?.name || "Guest"}
+            {userData?.data?.name || <div className="border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full w-5 h-5 animate-spin"></div>}
           </h3>
           <div className="text-green-300 mt-1 text-center">
             You'll get 15% of your friend's task reward as referral commission

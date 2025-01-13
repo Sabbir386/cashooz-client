@@ -54,7 +54,7 @@ const Hero = () => {
       description: "Test apps and games, answer surveys, and earn points to redeem for rewards and cash.",
       link: "/register",
       rightImage:
-        "https://i.ibb.co.com/LZXSC9P/The-Little-Things-Business-Planning.png",
+        "https://i.ibb.co.com/TW5gTCk/3-01.png",
     },
     {
       id: 2,
@@ -64,7 +64,7 @@ const Hero = () => {
       subtitle: "CASHOOZ",
       description: "Watch videos and get paid for your time, enjoying content while earning extra cash.",
       link: "/register",
-      rightImage: "https://i.ibb.co.com/nrDjzdN/Humaaans-2-Characters.png",
+      rightImage: "https://i.ibb.co.com/tmqgMm4/2-01.png",
     },
     {
       id: 3,
@@ -74,7 +74,7 @@ const Hero = () => {
       subtitle: "CASHOOZ",
       description: " Complete simple tasks like data entry, surveys, or testing apps to earn money and rewards.",
       link: "/register",
-      rightImage: "https://i.ibb.co.com/ZLGm4Jn/Humaaans-Friend-Meeting.png",
+      rightImage: "https://i.ibb.co.com/pxPShpd/1-01.png",
     },
     {
       id: 4,
@@ -84,7 +84,7 @@ const Hero = () => {
       subtitle: "CASHOOZ",
       description: "Access offers that let anyone claim free money or rewards through easy online tasks.",
       link: "/register",
-      rightImage: "https://i.ibb.co.com/ZLGm4Jn/Humaaans-Friend-Meeting.png",
+      rightImage: "https://i.ibb.co.com/JkdhHv8/4-01.png",
     },
     {
       id: 5,
@@ -94,7 +94,7 @@ const Hero = () => {
       subtitle: "CASHOOZ",
       description: "Earn cashback on purchases when shopping through certain websites and apps.",
       link: "/register",
-      rightImage: "https://i.ibb.co.com/ZLGm4Jn/Humaaans-Friend-Meeting.png",
+      rightImage: "https://i.ibb.co.com/wrv2stH/6-01.png",
     },
     {
       id: 6,
@@ -104,12 +104,12 @@ const Hero = () => {
       subtitle: "CASHOOZ",
       description: "The more tasks you complete, the more money you can make through various platforms and offers.",
       link: "/register",
-      rightImage: "https://i.ibb.co.com/ZLGm4Jn/Humaaans-Friend-Meeting.png",
+      rightImage: "https://i.ibb.co.com/tXqzdP8/5-01.png",
     },
   ];
   const [activeIndex, setActiveIndex] = useState(0);
   return (
-    <div className="h-[80vh] md:h-screen flex items-center justify-center bg-gray-50">
+    <div className="h-[70vh] md:h-screen flex items-center justify-center bg-gray-50">
       <Swiper
         modules={[Autoplay, Navigation, Pagination, Scrollbar, A11y]}
         spaceBetween={0}
@@ -180,7 +180,7 @@ const Hero = () => {
                   <div className="hidden md:block">
                     <motion.div
                       key={slide.id} // Ensures animation runs on each slide change
-                      className="w-72 h-auto ml-auto"
+                      className="w-full ml-auto"
                       initial="hidden"
                       animate={activeIndex === index ? "visible" : "hidden"}
                       variants={fadeImage}
@@ -188,7 +188,7 @@ const Hero = () => {
                       <img
                         src={slide.rightImage}
                         alt="Decoration"
-                        className="w-auto object-cover"
+                        className="w-full object-cover"
                       />
                     </motion.div>
                   </div>
