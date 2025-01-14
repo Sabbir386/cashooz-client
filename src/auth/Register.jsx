@@ -7,13 +7,14 @@ import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { UAParser } from "ua-parser-js";
 import { useSearchParams } from "react-router-dom";
-
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 const Register = () => {
   const navigate = useNavigate();
   const [registration] = useRegistrationMutation();
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [deviceInfo, setDeviceInfo] = useState("");
+  const [deviceFingerprint, setDeviceFingerprint] = useState("");
   const [deviceType, setDeviceType] = useState("");
   const [OSdeviceType, setOSdeviceType] = useState("");
   const [country, setCountry] = useState("");
@@ -34,59 +35,35 @@ const Register = () => {
       const userAgent = navigator.userAgent.toLowerCase();
       let deviceName = "Unknown Device";
 
-      if (userAgent.includes("iphone")) {
-        deviceName = "iPhone";
-      } else if (userAgent.includes("ipad")) {
-        deviceName = "iPad";
-      } else if (userAgent.includes("samsung")) {
-        deviceName = "Samsung";
-      } else if (
-        userAgent.includes("xiaomi") ||
-        userAgent.includes("redmi") ||
-        userAgent.includes("mi")
-      ) {
-        deviceName = "Xiaomi";
-      } else if (userAgent.includes("huawei")) {
-        deviceName = "Huawei";
-      } else if (userAgent.includes("pixel")) {
-        deviceName = "Google Pixel";
-      } else if (userAgent.includes("oneplus")) {
-        deviceName = "OnePlus";
-      } else if (userAgent.includes("nokia")) {
-        deviceName = "Nokia";
-      } else if (userAgent.includes("sony")) {
-        deviceName = "Sony";
-      } else if (userAgent.includes("lg")) {
-        deviceName = "LG";
-      } else if (userAgent.includes("htc")) {
-        deviceName = "HTC";
-      } else if (userAgent.includes("motorola")) {
-        deviceName = "Motorola";
-      }
+      if (userAgent.includes("iphone")) deviceName = "iPhone";
+      else if (userAgent.includes("ipad")) deviceName = "iPad";
+      else if (userAgent.includes("samsung")) deviceName = "Samsung";
+      else if (userAgent.includes("xiaomi")) deviceName = "Xiaomi";
+      else if (userAgent.includes("huawei")) deviceName = "Huawei";
+      else if (userAgent.includes("pixel")) deviceName = "Google Pixel";
+      else if (userAgent.includes("oneplus")) deviceName = "OnePlus";
+      else if (userAgent.includes("nokia")) deviceName = "Nokia";
+      else if (userAgent.includes("sony")) deviceName = "Sony";
+      else if (userAgent.includes("lg")) deviceName = "LG";
+      else if (userAgent.includes("htc")) deviceName = "HTC";
+      else if (userAgent.includes("motorola")) deviceName = "Motorola";
 
       let deviceInfo = `OS: ${os}, Device Type: ${deviceType}, Device Name: ${deviceName}, Browser: ${browser}`;
 
       try {
         const ipResponse = await fetch("https://api.ipify.org?format=json");
-        if (!ipResponse.ok) {
-          throw new Error("Network response was not ok");
-        }
         const ipData = await ipResponse.json();
         const ip = ipData.ip;
-        setIP(ip); // Set IP in state
+        setIP(ip);
 
         const locationResponse = await fetch(`https://ipapi.co/${ip}/json/`);
-        if (!locationResponse.ok) {
-          throw new Error("Network response was not ok");
-        }
         const locationData = await locationResponse.json();
         const country = locationData.country_name;
         const countryCode = locationData.country_code;
 
         deviceInfo += `, IP: ${ip}, Country: ${country}, CountryCode: ${countryCode}`;
-
-        setCountry(country); // Set Country in state
-        setCountryCode(countryCode); // Set Country Code in state
+        setCountry(country);
+        setCountryCode(countryCode);
       } catch (error) {
         console.error("Error fetching IP information:", error);
       }
@@ -95,14 +72,19 @@ const Register = () => {
       setDeviceType(deviceType);
     };
 
+    const generateDeviceFingerprint = async () => {
+      const fp = await FingerprintJS.load();
+      const result = await fp.get();
+      setDeviceFingerprint(result.visitorId);
+    };
+
     getDeviceInfo();
+    generateDeviceFingerprint();
 
     const refIdFromURL = searchParams.get("refId");
-    console.log(refIdFromURL); // Extract refId from the URL
-    if (refIdFromURL) {
-      setrefId(refIdFromURL);
-    }
+    if (refIdFromURL) setrefId(refIdFromURL);
   }, [searchParams]);
+
 
   if (deviceInfo) {
     console.log("Device Info:", deviceInfo);
@@ -125,6 +107,11 @@ const Register = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
+    if (!deviceFingerprint) {
+      toast.error("Device fingerprint generation failed.");
+      return;
+    }
+  console.log("deviceFingerprint",deviceFingerprint);
     const toastId = toast.loading("User Registering...");
     const normalUser = {
       password: data.password,
@@ -132,6 +119,8 @@ const Register = () => {
         name: data.name,
         email: data.email,
         ip: ip || "",
+        device: deviceInfo || "",
+        deviceFingerprint: deviceFingerprint || "",
         country: country || "USA",
         designation: "user",
         username: "piterson",
@@ -165,14 +154,15 @@ const Register = () => {
         console.error("Error:", errorMessage);
         return; // Exit the function here to avoid further processing
       }
+      // Success handling
+    if (user?.data) {
+      toast.success("Registration successful", { id: toastId, duration: 2000 });
 
-      // Only log user and show success if registration was successful
-      console.log(user);
-      toast.success("Registration successful", {
-        id: toastId,
-        duration: 2000,
-      });
-      navigate("/login");
+      // Add slight delay before navigation for a smooth user experience
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    }
     } catch (error) {
       // Handle unexpected errors from the registration process
       toast.error("Something went wrong. Please try again later.", {
