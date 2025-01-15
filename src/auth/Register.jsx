@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { UAParser } from "ua-parser-js";
 import { useSearchParams } from "react-router-dom";
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 const Register = () => {
   const navigate = useNavigate();
   const [registration] = useRegistrationMutation();
@@ -22,6 +22,7 @@ const Register = () => {
   const [CountryCode, setCountryCode] = useState("");
   const [refId, setrefId] = useState("");
   const [searchParams] = useSearchParams();
+  const [showRequirement, setShowRequirement] = useState(false);
   // device tracking ip address
   useEffect(() => {
     const getDeviceInfo = async () => {
@@ -85,7 +86,6 @@ const Register = () => {
     if (refIdFromURL) setrefId(refIdFromURL);
   }, [searchParams]);
 
-
   if (deviceInfo) {
     console.log("Device Info:", deviceInfo);
     console.log("IP:", ip);
@@ -111,7 +111,7 @@ const Register = () => {
       toast.error("Device fingerprint generation failed.");
       return;
     }
-  console.log("deviceFingerprint",deviceFingerprint);
+    console.log("deviceFingerprint", deviceFingerprint);
     const toastId = toast.loading("User Registering...");
     const normalUser = {
       password: data.password,
@@ -155,14 +155,17 @@ const Register = () => {
         return; // Exit the function here to avoid further processing
       }
       // Success handling
-    if (user?.data) {
-      toast.success("Registration successful", { id: toastId, duration: 2000 });
+      if (user?.data) {
+        toast.success("Registration successful", {
+          id: toastId,
+          duration: 2000,
+        });
 
-      // Add slight delay before navigation for a smooth user experience
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
-    }
+        // Add slight delay before navigation for a smooth user experience
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      }
     } catch (error) {
       // Handle unexpected errors from the registration process
       toast.error("Something went wrong. Please try again later.", {
@@ -198,29 +201,26 @@ const Register = () => {
             </div>
           </div>
           <div className="mt-4 flex items-start my-4">
-              <div className="mr-2 text-green-500 text-2xl">➜</div>
-              <input
-                type="checkbox"
-                checked={isChecked}
-                onChange={handleCheckboxChange}
-                className="mr-2 mt-1 h-5 w-5 border-gray-300 rounded"
-              />
-              <div className="text-xs text-gray-700">
-                I agree to the{" "}
-                <Link to="/termsncondition" className="text-blue-500 underline">
-                  Terms of Use
-                </Link>{" "}
-                and to receive marketing email messages from Cashooz, and I
-                accept the{" "}
-                <Link
-                  to={"/privecy-policy"}
-                  className="text-blue-500 underline"
-                >
-                  Privacy Policy
-                </Link>
-                .
-              </div>
+            <div className="mr-2 text-green-500 text-2xl">➜</div>
+            <input
+              type="checkbox"
+              checked={isChecked}
+              onChange={handleCheckboxChange}
+              className="mr-2 mt-1 h-5 w-5 border-gray-300 rounded"
+            />
+            <div className="text-xs text-gray-700">
+              I agree to the{" "}
+              <Link to="/termsncondition" className="text-blue-500 underline">
+                Terms of Use
+              </Link>{" "}
+              and to receive marketing email messages from Cashooz, and I accept
+              the{" "}
+              <Link to={"/privecy-policy"} className="text-blue-500 underline">
+                Privacy Policy
+              </Link>
+              .
             </div>
+          </div>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="w-full flex flex-col justify-center"
@@ -268,14 +268,16 @@ const Register = () => {
                     value: 8,
                     message: "Password must be at least 8 characters",
                   },
-                  // pattern: {
-                  //   value:
-                  //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                  //   message:
-                  //     "Password must contain an uppercase letter, a number, and a special character",
-                  // },
+                  pattern: {
+                    value:
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/,
+                    message:
+                      "Password must contain a lowercase letter, an uppercase letter, a number, and a special character",
+                  },
                 })}
                 className="w-full p-3 pr-10 rounded border placeholder-gray-400 focus:outline-none focus:border-cardBackground text-cardBackground"
+                onFocus={() => setShowRequirement(true)} // Show the requirement when input is focused
+                onBlur={() => setShowRequirement(false)} // Optionally hide it when the user leaves the input
               />
               <span
                 className="absolute right-3 top-7 transform -translate-y-1/2 cursor-pointer text-gray-500"
@@ -288,10 +290,13 @@ const Register = () => {
                   {errors.password.message}
                 </p>
               )}
-              <p className="text-sm mt-2 text-gray-500">
-                Password must be at least 8 characters long, contain an
-                uppercase letter, a number, and a special character.
-              </p>
+              {showRequirement && (
+                <p className="text-sm mt-2 text-gray-500">
+                  Password must be at least 8 characters long, contain a
+                  lowercase letter, an uppercase letter, a number, and a special
+                  character (e.g., #, !, @, etc.).
+                </p>
+              )}
             </div>
 
             <div className="mb-4">
@@ -311,7 +316,6 @@ const Register = () => {
               />
             </div>
 
-           
             <button
               disabled={!isChecked}
               className={`font-bold text-white uppercase focus:outline-none rounded p-3 ${

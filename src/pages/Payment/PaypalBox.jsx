@@ -6,6 +6,7 @@ import { verifyToken } from "../../utils/verifyToken";
 import { useAppSelector } from "../../redux/features/hooks";
 import { useCurrentToken } from "../../redux/features/auth/authSlice";
 import CustomSwal from "../../customSwal/customSwal";
+import { useUserTotalRewardsQuery } from "../../rewards/rewardApi";
 
 const PaypalBox = () => {
   const location = useLocation();
@@ -18,6 +19,13 @@ const PaypalBox = () => {
     user = verifyToken(token);
     // console.log(user);
   }
+  const {
+    data: totalRewards,
+    error,
+    isLoading: isTotalRewardsLoading,
+  } = useUserTotalRewardsQuery(user?.objectId, {
+    skip: user?.role !== "user",
+  });
   // Mutation hook for the createWithdrawal API
   const [createWithdrawal, { isLoading }] = useCreateWithdrawalMutation();
   const {
@@ -29,6 +37,50 @@ const PaypalBox = () => {
   // Handle form submission
   const handleWithdraw = async (e) => {
     e.preventDefault();
+
+    const myCurrentBalance = Math.floor(
+      (totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal) / 100
+    );
+
+    if (myCurrentBalance <= 0) {
+      CustomSwal.fire({
+        title: "You don't have enough balance",
+      });
+      return;
+    }
+
+    if (myCurrentBalance < 10) {
+      CustomSwal.fire({
+        title:
+          totalRewards?.totalWithdrawal > 0
+            ? "You need to earn $10 to make your withdrawal"
+            : "You need to earn $20 to make your first withdrawal",
+      });
+      return;
+    }
+
+    const amount = selectedAmount;
+    if (totalRewards?.totalWithdrawal > 0) {
+      if (amount > myCurrentBalance) {
+        CustomSwal.fire({
+          title: "Withdraw amount must be smaller than the current balance",
+        });
+        return;
+      }
+    } else {
+      if (myCurrentBalance < 20) {
+        CustomSwal.fire({
+          title: "You need to earn $20 to make your first withdrawal",
+        });
+        return;
+      }
+      if (amount > myCurrentBalance) {
+        CustomSwal.fire({
+          title: "Withdraw amount must be smaller than the current balance",
+        });
+        return;
+      }
+    }
 
     // Sample backend structure
     const requestBody = {
@@ -42,7 +94,7 @@ const PaypalBox = () => {
       networkType: "paypal",
       description: `Withdrawal request for ${method} payout`,
       method: "paypal",
-      amount: selectedAmount*100,
+      amount: selectedAmount * 100,
       transactionId: "TXN123456789",
       invoiceId: "",
       country: userData?.data?.country,
@@ -52,13 +104,14 @@ const PaypalBox = () => {
         processedAt: null,
       },
     };
+
     console.log(requestBody);
     try {
       // Send the withdrawal request
       await createWithdrawal(requestBody).unwrap();
       CustomSwal.fire(
         "Success",
-        "Your withdrawal request has been submitted.stay Tuned ! you will got notified within 24 hours.",
+        "Your withdrawal request has been submitted. Stay tuned! You will be notified within 24 hours.",
         "success"
       );
     } catch (error) {

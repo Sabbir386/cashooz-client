@@ -612,23 +612,15 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
 
     setIsProcessing(false);
   };
+  let myCurrentBalance = Math.floor(
+    (totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal) / 100
+  );
   // Handle PayPal Payment
   const handlePaypalPayment = async ({ selectedAmount, method }) => {
-    console.log(selectedAmount, method);
+    // console.log(selectedAmount, method);
     navigate("/dashboard/payment-paypal", {
       state: { selectedAmount, method },
     });
-    // try {
-    //   const orderResponse = await createPaypalOrder().unwrap();
-
-    //   if (orderResponse.success && orderResponse.orderUrl) {
-    //     window.location.href = orderResponse.orderUrl; // Redirect to PayPal for approval
-    //   } else {
-    //     console.error("Failed to create PayPal order");
-    //   }
-    // } catch (error) {
-    //   console.error("Error creating PayPal order:", error);
-    // }
   };
 
   // Toggle Modal
@@ -756,35 +748,32 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           </p>
         </div>
         {/* Other payment options */}
-        
-          <div
-            className="bg-[#F9A540] p-6 py-10 border border-gray-700 rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3 h-92"
-            onClick={handleCryptoPayment}
-          >
-            <img
-              src="https://i.ibb.co.com/4WM0hGp/bitcoin.png"
-              alt="Cash with Bitcoin"
-              className="w-16 h-16 mb-3"
-            />
-            <p className="text-white text-xl font-semibold">
-              Cash with Bitcoin
-            </p>
-            <p className="text-gray-200 text-sm">
-              Amount:{" "}
-              {Math.floor(
-                totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal
-              ) / 100}
-            </p>
-          </div>
 
-          {/* Render the CryptoModal */}
-          {isCryptoModalOpen && (
-            <CryptoModal
-              onClose={() => setCryptoModalOpen(false)}
-              onSubmit={handleCryptoSubmit}
-            />
-          )}
-       
+        <div
+          className="bg-[#F9A540] p-6 py-10 border border-gray-700 rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3 h-92"
+          onClick={handleCryptoPayment}
+        >
+          <img
+            src="https://i.ibb.co.com/4WM0hGp/bitcoin.png"
+            alt="Cash with Bitcoin"
+            className="w-16 h-16 mb-3"
+          />
+          <p className="text-white text-xl font-semibold">Cash with Bitcoin</p>
+          <p className="text-gray-200 text-sm">
+            Amount:{" "}
+            {Math.floor(
+              totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal
+            ) / 100}
+          </p>
+        </div>
+
+        {/* Render the CryptoModal */}
+        {isCryptoModalOpen && (
+          <CryptoModal
+            onClose={() => setCryptoModalOpen(false)}
+            onSubmit={handleCryptoSubmit}
+          />
+        )}
 
         <div
           className="bg-[#757CBE] p-6 py-10 border border-gray-700 rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3 h-92"
@@ -959,26 +948,35 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
               <div className="text-gray-400 text-sm mr-4">Price</div>
               <div className="text-white text-lg">${selectedAmount || 0}</div>
             </div>
-            <button
-              onClick={() =>
-                handlePaypalPayment({
-                  selectedAmount: selectedAmount,
-                  method: "paypal",
-                })
-              }
-              className={`bg-[#4ade80] text-white font-semibold py-2 px-6 rounded-lg transition duration-300 ${
-                !selectedAmount
-                  ? "opacity-50 cursor-not-allowed"
-                  : "hover:bg-[#32a562]"
-              }`}
-              style={{
-                minWidth: "150px",
-                textAlign: "center",
-              }}
-              disabled={!selectedAmount}
-            >
-              Withdraw
-            </button>
+            <div>
+      {/* Display "Insufficient Balance" message if selectedAmount > myCurrentBalance */}
+      {selectedAmount > myCurrentBalance && (
+        <p className="text-red-500 text-sm mb-2">
+          Insufficient Balance.
+        </p>
+      )}
+      
+      <button
+        onClick={() =>
+          handlePaypalPayment({
+            selectedAmount: selectedAmount,
+            method: "paypal",
+          })
+        }
+        className={`bg-[#4ade80] text-white font-semibold py-2 px-6 rounded-lg transition duration-300 ${
+          selectedAmount > myCurrentBalance || !selectedAmount
+            ? "opacity-50 cursor-not-allowed"
+            : "hover:bg-[#32a562]"
+        }`}
+        style={{
+          minWidth: "150px",
+          textAlign: "center",
+        }}
+        disabled={selectedAmount > myCurrentBalance || !selectedAmount} // Disable if selectedAmount > balance or no amount selected
+      >
+        Withdraw
+      </button>
+    </div>
           </div>
         </div>
       </Modal>
