@@ -13,6 +13,7 @@ import Loader from "../../components/Loader";
 import { useOfferCompletedRewardsMutation } from "../../rewards/rewardApi";
 import CustomSwal from "../../customSwal/customSwal";
 import { HiOutlineStar } from "react-icons/hi";
+import OfferPartners from "./OfferPartners";
 
 const OfferView = () => {
   const [networkOffers, setNetworkOffers] = useState([]);
@@ -24,9 +25,10 @@ const OfferView = () => {
   const token = useAppSelector(useCurrentToken);
   const user = token ? verifyToken(token) : null;
 
-  const { data: singleOffer } = useSingleOfferQuery(
-    selectedOffer?._id || params.id
-  );
+  // const { data: singleOffer } = useSingleOfferQuery(
+  //   selectedOffer?._id || params.id
+  // );
+  // console.log("singleOffer", singleOffer);
   const {
     data: offers,
     isLoading,
@@ -338,46 +340,7 @@ const OfferView = () => {
       )}
     </div>
     {/* Offer Partners Section */}
-    <div className="mt-10">
-        <h3 className="text-xl md:text-2xl font-semibold text-white text-left flex items-center">
-          Offer Partners
-        </h3>
-        <div className="grid gap-3 mt-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7">
-          {[...Array(7)].map((_, index) => (
-            <div
-              key={index}
-              onClick={() =>
-                window.open("https://freecash.com/w/bitlabs", "_blank")
-              }
-              className="relative h-64 rounded-xl shadow-lg flex flex-col justify-center items-center text-center text-white transition-transform duration-300 hover:scale-105 cursor-pointer"
-            >
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-[#1f1f2e] to-[#0f0f1f] transition-filter duration-300 hover:blur-sm z-0"></div>
-              <div className="absolute inset-0 flex justify-center items-center z-20 opacity-0 hover:opacity-100 transition-opacity duration-300">
-                <div className="bg-green-600 rounded-full p-3">
-                  <FaPlay className="text-white text-lg" />
-                </div>
-              </div>
-              <div className="relative z-30">
-                <p className="text-sm transition-transform duration-300 transform hover:scale-110">
-                  View surveys
-                </p>
-                <h5 className="font-bold mt-2 transition-transform duration-300 transform hover:scale-110">
-                  Prime
-                </h5>
-              </div>
-              <div className="absolute bottom-0 w-full py-3 text-center text-white font-semibold capitalize text-xs md:text-base z-30">
-                <div className="w-full text-center flex justify-center mt-2">
-                  <HiOutlineStar style={{ color: "#01D679" }} />
-                  <HiOutlineStar style={{ color: "#01D676" }} />
-                  <HiOutlineStar style={{ color: "#01D676" }} />
-                  <HiOutlineStar style={{ color: "#01D676" }} />
-                  <HiOutlineStar style={{ color: "#01D676" }} />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+   <OfferPartners></OfferPartners>
     </>
   );
 };

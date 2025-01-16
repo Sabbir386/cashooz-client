@@ -87,73 +87,43 @@ const OfferList = () => {
     const getDeviceInfo = async () => {
       const parser = new UAParser();
       const result = parser.getResult();
-
+    
       const os = result.os.name || "Unknown OS";
       let deviceType = result.device.type || "desktop";
       const browser = result.browser.name || "Unknown Browser";
-
+    
       const userAgent = navigator.userAgent.toLowerCase();
       let deviceName = "Unknown Device";
-
-      if (userAgent.includes("iphone")) {
-        deviceName = "iPhone";
-      } else if (userAgent.includes("ipad")) {
-        deviceName = "iPad";
-      } else if (userAgent.includes("samsung")) {
-        deviceName = "Samsung";
-      } else if (
-        userAgent.includes("xiaomi") ||
-        userAgent.includes("redmi") ||
-        userAgent.includes("mi")
-      ) {
-        deviceName = "Xiaomi";
-      } else if (userAgent.includes("huawei")) {
-        deviceName = "Huawei";
-      } else if (userAgent.includes("pixel")) {
-        deviceName = "Google Pixel";
-      } else if (userAgent.includes("oneplus")) {
-        deviceName = "OnePlus";
-      } else if (userAgent.includes("nokia")) {
-        deviceName = "Nokia";
-      } else if (userAgent.includes("sony")) {
-        deviceName = "Sony";
-      } else if (userAgent.includes("lg")) {
-        deviceName = "LG";
-      } else if (userAgent.includes("htc")) {
-        deviceName = "HTC";
-      } else if (userAgent.includes("motorola")) {
-        deviceName = "Motorola";
-      }
-
+    
+      if (userAgent.includes("iphone")) deviceName = "iPhone";
+      else if (userAgent.includes("ipad")) deviceName = "iPad";
+      else if (userAgent.includes("samsung")) deviceName = "Samsung";
+      // Add other device checks...
+    
       let deviceInfo = `OS: ${os}, Device Type: ${deviceType}, Device Name: ${deviceName}, Browser: ${browser}`;
-
+    
       try {
-        const ipResponse = await fetch("https://api.ipify.org?format=json");
-        if (!ipResponse.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const ipData = await ipResponse.json();
-        const ip = ipData.ip;
-
-        const locationResponse = await fetch(`https://ipapi.co/${ip}/json/`);
-        if (!locationResponse.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const locationData = await locationResponse.json();
-        const country = locationData.country_name;
-        const countryCode = locationData.country_code;
-
+        // Use an alternative API or your proxy
+        const response = await fetch("https://get.geojs.io/v1/ip/geo.json");
+        if (!response.ok) throw new Error("Failed to fetch geolocation data");
+    
+        const data = await response.json();
+        const ip = data.ip;
+        const country = data.country || "Unknown Country";
+        const countryCode = data.country_code || "XX";
+    
         deviceInfo += `, IP: ${ip}, Country: ${country}, CountryCode: ${countryCode}`;
         setCountry(country);
-        setCountryCode(CountryCode);
+        setCountryCode(countryCode);
       } catch (error) {
         console.error("Error fetching IP information:", error);
       }
-
+    
       setDeviceInfo(deviceInfo);
       setDeviceType(deviceType);
       setOSdeviceType(os);
     };
+    
 
     if (offersForAdmin) {
       setData(offersForAdmin.data);
@@ -165,9 +135,7 @@ const OfferList = () => {
     getDeviceInfo();
   }, [token, offersForAdmin, offers]);
 
-  if (deviceInfo) {
-    // console.log(OSdeviceType);
-  }
+  
   // const [createCompletedOffer] = useCreateCompletedOfferMutation();
   const handleDeleteOffer = async (_id) => {
     // console.log(_id);

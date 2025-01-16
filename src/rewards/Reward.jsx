@@ -232,10 +232,10 @@ const Reward = () => {
               <div className="text-white text-2xl">Reward: 5 CZ</div>
             )}
             {!userReward ? (
-              <div class="flex flex-row gap-2 py-5">
-                <div class="w-4 h-4 rounded-full bg-buttonBackground animate-bounce"></div>
-                <div class="w-4 h-4 rounded-full bg-buttonBackground animate-bounce [animation-delay:-.3s]"></div>
-                <div class="w-4 h-4 rounded-full bg-buttonBackground animate-bounce [animation-delay:-.5s]"></div>
+              <div className="flex flex-row gap-2 py-5">
+                <div className="w-4 h-4 rounded-full bg-buttonBackground animate-bounce"></div>
+                <div className="w-4 h-4 rounded-full bg-buttonBackground animate-bounce [animation-delay:-.3s]"></div>
+                <div className="w-4 h-4 rounded-full bg-buttonBackground animate-bounce [animation-delay:-.5s]"></div>
               </div>
             ) : idx + 1 <= userReward?.claimCount ||
               idx + 1 > userReward?.claimCount + 1 ? (
