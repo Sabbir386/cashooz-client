@@ -14,7 +14,7 @@ export const createCompletedOfferApi = baseApi.injectEndpoints({
           points: points,
         },
       }),
-      invalidatesTags: ["completedOffer"],
+      invalidatesTags: ["completedOffer","networkOffers"],
     }),
 
     // Query for viewing completed offers by userId

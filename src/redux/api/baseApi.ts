@@ -88,6 +88,7 @@ export const baseApi = createApi({
     'SocialMediaPost',
     'Affiliate',
     "bonusReward",
+    "networkOffers",
 
 
   ],
