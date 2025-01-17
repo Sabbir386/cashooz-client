@@ -119,7 +119,7 @@ const LandingLayout = () => {
                   </Link>
                 </li> */}
                 <li className="mx-2 my-4 md:my-0">
-                <Link
+                  <Link
                     onClick={() => setOpen(!open)}
                     to={"/aboutus"}
                     className="text-base hover:text-buttonBackground text-white duration"

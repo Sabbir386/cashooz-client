@@ -22,7 +22,7 @@ export default function MapData() {
         </h2>
         <WorldMap
       color="#ffffff"
-      backgroundColor="#141523"
+      backgroundColor="#212134"
       value-suffix="people"
       size="lg"
       data={data}

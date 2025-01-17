@@ -27,6 +27,7 @@ import EditNetwork from "../pages/EditNetwork";
 import EditCategory from "../pages/EditCategory";
 import Landing from "../pages/Landing/Landing";
 import SurveyList from "../pages/SurveyList";
+import AllSurveyList from "../pages/AllSurveyList";
 // import DetailsPage from "../pages/DetailsPage/DetailsPage";
 import NotFound from "../pages/NotFound/NotFound";
 import AdvertiserRegister from "../auth/AdvertiserRegister";
@@ -67,7 +68,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/auth/forgot-password",
-    
+
         element: <ResetPasswod></ResetPasswod>,
       },
       {
@@ -94,10 +95,9 @@ export const router = createBrowserRouter([
         path: "/termsncondition",
         element: <TermsAndConditions></TermsAndConditions>,
       },
-      
-    ]
+    ],
   },
- 
+
   {
     path: "/dashboard",
     element: <RootLayout></RootLayout>,
@@ -347,6 +347,11 @@ export const router = createBrowserRouter([
         path: "/dashboard/survey-list",
         element: <SurveyList></SurveyList>,
       },
+      {
+        path: "/dashboard/survey-list/all",
+        element: <AllSurveyList></AllSurveyList>,
+      },
+
       {
         path: "/dashboard/rewards",
         element: <Reward></Reward>,

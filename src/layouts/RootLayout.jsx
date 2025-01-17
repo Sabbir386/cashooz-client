@@ -42,13 +42,11 @@ function RootLayout() {
     skip: user?.role !== "user",
   });
   console.log(totalRewards);
-    const {
-      data: userData,
-      isLoading: isUserLoading,
-      error: userError,
-    } = useSingleNormalUserQuery(user?.objectId);
-
-
+  const {
+    data: userData,
+    isLoading: isUserLoading,
+    error: userError,
+  } = useSingleNormalUserQuery(user?.objectId);
 
   useEffect(() => {
     if (token) {
@@ -103,7 +101,7 @@ function RootLayout() {
 
   return (
     <div className="flex">
-      <ScrollToTop/>
+      <ScrollToTop />
       <Sidebar />
       <main className="min-h-screen ml-0 md:ml-[16rem] flex-1 mx-auto py-4 w-5 md:w-[100% - 16rem] bg-primaryColor px-3 relative">
         <div
@@ -126,7 +124,11 @@ function RootLayout() {
                 ) : (
                   <span className="text-buttonBackground animate-pulse font-bold text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
                     {/* {totalRewards?.userTotalRewards || "0"} CZ  */}
-                    {Math.floor((totalRewards?.userTotalRewards-totalRewards?.totalWithdrawal) || 0)} CZ
+                    {Math.floor(
+                      totalRewards?.userTotalRewards -
+                        totalRewards?.totalWithdrawal || 0
+                    )}{" "}
+                    CZ
                   </span>
                 )}
               </>
@@ -142,7 +144,10 @@ function RootLayout() {
               {/* Profile Image */}
               <img
                 className="w-8 h-8 rounded-full object-cover"
-                src={userData?.data?.profileImg || 'https://i.ibb.co.com/ckfZGJD/avatar.jpg'} // Replace with your profile image URL
+                src={
+                  userData?.data?.profileImg ||
+                  "https://i.ibb.co.com/ckfZGJD/avatar.jpg"
+                } // Replace with your profile image URL
                 alt="Profile"
               />
               {/* Username */}

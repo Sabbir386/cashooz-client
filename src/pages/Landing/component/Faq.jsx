@@ -74,11 +74,12 @@ const Faq = () => {
                 {openIndex === index ? <FaChevronUp /> : <FaChevronDown />}
               </button>
               <div
-                className={`transition-all overflow-hidden ${
+                className={`transition-all overflow-y-auto ${
                   openIndex === index ? "max-h-40 p-4" : "max-h-0"
                 }`}
               >
-               <div className="text-white overflow-y-auto scroll-0" dangerouslySetInnerHTML={{ __html: faq.answer }} />
+               <div className="text-white " />
+               <p dangerouslySetInnerHTML={{ __html: faq.answer }} className="text-white"></p>
               </div>
             </div>
           ))}

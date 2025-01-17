@@ -9,9 +9,9 @@ const Earning = () => {
     { label: "10,000 POINTS = $100", bgColor: "bg-blue-500" },
   ];
   return (
-    <div className="relative bg-secondaryColor py-12">
+    <div className="relative bg-secondaryColor py-28">
       {/* Background Image with Overlay */}
-      <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/18066330/pexels-photo-18066330/free-photo-of-us-dollar-banknotes.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')] bg-cover bg-center before:absolute before:inset-0 before:bg-black before:opacity-50"></div>
+      <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/18066330/pexels-photo-18066330/free-photo-of-us-dollar-banknotes.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')] bg-cover bg-center before:absolute before:inset-0 before:bg-black before:opacity-75"></div>
 
       {/* Content Section */}
       <div className="relative text-center max-w-3xl mx-auto px-4">
@@ -23,9 +23,9 @@ const Earning = () => {
           <div className="flex flex-wrap justify-center gap-4 mt-6 px-4">
             <Link
               to={"/register"}
-              className="inline-block px-5 py-2 rounded-md "
+              className="inline-block px-5 py-2 rounded-md bg-buttonBackground text-white hover:bg-green-500 duration-75"
             >
-              <img src="https://i.ibb.co.com/x6RR2j5/giphy.gif" alt="" className="w-40"/>
+              Sign Up
             </Link>
            
           </div>

@@ -19,6 +19,7 @@ import { useCreateCompletedOfferMutation } from "./completedOfferApi";
 import { useSurveyCompletedMutation } from "../rewards/rewardApi";
 import CustomSwal from "../customSwal/customSwal";
 import OfferPartners from "./OfferView/OfferPartners";
+import { Link } from "react-router-dom";
 const SurveyList = () => {
   const [createCompletedOffer] = useCreateCompletedOfferMutation();
   const [surveyCompleted] = useSurveyCompletedMutation();
@@ -114,6 +115,18 @@ const SurveyList = () => {
           </h1>
         </div>
       </div>
+      <div className="flex items-center justify-between">
+            <h2 className="text-3xl font-bold text-white border-b-[1px] border-b-secondaryColor pb-4">
+            
+            </h2>
+            <Link
+              to="/dashboard/survey-list/all"
+              className="text-white flex justify-center items-center gap-3 hover:text-buttonBackground"
+            >
+              <span>View All</span>
+              <FaArrowRight />
+            </Link>
+          </div>
 
       {surveyOffers?.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-64 mb-8">
@@ -213,7 +226,6 @@ const SurveyList = () => {
       </div>
       {/* Survey Partners Section */}
       <div>
-       
         <OfferPartners></OfferPartners>
       </div>
     </div>

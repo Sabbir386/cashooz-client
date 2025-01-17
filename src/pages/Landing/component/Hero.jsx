@@ -177,10 +177,10 @@ const Hero = () => {
                   </div>
 
                   {/* Decorative Right Section with Fade-In */}
-                  <div className="hidden md:block">
+                  <div className="relative hidden md:block">
                     <motion.div
                       key={slide.id} // Ensures animation runs on each slide change
-                      className="w-full ml-auto"
+                      className="w-full ml-auto relative h-[500px]"
                       initial="hidden"
                       animate={activeIndex === index ? "visible" : "hidden"}
                       variants={fadeImage}
@@ -188,7 +188,12 @@ const Hero = () => {
                       <img
                         src={slide.rightImage}
                         alt="Decoration"
-                        className="w-full object-cover"
+                        className="w-1/2 h-400px object-cover absolute z-40 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" 
+                      />
+                      <img
+                        src={slide.rightImage}
+                        alt="Decoration"
+                        className="w-1/2 h-400px object-cover absolute z-50 top-[60%] left-[60%] -translate-x-[60%] -translate-y-[60%]" 
                       />
                     </motion.div>
                   </div>

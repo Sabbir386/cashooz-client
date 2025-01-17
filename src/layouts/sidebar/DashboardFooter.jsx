@@ -1,5 +1,10 @@
 import React from "react";
-import { FaFacebook, FaInstagramSquare, FaPinterestSquare, FaTwitterSquare } from "react-icons/fa";
+import {
+  FaFacebook,
+  FaInstagramSquare,
+  FaPinterestSquare,
+  FaTwitterSquare,
+} from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const DashboardFooter = () => {
@@ -42,6 +47,7 @@ const DashboardFooter = () => {
           <div className="text-right">
             <h2 className="text-sm font-semibold mb-4">COMPANY</h2>
             <ul className="space-y-2 text-sm flex flex-col">
+            <a href="mailto:geniusandro02@gmail.com?subject=Inquiry&body=Hello,%0D%0A%0D%0AI would like to know more about...">Contact Us</a>
               <Link to={"/aboutus"}>About Us</Link>
               <Link to={"/termsncondition"}>Terms of Service</Link>
               <Link to={"/privecy-policy"}>Privacy</Link>
