@@ -3,7 +3,7 @@ import { FaPlay } from "react-icons/fa";
 import { HiOutlinePlay, HiOutlineStar } from "react-icons/hi";
 import PartnersModal from "./PartnersModal";
 
-const OfferPartners = () => {
+const OfferPartners = ({title}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContentUrl, setModalContentUrl] = useState("");
   const [modalTitle, setModalTitle] = useState("");
@@ -87,12 +87,12 @@ const OfferPartners = () => {
     setModalContentUrl("");
     setModalTitle("");
   };
-  let offerName = "offerPartner";
+
   return (
     <>
       
         <h3 className="text-xl md:text-2xl font-semibold text-white text-left">
-         {offerName === 'offerPartners' ? 'Offers Partners' : 'Survey Partners'}
+         {title}
         </h3>
       
       <div className="mt-5">

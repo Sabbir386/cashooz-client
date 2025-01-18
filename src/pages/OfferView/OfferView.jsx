@@ -340,7 +340,7 @@ const OfferView = () => {
       )}
     </div>
     {/* Offer Partners Section */}
-   <OfferPartners></OfferPartners>
+   <OfferPartners title={'Offer Partners'}></OfferPartners>
     </>
   );
 };

@@ -77,7 +77,7 @@ const LandingLayout = () => {
                 className={`md:flex md:items-center md:pb-0 pb-12 absolute md:static md:bg-transparent  left-0 w-full md:w-auto md:pl-0 pl-9 transition-all duration-500 ease-in ${
                   open
                     ? "top-20 bg-cardBackground z-[999] sm:drop-shadow-md sm:rounded-md md:drop-shadow-none"
-                    : "top-[-490px]"
+                    : "top-20 left-[-490px]"
                 }`}
               >
                 <li className="mx-2 my-4 md:my-0 ">

@@ -51,7 +51,6 @@ const AllSurveyList = () => {
         network: offer.network,
         category: offer.category,
       }).unwrap();
-
       CustomSwal.fire({
         icon: "success",
         title: `Survey Completed!`,

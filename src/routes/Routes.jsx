@@ -48,6 +48,7 @@ import Aboutus from "../pages/Aboutus/Aboutus";
 import SocialMediaPage from "../pages/SocialMedia/SocialMedia";
 import LandingLayout from "../layouts/LandingLayout";
 import ViewAllNetworkOffers from "../pages/OfferView/ViewAllNetworkOffers";
+import VerifyEmail from "../pages/registrationVerification/VerifyEmail";
 
 export const router = createBrowserRouter([
   {
@@ -78,6 +79,10 @@ export const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register></Register>,
+      },
+      {
+        path: "/verify-email",
+        element: <VerifyEmail></VerifyEmail>,
       },
       {
         path: "/advertiser-register",

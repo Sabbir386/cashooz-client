@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import {
   useLoginMutation,
   useRegistrationMutation,
@@ -14,6 +15,7 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase/firebase.init";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import ForgotPasswordModal from "./ForgotPasswordModal";
+import { UAParser } from "ua-parser-js";
 
 const Login = () => {
   const auth = getAuth(app);
@@ -21,6 +23,16 @@ const Login = () => {
   const [firebaseUser, setFirebaseUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+   const [deviceInfo, setDeviceInfo] = useState("");
+    const [deviceFingerprint, setDeviceFingerprint] = useState("");
+    const [deviceType, setDeviceType] = useState("");
+    const [OSdeviceType, setOSdeviceType] = useState("");
+    const [country, setCountry] = useState("");
+    const [ip, setIP] = useState("");
+    const [CountryCode, setCountryCode] = useState("");
+    const [refId, setrefId] = useState("");
+    const [searchParams] = useSearchParams();
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const {
@@ -36,7 +48,67 @@ const Login = () => {
       skip: !firebaseUser?.email,
     }
   );
+  useEffect(() => {
+    const getDeviceInfo = async () => {
+      const parser = new UAParser();
+      const result = parser.getResult();
 
+      const os = result.os.name || "Unknown OS";
+      let deviceType = result.device.type || "desktop";
+      const browser = result.browser.name || "Unknown Browser";
+
+      const userAgent = navigator.userAgent.toLowerCase();
+      let deviceName = "Unknown Device";
+
+      if (userAgent.includes("iphone")) deviceName = "iPhone";
+      else if (userAgent.includes("ipad")) deviceName = "iPad";
+      else if (userAgent.includes("samsung")) deviceName = "Samsung";
+      else if (userAgent.includes("xiaomi")) deviceName = "Xiaomi";
+      else if (userAgent.includes("huawei")) deviceName = "Huawei";
+      else if (userAgent.includes("pixel")) deviceName = "Google Pixel";
+      else if (userAgent.includes("oneplus")) deviceName = "OnePlus";
+      else if (userAgent.includes("nokia")) deviceName = "Nokia";
+      else if (userAgent.includes("sony")) deviceName = "Sony";
+      else if (userAgent.includes("lg")) deviceName = "LG";
+      else if (userAgent.includes("htc")) deviceName = "HTC";
+      else if (userAgent.includes("motorola")) deviceName = "Motorola";
+
+      let deviceInfo = `OS: ${os}, Device Type: ${deviceType}, Device Name: ${deviceName}, Browser: ${browser}`;
+
+      try {
+        const ipResponse = await fetch("https://api.ipify.org?format=json");
+        const ipData = await ipResponse.json();
+        const ip = ipData.ip;
+        setIP(ip);
+
+        const locationResponse = await fetch(`https://ipapi.co/${ip}/json/`);
+        const locationData = await locationResponse.json();
+        const country = locationData.country_name;
+        const countryCode = locationData.country_code;
+
+        deviceInfo += `, IP: ${ip}, Country: ${country}, CountryCode: ${countryCode}`;
+        setCountry(country);
+        setCountryCode(countryCode);
+      } catch (error) {
+        console.error("Error fetching IP information:", error);
+      }
+
+      setDeviceInfo(deviceInfo);
+      setDeviceType(deviceType);
+    };
+
+    const generateDeviceFingerprint = async () => {
+      const fp = await FingerprintJS.load();
+      const result = await fp.get();
+      setDeviceFingerprint(result.visitorId);
+    };
+
+    getDeviceInfo();
+    generateDeviceFingerprint();
+
+    const refIdFromURL = searchParams.get("refId");
+    if (refIdFromURL) setrefId(refIdFromURL);
+  }, [searchParams]);
   useEffect(() => {
     const handleFirebaseLogin = async () => {
       if (!firebaseUser) return;
@@ -45,53 +117,64 @@ const Login = () => {
       try {
         const userCheck = await refetchUser();
 
-        if (userCheck.data) {
+        if (userCheck?.data && userCheck.data.length > 0) {
+          // Existing user: Log in
           const userInfo = {
             email: firebaseUser.email,
             password: "normalUser12345",
           };
           const res = await login(userInfo).unwrap();
-          const user = verifyToken(res.data.accessToken);
-          dispatch(setUser({ user, token: res.data.accessToken }));
-          toast.success("Logged in", { id: toastId, duration: 2000 });
-          navigate("/dashboard");
+
+          if (res.data?.accessToken) {
+            const user = verifyToken(res.data.accessToken);
+            dispatch(setUser({ user, token: res.data.accessToken }));
+            toast.success("Logged in", { id: toastId });
+            navigate("/dashboard");
+          } else {
+            throw new Error("Login response does not contain accessToken");
+          }
         } else {
+          // New user: Register
           const displayName = firebaseUser.displayName
             ? firebaseUser.displayName.split(" ")
             : ["", ""];
           const normalUser = {
             password: "normalUser12345",
             normalUser: {
-              name: {
-                firstName: displayName[0] || "Unknown",
-                lastName: displayName[1] || "User",
-              },
+              name: displayName[0] || "Unknown",
               gender: "male",
               email: firebaseUser.email,
               contactNo: "01321341234",
               presentAddress: "madhupur",
+              ip: ip || "",
+              device: deviceInfo || "",
+              deviceFingerprint: deviceFingerprint || "",
+              referredBy: refId || "self",
+              profileImg: "",
             },
           };
 
-          const res = await registration(normalUser).unwrap();
+          await registration(normalUser).unwrap();
+
+          // Use Firebase access token for Redux
           const verifiedUser = verifyToken(firebaseUser.accessToken);
           dispatch(
             setUser({ user: verifiedUser, token: firebaseUser.accessToken })
           );
-          toast.success("User registered successfully", {
-            id: toastId,
-            duration: 2000,
-          });
+          toast.success("User registered successfully", { id: toastId });
           navigate("/dashboard");
         }
       } catch (error) {
-        toast.error("Something went wrong", { id: toastId, duration: 2000 });
+        toast.error("Something went wrong", { id: toastId });
         console.error("Login/Registration error:", error);
       }
     };
 
     handleFirebaseLogin();
   }, [firebaseUser, dispatch, navigate, login, registration, refetchUser]);
+  
+  
+  
 
   const handleGoogleSignIn = () => {
     signInWithPopup(auth, provider)

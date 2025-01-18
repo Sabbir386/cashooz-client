@@ -4,10 +4,12 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import { UAParser } from "ua-parser-js";
 import { useSearchParams } from "react-router-dom";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { app } from "../firebase/firebase.init";
 const Register = () => {
   const navigate = useNavigate();
   const [registration] = useRegistrationMutation();
@@ -23,6 +25,9 @@ const Register = () => {
   const [refId, setrefId] = useState("");
   const [searchParams] = useSearchParams();
   const [showRequirement, setShowRequirement] = useState(false);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+  const [firebaseUser, setFirebaseUser] = useState(null);
   // device tracking ip address
   useEffect(() => {
     const getDeviceInfo = async () => {
@@ -175,6 +180,90 @@ const Register = () => {
       console.error("Registration error:", error);
     }
   };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      // Sign in with Google
+      const result = await signInWithPopup(auth, provider);
+      const loggedUser = result.user;
+  
+      // Extract necessary fields
+      const { displayName, email, photoURL, uid } = loggedUser;
+      const accessToken = result._tokenResponse.idToken;
+  
+      // Prepare user data for registration
+      const normalUser = {
+        password: "defaultPassword0388@", // Replace this with a secure default password or generated one
+        normalUser: {
+          name: displayName || "Unknown Name",
+          email: email || "Unknown Email",
+          ip: ip || "", // Replace with actual IP fetching logic if needed
+          device: deviceInfo || "", // Replace with actual device info logic if needed
+          deviceFingerprint: deviceFingerprint || "",
+          country: country || "USA",
+          designation: "user",
+          username: "piterson", // Consider making this dynamic if needed
+          referredBy: refId || "self",
+          gender: "male", // Adjust if gender is to be determined dynamically
+          dateOfBirth: "1985-07-15", // Adjust if date of birth is dynamic
+          contactNo: "......", // Replace with actual phone number if available
+          emergencyContactNo: "1234567890",
+          bloodGroup: "A+",
+          presentAddress: "456 Elm Street, Cityville, Country",
+          permanentAddress: "789 Maple Avenue, Townsville, Country",
+          profileImg: photoURL || "",
+          isDeleted: false,
+        },
+      };
+  
+      console.log("Prepared user data:", normalUser);
+  
+      // Send user data to the backend
+      try {
+        const user = await registration(normalUser);
+  
+        // Handle error responses
+        if (user?.error?.status === 409) {
+          const errorMessage =
+            user?.error?.data?.errorSources[0]?.message || "Conflict error.";
+          toast.error(errorMessage, {
+            id: "error-toast",
+            duration: 2000,
+          });
+          console.error("Error:", errorMessage);
+          return; // Stop further execution
+        }
+  
+        // Success response
+        if (user?.data) {
+          toast.success("Registration successful", {
+            id: "success-toast",
+            duration: 2000,
+          });
+  
+          // Navigate to login after a slight delay
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 2000);
+        }
+      } catch (error) {
+        // Unexpected error during registration
+        toast.error("Something went wrong. Please try again later.", {
+          id: "registration-error-toast",
+          duration: 2000,
+        });
+        console.error("Registration error:", error);
+      }
+    } catch (error) {
+      // Google Sign-In error handling
+      toast.error("Google Sign-In failed. Please try again.", {
+        id: "google-signin-error-toast",
+        duration: 2000,
+      });
+      console.error("Google Sign-In error:", error.message);
+    }
+  };
+  
   // console.log(refId)
   return (
     <div className="bg-secondaryColor min-h-screen w-full flex justify-center items-center mt-20">
@@ -327,6 +416,15 @@ const Register = () => {
               Register
             </button>
           </form>
+          <button
+                      onClick={handleGoogleSignIn}
+                      className="bg-cardBackground text-white border w-full h-12 rounded-md mt-6 grid place-items-center text-xs shadow-sm"
+                    >
+                      <div className="flex gap-3 justify-center items-center">
+                        <FaGoogle />
+                        <span>Continue with Google</span>
+                      </div>
+                    </button>
 
           <div className="w-full flex justify-between my-5">
             <Link to={"/"} className="text-primaryColor font-semibold text-sm">
