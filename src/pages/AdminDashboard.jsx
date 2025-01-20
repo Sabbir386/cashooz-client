@@ -296,7 +296,7 @@ const AdminDashboard = () => {
         }))
       : [];
   if (LoggedDatawithNameAndCount) {
-    console.log("daa", transformedLoggedDatawithNameAndCount);
+    // console.log("daa", transformedLoggedDatawithNameAndCount);
   }
   const data02 = [
     { name: "A1", value: 100 },

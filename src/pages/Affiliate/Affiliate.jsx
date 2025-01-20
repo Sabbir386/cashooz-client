@@ -44,8 +44,10 @@ const Affiliate = () => {
   }
 
   // Fetch user data
+  const skipQuery = !user || !["user", "superAdmin", "admin", "advertiser"].includes(user?.role);
+
   const { data: userData, isLoading: isUserLoading } = useSingleNormalUserQuery(
-    user?.objectId
+    user?.objectId, { skip: skipQuery }
   );
 
   useEffect(() => {

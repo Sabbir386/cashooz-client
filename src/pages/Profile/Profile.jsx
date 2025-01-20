@@ -466,11 +466,12 @@ const Profile = () => {
   } = useUserMultipleWithdrawalsQuery(user?.email);
 
   // Fetch single normal user data
+  const skipQuery = !user || !["user", "superAdmin", "admin", "advertiser"].includes(user?.role);
   const {
     data: userData,
     isLoading: isUserLoading,
     error: userError,
-  } = useSingleNormalUserQuery(user?.objectId);
+  } = useSingleNormalUserQuery(user?.objectId, { skip: skipQuery });
 
   console.log("User data:", userData);
 

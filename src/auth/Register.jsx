@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useRegistrationMutation } from "../redux/features/auth/authApi";
+import { useFindByEmailUserQuery, useLoginMutation, useRegistrationMutation } from "../redux/features/auth/authApi";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
@@ -10,6 +10,9 @@ import { useSearchParams } from "react-router-dom";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase/firebase.init";
+import { setUser } from "../redux/features/auth/authSlice";
+import { verifyToken } from "../utils/verifyToken";
+import { useAppDispatch } from "../redux/features/hooks";
 const Register = () => {
   const navigate = useNavigate();
   const [registration] = useRegistrationMutation();
@@ -28,6 +31,14 @@ const Register = () => {
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
   const [firebaseUser, setFirebaseUser] = useState(null);
+  const [login] = useLoginMutation();
+  const dispatch = useAppDispatch();
+   const { data: userExists, refetch: refetchUser } = useFindByEmailUserQuery(
+      firebaseUser?.email,
+      {
+        skip: !firebaseUser?.email,
+      }
+    );
   // device tracking ip address
   useEffect(() => {
     const getDeviceInfo = async () => {
@@ -142,8 +153,6 @@ const Register = () => {
       },
     };
 
-    console.log(normalUser);
-
     try {
       const user = await registration(normalUser);
       // Check if response contains an error status
@@ -180,89 +189,160 @@ const Register = () => {
       console.error("Registration error:", error);
     }
   };
+  // google sign in...
 
-  const handleGoogleSignIn = async () => {
-    try {
-      // Sign in with Google
-      const result = await signInWithPopup(auth, provider);
-      const loggedUser = result.user;
-  
-      // Extract necessary fields
-      const { displayName, email, photoURL, uid } = loggedUser;
-      const accessToken = result._tokenResponse.idToken;
-  
-      // Prepare user data for registration
-      const normalUser = {
-        password: "defaultPassword0388@", // Replace this with a secure default password or generated one
-        normalUser: {
-          name: displayName || "Unknown Name",
-          email: email || "Unknown Email",
-          ip: ip || "", // Replace with actual IP fetching logic if needed
-          device: deviceInfo || "", // Replace with actual device info logic if needed
-          deviceFingerprint: deviceFingerprint || "",
-          country: country || "USA",
-          designation: "user",
-          username: "piterson", // Consider making this dynamic if needed
-          referredBy: refId || "self",
-          gender: "male", // Adjust if gender is to be determined dynamically
-          dateOfBirth: "1985-07-15", // Adjust if date of birth is dynamic
-          contactNo: "......", // Replace with actual phone number if available
-          emergencyContactNo: "1234567890",
-          bloodGroup: "A+",
-          presentAddress: "456 Elm Street, Cityville, Country",
-          permanentAddress: "789 Maple Avenue, Townsville, Country",
-          profileImg: photoURL || "",
-          isDeleted: false,
-        },
+    useEffect(() => {
+      const handleFirebaseLogin = async () => {
+        console.log(firebaseUser)
+        if (!firebaseUser) return;
+        console.log(firebaseUser)
+        const toastId = toast.loading("Checking user existence...");
+        try {
+          // Check if the user exists
+          const refreshedUser = await refetchUser();
+          const userExists = refreshedUser?.data?.data;
+    
+          console.log("Refetched User Data:", refreshedUser);
+    
+          if (userExists) {
+            // User exists, log them in
+            const userInfo = {
+              email: userExists.email,
+              password: "normalUser12345",
+            };
+            console.log(userInfo)
+    
+            const res = await login(userInfo).unwrap();
+            console.log("Login Response:", res);
+    
+            if (res.data?.accessToken) {
+              const user = verifyToken(res.data.accessToken);
+              console.log("Verified User:", user);
+    
+              if (user) {
+                console.log(res.data?.accessToken)
+                dispatch(setUser({ user, token: res.data.accessToken }));
+                toast.success("User logged in successfully", { id: toastId });
+                navigate("/dashboard");
+                return;
+              } else {
+                throw new Error("Invalid token payload during login");
+              }
+            } else {
+              throw new Error("Login response does not contain accessToken");
+            }
+          } else {
+            // User doesn't exist, register them
+            
+            const displayName = firebaseUser.displayName
+              ? firebaseUser.displayName.split(" ")
+              : ["", ""];
+            const normalUser = {
+              password: "normalUser12345",
+              normalUser: {
+                name: firebaseUser.displayName || "Unknown",
+                gender: "....",
+                email: firebaseUser.email,
+                contactNo: "..........",
+                presentAddress: "madhupur",
+                ip: ip || "",
+                device: deviceInfo || "",
+                deviceFingerprint: deviceFingerprint || "",
+                referredBy: refId || "self",
+                profileImg: firebaseUser.photoURL || "",
+              },
+            };
+    
+            console.log("Registering new user:", normalUser);
+    
+            const registeredUser = await registration(normalUser).unwrap();
+            console.log("Registration Response:", registeredUser);
+    
+            if (registeredUser) {
+              // Refetch user after registration
+              const refreshedUserAfterRegistration = await refetchUser();
+              const userExistsAfterRegistration =
+                refreshedUserAfterRegistration?.data?.data;
+    
+              console.log(
+                "User After Registration:",
+                refreshedUserAfterRegistration
+              );
+    
+              if (userExistsAfterRegistration) {
+                const userInfo = {
+                  email: userExistsAfterRegistration.email,
+                  password: "normalUser12345",
+                };
+    
+                const res = await login(userInfo).unwrap();
+                console.log("Login Response After Registration:", res);
+    
+                if (res.data?.accessToken) {
+                  const user = verifyToken(res.data.accessToken);
+                  console.log("Verified User After Registration:", user);
+    
+                  if (user) {
+                    dispatch(setUser({ user, token: res.data.accessToken }));
+                    toast.success("User registered and logged in successfully", {
+                      id: toastId,
+                    });
+                    navigate("/dashboard");
+                    return;
+                  } else {
+                    throw new Error(
+                      "Invalid token payload after registration login"
+                    );
+                  }
+                } else {
+                  throw new Error(
+                    "Login response does not contain accessToken after registration"
+                  );
+                }
+              } else {
+                throw new Error("Failed to verify user existence after registration");
+              }
+            } else {
+              throw new Error("Registration failed");
+            }
+          }
+        } catch (error) {
+          console.log(error)
+          toast.error("Something went wrong during login/registration", {
+            id: toastId,
+          });
+          console.error("Error during login/registration:", error);
+        }
       };
+    
+      handleFirebaseLogin();
+    }, [
+      firebaseUser,
+      dispatch,
+      navigate,
+      login,
+      registration,
+      refetchUser,
+      ip,
+      deviceInfo,
+      deviceFingerprint,
+      refId,
+    ]);
+    
   
-      console.log("Prepared user data:", normalUser);
-  
-      // Send user data to the backend
-      try {
-        const user = await registration(normalUser);
-  
-        // Handle error responses
-        if (user?.error?.status === 409) {
-          const errorMessage =
-            user?.error?.data?.errorSources[0]?.message || "Conflict error.";
-          toast.error(errorMessage, {
-            id: "error-toast",
-            duration: 2000,
-          });
-          console.error("Error:", errorMessage);
-          return; // Stop further execution
-        }
-  
-        // Success response
-        if (user?.data) {
-          toast.success("Registration successful", {
-            id: "success-toast",
-            duration: 2000,
-          });
-  
-          // Navigate to login after a slight delay
-          setTimeout(() => {
-            navigate("/dashboard");
-          }, 2000);
-        }
-      } catch (error) {
-        // Unexpected error during registration
-        toast.error("Something went wrong. Please try again later.", {
-          id: "registration-error-toast",
-          duration: 2000,
+    const handleGoogleSignIn = () => {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const loggedUser = result.user;
+          loggedUser.accessToken = result._tokenResponse.idToken;
+          console.log(loggedUser);
+          setFirebaseUser(loggedUser);
+        })
+        .catch((error) => {
+          console.error("Google Sign-In error:", error.message);
         });
-        console.error("Registration error:", error);
-      }
-    } catch (error) {
-      // Google Sign-In error handling
-      toast.error("Google Sign-In failed. Please try again.", {
-        id: "google-signin-error-toast",
-        duration: 2000,
-      });
-      console.error("Google Sign-In error:", error.message);
-    }
-  };
+    };
+ 
   
   // console.log(refId)
   return (
@@ -417,14 +497,14 @@ const Register = () => {
             </button>
           </form>
           <button
-                      onClick={handleGoogleSignIn}
-                      className="bg-cardBackground text-white border w-full h-12 rounded-md mt-6 grid place-items-center text-xs shadow-sm"
-                    >
-                      <div className="flex gap-3 justify-center items-center">
-                        <FaGoogle />
-                        <span>Continue with Google</span>
-                      </div>
-                    </button>
+            onClick={handleGoogleSignIn}
+            className="bg-cardBackground text-white border w-full h-12 rounded-md mt-6 grid place-items-center text-xs shadow-sm"
+          >
+            <div className="flex gap-3 justify-center items-center">
+              <FaGoogle />
+              <span>Continue with Google</span>
+            </div>
+          </button>
 
           <div className="w-full flex justify-between my-5">
             <Link to={"/"} className="text-primaryColor font-semibold text-sm">

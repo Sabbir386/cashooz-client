@@ -23,15 +23,15 @@ const Login = () => {
   const [firebaseUser, setFirebaseUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-   const [deviceInfo, setDeviceInfo] = useState("");
-    const [deviceFingerprint, setDeviceFingerprint] = useState("");
-    const [deviceType, setDeviceType] = useState("");
-    const [OSdeviceType, setOSdeviceType] = useState("");
-    const [country, setCountry] = useState("");
-    const [ip, setIP] = useState("");
-    const [CountryCode, setCountryCode] = useState("");
-    const [refId, setrefId] = useState("");
-    const [searchParams] = useSearchParams();
+  const [deviceInfo, setDeviceInfo] = useState("");
+  const [deviceFingerprint, setDeviceFingerprint] = useState("");
+  const [deviceType, setDeviceType] = useState("");
+  const [OSdeviceType, setOSdeviceType] = useState("");
+  const [country, setCountry] = useState("");
+  const [ip, setIP] = useState("");
+  const [CountryCode, setCountryCode] = useState("");
+  const [refId, setrefId] = useState("");
+  const [searchParams] = useSearchParams();
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -77,20 +77,32 @@ const Login = () => {
 
       try {
         const ipResponse = await fetch("https://api.ipify.org?format=json");
+        if (!ipResponse.ok) throw new Error("Failed to fetch IP address");
+
         const ipData = await ipResponse.json();
+        console.log("ipData", ipData);
         const ip = ipData.ip;
         setIP(ip);
 
-        const locationResponse = await fetch(`https://ipapi.co/${ip}/json/`);
-        const locationData = await locationResponse.json();
-        const country = locationData.country_name;
-        const countryCode = locationData.country_code;
+        try {
+          const locationResponse = await fetch(`https://ipapi.co/${ip}/json/`);
+          if (!locationResponse.ok)
+            throw new Error("Failed to fetch location data");
 
-        deviceInfo += `, IP: ${ip}, Country: ${country}, CountryCode: ${countryCode}`;
-        setCountry(country);
-        setCountryCode(countryCode);
-      } catch (error) {
-        console.error("Error fetching IP information:", error);
+          const locationData = await locationResponse.json();
+          const country = locationData.country_name || "Unknown";
+          const countryCode = locationData.country_code || "Unknown";
+
+          deviceInfo += `, IP: ${ip}, Country: ${country}, CountryCode: ${countryCode}`;
+          setCountry(country);
+          setCountryCode(countryCode);
+        } catch (locationError) {
+          console.warn("Error fetching location data:", locationError);
+          deviceInfo += `, IP: ${ip}, Country: Unknown, CountryCode: Unknown`;
+        }
+      } catch (ipError) {
+        console.error("Error fetching IP information:", ipError);
+        deviceInfo += ", IP: Unknown, Country: Unknown, CountryCode: Unknown";
       }
 
       setDeviceInfo(deviceInfo);
@@ -109,71 +121,139 @@ const Login = () => {
     const refIdFromURL = searchParams.get("refId");
     if (refIdFromURL) setrefId(refIdFromURL);
   }, [searchParams]);
+
   useEffect(() => {
     const handleFirebaseLogin = async () => {
       if (!firebaseUser) return;
-
+      console.log(firebaseUser)
       const toastId = toast.loading("Checking user existence...");
       try {
-        const userCheck = await refetchUser();
-
-        if (userCheck?.data && userCheck.data.length > 0) {
-          // Existing user: Log in
+        // Check if the user exists
+        const refreshedUser = await refetchUser();
+        const userExists = refreshedUser?.data?.data;
+  
+        console.log("Refetched User Data:", refreshedUser);
+  
+        if (userExists) {
+          // User exists, log them in
           const userInfo = {
-            email: firebaseUser.email,
+            email: userExists.email,
             password: "normalUser12345",
           };
+  
           const res = await login(userInfo).unwrap();
-
+          console.log("Login Response:", res);
+  
           if (res.data?.accessToken) {
             const user = verifyToken(res.data.accessToken);
-            dispatch(setUser({ user, token: res.data.accessToken }));
-            toast.success("Logged in", { id: toastId });
-            navigate("/dashboard");
+            console.log("Verified User:", user);
+  
+            if (user) {
+              dispatch(setUser({ user, token: res.data.accessToken }));
+              toast.success("User logged in successfully", { id: toastId });
+              navigate("/dashboard");
+              return;
+            } else {
+              throw new Error("Invalid token payload during login");
+            }
           } else {
             throw new Error("Login response does not contain accessToken");
           }
         } else {
-          // New user: Register
+          // User doesn't exist, register them
+          
           const displayName = firebaseUser.displayName
             ? firebaseUser.displayName.split(" ")
             : ["", ""];
           const normalUser = {
             password: "normalUser12345",
             normalUser: {
-              name: displayName[0] || "Unknown",
-              gender: "male",
+              name: firebaseUser.displayName || "Unknown",
+              gender: "....",
               email: firebaseUser.email,
-              contactNo: "01321341234",
+              contactNo: "..........",
               presentAddress: "madhupur",
               ip: ip || "",
               device: deviceInfo || "",
               deviceFingerprint: deviceFingerprint || "",
               referredBy: refId || "self",
-              profileImg: "",
+              profileImg: firebaseUser.photoURL || "",
             },
           };
-
-          await registration(normalUser).unwrap();
-
-          // Use Firebase access token for Redux
-          const verifiedUser = verifyToken(firebaseUser.accessToken);
-          dispatch(
-            setUser({ user: verifiedUser, token: firebaseUser.accessToken })
-          );
-          toast.success("User registered successfully", { id: toastId });
-          navigate("/dashboard");
+  
+          console.log("Registering new user:", normalUser);
+  
+          const registeredUser = await registration(normalUser).unwrap();
+          console.log("Registration Response:", registeredUser);
+  
+          if (registeredUser) {
+            // Refetch user after registration
+            const refreshedUserAfterRegistration = await refetchUser();
+            const userExistsAfterRegistration =
+              refreshedUserAfterRegistration?.data?.data;
+  
+            console.log(
+              "User After Registration:",
+              refreshedUserAfterRegistration
+            );
+  
+            if (userExistsAfterRegistration) {
+              const userInfo = {
+                email: userExistsAfterRegistration.email,
+                password: "normalUser12345",
+              };
+  
+              const res = await login(userInfo).unwrap();
+              console.log("Login Response After Registration:", res);
+  
+              if (res.data?.accessToken) {
+                const user = verifyToken(res.data.accessToken);
+                console.log("Verified User After Registration:", user);
+  
+                if (user) {
+                  dispatch(setUser({ user, token: res.data.accessToken }));
+                  toast.success("User registered and logged in successfully", {
+                    id: toastId,
+                  });
+                  navigate("/dashboard");
+                  return;
+                } else {
+                  throw new Error(
+                    "Invalid token payload after registration login"
+                  );
+                }
+              } else {
+                throw new Error(
+                  "Login response does not contain accessToken after registration"
+                );
+              }
+            } else {
+              throw new Error("Failed to verify user existence after registration");
+            }
+          } else {
+            throw new Error("Registration failed");
+          }
         }
       } catch (error) {
-        toast.error("Something went wrong", { id: toastId });
-        console.error("Login/Registration error:", error);
+        toast.error("Something went wrong during login/registration", {
+          id: toastId,
+        });
+        console.error("Error during login/registration:", error);
       }
     };
-
     handleFirebaseLogin();
-  }, [firebaseUser, dispatch, navigate, login, registration, refetchUser]);
-  
-  
+  }, [
+    firebaseUser,
+    dispatch,
+    navigate,
+    login,
+    registration,
+    refetchUser,
+    ip,
+    deviceInfo,
+    deviceFingerprint,
+    refId,
+  ]);
   
 
   const handleGoogleSignIn = () => {
@@ -181,6 +261,7 @@ const Login = () => {
       .then((result) => {
         const loggedUser = result.user;
         loggedUser.accessToken = result._tokenResponse.idToken;
+        console.log(loggedUser);
         setFirebaseUser(loggedUser);
       })
       .catch((error) => {
@@ -199,12 +280,12 @@ const Login = () => {
 
       const res = await login(userInfo).unwrap();
       const user = verifyToken(res.data.accessToken);
-
+      console.log("user", user);
       dispatch(setUser({ user, token: res.data.accessToken }));
       toast.success("Logged in", { id: toastId, duration: 2000 });
       navigate("/dashboard");
     } catch (error) {
-      console.log(error)
+      console.log(error);
       const errorMessage = error?.data?.message || "Something went wrong";
       toast.error(errorMessage, { id: toastId, duration: 2000 });
       console.error("Login error:", error);

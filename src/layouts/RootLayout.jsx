@@ -10,6 +10,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../redux/features/hooks";
 import {
   logOut,
+  selectCurrentUser,
   setUser,
   useCurrentToken,
 } from "../redux/features/auth/authSlice";
@@ -22,6 +23,7 @@ import { useUserTotalRewardsQuery } from "../rewards/rewardApi";
 import CustomSwal from "../customSwal/customSwal";
 import ScrollToTop from "./ScrollToTop";
 import { useSingleNormalUserQuery } from "../redux/features/auth/authApi";
+import { useSelector } from "react-redux";
 function RootLayout() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -29,10 +31,11 @@ function RootLayout() {
   const [bgColor, setBgColor] = useState("bg-transparent");
   const dropdownRef = useRef(null);
   const token = useAppSelector(useCurrentToken);
+  const currentUser = useAppSelector(selectCurrentUser);
   let user;
   if (token) {
+    console.log("token", token);
     user = verifyToken(token);
-    console.log(user);
   }
   const {
     data: totalRewards,
@@ -42,11 +45,16 @@ function RootLayout() {
     skip: user?.role !== "user",
   });
   console.log(totalRewards);
+
+  const skipQuery =
+    !user ||
+    !["user", "superAdmin", "admin", "advertiser"].includes(user?.role);
+
   const {
     data: userData,
     isLoading: isUserLoading,
     error: userError,
-  } = useSingleNormalUserQuery(user?.objectId);
+  } = useSingleNormalUserQuery(user?.objectId, { skip: skipQuery });
 
   useEffect(() => {
     if (token) {

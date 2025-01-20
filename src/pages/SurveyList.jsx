@@ -51,25 +51,24 @@ const SurveyList = () => {
 
   // survey completeion
   const handleSurveyCompletion = async (offer) => {
-    // Redirect to Toluna survey
-    window.open("https://www.toluna.com/", "_blank");
-
-    // Display success notification with specific offer details
-    // console.log("survey", offer);
     try {
-      console.log(offer?._id, user?.objectId, offer?.points);
+      // Redirect to Toluna survey
+      window.open("https://www.toluna.com/", "_blank");
+  
+      // API calls for completing the survey
       await createCompletedOffer({
         clickId: "clickIdValue",
         offerId: offer?._id,
         userId: user?.objectId,
         points: offer?.points,
       }).unwrap();
-
+  
       await surveyCompleted({
         userId: user?.objectId,
         surveyReward: offer?.points,
       }).unwrap();
-      const response = await createSurveyCompleted({
+  
+      await createSurveyCompleted({
         name: offer?.name,
         offerId: offer?._id,
         userId: user?.objectId,
@@ -77,8 +76,11 @@ const SurveyList = () => {
         network: offer?.network,
         category: offer?.category,
       }).unwrap();
-
-      // console.log("Response:", response);
+  
+      // Remove the completed offer from the list
+      setSurveyOffers((prevOffers) => prevOffers.filter((o) => o._id !== offer._id));
+  
+      // Display success notification
       CustomSwal.fire({
         icon: "success",
         title: `Survey Completed!`,
@@ -86,7 +88,7 @@ const SurveyList = () => {
         confirmButtonText: "Claim",
       });
     } catch (err) {
-      console.log("Error completing survey:", err);
+      console.error("Error completing survey:", err);
       CustomSwal.fire({
         title: "Error!",
         text: "Failed to complete offer.",
@@ -94,10 +96,8 @@ const SurveyList = () => {
         confirmButtonText: "Try Again",
       });
     }
-    // Save the survey completion in the backend (assumes a backend function to update rewards)
-    // For example, if you have a function like `saveSurveyCompletion`:
-    // await saveSurveyCompletion({ offerId: offer._id, userId: user?.objectId, points: offer.points });
   };
+  
   if (isLoading) {
     return <Loader></Loader>;
   }
@@ -111,30 +111,31 @@ const SurveyList = () => {
         <div className="flex items-center mb-4 md:mb-0">
           <FcSurvey className="w-6 h-6 md:w-8 md:h-8 mr-2" />
           <h1 className="text-2xl md:text-3xl font-semibold text-white">
-            Surveys Wall
+            Survey Wall
           </h1>
         </div>
       </div>
-      <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold text-white border-b-[1px] border-b-secondaryColor pb-4"></h2>
-        <Link
-          to="/dashboard/survey-list/all"
-          className="text-white flex justify-center items-center gap-3 hover:text-buttonBackground"
-        >
-          <span>View All</span>
-          <FaArrowRight />
-        </Link>
-      </div>
+      {surveyOffers?.length >0 && (
+          <div className="flex items-center justify-between">
+            <h2 className="text-3xl font-bold text-white border-b-[1px] border-b-secondaryColor pb-4"></h2>
+            <Link
+              to="/dashboard/survey-list/all"
+              className="text-white flex justify-center items-center gap-3 hover:text-buttonBackground"
+            >
+              <span>View All</span>
+              <FaArrowRight />
+            </Link>
+          </div>
+        )}
 
       {surveyOffers?.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-64 mb-8">
           <FcSurvey className="w-10 h-10 md:w-12 md:h-12 mb-4" />
           <h2 className="text-2xl md:text-4xl font-bold text-white">
-            You've cleared the board!
+            No Survey Available!
           </h2>
           <p className="text-sm md:text-lg text-gray-400 mt-2 text-center">
-            You've completed all the surveys we have for you right now. More
-            surveys might be available soon.
+            Surveys might be Available soon.Come Back Tomorrow
           </p>
         </div>
       ) : (

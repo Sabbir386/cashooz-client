@@ -42,12 +42,12 @@ const Reward = () => {
   }
 
   const userId = user?.objectId || "";
-
+  const skipQuery = !user || !["user", "superAdmin", "admin", "advertiser"].includes(user?.role);
   const {
     data: userData,
     isLoading: isUserLoading,
     error: userError,
-  } = useSingleNormalUserQuery(user?.objectId);
+  } = useSingleNormalUserQuery(user?.objectId, { skip: skipQuery });
   console.log(userData);
   const referralBonusTiers = [
     { referrals: 10, bonus: 100 },

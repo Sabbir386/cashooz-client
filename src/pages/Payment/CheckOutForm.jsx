@@ -760,7 +760,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           />
           <p className="text-white text-xl font-semibold">Cash with Bitcoin</p>
           <p className="text-gray-200 text-sm">
-            Amount:{" "}
+            Amount:$
             {Math.floor(
               totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal
             ) / 100}
@@ -949,34 +949,34 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
               <div className="text-white text-lg">${selectedAmount || 0}</div>
             </div>
             <div>
-      {/* Display "Insufficient Balance" message if selectedAmount > myCurrentBalance */}
-      {selectedAmount > myCurrentBalance && (
-        <p className="text-red-500 text-sm mb-2">
-          Insufficient Balance.
-        </p>
-      )}
-      
-      <button
-        onClick={() =>
-          handlePaypalPayment({
-            selectedAmount: selectedAmount,
-            method: "paypal",
-          })
-        }
-        className={`bg-[#4ade80] text-white font-semibold py-2 px-6 rounded-lg transition duration-300 ${
-          selectedAmount > myCurrentBalance || !selectedAmount
-            ? "opacity-50 cursor-not-allowed"
-            : "hover:bg-[#32a562]"
-        }`}
-        style={{
-          minWidth: "150px",
-          textAlign: "center",
-        }}
-        disabled={selectedAmount > myCurrentBalance || !selectedAmount} // Disable if selectedAmount > balance or no amount selected
-      >
-        Withdraw
-      </button>
-    </div>
+              {/* Display "Insufficient Balance" message if selectedAmount > myCurrentBalance */}
+              {selectedAmount > myCurrentBalance && (
+                <p className="text-red-500 text-sm mb-2">
+                  Insufficient Balance.
+                </p>
+              )}
+
+              <button
+                onClick={() =>
+                  handlePaypalPayment({
+                    selectedAmount: selectedAmount,
+                    method: "paypal",
+                  })
+                }
+                className={`bg-[#4ade80] text-white font-semibold py-2 px-6 rounded-lg transition duration-300 ${
+                  selectedAmount > myCurrentBalance || !selectedAmount
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-[#32a562]"
+                }`}
+                style={{
+                  minWidth: "150px",
+                  textAlign: "center",
+                }}
+                disabled={selectedAmount > myCurrentBalance || !selectedAmount} // Disable if selectedAmount > balance or no amount selected
+              >
+                Withdraw
+              </button>
+            </div>
           </div>
         </div>
       </Modal>
