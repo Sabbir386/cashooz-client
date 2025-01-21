@@ -276,8 +276,12 @@ const CreateOffer = () => {
     reset,
     control,
     formState: { errors },
-  } = useForm();
-
+  } = useForm({
+    defaultValues: {
+      country: [{ value: "all", label: "all" }],
+      devices: [{ value: "all", label: "all" }],
+    },
+  });
   // Fetch networks data
   const {
     data: networks,
@@ -323,7 +327,7 @@ const CreateOffer = () => {
               offerLink: data.offerLink,
               offerStatus: "inactive",
               dailyLimit: 100,
-              totalLimit: 500,
+              totalLimit: parseInt(data.totalLimt),
               price: 500,
               description: content,
               terms: data.terms,
@@ -335,7 +339,7 @@ const CreateOffer = () => {
               startDate: "2023-11-01T00:00:00.000Z",
               endDate: "2024-01-31T00:00:00.000Z",
             };
-            // console.log(offerInfo);
+            console.log(offerInfo);
             await CreateOffer(offerInfo);
             toast.success("Successfully Offer Created", {
               id: toastId,
@@ -530,7 +534,7 @@ const CreateOffer = () => {
                 control={control}
                 render={({ field }) => (
                   <Select
-                    defaultValue={tags[0]}
+                  defaultValue={[{value:"all",label:"all"}]}
                     isMulti
                     options={tags}
                     className="basic-multi-select"
@@ -561,7 +565,7 @@ const CreateOffer = () => {
                 control={control}
                 render={({ field }) => (
                   <Select
-                    defaultValue={[devices[0]]}
+                    defaultValue={[{value:"all",label:"all"}]}
                     isMulti
                     options={devices}
                     className="basic-multi-select"
@@ -609,7 +613,7 @@ const CreateOffer = () => {
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
                 placeholder="50"
                 required
-                {...register("email", { required: "Total Limit is required" })}
+                {...register("totalLimt", { required: "Total Limit is required" })}
               />
             </div>
             <div className="mb-6">

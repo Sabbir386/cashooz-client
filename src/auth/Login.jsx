@@ -169,7 +169,7 @@ const Login = () => {
             password: "normalUser12345",
             normalUser: {
               name: firebaseUser.displayName || "Unknown",
-              gender: "....",
+              gender: "male",
               email: firebaseUser.email,
               contactNo: "..........",
               presentAddress: "madhupur",
