@@ -2,7 +2,7 @@ import React from "react";
 
 function Aboutus() {
   return (
-    <div className="bg-secondaryColor text-white py-10 px-6 md:px-20">
+    <div className="bg-secondaryColor text-white py-10 px-6 md:px-20 mt-5">
       <div className="max-w-4xl mx-auto bg-primaryColor text-gray-800 rounded-lg shadow-lg p-6 md:p-10">
         <h1 className="text-3xl md:text-4xl font-bold mb-4 text-buttonBackground">
           About Us

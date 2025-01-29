@@ -12,68 +12,38 @@ const OfferPartners = ({title}) => {
   const partnersData = [
     {
       id: 1,
-      title: "AdGate Media",
+      title: "MY LEAD",
       description: "Complete offers and earn rewards.",
-      url: "https://adgatemedia.com/",
+      url: "https://reward-me.eu/d32360bc-d403-11ef-9001-c2a106037d45?player_id=678f7e36681fd7de12d5f3f6",
       logo: "https://upload.wikimedia.org/wikipedia/commons/a/ac/AdGate_Media_logo.png",
       stars: 5,
       bonus: "+50%",
+      type: "Offer Partners",
     },
     {
       id: 2,
-      title: "Offerdaddy",
+      title: "CPA Lead",
       description: "Discover exclusive offers and start earning.",
-      url: "https://www.offerdaddy.com/",
+      url: "https://www.directcpi.com/list/53903?subid=678f7e36681fd7de12d5f3f6",
       logo: "https://upload.wikimedia.org/wikipedia/commons/5/5b/Offerdaddy_logo.png",
       stars: 4,
       bonus: "+30%",
+      type: "Offer Partners",
     },
     {
       id: 3,
-      title: "OfferToro",
+      title: "THEOREM REACH",
       description: "Explore exciting tasks and gain rewards.",
-      url: "https://www.offertoro.com/",
+      url: "https://theoremreach.com/respondent_entry/direct?api_key=3d6d42797b69b8e571f49bd7bec2&user_id=678f7e36681fd7de12d5f3f6&transaction_id=112233",
       logo: "https://offertoro.com/assets/images/logo.png",
       stars: 4,
       bonus: "+35%",
+      type: "Survey Partners",
     },
-    {
-      id: 4,
-      title: "Peanut Labs",
-      description: "Participate in surveys and earn cash rewards.",
-      url: "https://www.peanutlabs.com/",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Peanut_Labs_logo.png",
-      stars: 5,
-      bonus: "+40%",
-    },
-    {
-      id: 5,
-      title: "Adscend Media",
-      description: "Engage with offers and unlock amazing rewards.",
-      url: "https://adscendmedia.com/",
-      logo: "https://adscendmedia.com/assets/images/adscend-media-logo.png",
-      stars: 5,
-      bonus: "+45%",
-    },
-    {
-      id: 6,
-      title: "CPALead",
-      description: "Monetize your clicks with premium offers.",
-      url: "https://www.cpalead.com/",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/9/92/CPALead_logo.png",
-      stars: 3,
-      bonus: "+25%",
-    },
-    {
-      id: 7,
-      title: "Revenue Universe",
-      description: "Generate revenue by completing daily tasks.",
-      url: "https://revenueuniverse.com/",
-      logo: "https://revenueuniverse.com/assets/images/revenue-universe-logo.png",
-      stars: 4,
-      bonus: "+30%",
-    },
+    
   ];
+  // Filter the partnersData by type
+  const filteredPartners = partnersData.filter((partner) => partner.type === title);
 
   const openModal = (url, title, logo) => {
     setModalContentUrl(url);
@@ -97,7 +67,7 @@ const OfferPartners = ({title}) => {
       
       <div className="mt-5">
         <div className="grid gap-4 mt-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7">
-          {partnersData.map((partner) => (
+          {filteredPartners.map((partner) => (
             <div
               key={partner.id}
               onClick={() =>

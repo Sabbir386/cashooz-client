@@ -8,13 +8,13 @@ const faqs = [
       `
       <p>Cashooz.com partners with companies looking to promote their apps, surveys, and products. Tasks on the site can include actions like downloading an app and reaching a certain level, such as level 5, within a day to earn 2000 CZ.</p>
       <p> To get started, simply choose an offer or survey. We recommend checking out the featured offers at the top of the offer page—these tasks are easy to complete, and many users have successfully finished them in the past.</p>
-      <p> Once you complete a task, you’ll earn CZ. (100 CZ equals $1.00). You can then cash out your CZ for rewards like PayPal, Bitcoin, Litecoin, Ethereum and various other gift card options.</p>
+      <p> Once you complete a task, you’ll earn CZ. (1000 CZ equals $1.00). You can then cash out your CZ for rewards like PayPal, Bitcoin, Litecoin, Ethereum and various other gift card options.</p>
       `,
   },
   {
     question: "How much can you actually earn on Cashooz?  ",
     answer:
-      "Earning over $200 per month on Freecash is definitely achievable, and some users even make $1000+ monthly. You can take a look at the leaderboard to see how much the most active users are making.",
+      "Earning over $200 per month on cashooz is definitely achievable, and some users even make $1000+ monthly. You can take a look at the leaderboard to see how much the most active users are making.",
   },
   {
     question: "How long does it take to withdraw your earnings?",
