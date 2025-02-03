@@ -3,9 +3,11 @@ import { baseApi } from "../redux/api/baseApi";
 export const surveyWallApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getFilteredSurveys: builder.query({
-      query: ({ networkName }) => {
+      query: ({ networkName, userId }) => {
         const params = new URLSearchParams();
         if (networkName) params.append('networkName', networkName);
+        if (userId) params.append('userId', userId); // Append userId to query params
+    
         return {
           url: `/offer/surveyWall/networks-offers-filter-by-survey-wall?${params.toString()}`,
           method: "GET",
@@ -13,6 +15,7 @@ export const surveyWallApi = baseApi.injectEndpoints({
       },
       providesTags: ['SurveyWall'],
     }),
+    
     createSurveyCompleted: builder.mutation({
       query: (newSurvey) => ({
         url: `/surveys/create-survey`,

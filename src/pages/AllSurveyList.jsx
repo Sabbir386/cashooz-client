@@ -18,11 +18,15 @@ const AllSurveyList = () => {
 
   const {
     data: surveyOffers,
+    error,
     isLoading,
     isError,
-  } = useGetFilteredSurveysQuery({
-    networkName: "Survey Wall",
-  });
+  } = useGetFilteredSurveysQuery(
+    { networkName: "Survey Wall", userId: user?.objectId }, 
+    { skip: !user?.objectId }
+  );
+  
+
   const [createSurveyCompleted] = useCreateSurveyCompletedMutation();
   const [createCompletedOffer] = useCreateCompletedOfferMutation();
   const [surveyCompleted] = useSurveyCompletedMutation();
@@ -36,6 +40,7 @@ const AllSurveyList = () => {
         offerId: offer._id,
         userId: user?.objectId,
         points: offer.points,
+        payout: offer.points,
       }).unwrap();
 
       await surveyCompleted({

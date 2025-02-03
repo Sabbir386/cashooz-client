@@ -6,7 +6,7 @@ import { FaEdit, FaRegTrashAlt, FaEye } from "react-icons/fa";
 import {
   useDeleteOfferMutation,
   useSingleOfferQuery,
-  useToggleOfferStatusMutation, 
+  useToggleOfferStatusMutation,
   useViewOfferQuery,
 } from "./offerApi";
 import UAParser from "ua-parser-js";
@@ -87,43 +87,42 @@ const OfferList = () => {
     const getDeviceInfo = async () => {
       const parser = new UAParser();
       const result = parser.getResult();
-    
+
       const os = result.os.name || "Unknown OS";
       let deviceType = result.device.type || "desktop";
       const browser = result.browser.name || "Unknown Browser";
-    
+
       const userAgent = navigator.userAgent.toLowerCase();
       let deviceName = "Unknown Device";
-    
+
       if (userAgent.includes("iphone")) deviceName = "iPhone";
       else if (userAgent.includes("ipad")) deviceName = "iPad";
       else if (userAgent.includes("samsung")) deviceName = "Samsung";
       // Add other device checks...
-    
+
       let deviceInfo = `OS: ${os}, Device Type: ${deviceType}, Device Name: ${deviceName}, Browser: ${browser}`;
-    
+
       try {
         // Use an alternative API or your proxy
         const response = await fetch("https://get.geojs.io/v1/ip/geo.json");
         if (!response.ok) throw new Error("Failed to fetch geolocation data");
-    
+
         const data = await response.json();
         const ip = data.ip;
         const country = data.country || "Unknown Country";
         const countryCode = data.country_code || "XX";
-    
+
         deviceInfo += `, IP: ${ip}, Country: ${country}, CountryCode: ${countryCode}`;
         setCountry(country);
         setCountryCode(countryCode);
       } catch (error) {
         console.error("Error fetching IP information:", error);
       }
-    
+
       setDeviceInfo(deviceInfo);
       setDeviceType(deviceType);
       setOSdeviceType(os);
     };
-    
 
     if (offersForAdmin) {
       setData(offersForAdmin.data);
@@ -135,7 +134,6 @@ const OfferList = () => {
     getDeviceInfo();
   }, [token, offersForAdmin, offers]);
 
-  
   // const [createCompletedOffer] = useCreateCompletedOfferMutation();
   const handleDeleteOffer = async (_id) => {
     // console.log(_id);
@@ -512,7 +510,6 @@ const OfferList = () => {
                     >
                       offer link
                     </a>
-                    
                   </div>
                 </div>
               </div>

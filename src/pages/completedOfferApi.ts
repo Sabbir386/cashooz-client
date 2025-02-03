@@ -6,16 +6,31 @@ export const createCompletedOfferApi = baseApi.injectEndpoints({
     createCompletedOffer: builder.mutation({
       query: ({ clickId, offerId, userId, points }) => ({
         url: `/completedOffer/create-completedOffer`,
-        method: "POST",
+        method: "GET",
         params: {
           clickId: clickId,
           offerId: offerId,
           userId: userId,
           points: points,
+          payout: points,
         },
       }),
       invalidatesTags: ["completedOffer","networkOffers"],
     }),
+    // createCompletedOffer: builder.mutation({
+    //   query: ({ clickId, offerId, userId, points }) => ({
+    //     url: `/completedOffer/create-completedOffer`,
+    //     method: "POST",
+    //     params: {
+    //       clickId: clickId,
+    //       offerId: offerId,
+    //       userId: userId,
+    //       points: points,
+    //       payout: points,
+    //     },
+    //   }),
+    //   invalidatesTags: ["completedOffer","networkOffers"],
+    // }),
 
     // Query for viewing completed offers by userId
     viewCompletedOffer: builder.query({

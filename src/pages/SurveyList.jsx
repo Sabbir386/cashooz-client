@@ -31,14 +31,17 @@ const SurveyList = () => {
   const user = token ? verifyToken(token) : null;
   const [createSurveyCompleted] = useCreateSurveyCompletedMutation();
   // console.log(user);
-  const {
+  
+const {
     data: surveys,
     error,
     isLoading,
     isError,
-  } = useGetFilteredSurveysQuery({
-    networkName: "Survey Wall",
-  });
+  } = useGetFilteredSurveysQuery(
+    { networkName: "Survey Wall", userId: user?.objectId }, 
+    { skip: !user?.objectId }
+  );
+
   console.log("surveys", surveys);
   const offers = surveys?.data?.[0]?.offers || [];
   useEffect(() => {
@@ -61,6 +64,7 @@ const SurveyList = () => {
         offerId: offer?._id,
         userId: user?.objectId,
         points: offer?.points,
+        payout: offer?.points,
       }).unwrap();
   
       await surveyCompleted({

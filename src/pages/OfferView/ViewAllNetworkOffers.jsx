@@ -16,12 +16,14 @@ function ViewAllNetworkOffers() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMoreInfoOpen, setIsMoreInfoOpen] = useState(false);
   const [createCompletedOffer] = useCreateCompletedOfferMutation();
-  const { data, isLoading, isError, error } = useSpecificAllOfferByNetworkQuery(
-    { networkId }
-  );
   const [offerCompletedRewards] = useOfferCompletedRewardsMutation();
   const token = useAppSelector(useCurrentToken);
   const user = token ? verifyToken(token) : null;
+
+  const { data, isLoading, isError, error } = useSpecificAllOfferByNetworkQuery(
+    { networkId, userId: user?.objectId },
+    { skip: !user?.objectId } // Skip the query if userId is missing
+  );
   const toggleModal = (offer) => {
     setSelectedOffer(offer);
     setIsModalOpen(!isModalOpen);
@@ -44,6 +46,7 @@ function ViewAllNetworkOffers() {
         offerId: selectedOffer?._id || params.id,
         userId: user?.objectId,
         points: selectedOffer?.points,
+        payout: selectedOffer?.points,
       }).unwrap();
 
       CustomSwal.fire({

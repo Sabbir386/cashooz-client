@@ -38,8 +38,8 @@ const OfferView = () => {
     data: offers,
     isLoading,
     error: offerError,
-  } = useOfferByNetworkQuery(undefined, {
-    skip: !(userRole === "superAdmin" || userRole === "admin" ||userRole === "user")
+  } = useOfferByNetworkQuery(user?.objectId, {
+    skip: !user?.objectId
   });
   
   const [createCompletedOffer] = useCreateCompletedOfferMutation();
@@ -78,24 +78,42 @@ const OfferView = () => {
 
   const handleCompleteOffer = async () => {
     try {
-      await createCompletedOffer({
-        clickId: "clickIdValue",
-        offerId: selectedOffer?._id || params.id,
-        userId: user?.objectId,
-        points: selectedOffer?.points,
-      }).unwrap();
+      // await createCompletedOffer({
+      //   clickId: "clickIdValue",
+      //   offerId: selectedOffer?._id || params.id,
+      //   userId: user?.objectId,
+      //   points: selectedOffer?.points,
+      //   payout: selectedOffer?.points,
+      // }).unwrap();
+      console.log(selectedOffer._id)
+      if (selectedOffer?.offerLink) {
+        const actualClickId = user?.objectId; // Replace with actual ID
+        const actualSite = 'https://cashooz.com'; // Replace with actual site
+        const actualPlacement = selectedOffer._id; // Replace with actual placement
+    
+        const updatedOfferLink = selectedOffer.offerLink
+            .replace('ADD_CLICK_ID_HERE', actualClickId)
+            .replace('PASS_SITE_HERE', actualSite)
+            .replace('PASS_PLACEMENT_HERE', actualPlacement);
+    
+        console.log(updatedOfferLink); // Check the final URL in console
+        setIsModalOpen(false);
+        window.open(updatedOfferLink, '_blank');
 
-      CustomSwal.fire({
-        title: "Success!",
-        text: "Offer completed successfully!",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
+        
+    }
+      // window.open(selectedOffer?.offerLink, '_blank');
+      // CustomSwal.fire({
+      //   title: "Success!",
+      //   text: "Offer completed successfully!",
+      //   icon: "success",
+      //   confirmButtonText: "OK",
+      // });
 
-      const response = await offerCompletedRewards({
-        userId: user?.objectId, // Assuming `user` contains the logged-in user's details
-        offerReward: selectedOffer?.points, // Use the points as the task reward
-      }).unwrap();
+      // const response = await offerCompletedRewards({
+      //   userId: user?.objectId, // Assuming `user` contains the logged-in user's details
+      //   offerReward: selectedOffer?.points, // Use the points as the task reward
+      // }).unwrap();
       // console.log('response offer',response)
     } catch (err) {
       CustomSwal.fire({
