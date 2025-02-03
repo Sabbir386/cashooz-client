@@ -325,7 +325,7 @@ const CreateOffer = () => {
               device: data.devices,
               gender: ["male"],
               offerLink: data.offerLink,
-              offerStatus: "inactive",
+              offerStatus: "active",
               dailyLimit: 100,
               totalLimit: parseInt(data.totalLimt),
               price: 500,
@@ -468,7 +468,7 @@ const CreateOffer = () => {
                 {networksError && <option>Error loading networks</option>}
               </select>
             </div>
-            
+
             <div>
               <label
                 htmlFor="contactNo"
@@ -534,7 +534,7 @@ const CreateOffer = () => {
                 control={control}
                 render={({ field }) => (
                   <Select
-                  defaultValue={[{value:"all",label:"all"}]}
+                    defaultValue={[{ value: "all", label: "all" }]}
                     isMulti
                     options={tags}
                     className="basic-multi-select"
@@ -565,7 +565,7 @@ const CreateOffer = () => {
                 control={control}
                 render={({ field }) => (
                   <Select
-                    defaultValue={[{value:"all",label:"all"}]}
+                    defaultValue={[{ value: "all", label: "all" }]}
                     isMulti
                     options={devices}
                     className="basic-multi-select"
@@ -613,7 +613,9 @@ const CreateOffer = () => {
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
                 placeholder="50"
                 required
-                {...register("totalLimt", { required: "Total Limit is required" })}
+                {...register("totalLimt", {
+                  required: "Total Limit is required",
+                })}
               />
             </div>
             <div className="mb-6">

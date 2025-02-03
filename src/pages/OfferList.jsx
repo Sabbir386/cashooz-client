@@ -41,6 +41,9 @@ const OfferList = () => {
   const offset = currentPage * pageSize;
 
   const handleToggle = async (id) => {
+    console.log(id, "id");
+    console.log(offerStatus, "offerStatus");
+
     try {
       await toggleOfferStatus({ id });
       // Optionally, handle additional logic after successful mutation
@@ -87,7 +90,6 @@ const OfferList = () => {
     const getDeviceInfo = async () => {
       const parser = new UAParser();
       const result = parser.getResult();
-
       const os = result.os.name || "Unknown OS";
       let deviceType = result.device.type || "desktop";
       const browser = result.browser.name || "Unknown Browser";
@@ -197,6 +199,7 @@ const OfferList = () => {
 
   const handleStatusChange = (event) => {
     setOfferStatus(event.target.value);
+    console.log(event.target.value)
     // refetch(); // Manually refetch data when status changes
   };
 

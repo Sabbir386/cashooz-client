@@ -53,7 +53,7 @@ export const createOfferApi = baseApi.injectEndpoints({
         body: {
         },
       }),
-      invalidatesTags: ['Offer'],
+      invalidatesTags: ['Offer', "networkOffers", "SurveyWall"],
     }),
   }),
 });
