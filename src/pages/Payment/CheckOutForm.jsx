@@ -93,7 +93,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
 
   const handleEthereumSubmit = async (data) => {
     let myCurrentBalance = Math.floor(
-      (totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal) / 100
+      (totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal) / 1000
     );
 
     if (myCurrentBalance <= 0) {
@@ -121,7 +121,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
               networkType: "ethereum",
               description: `Withdrawal request for ${data?.ethAmount} Ethereum payout`,
               method: "Ethereum",
-              amount: parseFloat(data?.amountUSD * 100), // Ensuring amount in correct format
+              amount: parseFloat(data?.amountUSD * 1000), // Ensuring amount in correct format
               transactionId: "TXN123456789",
               invoiceId: "",
               country: userData?.data?.country,
@@ -172,7 +172,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
                   networkType: "ethereum",
                   description: `Withdrawal request for ${data?.ethAmount} Ethereum payout`,
                   method: "Ethereum",
-                  amount: parseFloat(data?.amountUSD * 100),
+                  amount: parseFloat(data?.amountUSD * 1000),
                   transactionId: "TXN123456789",
                   invoiceId: "",
                   country: userData?.data?.country,
@@ -235,7 +235,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
 
   const handleLitecoinSubmit = async (data) => {
     let myCurrentBalance = Math.floor(
-      (totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal) / 100
+      (totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal) / 1000
     );
 
     if (myCurrentBalance <= 0) {
@@ -263,7 +263,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
               networkType: "litecoin",
               description: `Withdrawal request for ${data?.litecoinAmount} Litecoin payout`,
               method: "Litecoin",
-              amount: parseFloat(data?.amountUSD * 100), // Ensuring amount in correct format
+              amount: parseFloat(data?.amountUSD * 1000), // Ensuring amount in correct format
               transactionId: "TXN987654321",
               invoiceId: "",
               country: userData?.data?.country,
@@ -314,7 +314,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
                   networkType: "litecoin",
                   description: `Withdrawal request for ${data?.litecoinAmount} Litecoin payout`,
                   method: "Litecoin",
-                  amount: parseFloat(data?.amountUSD * 100),
+                  amount: parseFloat(data?.amountUSD * 1000),
                   transactionId: "TXN987654321",
                   invoiceId: "",
                   country: userData?.data?.country,
@@ -378,7 +378,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
 
   const handleCryptoSubmit = async (data) => {
     let myCurrentBalance = Math.floor(
-      (totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal) / 100
+      (totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal) / 1000
     );
 
     if (myCurrentBalance <= 0) {
@@ -407,7 +407,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
               networkType: "btc",
               description: `Withdrawal request for ${data?.btcAmount} payout`,
               method: "Bitcoin",
-              amount: parseFloat(data?.amountUSD * 100),
+              amount: parseFloat(data?.amountUSD * 1000),
               transactionId: "TXN123456789",
               invoiceId: "",
               country: userData?.data?.country,
@@ -459,7 +459,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
                   networkType: "btc",
                   description: `Withdrawal request for ${data?.btcAmount} payout`,
                   method: "Bitcoin",
-                  amount: parseFloat(data?.amountUSD * 100),
+                  amount: parseFloat(data?.amountUSD * 1000),
                   transactionId: "TXN123456789",
                   invoiceId: "",
                   country: userData?.data?.country,
@@ -525,7 +525,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
     const createPayment = async () => {
       try {
         const response = await createPaymentIntent({
-          price: Math.round(price * 100), // Convert price to cents
+          price: Math.round(price * 1000), // Convert price to cents
         });
         if (response?.data?.clientSecret) {
           setClientSecret(response.data.clientSecret);
@@ -585,7 +585,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
 
         // Save payment info to database
         const amountReceived = paymentIntent.amount;
-        const amount = amountReceived / 100;
+        const amount = amountReceived / 1000;
 
         if (isNaN(amount)) {
           setCardError("Invalid payment amount");
@@ -613,7 +613,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
     setIsProcessing(false);
   };
   let myCurrentBalance = Math.floor(
-    (totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal) / 100
+    (totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal) / 1000
   );
   // Handle PayPal Payment
   const handlePaypalPayment = async ({ selectedAmount, method }) => {
@@ -723,12 +723,12 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
                 Math.floor(
                   totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal
                 ) /
-                  100
+                  1000
               : ""}
           </p>
         </div>
       </div>
-      <p className="text-gray-400 text-sm text-right">100 CZ = $1</p>
+      <p className="text-gray-400 text-sm text-right">1000 CZ = $1</p>
       <div className="xl:max-w-[80%] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6  gap-4 mt-6">
         <div
           className="p-6 py-10 bg-[#259CDF] border border-gray-700 rounded-lg  cursor-pointer text-center flex flex-col items-center justify-center gap-3 h-92"
@@ -744,7 +744,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             Amount: $
             {Math.floor(
               totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal
-            ) / 100}
+            ) / 1000}
           </p>
         </div>
         {/* Other payment options */}
@@ -763,7 +763,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             Amount:$
             {Math.floor(
               totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal
-            ) / 100}
+            ) / 1000}
           </p>
         </div>
 
@@ -789,7 +789,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             Amount: $
             {Math.floor(
               totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal
-            ) / 100}
+            ) / 1000}
           </p>
         </div>
 
@@ -815,7 +815,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             Amount: $
             {Math.floor(
               totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal
-            ) / 100}
+            ) / 1000}
           </p>
         </div>
 
@@ -846,7 +846,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             Amount: $
             {Math.floor(
               totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal
-            ) / 100}
+            ) / 1000}
           </p>
 
           <div className="absolute top-4 right-5 bg-[#01D676] text-white text-sm font-bold px-3 py-1 rounded-md  shadow-lg animate-pulse">
@@ -865,7 +865,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             Amount: $
             {Math.floor(
               totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal
-            ) / 100}
+            ) / 1000}
           </p>
 
           {/* Coming Soon Stamp */}

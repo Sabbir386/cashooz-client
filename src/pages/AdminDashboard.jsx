@@ -397,12 +397,12 @@ const AdminDashboard = () => {
                   $
                   {
                     payment.networkType === "btc"
-                      ? ((payment.amount )/100).toFixed(2) // Convert BTC to USD (example rate)
+                      ? ((payment.amount )/1000).toFixed(2) // Convert BTC to USD (example rate)
                       : payment.networkType === "ethereum"
-                      ? ((payment.amount )/100).toFixed(2) // Convert ETH to USD (example rate)
+                      ? ((payment.amount )/1000).toFixed(2) // Convert ETH to USD (example rate)
                       : payment.networkType === "litecoin"
-                      ? ((payment.amount )/100).toFixed(2) // Convert LTC to USD (example rate)
-                      : ((payment.amount)/100).toFixed(2) // Default for PayPal or already in USD
+                      ? ((payment.amount )/1000).toFixed(2) // Convert LTC to USD (example rate)
+                      : ((payment.amount)/1000).toFixed(2) // Default for PayPal or already in USD
                   }
                 </span>
               </div>

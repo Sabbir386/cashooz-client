@@ -8,9 +8,15 @@ import Build from "./pages/Build";
 import Settings from "./pages/Settings";
 import Stroage from "./pages/Stroage";
 import { router } from "./routes/Routes";
+import AnalyticsTracker from "./firebase/AnalyticsTracker ";
 
 const App = () => {
-  return <RouterProvider router={router}></RouterProvider>;
+  return (
+    <>
+    <AnalyticsTracker />
+      <RouterProvider router={router}></RouterProvider>
+    </>
+  );
 };
 
 export default App;

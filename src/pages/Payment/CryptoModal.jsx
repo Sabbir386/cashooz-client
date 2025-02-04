@@ -44,7 +44,7 @@ const CryptoModal = ({ onClose, onSubmit }) => {
 
         {/* Notice Section */}
         <div className="bg-blue-600 text-sm rounded-md p-3 mb-6 text-center">
-          New users have to earn 2000 CZ to make their first withdrawal.Afer this the minimum will be 1000 CZ.
+          New users have to earn 20000 CZ to make their first withdrawal.Afer this the minimum will be 10000 CZ.
         </div>
 
         {/* Bitcoin Address Input */}
@@ -78,7 +78,7 @@ const CryptoModal = ({ onClose, onSubmit }) => {
               className="w-full px-4 py-2 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button
-              onClick={() => setAmountUSD(100)} // Set to max amount (replace 100 with your logic if needed)
+              onClick={() => setAmountUSD(1000)} // Set to max amount (replace 100 with your logic if needed)
               className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-green-600 px-3 py-1 rounded-md text-sm font-medium text-white"
             >
               Max amount

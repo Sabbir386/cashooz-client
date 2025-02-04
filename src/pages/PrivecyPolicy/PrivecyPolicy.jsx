@@ -33,7 +33,7 @@ function PrivecyPolicy() {
             you may provide through the Website.
           </p>
           <p className="text-gray-400 leading-relaxed mb-4">
-            All earnings are in USD. $1.00 = 100 CZ (Points). This Privacy
+            All earnings are in USD. $1.00 = 1000 CZ (Points). This Privacy
             Policy has been established to clarify the types of information that
             may be collected on our Website, the manner in which we utilize this
             information, and the circumstances under which we may share it with

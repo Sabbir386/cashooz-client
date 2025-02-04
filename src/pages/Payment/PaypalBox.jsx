@@ -39,7 +39,7 @@ const PaypalBox = () => {
     e.preventDefault();
 
     const myCurrentBalance = Math.floor(
-      (totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal) / 100
+      (totalRewards?.userTotalRewards - totalRewards?.totalWithdrawal) / 1000
     );
 
     if (myCurrentBalance <= 0) {
@@ -94,7 +94,7 @@ const PaypalBox = () => {
       networkType: "paypal",
       description: `Withdrawal request for ${method} payout`,
       method: "paypal",
-      amount: selectedAmount * 100,
+      amount: selectedAmount * 1000,
       transactionId: "TXN123456789",
       invoiceId: "",
       country: userData?.data?.country,

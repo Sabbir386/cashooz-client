@@ -44,7 +44,7 @@ function Aboutus() {
               doing online, be it taking surveys, watching videos, voting,
               testing website, installing apps, signing up, playing games,
               performing web searches, listening music, review, reading email,
-              refer others and much more! All earnings are in USD. $1.00 = 100
+              refer others and much more! All earnings are in USD. $1.00 = 1000
               CZ (Points). We collaborate with leading market research and
               product testing firms to provide you with the finest paid tasks,
               updated daily to ensure a continuous array of earning
