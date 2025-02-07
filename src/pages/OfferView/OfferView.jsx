@@ -89,7 +89,7 @@ const OfferView = () => {
       if (selectedOffer?.offerLink) {
         const actualClickId = user?.objectId; // Replace with actual ID
         const actualSite = 'https://cashooz.com'; // Replace with actual site
-        const actualPlacement = selectedOffer._id; // Replace with actual placement
+        const actualPlacement = selectedOffer.points; // Replace with actual placement
 
         console.log(selectedOffer.offerLink)
     
