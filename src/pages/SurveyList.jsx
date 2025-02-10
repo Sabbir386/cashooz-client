@@ -20,10 +20,16 @@ import { useSurveyCompletedMutation } from "../rewards/rewardApi";
 import CustomSwal from "../customSwal/customSwal";
 import OfferPartners from "./OfferView/OfferPartners";
 import { Link } from "react-router-dom";
+import { UAParser } from "ua-parser-js";
 const SurveyList = () => {
   const [createCompletedOffer] = useCreateCompletedOfferMutation();
   const [surveyCompleted] = useSurveyCompletedMutation();
-
+  const [ip, setIP] = useState("");
+  const [CountryCode, setCountryCode] = useState("");
+  const [deviceInfo, setDeviceInfo] = useState("");
+  const [deviceType, setDeviceType] = useState("");
+  const [country, setCountry] = useState("");
+  const [OS, setOS] = useState("");
   const [surveyOffers, setSurveyOffers] = useState([]);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -31,15 +37,72 @@ const SurveyList = () => {
   const user = token ? verifyToken(token) : null;
   const [createSurveyCompleted] = useCreateSurveyCompletedMutation();
   // console.log(user);
-  
-const {
+  // country tracking ..
+  useEffect(() => {
+    const getDeviceInfo = async () => {
+      const parser = new UAParser();
+      const result = parser.getResult();
+
+      const os = result.os.name || "Unknown OS";
+      setOS(result.os.name || "Unknown OS");
+      let deviceType = result.device.type || "desktop";
+      const browser = result.browser.name || "Unknown Browser";
+
+      const userAgent = navigator.userAgent.toLowerCase();
+      let deviceName = "Unknown Device";
+
+      if (userAgent.includes("iphone")) deviceName = "iPhone";
+      else if (userAgent.includes("ipad")) deviceName = "iPad";
+      else if (userAgent.includes("samsung")) deviceName = "Samsung";
+      else if (userAgent.includes("xiaomi")) deviceName = "Xiaomi";
+      else if (userAgent.includes("huawei")) deviceName = "Huawei";
+      else if (userAgent.includes("pixel")) deviceName = "Google Pixel";
+      else if (userAgent.includes("oneplus")) deviceName = "OnePlus";
+      else if (userAgent.includes("nokia")) deviceName = "Nokia";
+      else if (userAgent.includes("sony")) deviceName = "Sony";
+      else if (userAgent.includes("lg")) deviceName = "LG";
+      else if (userAgent.includes("htc")) deviceName = "HTC";
+      else if (userAgent.includes("motorola")) deviceName = "Motorola";
+
+      let deviceInfo = `OS: ${os}, Device Type: ${deviceType}, Device Name: ${deviceName}, Browser: ${browser}`;
+
+      try {
+        const ipResponse = await fetch("https://api.ipify.org?format=json");
+        const ipData = await ipResponse.json();
+        const ip = ipData.ip;
+        setIP(ip);
+
+        const response = await fetch(`https://ipwhois.app/json/${ip}`);
+        const locationData = await response.json();
+        const country = locationData.country;
+        const countryCode = locationData.country_code;
+
+        deviceInfo += `, IP: ${ip}, Country: ${country}, CountryCode: ${countryCode}`;
+        setCountry(country);
+        setCountryCode(countryCode);
+      } catch (error) {
+        console.error("Error fetching IP information:", error);
+      }
+
+      setDeviceInfo(deviceInfo);
+      setDeviceType(deviceType);
+    };
+    getDeviceInfo();
+  }, [user?.objectId]);
+
+  const {
     data: surveys,
     error,
     isLoading,
     isError,
   } = useGetFilteredSurveysQuery(
-    { networkName: "Survey Wall", userId: user?.objectId }, 
-    { skip: !user?.objectId }
+    {
+      networkName: "Survey Wall",
+      userId: user?.objectId,
+      userOS: OS, // Assuming 'os' is part of user object
+      userCountryCode: CountryCode, // Assuming 'countryCode' is part of user object
+    },
+    { skip: !user?.objectId || !OS || !CountryCode } // Skip the query if userId is missing
   );
 
   console.log("surveys", surveys);
@@ -57,7 +120,7 @@ const {
     try {
       // Redirect to Toluna survey
       window.open("https://www.toluna.com/", "_blank");
-  
+
       // API calls for completing the survey
       await createCompletedOffer({
         clickId: "clickIdValue",
@@ -66,12 +129,12 @@ const {
         points: offer?.points,
         payout: offer?.points,
       }).unwrap();
-  
+
       await surveyCompleted({
         userId: user?.objectId,
         surveyReward: offer?.points,
       }).unwrap();
-  
+
       await createSurveyCompleted({
         name: offer?.name,
         offerId: offer?._id,
@@ -80,10 +143,12 @@ const {
         network: offer?.network,
         category: offer?.category,
       }).unwrap();
-  
+
       // Remove the completed offer from the list
-      setSurveyOffers((prevOffers) => prevOffers.filter((o) => o._id !== offer._id));
-  
+      setSurveyOffers((prevOffers) =>
+        prevOffers.filter((o) => o._id !== offer._id)
+      );
+
       // Display success notification
       CustomSwal.fire({
         icon: "success",
@@ -101,7 +166,7 @@ const {
       });
     }
   };
-  
+
   if (isLoading) {
     return <Loader></Loader>;
   }
@@ -119,18 +184,18 @@ const {
           </h1>
         </div>
       </div>
-      {surveyOffers?.length >0 && (
-          <div className="flex items-center justify-between">
-            <h2 className="text-3xl font-bold text-white border-b-[1px] border-b-secondaryColor pb-4"></h2>
-            <Link
-              to="/dashboard/survey-list/all"
-              className="text-white flex justify-center items-center gap-3 hover:text-buttonBackground"
-            >
-              <span>View All</span>
-              <FaArrowRight />
-            </Link>
-          </div>
-        )}
+      {surveyOffers?.length > 0 && (
+        <div className="flex items-center justify-between">
+          <h2 className="text-3xl font-bold text-white border-b-[1px] border-b-secondaryColor pb-4"></h2>
+          <Link
+            to="/dashboard/survey-list/all"
+            className="text-white flex justify-center items-center gap-3 hover:text-buttonBackground"
+          >
+            <span>View All</span>
+            <FaArrowRight />
+          </Link>
+        </div>
+      )}
 
       {surveyOffers?.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-64 mb-8">

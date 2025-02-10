@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FcSurvey } from "react-icons/fc";
 import {
   useCreateSurveyCompletedMutation,
@@ -10,22 +10,84 @@ import { useAppSelector } from "../redux/features/hooks";
 import { useCurrentToken } from "../redux/features/auth/authSlice";
 import { verifyToken } from "../utils/verifyToken";
 import CustomSwal from "../customSwal/customSwal";
+import { UAParser } from "ua-parser-js";
+import Loader from "../components/Loader";
 
 const AllSurveyList = () => {
   // Hooks must be called inside the component body
+  const [ip, setIP] = useState("");
+  const [CountryCode, setCountryCode] = useState("");
+  const [deviceInfo, setDeviceInfo] = useState("");
+  const [deviceType, setDeviceType] = useState("");
+  const [country, setCountry] = useState("");
+  const [OS, setOS] = useState("");
   const token = useAppSelector(useCurrentToken);
   const user = token ? verifyToken(token) : null;
+  useEffect(() => {
+    const getDeviceInfo = async () => {
+      const parser = new UAParser();
+      const result = parser.getResult();
 
+      const os = result.os.name || "Unknown OS";
+      setOS(result.os.name || "Unknown OS");
+      let deviceType = result.device.type || "desktop";
+      const browser = result.browser.name || "Unknown Browser";
+
+      const userAgent = navigator.userAgent.toLowerCase();
+      let deviceName = "Unknown Device";
+
+      if (userAgent.includes("iphone")) deviceName = "iPhone";
+      else if (userAgent.includes("ipad")) deviceName = "iPad";
+      else if (userAgent.includes("samsung")) deviceName = "Samsung";
+      else if (userAgent.includes("xiaomi")) deviceName = "Xiaomi";
+      else if (userAgent.includes("huawei")) deviceName = "Huawei";
+      else if (userAgent.includes("pixel")) deviceName = "Google Pixel";
+      else if (userAgent.includes("oneplus")) deviceName = "OnePlus";
+      else if (userAgent.includes("nokia")) deviceName = "Nokia";
+      else if (userAgent.includes("sony")) deviceName = "Sony";
+      else if (userAgent.includes("lg")) deviceName = "LG";
+      else if (userAgent.includes("htc")) deviceName = "HTC";
+      else if (userAgent.includes("motorola")) deviceName = "Motorola";
+
+      let deviceInfo = `OS: ${os}, Device Type: ${deviceType}, Device Name: ${deviceName}, Browser: ${browser}`;
+
+      try {
+        const ipResponse = await fetch("https://api.ipify.org?format=json");
+        const ipData = await ipResponse.json();
+        const ip = ipData.ip;
+        setIP(ip);
+
+        const response = await fetch(`https://ipwhois.app/json/${ip}`);
+        const locationData = await response.json();
+        const country = locationData.country;
+        const countryCode = locationData.country_code;
+
+        deviceInfo += `, IP: ${ip}, Country: ${country}, CountryCode: ${countryCode}`;
+        setCountry(country);
+        setCountryCode(countryCode);
+      } catch (error) {
+        console.error("Error fetching IP information:", error);
+      }
+
+      setDeviceInfo(deviceInfo);
+      setDeviceType(deviceType);
+    };
+    getDeviceInfo();
+  }, [user?.objectId]);
   const {
     data: surveyOffers,
     error,
     isLoading,
     isError,
   } = useGetFilteredSurveysQuery(
-    { networkName: "Survey Wall", userId: user?.objectId }, 
-    { skip: !user?.objectId }
+    {
+      networkName: "Survey Wall",
+      userId: user?.objectId,
+      userOS: OS, // Assuming 'os' is part of user object
+      userCountryCode: CountryCode,
+    },
+    { skip: !user?.objectId || !OS || !CountryCode }
   );
-  
 
   const [createSurveyCompleted] = useCreateSurveyCompletedMutation();
   const [createCompletedOffer] = useCreateCompletedOfferMutation();
@@ -74,7 +136,7 @@ const AllSurveyList = () => {
   };
 
   if (isLoading) {
-    return <p className="text-white">Loading surveys...</p>;
+    return <Loader />;
   }
 
   if (isError) {
@@ -124,9 +186,7 @@ const AllSurveyList = () => {
             </div>
           ))
         ) : (
-          <p className="text-white text-center">
-            No surveys available to display.
-          </p>
+          ''
         )}
       </div>
     </div>

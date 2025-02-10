@@ -13,21 +13,23 @@ export const dashboardApi = baseApi.injectEndpoints({
 
     // Fetch offers by network
     offerByNetwork: builder.query({
-      query: (userId) => ({
-        url: `/offer/networks-with-offers/bynetwork?userId=${userId}`, // Pass userId in the query string
+      query: ({ userId, userOS, userCountryCode }) => ({
+        url: `/offer/networks-with-offers/bynetwork?userId=${userId}&userOS=${userOS}&userCountryCode=${userCountryCode}`,
         method: "GET",
       }),
-      providesTags: ["networkOffers"], // Keep the tag for caching
+      providesTags: ["networkOffers"],
     }),
+    
     
     // Fetch specific offers by network ID
     specificAllOfferByNetwork: builder.query({
-      query: ({ networkId, userId }) => ({
-        url: `/offer/viewAllNetworkoffer/specificNetworkOffers?networkId=${networkId}&userId=${userId}`,
+      query: ({ networkId, userId, userOS, userCountryCode }) => ({
+        url: `/offer/viewAllNetworkoffer/specificNetworkOffers?networkId=${networkId}&userId=${userId}&userOS=${userOS}&userCountryCode=${userCountryCode}`,
         method: "GET",
       }),
       providesTags: ["networkOffers"], // Use the same tag for related queries
     }),
+    
     
 
     // Fetch all completed offers

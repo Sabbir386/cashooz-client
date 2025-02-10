@@ -80,7 +80,7 @@ const LandingLayout = () => {
                     : "top-20 left-[-490px]"
                 }`}
               >
-                <li className="mx-2 my-4 md:my-0 ">
+                <li className="text-right md:text-left mx-2 my-4 md:my-0 px-5">
                   <Link
                     onClick={() => setOpen(!open)}
                     to={"/login"}
@@ -118,7 +118,7 @@ const LandingLayout = () => {
                     Become an Advertiser
                   </Link>
                 </li> */}
-                <li className="mx-2 my-4 md:my-0">
+                <li className="text-right md:text-left mx-2 my-4 md:my-0 px-5">
                   <Link
                     onClick={() => setOpen(!open)}
                     to={"/aboutus"}

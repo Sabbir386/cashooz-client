@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
-import { UAParser } from "ua-parser-js";
+
 import { useSearchParams } from "react-router-dom";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
@@ -13,6 +13,7 @@ import { app } from "../firebase/firebase.init";
 import { setUser } from "../redux/features/auth/authSlice";
 import { verifyToken } from "../utils/verifyToken";
 import { useAppDispatch } from "../redux/features/hooks";
+import { UAParser } from "ua-parser-js";
 const Register = () => {
   const navigate = useNavigate();
   const [registration] = useRegistrationMutation();

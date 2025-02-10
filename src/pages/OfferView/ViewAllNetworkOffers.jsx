@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSpecificAllOfferByNetworkQuery } from "../dashboardApi";
 import Loader from "../../components/Loader";
@@ -9,6 +9,7 @@ import { useAppSelector } from "../../redux/features/hooks";
 import { useCurrentToken } from "../../redux/features/auth/authSlice";
 import { verifyToken } from "../../utils/verifyToken";
 import { useOfferCompletedRewardsMutation } from "../../rewards/rewardApi";
+import { UAParser } from "ua-parser-js";
 
 function ViewAllNetworkOffers() {
   const { networkId } = useParams();
@@ -17,13 +18,80 @@ function ViewAllNetworkOffers() {
   const [isMoreInfoOpen, setIsMoreInfoOpen] = useState(false);
   const [createCompletedOffer] = useCreateCompletedOfferMutation();
   const [offerCompletedRewards] = useOfferCompletedRewardsMutation();
+   const [ip, setIP] = useState("");
+    const [CountryCode, setCountryCode] = useState("");
+     const [deviceInfo, setDeviceInfo] = useState("");
+      const [deviceType, setDeviceType] = useState("");
+      const [country, setCountry] = useState("");
+      const [OS, setOS] = useState("");
   const token = useAppSelector(useCurrentToken);
   const user = token ? verifyToken(token) : null;
+// coutry tracking .. 
+useEffect(() => {
+    const getDeviceInfo = async () => {
+      const parser = new UAParser();
+      const result = parser.getResult();
+
+      const os = result.os.name || "Unknown OS";
+      setOS(result.os.name || "Unknown OS");
+      let deviceType = result.device.type || "desktop";
+      const browser = result.browser.name || "Unknown Browser";
+
+      const userAgent = navigator.userAgent.toLowerCase();
+      let deviceName = "Unknown Device";
+
+      if (userAgent.includes("iphone")) deviceName = "iPhone";
+      else if (userAgent.includes("ipad")) deviceName = "iPad";
+      else if (userAgent.includes("samsung")) deviceName = "Samsung";
+      else if (userAgent.includes("xiaomi")) deviceName = "Xiaomi";
+      else if (userAgent.includes("huawei")) deviceName = "Huawei";
+      else if (userAgent.includes("pixel")) deviceName = "Google Pixel";
+      else if (userAgent.includes("oneplus")) deviceName = "OnePlus";
+      else if (userAgent.includes("nokia")) deviceName = "Nokia";
+      else if (userAgent.includes("sony")) deviceName = "Sony";
+      else if (userAgent.includes("lg")) deviceName = "LG";
+      else if (userAgent.includes("htc")) deviceName = "HTC";
+      else if (userAgent.includes("motorola")) deviceName = "Motorola";
+
+      let deviceInfo = `OS: ${os}, Device Type: ${deviceType}, Device Name: ${deviceName}, Browser: ${browser}`;
+
+      try {
+        const ipResponse = await fetch("https://api.ipify.org?format=json");
+        const ipData = await ipResponse.json();
+        const ip = ipData.ip;
+        setIP(ip);
+
+        const response = await fetch(`https://ipwhois.app/json/${ip}`);
+        const locationData = await response.json();
+        const country = locationData.country;
+        const countryCode = locationData.country_code;
+
+        deviceInfo += `, IP: ${ip}, Country: ${country}, CountryCode: ${countryCode}`;
+        setCountry(country);
+        setCountryCode(countryCode);
+      } catch (error) {
+        console.error("Error fetching IP information:", error);
+      }
+
+      setDeviceInfo(deviceInfo);
+      setDeviceType(deviceType);
+    };
+    getDeviceInfo();
+    
+  }, [user?.objectId]);
+
+  if(networkId) {console.log("networkId", networkId);}
 
   const { data, isLoading, isError, error } = useSpecificAllOfferByNetworkQuery(
-    { networkId, userId: user?.objectId },
-    { skip: !user?.objectId } // Skip the query if userId is missing
+    { 
+      networkId, 
+      userId: user?.objectId, 
+      userOS:OS,  // Assuming 'os' is part of user object
+      userCountryCode: CountryCode // Assuming 'countryCode' is part of user object
+    },
+    { skip: !user?.objectId || !OS || !CountryCode }
   );
+  
   const toggleModal = (offer) => {
     setSelectedOffer(offer);
     setIsModalOpen(!isModalOpen);
@@ -83,6 +151,8 @@ function ViewAllNetworkOffers() {
   }
 
   const offers = data?.data?.offers || [];
+  console.log('offers: ',offers);
+  
   // Function to animate each character
   const renderAnimatedText = (text) => {
     return text.split("").map((char, index) => (

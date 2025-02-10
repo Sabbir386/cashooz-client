@@ -19,29 +19,88 @@ import { useOfferCompletedRewardsMutation } from "../../rewards/rewardApi";
 import CustomSwal from "../../customSwal/customSwal";
 import { HiOutlineStar } from "react-icons/hi";
 import OfferPartners from "./OfferPartners";
+import { UAParser } from "ua-parser-js";
 
 const OfferView = () => {
   const [networkOffers, setNetworkOffers] = useState([]);
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMoreInfoOpen, setIsMoreInfoOpen] = useState(false);
-
+  const [deviceInfo, setDeviceInfo] = useState("");
+  const [deviceType, setDeviceType] = useState("");
+  const [OS, setOS] = useState("");
+  const [country, setCountry] = useState("");
+  const [ip, setIP] = useState("");
+  const [CountryCode, setCountryCode] = useState("");
   const params = useParams();
   const token = useAppSelector(useCurrentToken);
   const user = token ? verifyToken(token) : null;
-  const userRole=user?.role;
-  // const { data: singleOffer } = useSingleOfferQuery(
-  //   selectedOffer?._id || params.id
-  // );
-  // console.log("singleOffer", singleOffer);
+  const userRole = user?.role;
+  useEffect(() => {
+    const getDeviceInfo = async () => {
+      const parser = new UAParser();
+      const result = parser.getResult();
+
+      const os = result.os.name || "Unknown OS";
+      setOS(result.os.name || "Unknown OS");
+      let deviceType = result.device.type || "desktop";
+      const browser = result.browser.name || "Unknown Browser";
+
+      const userAgent = navigator.userAgent.toLowerCase();
+      let deviceName = "Unknown Device";
+
+      if (userAgent.includes("iphone")) deviceName = "iPhone";
+      else if (userAgent.includes("ipad")) deviceName = "iPad";
+      else if (userAgent.includes("samsung")) deviceName = "Samsung";
+      else if (userAgent.includes("xiaomi")) deviceName = "Xiaomi";
+      else if (userAgent.includes("huawei")) deviceName = "Huawei";
+      else if (userAgent.includes("pixel")) deviceName = "Google Pixel";
+      else if (userAgent.includes("oneplus")) deviceName = "OnePlus";
+      else if (userAgent.includes("nokia")) deviceName = "Nokia";
+      else if (userAgent.includes("sony")) deviceName = "Sony";
+      else if (userAgent.includes("lg")) deviceName = "LG";
+      else if (userAgent.includes("htc")) deviceName = "HTC";
+      else if (userAgent.includes("motorola")) deviceName = "Motorola";
+
+      let deviceInfo = `OS: ${os}, Device Type: ${deviceType}, Device Name: ${deviceName}, Browser: ${browser}`;
+
+      try {
+        const ipResponse = await fetch("https://api.ipify.org?format=json");
+        const ipData = await ipResponse.json();
+        const ip = ipData.ip;
+        setIP(ip);
+
+        const response = await fetch(`https://ipwhois.app/json/${ip}`);
+        const locationData = await response.json();
+        const country = locationData.country;
+        const countryCode = locationData.country_code;
+
+       
+
+        deviceInfo += `, IP: ${ip}, Country: ${country}, CountryCode: ${countryCode}`;
+        setCountry(country);
+        setCountryCode(countryCode);
+      } catch (error) {
+        console.error("Error fetching IP information:", error);
+      }
+
+      setDeviceInfo(deviceInfo);
+      setDeviceType(deviceType);
+    };
+    getDeviceInfo();
+  }, [user?.objectId]);
+
   const {
     data: offers,
     isLoading,
     error: offerError,
-  } = useOfferByNetworkQuery(user?.objectId, {
-    skip: !user?.objectId
-  });
-  
+  } = useOfferByNetworkQuery(
+    { userId: user?.objectId, userOS: OS, userCountryCode: CountryCode },
+    {
+      skip: !user?.objectId || !OS || !CountryCode, // Skip if userId, OS, or CountryCode is missing
+    }
+  );
+
   const [createCompletedOffer] = useCreateCompletedOfferMutation();
   const [offerCompletedRewards] = useOfferCompletedRewardsMutation();
   useEffect(() => {
@@ -85,25 +144,23 @@ const OfferView = () => {
       //   points: selectedOffer?.points,
       //   payout: selectedOffer?.points,
       // }).unwrap();
-      console.log(selectedOffer._id)
+      console.log(selectedOffer._id);
       if (selectedOffer?.offerLink) {
         const actualClickId = user?.objectId; // Replace with actual ID
-        const actualSite = 'https://cashooz.com'; // Replace with actual site
+        const actualSite = "https://cashooz.com"; // Replace with actual site
         const actualPlacement = selectedOffer.points; // Replace with actual placement
 
-        console.log(selectedOffer.offerLink)
-    
+        console.log(selectedOffer.offerLink);
+
         const updatedOfferLink = selectedOffer.offerLink
-            .replace('ADD_CLICK_ID_HERE', actualClickId)
-            .replace('PASS_SITE_HERE', actualSite)
-            .replace('PASS_PLACEMENT_HERE', actualPlacement);
-    
+          .replace("ADD_CLICK_ID_HERE", actualClickId)
+          .replace("PASS_SITE_HERE", actualSite)
+          .replace("PASS_PLACEMENT_HERE", actualPlacement);
+
         console.log(updatedOfferLink); // Check the final URL in console
         setIsModalOpen(false);
-        window.open(updatedOfferLink, '_blank');
-
-        
-    }
+        window.open(updatedOfferLink, "_blank");
+      }
       // window.open(selectedOffer?.offerLink, '_blank');
       // CustomSwal.fire({
       //   title: "Success!",
