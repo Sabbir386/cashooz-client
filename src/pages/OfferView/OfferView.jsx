@@ -23,6 +23,7 @@ import { UAParser } from "ua-parser-js";
 
 const OfferView = () => {
   const [networkOffers, setNetworkOffers] = useState([]);
+  const [isNetworkPresent, setIsNetworkPresent] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMoreInfoOpen, setIsMoreInfoOpen] = useState(false);
@@ -75,8 +76,6 @@ const OfferView = () => {
         const country = locationData.country;
         const countryCode = locationData.country_code;
 
-       
-
         deviceInfo += `, IP: ${ip}, Country: ${country}, CountryCode: ${countryCode}`;
         setCountry(country);
         setCountryCode(countryCode);
@@ -105,6 +104,7 @@ const OfferView = () => {
   const [offerCompletedRewards] = useOfferCompletedRewardsMutation();
   useEffect(() => {
     if (offers?.data) {
+      setIsNetworkPresent(true);
       setNetworkOffers(offers.data);
     }
   }, [offers]);
@@ -198,117 +198,123 @@ const OfferView = () => {
         <div
           className={`${networkOffers.length > 0 ? "min-h-screen" : "auto"}`}
         >
-          {networkOffers.length > 0 ? (
-            networkOffers.map((networkOffer, idx) => (
-              <div key={idx} className="my-8">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-3xl font-bold text-white border-b-[1px] border-b-secondaryColor pb-4">
-                    {networkOffer.networkName}
-                  </h2>
-                  <Link
-                    to={`/dashboard/offers/${networkOffer._id}`}
-                    className="text-white flex justify-center items-center gap-3 hover:text-buttonBackground"
-                  >
-                    <span>View All</span>
-                    <FaArrowRight className="" />
-                  </Link>
-                </div>
+          {isNetworkPresent ? (
+            networkOffers?.length > 0 ? (
+              networkOffers.map((networkOffer, idx) => (
+                <div key={idx} className="my-8">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-3xl font-bold text-white border-b-[1px] border-b-secondaryColor pb-4">
+                      {networkOffer.networkName}
+                    </h2>
+                    <Link
+                      to={`/dashboard/offers/${networkOffer._id}`}
+                      className="text-white flex justify-center items-center gap-3 hover:text-buttonBackground"
+                    >
+                      <span>View All</span>
+                      <FaArrowRight className="" />
+                    </Link>
+                  </div>
 
-                <div className="relative w-full">
-                  <Swiper
-                    modules={[Navigation, Pagination, Scrollbar, A11y]}
-                    spaceBetween={10}
-                    slidesPerView={2}
-                    navigation={{
-                      prevEl: prevRefs.current[idx].current,
-                      nextEl: nextRefs.current[idx].current,
-                      disabledClass: "opacity-25 cursor-not-allowed",
-                    }}
-                    onBeforeInit={(swiper) => {
-                      swiper.params.navigation.prevEl =
-                        prevRefs.current[idx].current;
-                      swiper.params.navigation.nextEl =
-                        nextRefs.current[idx].current;
-                    }}
-                    pagination={{ clickable: true }}
-                    breakpoints={{
-                      640: { slidesPerView: 2, spaceBetween: 10 },
-                      768: { slidesPerView: 4, spaceBetween: 10 },
-                      1024: { slidesPerView: 7, spaceBetween: 10 },
-                    }}
-                  >
-                    {networkOffer.offers.map((offer) => (
-                      <SwiperSlide className="text-white" key={offer._id}>
-                        <div
-                          className="cursor-pointer bg-cardBackground p-4 rounded-md"
-                          onClick={() => toggleModal(offer)}
-                        >
-                          <img
-                            src={
-                              offer.image ||
-                              "https://main-p.agmcdn.com/offers/1126583-cwTa2k02.jpg"
-                            }
-                            alt={offer.name}
-                            className="w-full h-24 object-cover rounded-md"
-                          />
-                          <div className="mt-4 text-white">
-                            <h4 className="font-bold text-base">
-                              {offer?.name
-                                ? offer.name.slice(0, 11)
-                                : "Offer Name"}
-                              {offer.name.length > 11 && "..."}
-                            </h4>
-                            <h6 className="text-grayColor text-sm">
-                              {offer?.categoryName || offer.category}
-                            </h6>
-                            <h3 className="font-semibold">
-                              {offer?.points || "00"} CZ
-                            </h3>
+                  <div className="relative w-full">
+                    <Swiper
+                      modules={[Navigation, Pagination, Scrollbar, A11y]}
+                      spaceBetween={10}
+                      slidesPerView={2}
+                      navigation={{
+                        prevEl: prevRefs.current[idx].current,
+                        nextEl: nextRefs.current[idx].current,
+                        disabledClass: "opacity-25 cursor-not-allowed",
+                      }}
+                      onBeforeInit={(swiper) => {
+                        swiper.params.navigation.prevEl =
+                          prevRefs.current[idx].current;
+                        swiper.params.navigation.nextEl =
+                          nextRefs.current[idx].current;
+                      }}
+                      pagination={{ clickable: true }}
+                      breakpoints={{
+                        640: { slidesPerView: 2, spaceBetween: 10 },
+                        768: { slidesPerView: 4, spaceBetween: 10 },
+                        1024: { slidesPerView: 7, spaceBetween: 10 },
+                      }}
+                    >
+                      {networkOffer.offers.map((offer) => (
+                        <SwiperSlide className="text-white" key={offer._id}>
+                          <div
+                            className="cursor-pointer bg-cardBackground p-4 rounded-md"
+                            onClick={() => toggleModal(offer)}
+                          >
+                            <img
+                              src={
+                                offer.image ||
+                                "https://main-p.agmcdn.com/offers/1126583-cwTa2k02.jpg"
+                              }
+                              alt={offer.name}
+                              className="w-full h-24 object-cover rounded-md"
+                            />
+                            <div className="mt-4 text-white">
+                              <h4 className="font-bold text-base">
+                                {offer?.name
+                                  ? offer.name.slice(0, 11)
+                                  : "Offer Name"}
+                                {offer.name.length > 11 && "..."}
+                              </h4>
+                              <h6 className="text-grayColor text-sm">
+                                {offer?.categoryName || offer.category}
+                              </h6>
+                              <h3 className="font-semibold">
+                                {offer?.points || "00"} CZ
+                              </h3>
+                            </div>
                           </div>
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+
+                    {/* Pagination Controls */}
+
+                    <div className="flex justify-center items-center space-x-6 mt-6">
+                      {/* Previous Button */}
+                      <button
+                        ref={prevRefs.current[idx]}
+                        className="flex items-center space-x-2 font-semibold" // Cursor pointer added here
+                      >
+                        <div className="flex items-center justify-center w-8 h-8 rounded bg-green-500 ">
+                          <FaArrowLeft className="text-white hover:text-white" />
                         </div>
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
+                        <span className="text-white hidden sm:inline">
+                          PREVIOUS
+                        </span>
+                      </button>
 
-                  {/* Pagination Controls */}
-
-                  <div className="flex justify-center items-center space-x-6 mt-6">
-                    {/* Previous Button */}
-                    <button
-                      ref={prevRefs.current[idx]}
-                      className="flex items-center space-x-2 font-semibold" // Cursor pointer added here
-                    >
-                      <div className="flex items-center justify-center w-8 h-8 rounded bg-green-500 ">
-                        <FaArrowLeft className="text-white hover:text-white" />
-                      </div>
-                      <span className="text-white hidden sm:inline">
-                        PREVIOUS
+                      {/* Results Info */}
+                      <span className="text-white font-semibold">
+                        {/* 1 - {networkOffer.offers.length} of results */}
                       </span>
-                    </button>
 
-                    {/* Results Info */}
-                    <span className="text-white font-semibold">
-                      {/* 1 - {networkOffer.offers.length} of results */}
-                    </span>
-
-                    {/* Next Button */}
-                    <button
-                      ref={nextRefs.current[idx]}
-                      className="flex items-center space-x-2 font-semibold" // Cursor pointer added here
-                    >
-                      <span className="text-white hidden sm:inline">NEXT</span>
-                      <div className="flex items-center justify-center w-8 h-8 rounded bg-green-500">
-                        <FaArrowRight className="text-white hover:text-white" />
-                      </div>
-                    </button>
+                      {/* Next Button */}
+                      <button
+                        ref={nextRefs.current[idx]}
+                        className="flex items-center space-x-2 font-semibold" // Cursor pointer added here
+                      >
+                        <span className="text-white hidden sm:inline">
+                          NEXT
+                        </span>
+                        <div className="flex items-center justify-center w-8 h-8 rounded bg-green-500">
+                          <FaArrowRight className="text-white hover:text-white" />
+                        </div>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
+              ))
+            ) : (
+              <p className="text-center text-blue-400 p-4">
+                Offers might be Available soon.Come Back Tomorrow....
+              </p>
+            )
           ) : (
-            <p className="text-center text-blue-400 p-4">
-              Offers might be Available soon.Come Back Tomorrow....
-            </p>
+            <></>
           )}
         </div>
 

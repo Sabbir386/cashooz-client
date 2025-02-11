@@ -13,21 +13,22 @@ import { UAParser } from "ua-parser-js";
 
 function ViewAllNetworkOffers() {
   const { networkId } = useParams();
+  const [isNetworkPresent, setIsNetworkPresent] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMoreInfoOpen, setIsMoreInfoOpen] = useState(false);
   const [createCompletedOffer] = useCreateCompletedOfferMutation();
   const [offerCompletedRewards] = useOfferCompletedRewardsMutation();
-   const [ip, setIP] = useState("");
-    const [CountryCode, setCountryCode] = useState("");
-     const [deviceInfo, setDeviceInfo] = useState("");
-      const [deviceType, setDeviceType] = useState("");
-      const [country, setCountry] = useState("");
-      const [OS, setOS] = useState("");
+  const [ip, setIP] = useState("");
+  const [CountryCode, setCountryCode] = useState("");
+  const [deviceInfo, setDeviceInfo] = useState("");
+  const [deviceType, setDeviceType] = useState("");
+  const [country, setCountry] = useState("");
+  const [OS, setOS] = useState("");
   const token = useAppSelector(useCurrentToken);
   const user = token ? verifyToken(token) : null;
-// coutry tracking .. 
-useEffect(() => {
+  // coutry tracking ..
+  useEffect(() => {
     const getDeviceInfo = async () => {
       const parser = new UAParser();
       const result = parser.getResult();
@@ -77,21 +78,26 @@ useEffect(() => {
       setDeviceType(deviceType);
     };
     getDeviceInfo();
-    
   }, [user?.objectId]);
 
-  if(networkId) {console.log("networkId", networkId);}
+
+
+  if (networkId) {
+    console.log("networkId", networkId);
+  }
 
   const { data, isLoading, isError, error } = useSpecificAllOfferByNetworkQuery(
-    { 
-      networkId, 
-      userId: user?.objectId, 
-      userOS:OS,  // Assuming 'os' is part of user object
-      userCountryCode: CountryCode // Assuming 'countryCode' is part of user object
+    {
+      networkId,
+      userId: user?.objectId,
+      userOS: OS, // Assuming 'os' is part of user object
+      userCountryCode: CountryCode, // Assuming 'countryCode' is part of user object
     },
     { skip: !user?.objectId || !OS || !CountryCode }
   );
-  
+
+
+
   const toggleModal = (offer) => {
     setSelectedOffer(offer);
     setIsModalOpen(!isModalOpen);
@@ -142,6 +148,16 @@ useEffect(() => {
       });
     }
   };
+
+
+  const offers = data?.data?.offers || [];
+    useEffect(() => {
+      if (data) {
+        setIsNetworkPresent(true);
+        // setNetworkOffers(offers.data);
+      }
+    }, [data]);
+  // console.log("offers: ", offers);
   if (isLoading) {
     return <Loader></Loader>;
   }
@@ -149,10 +165,6 @@ useEffect(() => {
   if (isError) {
     return <div>Error: {error?.data?.message || "Failed to fetch offers"}</div>;
   }
-
-  const offers = data?.data?.offers || [];
-  console.log('offers: ',offers);
-  
   // Function to animate each character
   const renderAnimatedText = (text) => {
     return text.split("").map((char, index) => (
@@ -175,37 +187,41 @@ useEffect(() => {
         {data?.data?.networkName && renderAnimatedText(data?.data?.networkName)}
       </h1>
       <div className="grid grid-cols-2 md:grid-cols-7 gap-4">
-        {offers.length > 0 ? (
-          offers.map((offer) => (
-            <div
-              className="cursor-pointer bg-cardBackground p-4 rounded-md"
-              onClick={() => toggleModal(offer)}
-            >
-              <img
-                src={
-                  offer.image ||
-                  "https://main-p.agmcdn.com/offers/1126583-cwTa2k02.jpg"
-                }
-                alt={offer.name}
-                className="w-full h-24 object-cover rounded-md"
-              />
-              <div className="mt-4 text-white">
-                <h4 className="font-bold text-base">
-                  {offer?.name ? offer.name.slice(0, 11) : "Offer Name"}
-                  {offer.name.length > 11 && "..."}
-                </h4>
-                <h6 className="text-grayColor text-sm">
-                  {offer?.categoryName || offer.category}
-                </h6>
-                <h3 className="font-semibold">{offer?.points || "00"} CZ</h3>
+      {isNetworkPresent ? (
+          offers.length > 0 ? (
+            offers.map((offer) => (
+              <div
+                key={offer._id}
+                className="cursor-pointer bg-cardBackground p-4 rounded-md"
+                onClick={() => toggleModal(offer)}
+              >
+                <img
+                  src={
+                    offer.image ||
+                    "https://main-p.agmcdn.com/offers/1126583-cwTa2k02.jpg"
+                  }
+                  alt={offer.name}
+                  className="w-full h-24 object-cover rounded-md"
+                />
+                <div className="mt-4 text-white">
+                  <h4 className="font-bold text-base">
+                    {offer?.name ? offer.name.slice(0, 11) : "Offer Name"}
+                    {offer.name.length > 11 && "..."}
+                  </h4>
+                  <h6 className="text-grayColor text-sm">
+                    {offer?.categoryName || offer.category}
+                  </h6>
+                  <h3 className="font-semibold">{offer?.points || "00"} CZ</h3>
+                </div>
               </div>
+            ))
+          ) : (
+            <div className="text-white">
+              No offers available for this network.
             </div>
-          ))
-        ) : (
-          <div className="text-white">
-            No offers available for this network.
-          </div>
-        )}
+          ))  : (
+            <></>
+          )}
       </div>
       {/* Modal for displaying selected offer details */}
       {isModalOpen && selectedOffer && (

@@ -44,7 +44,7 @@ function RootLayout() {
   } = useUserTotalRewardsQuery(user?.objectId, {
     skip: user?.role !== "user",
   });
-  console.log(totalRewards);
+  // console.log(totalRewards);
 
   const skipQuery =
     !user ||

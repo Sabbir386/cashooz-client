@@ -23,6 +23,7 @@ import { Link } from "react-router-dom";
 import { UAParser } from "ua-parser-js";
 const SurveyList = () => {
   const [createCompletedOffer] = useCreateCompletedOfferMutation();
+  const [isNetworkPresent, setIsNetworkPresent] = useState(false);
   const [surveyCompleted] = useSurveyCompletedMutation();
   const [ip, setIP] = useState("");
   const [CountryCode, setCountryCode] = useState("");
@@ -105,11 +106,12 @@ const SurveyList = () => {
     { skip: !user?.objectId || !OS || !CountryCode } // Skip the query if userId is missing
   );
 
-  console.log("surveys", surveys);
+  // console.log("surveys", surveys);
   const offers = surveys?.data?.[0]?.offers || [];
   useEffect(() => {
     if (Array.isArray(offers) && offers.length) {
       setSurveyOffers(offers);
+      setIsNetworkPresent(true);
     } else if (offers.length === 0) {
       console.log("No surveys available");
     }
@@ -196,40 +198,30 @@ const SurveyList = () => {
           </Link>
         </div>
       )}
-
-      {surveyOffers?.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-64 mb-8">
-          <FcSurvey className="w-10 h-10 md:w-12 md:h-12 mb-4" />
-          <h2 className="text-2xl md:text-4xl font-bold text-white">
-            No Survey Available!
-          </h2>
-          <p className="text-sm md:text-lg text-gray-400 mt-2 text-center">
-            Surveys might be Available soon.Come Back Tomorrow
-          </p>
-        </div>
-      ) : (
-        <Swiper
-          modules={[Navigation, Pagination, Scrollbar, A11y]}
-          spaceBetween={10}
-          navigation={{
-            prevEl: prevRef.current,
-            nextEl: nextRef.current,
-            disabledClass: "opacity-25 cursor-not-allowed",
-          }}
-          onBeforeInit={(swiper) => {
-            swiper.params.navigation.prevEl = prevRef.current;
-            swiper.params.navigation.nextEl = nextRef.current;
-          }}
-          pagination={{ clickable: true }}
-          breakpoints={{
-            1368: { slidesPerView: 6, spaceBetween: 10 },
-            1024: { slidesPerView: 5, spaceBetween: 10 },
-            768: { slidesPerView: 3, spaceBetween: 25 },
-            510: { slidesPerView: 2, spaceBetween: 20 },
-            0: { slidesPerView: 2, spaceBetween: 5 },
-          }}
-        >
-          {surveyOffers?.length > 0 ? (
+      (
+      <Swiper
+        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        spaceBetween={10}
+        navigation={{
+          prevEl: prevRef.current,
+          nextEl: nextRef.current,
+          disabledClass: "opacity-25 cursor-not-allowed",
+        }}
+        onBeforeInit={(swiper) => {
+          swiper.params.navigation.prevEl = prevRef.current;
+          swiper.params.navigation.nextEl = nextRef.current;
+        }}
+        pagination={{ clickable: true }}
+        breakpoints={{
+          1368: { slidesPerView: 6, spaceBetween: 10 },
+          1024: { slidesPerView: 5, spaceBetween: 10 },
+          768: { slidesPerView: 3, spaceBetween: 25 },
+          510: { slidesPerView: 2, spaceBetween: 20 },
+          0: { slidesPerView: 2, spaceBetween: 5 },
+        }}
+      >
+        {isNetworkPresent ? (
+          surveyOffers?.length > 0 ? (
             surveyOffers.map((offer) => (
               <SwiperSlide key={offer._id} className="text-white">
                 <div
@@ -256,13 +248,21 @@ const SurveyList = () => {
               </SwiperSlide>
             ))
           ) : (
-            <p className="text-white text-center">
-              No surveys available to display.
-            </p>
-          )}
-        </Swiper>
-      )}
-
+            <div className="flex flex-col items-center justify-center h-64 mb-8">
+              <FcSurvey className="w-10 h-10 md:w-12 md:h-12 mb-4" />
+              <h2 className="text-2xl md:text-4xl font-bold text-white">
+                No Survey Available!
+              </h2>
+              <p className="text-sm md:text-lg text-gray-400 mt-2 text-center">
+                Surveys might be Available soon.Come Back Tomorrow
+              </p>
+            </div>
+          )
+        ) : (
+          <></>
+        )}
+      </Swiper>
+     
       {/* Pagination Controls */}
       <div className="flex justify-center items-center space-x-6 mt-6">
         {/* Previous Button */}
