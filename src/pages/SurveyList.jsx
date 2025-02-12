@@ -119,9 +119,10 @@ const SurveyList = () => {
 
   // survey completeion
   const handleSurveyCompletion = async (offer) => {
+    console.log(offer);
     try {
       // Redirect to Toluna survey
-      window.open("https://www.toluna.com/", "_blank");
+      window.open(offer?.offerLink, "_blank");
 
       // API calls for completing the survey
       await createCompletedOffer({
@@ -198,7 +199,7 @@ const SurveyList = () => {
           </Link>
         </div>
       )}
-      (
+      
       <Swiper
         modules={[Navigation, Pagination, Scrollbar, A11y]}
         spaceBetween={10}
@@ -259,10 +260,17 @@ const SurveyList = () => {
             </div>
           )
         ) : (
-          <></>
+          <div className="flex flex-col items-center justify-center h-64 mb-8">
+              <FcSurvey className="w-10 h-10 md:w-12 md:h-12 mb-4" />
+              <h2 className="text-2xl md:text-4xl font-bold text-white">
+                No Survey Available!
+              </h2>
+              <p className="text-sm md:text-lg text-gray-400 mt-2 text-center">
+                Surveys might be Available soon.Come Back Tomorrow
+              </p>
+            </div>
         )}
       </Swiper>
-     
       {/* Pagination Controls */}
       <div className="flex justify-center items-center space-x-6 mt-6">
         {/* Previous Button */}
@@ -294,7 +302,7 @@ const SurveyList = () => {
       </div>
       {/* Survey Partners Section */}
       <div>
-        <OfferPartners title={"Survey Partners"}></OfferPartners>
+        <OfferPartners title={"Survey Partners"} user={user}></OfferPartners>
       </div>
     </div>
   );

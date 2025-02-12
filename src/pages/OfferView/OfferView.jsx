@@ -150,16 +150,22 @@ const OfferView = () => {
         const actualSite = "https://cashooz.com"; // Replace with actual site
         const actualPlacement = selectedOffer.points; // Replace with actual placement
 
-        console.log(selectedOffer.offerLink);
+        const mainLink = selectedOffer.offerLink;
+        const linkParams = `${selectedOffer?._id}&s2=${user?.objectId}&networkOfferId={offer_id}&offerName={offer_name}&payout={payout}&payoutCents={payout_cents}&ip={ip}&`;
 
-        const updatedOfferLink = selectedOffer.offerLink
-          .replace("ADD_CLICK_ID_HERE", actualClickId)
-          .replace("PASS_SITE_HERE", actualSite)
-          .replace("PASS_PLACEMENT_HERE", actualPlacement);
+        // Ensure the correct separator (?) or (&)
+        // const separator = mainLink.includes("?") ? "&" : "?";
+        const finalLink = mainLink+linkParams;
 
-        console.log(updatedOfferLink); // Check the final URL in console
+        console.log("finalLink:", finalLink);
+        // const updatedOfferLink = selectedOffer.offerLink
+        //   .replace("ADD_CLICK_ID_HERE", actualClickId)
+        //   .replace("PASS_SITE_HERE", actualSite)
+        //   .replace("PASS_PLACEMENT_HERE", actualPlacement);
+
+        // console.log(updatedOfferLink); // Check the final URL in console
         setIsModalOpen(false);
-        window.open(updatedOfferLink, "_blank");
+        window.open(finalLink, "_blank");
       }
       // window.open(selectedOffer?.offerLink, '_blank');
       // CustomSwal.fire({

@@ -3,18 +3,19 @@ import { FaPlay } from "react-icons/fa";
 import { HiOutlinePlay, HiOutlineStar } from "react-icons/hi";
 import PartnersModal from "./PartnersModal";
 
-const OfferPartners = ({title}) => {
+const OfferPartners = ({ title, user }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContentUrl, setModalContentUrl] = useState("");
   const [modalTitle, setModalTitle] = useState("");
   const [modalLogo, setModalLogo] = useState("");
 
+  // console.log(user)
   const partnersData = [
     {
       id: 1,
       title: "MY LEAD",
       description: "Complete offers and earn rewards.",
-      url: "https://reward-me.eu/d32360bc-d403-11ef-9001-c2a106037d45?player_id=678f7e36681fd7de12d5f3f6",
+      url: `https://reward-me.eu/d32360bc-d403-11ef-9001-c2a106037d45?player_id=${user?.objectId}`,
       logo: "https://upload.wikimedia.org/wikipedia/commons/a/ac/AdGate_Media_logo.png",
       stars: 5,
       bonus: "+50%",
@@ -24,7 +25,7 @@ const OfferPartners = ({title}) => {
       id: 2,
       title: "CPA Lead",
       description: "Discover exclusive offers and start earning.",
-      url: "https://www.directcpi.com/list/53903?subid=678f7e36681fd7de12d5f3f6",
+      url: `https://www.directcpi.com/list/53903?subid=${user?.objectId}`,
       logo: "https://upload.wikimedia.org/wikipedia/commons/5/5b/Offerdaddy_logo.png",
       stars: 4,
       bonus: "+30%",
@@ -34,16 +35,27 @@ const OfferPartners = ({title}) => {
       id: 3,
       title: "THEOREM REACH",
       description: "Explore exciting tasks and gain rewards.",
-      url: "https://theoremreach.com/respondent_entry/direct?api_key=3d6d42797b69b8e571f49bd7bec2&user_id=678f7e36681fd7de12d5f3f6&transaction_id=112233",
+      url: `https://theoremreach.com/respondent_entry/direct?api_key=3d6d42797b69b8e571f49bd7bec2&user_id=${user?.objectId}&transaction_id=112233`,
       logo: "https://offertoro.com/assets/images/logo.png",
       stars: 4,
       bonus: "+35%",
       type: "Survey Partners",
     },
-    
+    {
+      id: 4,
+      title: "Affmine",
+      description: "Discover exclusive offers and start earning.",
+      url: `https://affgo.xyz/offerwall/?o=ow_67a1f20d13405&s1=${user?.objectId}`,
+      logo: "https://network.affmine.com/img/logo.png",
+      stars: 4,
+      bonus: "+30%",
+      type: "Offer Partners",
+    }
   ];
   // Filter the partnersData by type
-  const filteredPartners = partnersData.filter((partner) => partner.type === title);
+  const filteredPartners = partnersData.filter(
+    (partner) => partner.type === title
+  );
 
   const openModal = (url, title, logo) => {
     setModalContentUrl(url);
@@ -60,11 +72,10 @@ const OfferPartners = ({title}) => {
 
   return (
     <>
-      
-        <h3 className="text-xl md:text-2xl font-semibold text-white text-left">
-         {title}
-        </h3>
-      
+      <h3 className="text-xl md:text-2xl font-semibold text-white text-left">
+        {title}
+      </h3>
+
       <div className="mt-5">
         <div className="grid gap-4 mt-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7">
           {filteredPartners.map((partner) => (
@@ -73,7 +84,7 @@ const OfferPartners = ({title}) => {
               onClick={() =>
                 openModal(partner.url, partner.title, partner.logo)
               }
-              className="relative h-64 rounded-xl shadow-lg flex flex-col justify-center items-center text-center text-white cursor-pointer transition-transform duration-300 hover:scale-105 group overflow-hidden"
+              className="relative h-64 rounded-xl shadow-md shadow-white flex flex-col justify-center items-center text-center text-white cursor-pointer transition-transform duration-300 hover:scale-105 group overflow-hidden"
             >
               {/* Background gradient */}
               <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-[#1f1f2e] to-[#0f0f1f] opacity-90"></div>

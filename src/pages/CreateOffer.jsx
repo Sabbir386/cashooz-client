@@ -332,7 +332,7 @@ const CreateOffer = () => {
               description: content,
               terms: data.terms,
               image: imageData.url,
-              points: Number(data.points),
+              points: Number((data.points) * 1000 * 0.7),
               completionLimit: 200,
               completionWindow: 300,
               completedCount: 50,
