@@ -37,7 +37,7 @@ const UserDashboard = () => {
     user = verifyToken(token);
     userRole = user.role;
   }
-  // console.log(user);
+  // //console.log(user);
 
   //logged User --......>
   const [CountLoggedUserTotalCompletedOffer, setLoggedUserTotalCompletedOffer] =
@@ -80,17 +80,17 @@ const UserDashboard = () => {
 
   useEffect(() => {
     if (loggedUserTotalCompletedOffer) {
-      console.log(loggedUserTotalCompletedOffer);
+      //console.log(loggedUserTotalCompletedOffer);
       setLoggedUserTotalCompletedOffer(loggedUserTotalCompletedOffer);
     }
     if (loggedInUserDailycCompletedOfferCounts) {
-      console.log(loggedInUserDailycCompletedOfferCounts);
+      //console.log(loggedInUserDailycCompletedOfferCounts);
       setLoggedInUserDailycCompletedOfferCounts(
         loggedInUserDailycCompletedOfferCounts
       );
     }
     if (loggedInUserOfferNameandTotalCounts) {
-      console.log(loggedInUserOfferNameandTotalCounts);
+      //console.log(loggedInUserOfferNameandTotalCounts);
       setLoggedInUserOfferNameandTotalCounts(
         loggedInUserOfferNameandTotalCounts
       );
@@ -105,7 +105,7 @@ const UserDashboard = () => {
   let LoggedData = [];
   if (userRole === "user" || userRole === "advertiser") {
     LoggedData = CountLoggedUserTotalCompletedOffer?.data ?? [];
-    // console.log("loged", LoggedData);
+    // //console.log("loged", LoggedData);
   }
   const transformedData = LoggedData.flatMap((entry) =>
     entry.offerInfo.map((info) => ({
@@ -120,7 +120,7 @@ const UserDashboard = () => {
     // Sort by ascending order of the date
     return dateA - dateB;
   });
-  // console.log("Sorted Transformed Data:", transformedData);
+  // //console.log("Sorted Transformed Data:", transformedData);
 
   const data2 = [
     { name: "Page A", uv: 4000, pv: 2400, amt: 2400 },
@@ -138,7 +138,7 @@ const UserDashboard = () => {
   if (userRole === "user" || userRole === "advertiser") {
     LoggedDatawithNameAndCount =
       CountLoggedInUserOfferNameandTotalCounts?.data ?? [];
-    console.log("logedwithNameData", LoggedDatawithNameAndCount);
+    //console.log("logedwithNameData", LoggedDatawithNameAndCount);
   }
 
   // Check if LoggedDatawithNameAndCount.data exists and is an array

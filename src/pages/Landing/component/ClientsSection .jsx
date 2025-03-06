@@ -52,10 +52,10 @@ const ClientsSection = () => {
   ];
 
   return (
-    <section className="bg-primaryColor text-buttonBackground pt-12">
-      <div className="text-center mb-8">
-        <h2 className="text-lg md:text-4xl font-semibold text-white">
-          Our Clients & Partners
+    <section className="max-w-7xl mx-auto bg-white text-buttonBackground pt-12">
+      <div className="text-center mb-2">
+        <h2 className="text-base font-semibold text-cardBackground">
+          Trusted by world's leading brand
         </h2>
       </div>
 
@@ -95,8 +95,9 @@ const ClientsSection = () => {
                   <img
                     src={client.logo}
                     alt=""
-                    className="w-32 h-16 object-scale-down  "
+                    className="w-32 h-16 object-scale-down greyScale hover:grayscale-0" 
                   />
+                  
                 </div>
                 {/* <p className="mt-2 text-xs md:text-sm text-center text-black">
                   {client.name}

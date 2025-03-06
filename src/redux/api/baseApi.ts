@@ -31,14 +31,14 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   DefinitionType
 > = async (args, api, extraOptions): Promise<any> => {
   let result = await baseQuery(args, api, extraOptions);
-  // console.log(result);
+  // //console.log(result);
   if (result?.error?.status === 404) {
     // toast.error("User Not Found");
     return { data: [] };
   }
   if (result?.error?.status === 401) {
     //* Send Refresh
-    // console.log("Sending refresh token");
+    // //console.log("Sending refresh token");
     // return { data: [] };
     const res = await fetch(
       "https://cashooz-server.vercel.app/api/v1/auth/refresh-token",
@@ -49,7 +49,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     );
 
     const data = await res.json();
-    //  console.log(data)
+    //  //console.log(data)
     if (data?.data?.accessToken) {
       const user = (api.getState() as RootState).auth.user;
 

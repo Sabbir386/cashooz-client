@@ -66,7 +66,7 @@ const EditAdmin = () => {
             id: toastId,
             duration: 2000,
           });
-          // console.log("Error:", error);
+          // //console.log("Error:", error);
         }
       }
     });

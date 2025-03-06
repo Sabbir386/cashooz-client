@@ -66,7 +66,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   let user;
   if (token) {
     user = verifyToken(token);
-    // console.log(user);
+    // //console.log(user);
   }
   // Mutation hook for the createWithdrawal API
   const [createWithdrawal, { isLoading }] = useCreateWithdrawalMutation();
@@ -77,13 +77,13 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   } = useUserTotalRewardsQuery(user?.objectId, {
     skip: user?.role !== "user",
   });
-  //  console.log(totalRewards?.totalWithdrawal);
+  //  //console.log(totalRewards?.totalWithdrawal);
   const {
     data: userData,
     isLoading: isUserLoading,
     error: userError,
   } = useSingleNormalUserQuery(user?.objectId);
-  // console.log(userData?.data);
+  // //console.log(userData?.data);
   // ehtehrum ..
   const [isEthereumModalOpen, setEthereumModalOpen] = useState(false);
 
@@ -106,7 +106,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         if (totalRewards?.totalWithdrawal > 0) {
           if (amount <= myCurrentBalance) {
             // Close the modal and save the data
-            console.log(amount);
+            //console.log(amount);
             setEthereumModalOpen(false);
 
             // Prepare the request body
@@ -248,7 +248,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         if (totalRewards?.totalWithdrawal > 0) {
           if (amount <= myCurrentBalance) {
             // Close the modal and save the data
-            console.log(amount);
+            //console.log(amount);
             setLitecoinModalOpen(false);
 
             // Prepare the request body
@@ -391,7 +391,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         if (totalRewards?.totalWithdrawal > 0) {
           if (amount <= myCurrentBalance) {
             // Close the modal and save the data
-            console.log(amount);
+            //console.log(amount);
             setCryptoModalOpen(false);
             setCryptoData(data);
 
@@ -417,7 +417,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
                 processedAt: null,
               },
             };
-            console.log(requestBody);
+            //console.log(requestBody);
             try {
               // Submit the withdrawal request
               await createWithdrawal(requestBody).unwrap();
@@ -516,7 +516,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   // Handle card click and select amount
   const handleCardClick = (amount) => {
     setSelectedAmount(amount);
-    console.log(`Selected PayPal amount: $${amount}`);
+    //console.log(`Selected PayPal amount: $${amount}`);
   };
   // from api count withdrawData of user
 
@@ -617,7 +617,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
   );
   // Handle PayPal Payment
   const handlePaypalPayment = async ({ selectedAmount, method }) => {
-    // console.log(selectedAmount, method);
+    // //console.log(selectedAmount, method);
     navigate("/dashboard/payment-paypal", {
       state: { selectedAmount, method },
     });

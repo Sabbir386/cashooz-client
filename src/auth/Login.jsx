@@ -80,12 +80,12 @@ const Login = () => {
         if (!ipResponse.ok) throw new Error("Failed to fetch IP address");
 
         const ipData = await ipResponse.json();
-        console.log("ipData", ipData);
+        //console.log("ipData", ipData);
         const ip = ipData.ip;
         setIP(ip);
 
         try {
-          const locationResponse = await fetch(`https://ipapi.co/${ip}/json/`);
+          const locationResponse = await fetch(`https://ipwhois.app/json/${ip}`);
           if (!locationResponse.ok)
             throw new Error("Failed to fetch location data");
 
@@ -125,29 +125,29 @@ const Login = () => {
   useEffect(() => {
     const handleFirebaseLogin = async () => {
       if (!firebaseUser) return;
-      console.log(firebaseUser)
+      //console.log(firebaseUser)
       const toastId = toast.loading("Checking user existence...");
       try {
         // Check if the user exists
         const refreshedUser = await refetchUser();
         const userExists = refreshedUser?.data?.data;
-  
-        console.log("Refetched User Data:", refreshedUser);
-  
+
+        //console.log("Refetched User Data:", refreshedUser);
+
         if (userExists) {
           // User exists, log them in
           const userInfo = {
             email: userExists.email,
             password: "normalUser12345",
           };
-  
+
           const res = await login(userInfo).unwrap();
-          console.log("Login Response:", res);
-  
+          //console.log("Login Response:", res);
+
           if (res.data?.accessToken) {
             const user = verifyToken(res.data.accessToken);
-            console.log("Verified User:", user);
-  
+            //console.log("Verified User:", user);
+
             if (user) {
               dispatch(setUser({ user, token: res.data.accessToken }));
               toast.success("User logged in successfully", { id: toastId });
@@ -161,7 +161,7 @@ const Login = () => {
           }
         } else {
           // User doesn't exist, register them
-          
+
           const displayName = firebaseUser.displayName
             ? firebaseUser.displayName.split(" ")
             : ["", ""];
@@ -180,36 +180,36 @@ const Login = () => {
               profileImg: firebaseUser.photoURL || "",
             },
           };
-  
-          console.log("Registering new user:", normalUser);
-  
+
+          //console.log("Registering new user:", normalUser);
+
           const registeredUser = await registration(normalUser).unwrap();
-          console.log("Registration Response:", registeredUser);
-  
+          //console.log("Registration Response:", registeredUser);
+
           if (registeredUser) {
             // Refetch user after registration
             const refreshedUserAfterRegistration = await refetchUser();
             const userExistsAfterRegistration =
               refreshedUserAfterRegistration?.data?.data;
-  
-            console.log(
-              "User After Registration:",
-              refreshedUserAfterRegistration
-            );
-  
+
+            //console.log(
+            //   "User After Registration:",
+            //   refreshedUserAfterRegistration
+            // );
+
             if (userExistsAfterRegistration) {
               const userInfo = {
                 email: userExistsAfterRegistration.email,
                 password: "normalUser12345",
               };
-  
+
               const res = await login(userInfo).unwrap();
-              console.log("Login Response After Registration:", res);
-  
+              //console.log("Login Response After Registration:", res);
+
               if (res.data?.accessToken) {
                 const user = verifyToken(res.data.accessToken);
-                console.log("Verified User After Registration:", user);
-  
+                //console.log("Verified User After Registration:", user);
+
                 if (user) {
                   dispatch(setUser({ user, token: res.data.accessToken }));
                   toast.success("User registered and logged in successfully", {
@@ -228,7 +228,9 @@ const Login = () => {
                 );
               }
             } else {
-              throw new Error("Failed to verify user existence after registration");
+              throw new Error(
+                "Failed to verify user existence after registration"
+              );
             }
           } else {
             throw new Error("Registration failed");
@@ -254,14 +256,13 @@ const Login = () => {
     deviceFingerprint,
     refId,
   ]);
-  
 
   const handleGoogleSignIn = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         const loggedUser = result.user;
         loggedUser.accessToken = result._tokenResponse.idToken;
-        console.log(loggedUser);
+        //console.log(loggedUser);
         setFirebaseUser(loggedUser);
       })
       .catch((error) => {
@@ -280,12 +281,12 @@ const Login = () => {
 
       const res = await login(userInfo).unwrap();
       const user = verifyToken(res.data.accessToken);
-      console.log("user", user);
+      //console.log("user", user);
       dispatch(setUser({ user, token: res.data.accessToken }));
       toast.success("Logged in", { id: toastId, duration: 2000 });
       navigate("/dashboard");
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       const errorMessage = error?.data?.message || "Something went wrong";
       toast.error(errorMessage, { id: toastId, duration: 2000 });
       console.error("Login error:", error);
@@ -294,8 +295,8 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-secondaryColor h-screen w-full flex justify-center items-center">
-      <div className="bg-cardBackground w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded-md relative">
+    <div className="bg-secondaryColor min-h-screen w-full flex justify-center items-center mt-12">
+      <div className="bg-cardBackground w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded-md">
         <div className="w-full md:w-1/2 hidden md:flex flex-col justify-center items-center text-white">
           <h1 className="text-3xl">Hey Buddy</h1>
           <p className="text-5xl font-extrabold text-buttonBackground">

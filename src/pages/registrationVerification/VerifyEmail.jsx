@@ -14,7 +14,7 @@ const VerifyEmail = () => {
           <img
             src="https://i.ibb.co.com/T03Qzcd/cashooz-logo.png" 
             alt="Email Verification"
-            className="mx-auto w-20 h-20 md:w-28 md:h-28 mb-4"
+            className="mx-auto w-20 md:w-28 mb-4"
           />
           <h1 className="text-2xl font-semibold text-gray-800 mb-2">
             Verification Successful

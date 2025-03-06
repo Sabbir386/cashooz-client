@@ -24,6 +24,7 @@ import CustomSwal from "../customSwal/customSwal";
 import ScrollToTop from "./ScrollToTop";
 import { useSingleNormalUserQuery } from "../redux/features/auth/authApi";
 import { useSelector } from "react-redux";
+import { FcCurrencyExchange } from "react-icons/fc";
 function RootLayout() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -34,7 +35,6 @@ function RootLayout() {
   const currentUser = useAppSelector(selectCurrentUser);
   let user;
   if (token) {
-    console.log("token", token);
     user = verifyToken(token);
   }
   const {
@@ -44,7 +44,7 @@ function RootLayout() {
   } = useUserTotalRewardsQuery(user?.objectId, {
     skip: user?.role !== "user",
   });
-  // console.log(totalRewards);
+ 
 
   const skipQuery =
     !user ||
@@ -117,10 +117,10 @@ function RootLayout() {
         >
           {/* Balance Display */}
           <div
-            className="flex items-center space-x-2 p-2 rounded-md"
-            style={{ backgroundColor: "#141523" }}
+            className="flex items-center space-x-2 px-2 py-1 rounded-md bg-white"
+            
           >
-            <FaCommentsDollar className="text-white text-2xl font-bold" />
+            <FcCurrencyExchange className="text-white text-2xl font-bold" />
             {user?.role === "user" && (
               <>
                 {isLoading ? (
@@ -130,7 +130,7 @@ function RootLayout() {
                 ) : error ? (
                   <span className="text-white">Error</span>
                 ) : (
-                  <span className="text-buttonBackground animate-pulse font-bold text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+                  <span className="text-black  font-bold text-sm sm:text-base md:text-sm lg:text-base xl:text-lg">
                     {/* {totalRewards?.userTotalRewards || "0"} CZ  */}
                     {Math.floor(
                       totalRewards?.userTotalRewards -

@@ -70,7 +70,7 @@ const Affiliate = () => {
       { userId: userData?.data?.user },
       { skip: !userData?.data?.user } // Skip the query if userId is not defined
     );
-  console.log(totalReferralRewards);
+  //console.log(totalReferralRewards);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(referralLink);
@@ -100,7 +100,7 @@ const Affiliate = () => {
       const referralId = userData?.data?.referralId;
       const claimedAmount = referrals?.totalEarnings;
 
-      console.log("API Request Data:", { userId, referralId, claimedAmount });
+      //console.log("API Request Data:", { userId, referralId, claimedAmount });
 
       // Make the API call to claim rewards
       const response = await createAffiliateReward({
@@ -110,7 +110,7 @@ const Affiliate = () => {
       }).unwrap();
 
       // Log the API response for debugging
-      console.log("API Response:", response);
+      //console.log("API Response:", response);
 
       // Success alert on successful API call
       CustomSwal.fire({
@@ -358,7 +358,7 @@ const Affiliate = () => {
                       text: `💲Cashooz.com💰 is one of the web's leading rewards platforms, with a vibrant and rapidly growing community. It's a completely free program that lets you earn real money by completing everyday online tasks and activities. Whether you're browsing, shopping, or engaging with content, you can make money from home. Once you've earned, simply redeem your rewards through one of our supported payout methods—no personal investment required. Start earning today: ${referralLink}`,
                       url: referralLink,
                     })
-                    .then(() => console.log("Shared successfully"))
+                    .then()
                     .catch((error) => console.error("Sharing failed", error));
                 } else {
                   alert("Sharing not supported on this browser.");

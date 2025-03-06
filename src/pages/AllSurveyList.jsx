@@ -12,6 +12,7 @@ import { verifyToken } from "../utils/verifyToken";
 import CustomSwal from "../customSwal/customSwal";
 import { UAParser } from "ua-parser-js";
 import Loader from "../components/Loader";
+import { FaStar } from "react-icons/fa";
 
 const AllSurveyList = () => {
   // Hooks must be called inside the component body
@@ -94,45 +95,60 @@ const AllSurveyList = () => {
   const [surveyCompleted] = useSurveyCompletedMutation();
 
   const handleSurveyCompletion = async (offer) => {
-    window.open("https://www.toluna.com/", "_blank");
+    //console.log(offer);
+    const linkParams = `&user_id=${user?.objectId}&s1=${offer._id}&s2=${user?.objectId}`;
+    const finalURL = offer?.offerLink + linkParams;
+    window.open(finalURL, "_blank");
+    // try {
+    // // Redirect to Toluna survey
+    // const linkParams = `&user_id=${user?.objectId}&s1=${offer._id}&s2=${user?.objectId}`;
+    // const finalURL = offer?.offerLink + linkParams;
+    // window.open(finalURL, "_blank");
+    // // API calls for completing the survey
+    // await createCompletedOffer({
+    //   clickId: "clickIdValue",
+    //   offerId: offer?._id,
+    //   userId: user?.objectId,
+    //   points: offer?.points,
+    //   payout: offer?.points,
+    // }).unwrap();
 
-    try {
-      await createCompletedOffer({
-        clickId: "clickIdValue",
-        offerId: offer._id,
-        userId: user?.objectId,
-        points: offer.points,
-        payout: offer.points,
-      }).unwrap();
+    // await surveyCompleted({
+    //   userId: user?.objectId,
+    //   surveyReward: offer?.points,
+    // }).unwrap();
 
-      await surveyCompleted({
-        userId: user?.objectId,
-        surveyReward: offer.points,
-      }).unwrap();
+    // await createSurveyCompleted({
+    //   name: offer?.name,
+    //   offerId: offer?._id,
+    //   userId: user?.objectId,
+    //   points: offer?.points,
+    //   network: offer?.network,
+    //   category: offer?.category,
+    // }).unwrap();
 
-      await createSurveyCompleted({
-        name: offer.name,
-        offerId: offer._id,
-        userId: user?.objectId,
-        points: offer.points,
-        network: offer.network,
-        category: offer.category,
-      }).unwrap();
-      CustomSwal.fire({
-        icon: "success",
-        title: `Survey Completed!`,
-        html: `<strong>${offer.name}</strong><br>You earned <strong>${offer.points} CZ</strong> for completing this survey!`,
-        confirmButtonText: "Claim",
-      });
-    } catch (err) {
-      console.error("Error completing survey:", err);
-      CustomSwal.fire({
-        title: "Error!",
-        text: "Failed to complete offer.",
-        icon: "error",
-        confirmButtonText: "Try Again",
-      });
-    }
+    // // Remove the completed offer from the list
+    // setSurveyOffers((prevOffers) =>
+    //   prevOffers.filter((o) => o._id !== offer._id)
+    // );
+
+    // // Display success notification
+    // CustomSwal.fire({
+    //   icon: "success",
+    //   title: `Survey Completed!`,
+    //   html: `<strong>${offer.name}</strong><br>You earned <strong>${offer.points} CZ</strong> for completing this survey!`,
+    //   confirmButtonText: "Claim",
+    // });
+
+    // } catch (err) {
+    //   console.error("Error completing survey:", err);
+    //   CustomSwal.fire({
+    //     title: "Error!",
+    //     text: "Failed to complete offer.",
+    //     icon: "error",
+    //     confirmButtonText: "Try Again",
+    //   });
+    // }
   };
 
   if (isLoading) {
@@ -159,35 +175,38 @@ const AllSurveyList = () => {
           </h1>
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-        {offers.length > 0 ? (
-          offers.map((offer) => (
-            <div
-              key={offer._id}
-              className="p-4 rounded-lg shadow-md bg-gradient-to-b from-[#1f1f2e] to-[#0f0f1f] transition-transform duration-300 hover:scale-105 cursor-pointer flex flex-col items-center gap-3"
-              onClick={() => handleSurveyCompletion(offer)}
-            >
-              {offer.image && (
-                <img
-                  src={offer.image}
-                  alt={offer.name}
-                  className="w-24 h-24 md:w-36 md:h-36 object-cover rounded-md border border-gray-700"
-                />
-              )}
-              <div className="text-center text-white">
-                <h4 className="font-bold text-sm truncate max-w-[100px] sm:max-w-[120px] md:max-w-full">
-                  {offer.name ? offer.name.slice(0, 15) : "Offer Name"}
-                  {offer.name?.length > 15 && "..."}
-                </h4>
-                <h5 className="text-base font-semibold text-green-400 mt-1">
-                  CZ {offer.points || "0"}
-                </h5>
-              </div>
-            </div>
-          ))
-        ) : (
-          ''
-        )}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-2">
+        {offers.length > 0
+          ? offers.map((offer) => (
+               <div className="max-w-[200px] bg-white/20 shadow-sm shadow-white p-4 rounded-lg cursor-pointer" onClick={() => handleSurveyCompletion(offer)}>
+                                {/* Product Image */}
+                                <div className="w-full h-[180px] flex justify-center rounded-md">
+                                  <img
+                                      src={offer.image}
+                                      alt={offer.name} // Replace with actual image URL
+                                  
+                                    className="w-full h-full object-cover rounded-md"
+                                  />
+                                </div>
+              
+                                {/* Product Details */}
+                                <div className="mt-3 rounded-b-md">
+                                  <h3 className="text-white font-medium text-sm">
+                                  {offer?.name ? offer.name.slice(0, 15) : "Offer Name"}
+                                  {offer.name?.length > 15 && "..."}
+                                  </h3>
+                                  <p className="text-buttonBackground font-bold text-sm"> CZ {offer?.points || "0"}</p>
+              
+                                  {/* Star Ratings */}
+                                  <div className="flex justify-center mt-1 text-yellow-500">
+                                    {[...Array(5)].map((_, index) => (
+                                      <FaStar key={index} />
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+            ))
+          : ""}
       </div>
     </div>
   );

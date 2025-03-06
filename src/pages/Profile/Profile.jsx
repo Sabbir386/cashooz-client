@@ -444,7 +444,7 @@ const Profile = () => {
   let user;
   if (token) {
     user = verifyToken(token);
-    console.log("User email:", user?.email);
+    //console.log("User email:", user?.email);
   }
 
   // Fetch user's specific posts
@@ -466,14 +466,16 @@ const Profile = () => {
   } = useUserMultipleWithdrawalsQuery(user?.email);
 
   // Fetch single normal user data
-  const skipQuery = !user || !["user", "superAdmin", "admin", "advertiser"].includes(user?.role);
+  const skipQuery =
+    !user ||
+    !["user", "superAdmin", "admin", "advertiser"].includes(user?.role);
   const {
     data: userData,
     isLoading: isUserLoading,
     error: userError,
   } = useSingleNormalUserQuery(user?.objectId, { skip: skipQuery });
 
-  console.log("User data:", userData);
+  //console.log("User data:", userData);
 
   // Fetch referrals
   const {
@@ -484,7 +486,7 @@ const Profile = () => {
     referralId: userData?.data?.referralId || "", // Ensure referralId is passed correctly
   });
 
-  // console.log("Referrals:", referralData);
+  // //console.log("Referrals:", referralData);
   const {
     data: userEarningFieldData,
     error: userEarningFieldError,
@@ -493,7 +495,7 @@ const Profile = () => {
     skip: user?.role !== "user",
   });
 
-  console.log("userEarningFieldData", userEarningFieldData);
+  //console.log("userEarningFieldData", userEarningFieldData);
   //survey completed data user
   const {
     data: surveysData,
@@ -554,8 +556,8 @@ const Profile = () => {
   const referrals = referralData?.data || [];
   const surveys = surveysData?.data || [];
   const bonusReward = bonusRewardsData?.rewards || [];
-  console.log("bonusRewardsData", bonusReward);
-  console.log("Surveys Data:", surveys);
+  //console.log("bonusRewardsData", bonusReward);
+  //console.log("Surveys Data:", surveys);
   // Array of components corresponding to each tab
   const tabComponents = [
     <TabOneComponent userEarningFieldData={userEarningFieldData} />,

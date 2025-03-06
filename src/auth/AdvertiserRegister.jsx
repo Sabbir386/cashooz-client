@@ -37,12 +37,11 @@ const AdvertiserRegister = () => {
           presentAddress: "456 Elm Street, Cityville, Country",
           permanentAddress: "789 Maple Avenue, Townsville, Country",
           profileImg: "profile_picture.jpg",
-          isDeleted: false
-          
+          isDeleted: false,
         },
       };
 
-       console.log("Registration data:", advertiser);
+      //console.log("Registration data:", advertiser);
       await createAdvertiser(advertiser);
       toast.success("Registration successful", { id: toastId, duration: 2000 });
       navigate("/login");
@@ -65,7 +64,7 @@ const AdvertiserRegister = () => {
         </div>
         <div className="bg-white w-full md:w-1/2 flex flex-col items-center py-32 px-8 rounded-r-md">
           <h3 className="text-3xl font-bold text-buttonBackground mb-4">
-          Advertiser Registration
+            Advertiser Registration
           </h3>
           <form
             onSubmit={handleSubmit(onSubmit)}

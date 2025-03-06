@@ -17,7 +17,7 @@ const PaypalBox = () => {
 
   if (token) {
     user = verifyToken(token);
-    // console.log(user);
+    // //console.log(user);
   }
   const {
     data: totalRewards,
@@ -33,7 +33,7 @@ const PaypalBox = () => {
     isLoading: isUserLoading,
     error: userError,
   } = useSingleNormalUserQuery(user?.objectId);
-  console.log(userData?.data);
+  //console.log(userData?.data);
   // Handle form submission
   const handleWithdraw = async (e) => {
     e.preventDefault();
@@ -105,7 +105,7 @@ const PaypalBox = () => {
       },
     };
 
-    console.log(requestBody);
+    //console.log(requestBody);
     try {
       // Send the withdrawal request
       await createWithdrawal(requestBody).unwrap();

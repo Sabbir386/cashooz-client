@@ -294,12 +294,12 @@ const CreateOffer = () => {
     isError: categoriesError,
   } = useViewCategoryQuery();
 
-  // console.log(categories); // Add this line to check the fetched categories data in console
+  // //console.log(categories); // Add this line to check the fetched categories data in console
 
   const onSubmit = async (data) => {
     const toastId = toast.loading("Offer Creating....");
 
-    // // console.log(data);
+    // // //console.log(data);
 
     try {
       const image = data.image[0];
@@ -315,7 +315,7 @@ const CreateOffer = () => {
       })
         .then((res) => res.json())
         .then(async (imageData) => {
-          // console.log(imageData);
+          // //console.log(imageData);
           if (imageData.url) {
             const offerInfo = {
               name: data.name,
@@ -332,14 +332,14 @@ const CreateOffer = () => {
               description: content,
               terms: data.terms,
               image: imageData.url,
-              points: Number((data.points) * 1000 * 0.7),
+              points: Number(data.points * 1000 * 0.7),
               completionLimit: 200,
               completionWindow: 300,
               completedCount: 50,
               startDate: "2023-11-01T00:00:00.000Z",
               endDate: "2024-01-31T00:00:00.000Z",
             };
-            console.log(offerInfo);
+            //console.log(offerInfo);
             await CreateOffer(offerInfo);
             toast.success("Successfully Offer Created", {
               id: toastId,
@@ -348,14 +348,14 @@ const CreateOffer = () => {
           }
         })
         .catch((err) => {
-          console.log(err);
+          //console.log(err);
         });
 
       // reset();
       // navigate("/dashboard");
     } catch (error) {
       toast.error("Something went wrong", { id: toastId, duration: 2000 });
-      // console.log("Error:", error);
+      // //console.log("Error:", error);
     }
   };
 
@@ -495,12 +495,25 @@ const CreateOffer = () => {
                 Points
               </label>
               <input
-                type="number"
+                type="text"
                 id="points"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="123"
+                placeholder="123 or 123.45"
                 required
-                {...register("points", { required: "Points is required" })}
+                inputMode="decimal" // Helps mobile keyboards show a decimal option
+                {...register("points", {
+                  required: "Points is required",
+                  pattern: {
+                    value: /^-?\d*\.?\d+$/,
+                    message: "Enter a valid number",
+                  },
+                })}
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/[^0-9.]/g, ""); // Restrict non-numeric input except '.'
+                  if ((e.target.value.match(/\./g) || []).length > 1) {
+                    e.target.value = e.target.value.slice(0, -1); // Prevent multiple dots
+                  }
+                }}
               />
             </div>
             <div>

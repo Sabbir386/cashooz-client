@@ -39,7 +39,7 @@ const CreateAdmin = () => {
         },
       };
 
-      // console.log("Registration data:", adminInfo);
+      // //console.log("Registration data:", adminInfo);
       await createAdmin(adminInfo);
       toast.success("Registration successful", { id: toastId, duration: 2000 });
       navigate("/login");

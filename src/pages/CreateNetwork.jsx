@@ -18,7 +18,7 @@ const CreateNetwork = () => {
       const networkInfo = {
         networkName: data.networkName,
       };
-      // console.log(networkInfo);
+      // //console.log(networkInfo);
       await CreateNetwork(networkInfo);
       // reset();
       toast.success("Successfully Network Created", {
@@ -29,7 +29,7 @@ const CreateNetwork = () => {
       // navigate("/dashboard");
     } catch (error) {
       toast.error("Something went wrong", { id: toastId, duration: 2000 });
-      // console.log("err-", error);
+      // //console.log("err-", error);
     }
   };
 

@@ -35,12 +35,12 @@ const CreateAdvertiser = () => {
           designation: data.designation,
           emergencyContactNo: "01578458458",
           bloodGroup: "A-",
-          role:'adverstiser',
+          role: "adverstiser",
           permanentAddress: "456 Second Avenue, Town, Country",
         },
       };
 
-      // console.log("Registration data:", advertiserInfo);
+      // //console.log("Registration data:", advertiserInfo);
       await createAdvertiser(advertiserInfo);
       toast.success("Registration successful", { id: toastId, duration: 2000 });
       //   navigate("/login");

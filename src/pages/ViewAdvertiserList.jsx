@@ -36,7 +36,7 @@ const ViewAdvertiserList = () => {
   // Handle deletion of an advertiser
   const handleDelete = (_id) => {
     // Implement your logic to delete advertiser with ID 'id'
-    // console.log("Delete advertiser with ID:", _id);
+    // //console.log("Delete advertiser with ID:", _id);
     CustomSwal.fire({
       title: "Are you sure you want to delete this Advertiser?",
       icon: "warning",
@@ -58,7 +58,7 @@ const ViewAdvertiserList = () => {
             id: toastId,
             duration: 2000,
           });
-          // console.log("Error:", error);
+          // //console.log("Error:", error);
         }
       }
     });

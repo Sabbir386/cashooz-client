@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function PrivecyPolicy() {
   return (
@@ -140,6 +141,289 @@ function PrivecyPolicy() {
           </p>
         </section>
 
+        <section className="mt-8">
+          <h2 className="text-xl md:text-2xl font-semibold mb-2 text-white">
+            Personal Data Collection and Usage
+          </h2>
+          <p className="text-gray-400 leading-relaxed mb-4">
+            Personal data, also known as personal information, refers to any
+            details that can be used to identify an individual. This does not
+            include anonymized data, such as "Anonymous Data," which is no
+            longer linked to identifiable individuals. We collect and process
+            personal data to operate our website effectively and provide our
+            content and services to users. Typically, we process personal data
+            only with the consent of website visitors.
+          </p>
+          <p className="text-gray-200 leading-relaxed">
+            We gather, store, use, and transfer various types of personal data,
+            which we categorize as follows:
+          </p>
+          <ul className="list-disc list-inside text-gray-400 space-y-2">
+            <li>
+              Identity Data: This includes information that can uniquely
+              identify you, such as your first and last name, username,
+              telephone number, gender, country of residence, and official
+              identification documents like a driver's license, passport, state
+              identification, visa, or similar government-issued IDs.
+            </li>
+            <li>
+              Contact Data: This consists of details like your address, email
+              address, and telephone numbers, which allow us to communicate with
+              you.
+            </li>
+            <li>
+              Special Categories Data: This refers to sensitive personal data,
+              including information about your race, ethnicity, religious or
+              philosophical beliefs, sexual life, sexual orientation, political
+              views, health status, and biometric data.
+            </li>
+            <li>
+              Transaction Data: This includes information about your financial
+              transactions, such as payment methods, payouts, cash-outs,
+              redemption methods, and gift card information for services
+              provided on the website.
+            </li>
+            <li>
+              Technical Data: This includes data about your internet protocol
+              (IP) address, browser type and version, device identification,
+              operating system, time zone settings, location, and other
+              technical details about the device and software you use to access
+              our website.
+            </li>
+            <li>
+              Profile Data: This includes usernames, passwords, selfies,
+              interests, preferences, feedback, and information gathered from
+              research and survey responses that help us tailor our services.
+            </li>
+            <li>
+              Research and Survey Responses Data: This includes information
+              collected through surveys or research efforts aimed at improving
+              user experience and enhancing our website. While this data may be
+              linked to you, it is processed in a pseudonymous manner, meaning
+              it is not directly identifiable.
+            </li>
+            <li>
+              Usage Data: This data provides insights into how you interact with
+              our website, including the content you view or click on, as well
+              as diagnostic and troubleshooting information related to your
+              activities.
+            </li>
+            <li>
+              Marketing and Communications Data: This includes your preferences
+              regarding marketing communications from us or third parties (e.g.,
+              via platforms like Facebook, Google Analytics, or Microsoft
+              Clarity). It also includes your communication preferences, which
+              help us tailor our outreach efforts. <br /> Additionally, we
+              collect Aggregated Data, which refers to statistical or
+              demographic data derived from personal information. While
+              Aggregated Data may come from your personal information, it cannot
+              be used to identify you and is not classified as personal data
+              under privacy laws. <br />
+              Overall, we collect and process your personal information to
+              enhance your experience on our website, improve our services, and
+              communicate with you more effectively. We ensure that this data is
+              managed in compliance with privacy laws and regulations.
+            </li>
+          </ul>
+        </section>
+        <section className="mt-8">
+          <div className="">
+            <div className="shadow-lg rounded-2xl p-6 ">
+              <div>
+                <section className="mb-6">
+                  <h2 className="text-xl font-semibold text-white">
+                    Data You Provide to Us
+                  </h2>
+                  <p className="text-white mt-2">
+                    We collect data directly from you when you interact with us,
+                    such as during communications regarding our services. For
+                    example, if you reach out for technical support, we collect
+                    the information you provide.
+                  </p>
+                </section>
+
+                <section className="mb-6">
+                  <p className="text-white mt-2">
+                    We also use third-party tools to help facilitate, operate,
+                    and manage our website. These third-party services, which
+                    include tools that use cookies and other tracking
+                    technologies, collect data when you interact with our site.
+                    These tools are managed by external parties, and we are not
+                    responsible for the specific data they capture or how they
+                    use and protect that data.
+                  </p>
+                  <p className="text-white mt-2">
+                    When utilizing our Services, we and our third-party service
+                    providers may gather information from you through automated
+                    methods, including cookies, web beacons, and web server
+                    logs. By engaging with the Services, you agree to the use of
+                    cookies, beacons, and similar technologies in your browser
+                    and within emails, as outlined in this Privacy Policy. The
+                    data collected through these means encompasses your IP
+                    address, browser specifications, gyroscopic position,
+                    service strength, data provider, device identifiers and
+                    characteristics, country code or approximate location,
+                    operating system version, language preferences, referring
+                    URLs, and details regarding your usage of our Services, such
+                    as the duration (in seconds) of music playback, metadata
+                    (including genre, artist, album, title, description, and
+                    tags), and media type.
+                  </p>
+                  <p className="text-white mt-2">
+                    We may utilize this information for various purposes, such
+                    as ensuring the proper functioning of the Services, creating
+                    an account on your behalf if you have not formally
+                    registered, analyzing your listening habits and preferences
+                    to deliver personalized content, assessing the number of
+                    users visiting specific pages or engaging with messages or
+                    newsletters, and preventing fraudulent activities. We
+                    collaborate with analytics providers like Google Analytics,
+                    which employs cookies and similar technologies to collect
+                    and analyze data regarding the use of the Services and to
+                    report on activities and trends. This service may also
+                    gather information about your interactions with other
+                    websites, applications, and online resources. For more
+                    information on Google’s practices, please visit
+                    https://www.google.com/policies/privacy/partners/, and you
+                    can opt out by downloading the Google Analytics opt-out
+                    browser add-on available at
+                    https://tools.google.com/dlpage/gaoptout.
+                  </p>
+                  <p className="text-white mt-2">
+                    Additionally, third parties that promote goods or services
+                    on the Service (collectively referred to as “Advertisers”)
+                    may also employ cookies or other technologies to monitor
+                    your usage of the Service. Advertisers may further utilize
+                    cookies to track your online activities across various
+                    websites over time to deliver interest-based advertising.
+                  </p>
+                  <p className="text-white mt-2">
+                    The data we collect is stored on servers located in
+                    Amsterdam, Netherlands, ensuring that your information is
+                    managed and stored securely.
+                  </p>
+                  <p className="text-white mt-2">
+                    We ensure that cookies and tracking technologies are only
+                    activated once you provide your consent. This consent is
+                    tracked when you click “Accept” on our Privacy Center. By
+                    consenting, you allow us and our third-party service
+                    providers to collect and process data through these tools.
+                  </p>
+                </section>
+
+                <section className="mb-6">
+                  <h2 className="text-xl font-semibold text-white">
+                    Usage of Collected Data
+                  </h2>
+                  <ul className="list-disc list-inside text-white mt-2">
+                    <li>Ensuring the proper functioning of the Services.</li>
+                    <li>Creating an account on your behalf.</li>
+                    <li>
+                      Analyzing your listening habits for personalized content.
+                    </li>
+                    <li>
+                      Tracking user engagement with newsletters and messages.
+                    </li>
+                    <li>Preventing fraudulent activities.</li>
+                  </ul>
+                </section>
+
+                <section className="mb-6">
+                  <h2 className="text-xl font-semibold text-white">
+                    Third-Party Analytics
+                  </h2>
+                  <p className="text-white mt-2">
+                    We use Google Analytics to track and analyze website usage
+                    trends. More information on their data policies can be found
+                    <Link
+                      href="https://www.google.com/policies/privacy/partners/"
+                      className="text-blue-600 hover:underline"
+                    >
+                      {" "}
+                      here
+                    </Link>
+                    . You can opt out via
+                    <Link
+                      href="https://tools.google.com/dlpage/gaoptout"
+                      className="text-blue-600 hover:underline"
+                    >
+                      {" "}
+                      this link
+                    </Link>
+                    .
+                  </p>
+                </section>
+
+                <section className="mb-6">
+                  <h2 className="text-xl font-semibold text-white">
+                    Advertising and Tracking
+                  </h2>
+                  <p className="text-white mt-2">
+                    Advertisers may use cookies to track your usage across
+                    various websites and deliver interest-based ads.
+                  </p>
+                </section>
+
+                <section className="mb-6">
+                  <h2 className="text-xl font-semibold text-white">
+                    Data Storage
+                  </h2>
+                  <p className="text-white mt-2">
+                    Your data is securely stored on servers in Amsterdam,
+                    Netherlands.
+                  </p>
+                </section>
+
+                <section className="mb-6">
+                  <h2 className="text-xl font-semibold text-white">Consent</h2>
+                  <p className="text-white mt-2">
+                    Cookies and tracking technologies are only activated after
+                    you provide consent by clicking “Accept.”
+                  </p>
+                </section>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="mt-8">
+          <h2 className="text-xl md:text-2xl font-semibold mb-2 text-white">
+            Location Data
+          </h2>
+          <p className="text-gray-400 leading-relaxed mb-4">
+            We may gather information regarding your real-time geo-location
+            through our tracking software and Features to offer location-aware
+            services, provided that you have requested or consented to such
+            services. This information is utilized to deliver content,
+            advertising, or other services that rely on your location. In
+            instances where you have opted for location-aware services, we may
+            also collect this data in conjunction with an identifier linked to
+            your device, allowing us to recognize your mobile browser or device
+            upon your return to our tracking software. This data is classified
+            as Personal Data in numerous jurisdictions. Additionally, with your
+            request or consent, we may share your location information with
+            advertisers, merchants, and third-party partners involved in surveys
+            and other activities, to present you with reward opportunities,
+            assist in locating participating stores or partners, and for various
+            research, analytics, and marketing purposes. You have the ability to
+            provide or withdraw your consent for us to access your location data
+            at any time by modifying the settings on your mobile device.
+            Furthermore, you can cease all location data collection by
+            uninstalling all tracking mobile applications, following the
+            standard uninstallation procedures for your device.
+          </p>
+        </section>
+        <section className="mt-8">
+          <h2 className="text-xl md:text-2xl font-semibold mb-2 text-white">
+          How We Use Your Personal Information
+          </h2>
+          <p className="text-gray-400 leading-relaxed mb-4">
+          We collect and use your personal information for various purposes related to the operation of our services, including but not limited to the following:
+          </p>
+          <ul>
+            <li></li>
+          </ul>
+        
+        </section>
         <section className="mt-8">
           <h2 className="text-xl md:text-2xl font-semibold mb-2 text-white">
             Contact Us

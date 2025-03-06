@@ -11,7 +11,7 @@ const ViewAdminList = () => {
   // Use the Redux query hook to fetch data
   const { data: admins, error, isLoading } = useViewAdminQuery();
   const [deleteAdmin] = useDeleteAdminMutation();
-  // console.log(admins);
+  // //console.log(admins);
   const [data, setData] = useState([]);
 
   // Update state when admins data is available
@@ -22,7 +22,7 @@ const ViewAdminList = () => {
   }, [admins]);
 
   const handleDeleteAdmin = async (_id) => {
-    // console.log(_id);
+    // //console.log(_id);
     CustomSwal.fire({
       title: "Are you sure you want to delete this Admin?",
       icon: "warning",
@@ -44,7 +44,7 @@ const ViewAdminList = () => {
             id: toastId,
             duration: 2000,
           });
-          // console.log("Error:", error);
+          // //console.log("Error:", error);
         }
       }
     });

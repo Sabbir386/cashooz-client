@@ -23,6 +23,8 @@ import { UAParser } from "ua-parser-js";
 
 const OfferView = () => {
   const [networkOffers, setNetworkOffers] = useState([]);
+  const [partnerOffers, setPartnerOffers] = useState([]);
+  const [surveyPartnerOffers, setSurveyPartnerOffers] = useState([]);
   const [isNetworkPresent, setIsNetworkPresent] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -105,7 +107,23 @@ const OfferView = () => {
   useEffect(() => {
     if (offers?.data) {
       setIsNetworkPresent(true);
-      setNetworkOffers(offers.data);
+
+      const offerwithoutPartner = offers.data.filter(
+        (offer) =>
+          offer.networkName !== "Offer Partners" &&
+          offer.networkName !== "Survey Partners"
+      );
+      const withPartner = offers.data.filter(
+        (offer) => offer.networkName === "Offer Partners"
+      );
+      const withSurveyPartner = offers.data.filter(
+        (offer) => offer.networkName === "Survey Partners"
+      );
+      console.log(offers)
+      // console.log(withPartner[0].offers, "<<<withPartner>>>");
+      setPartnerOffers(withPartner[0]?.offers);
+      setSurveyPartnerOffers(withSurveyPartner);
+      setNetworkOffers(offerwithoutPartner);
     }
   }, [offers]);
 
@@ -144,7 +162,7 @@ const OfferView = () => {
       //   points: selectedOffer?.points,
       //   payout: selectedOffer?.points,
       // }).unwrap();
-      console.log(selectedOffer._id);
+      //console.log(selectedOffer._id);
       if (selectedOffer?.offerLink) {
         const actualClickId = user?.objectId; // Replace with actual ID
         const actualSite = "https://cashooz.com"; // Replace with actual site
@@ -155,15 +173,15 @@ const OfferView = () => {
 
         // Ensure the correct separator (?) or (&)
         // const separator = mainLink.includes("?") ? "&" : "?";
-        const finalLink = mainLink+linkParams;
+        const finalLink = mainLink + linkParams;
 
-        console.log("finalLink:", finalLink);
+        //console.log("finalLink:", finalLink);
         // const updatedOfferLink = selectedOffer.offerLink
         //   .replace("ADD_CLICK_ID_HERE", actualClickId)
         //   .replace("PASS_SITE_HERE", actualSite)
         //   .replace("PASS_PLACEMENT_HERE", actualPlacement);
 
-        // console.log(updatedOfferLink); // Check the final URL in console
+        // //console.log(updatedOfferLink); // Check the final URL in console
         setIsModalOpen(false);
         window.open(finalLink, "_blank");
       }
@@ -179,7 +197,7 @@ const OfferView = () => {
       //   userId: user?.objectId, // Assuming `user` contains the logged-in user's details
       //   offerReward: selectedOffer?.points, // Use the points as the task reward
       // }).unwrap();
-      // console.log('response offer',response)
+      // //console.log('response offer',response)
     } catch (err) {
       CustomSwal.fire({
         title: "Error!",
@@ -225,7 +243,7 @@ const OfferView = () => {
                     <Swiper
                       modules={[Navigation, Pagination, Scrollbar, A11y]}
                       spaceBetween={10}
-                      slidesPerView={2}
+                      slidesPerView={3}
                       navigation={{
                         prevEl: prevRefs.current[idx].current,
                         nextEl: nextRefs.current[idx].current,
@@ -239,15 +257,15 @@ const OfferView = () => {
                       }}
                       pagination={{ clickable: true }}
                       breakpoints={{
-                        640: { slidesPerView: 2, spaceBetween: 10 },
+                        640: { slidesPerView: 3, spaceBetween: 10 },
                         768: { slidesPerView: 4, spaceBetween: 10 },
                         1024: { slidesPerView: 7, spaceBetween: 10 },
                       }}
                     >
-                      {networkOffer.offers.map((offer) => (
+                      {networkOffer?.offers?.map((offer) => (
                         <SwiperSlide className="text-white" key={offer._id}>
                           <div
-                            className="cursor-pointer bg-cardBackground p-4 rounded-md"
+                            className="cursor-pointer bg-cardBackground p-0 pb-2 md:p-4 rounded-md"
                             onClick={() => toggleModal(offer)}
                           >
                             <img
@@ -256,19 +274,19 @@ const OfferView = () => {
                                 "https://main-p.agmcdn.com/offers/1126583-cwTa2k02.jpg"
                               }
                               alt={offer.name}
-                              className="w-full h-24 object-cover rounded-md"
+                              className="w-full h-36 md:h-24 md:object-cover rounded-md"
                             />
-                            <div className="mt-4 text-white">
-                              <h4 className="font-bold text-base">
+                            <div className="mt-4 text-white px-2 md:px-0">
+                              <h4 className="font-bold text-sm md:text-base">
                                 {offer?.name
                                   ? offer.name.slice(0, 11)
                                   : "Offer Name"}
                                 {offer.name.length > 11 && "..."}
                               </h4>
-                              <h6 className="text-grayColor text-sm">
+                              <h6 className="text-grayColor font-bold text-xs md:text-sm">
                                 {offer?.categoryName || offer.category}
                               </h6>
-                              <h3 className="font-semibold">
+                              <h3 className="font-semibold text-xs text-buttonBackground">
                                 {offer?.points || "00"} CZ
                               </h3>
                             </div>
@@ -315,7 +333,7 @@ const OfferView = () => {
                 </div>
               ))
             ) : (
-              <p className="text-center text-blue-400 p-4">
+              <p className="text-center text-emerald-600 p-4 animate-pulse">
                 Offers might be Available soon.Come Back Tomorrow....
               </p>
             )
@@ -323,6 +341,15 @@ const OfferView = () => {
             <></>
           )}
         </div>
+        {partnerOffers?.length > 0 ? (
+          <OfferPartners
+            title={"Offer Partners"}
+            partnerOffers={partnerOffers}
+            user={user}
+          ></OfferPartners>
+        ) : (
+          <></>
+        )}
 
         {/* Modal for displaying selected offer details */}
         {isModalOpen && selectedOffer && (
@@ -353,7 +380,7 @@ const OfferView = () => {
                       "https://i.ibb.co/JjrS14H/cashooz.png"
                     }
                     alt="Offer"
-                    className="block mx-auto w-32 h-40 object-cover rounded-full"
+                    className="block mx-auto w-40 h-40 object-cover rounded-full"
                   />
                   <div>
                     {/* <p className="text-white text-2xl font-bold">
@@ -445,7 +472,6 @@ const OfferView = () => {
         )}
       </div>
       {/* Offer Partners Section */}
-      <OfferPartners title={"Offer Partners"}></OfferPartners>
     </>
   );
 };

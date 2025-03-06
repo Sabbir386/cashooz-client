@@ -15,14 +15,14 @@ const SocialMediaPage = () => {
     isError,
     refetch,
   } = useGetAllSocialMediaPostsQuery();
-  // console.log('socialMediaLinks',socialMediaLinks);
+  // //console.log('socialMediaLinks',socialMediaLinks);
 
   const [deleteSocialMediaPost] = useDeleteSocialMediaPostMutation();
   const [updateSocialMediaPostStatus] =
     useUpdateSocialMediaPostStatusMutation();
   const [socialMediaPostRewards] = useSocialMediaPostRewardsMutation();
   const handleStatusChange = async (id, userId, rewardPoint, newStatus) => {
-    console.log(id, newStatus, rewardPoint); // Debugging log
+    //console.log(id, newStatus, rewardPoint); // Debugging log
     try {
       // Update the social media post status
       await updateSocialMediaPostStatus({
@@ -106,7 +106,7 @@ const SocialMediaPage = () => {
       }
     });
   };
-  // console.log(socialMediaLinks);
+  // //console.log(socialMediaLinks);
   if (isLoading) {
     return <p className="text-white">Loading...</p>;
   }

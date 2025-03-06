@@ -35,7 +35,7 @@ const CreateUser = () => {
         },
       };
 
-      // console.log("Registration data:", normalUser);
+      // //console.log("Registration data:", normalUser);
       await registration(normalUser);
       toast.success("Registration successful", { id: toastId, duration: 2000 });
       navigate("/login");

@@ -19,7 +19,7 @@ const WithdrawlHistory = () => {
   const [updateWithdrawalStatus] = useUpdateWithdrawalStatusMutation();
   useEffect(() => {
     if (apiResponse?.data) {
-      console.log(apiResponse?.data);
+      //console.log(apiResponse?.data);
       setAllWithdrawls(apiResponse.data); // Ensure `data` is an array from API response
     }
   }, [apiResponse]);
@@ -42,15 +42,17 @@ const WithdrawlHistory = () => {
       if (newStatus === "failed" && amount) {
         payload.amount = amount; // Include amount only for 'failed' status
       }
-  
+
       // Call the API to update the withdrawal status
       const response = await updateWithdrawalStatus(payload).unwrap();
-      console.log("Status updated:", response);
-  
+      //console.log("Status updated:", response);
+
       // Show success message using Swal
       CustomSwal.fire({
         title: "Success!",
-        text: `Payment successfully ${newStatus === "completed" ? "Transferred" : "Marked as Failed"}.`,
+        text: `Payment successfully ${
+          newStatus === "completed" ? "Transferred" : "Marked as Failed"
+        }.`,
         icon: "success",
         confirmButtonText: "Okay",
         customClass: {
@@ -63,7 +65,7 @@ const WithdrawlHistory = () => {
           }
         },
       });
-  
+
       // Update the state to reflect the new status locally
       setAllWithdrawls((prevWithdrawals) =>
         prevWithdrawals.map((withdrawal) =>
@@ -74,7 +76,7 @@ const WithdrawlHistory = () => {
       );
     } catch (error) {
       console.error("Failed to update status:", error);
-  
+
       // Show error message using Swal
       CustomSwal.fire({
         title: "Error!",
@@ -93,7 +95,6 @@ const WithdrawlHistory = () => {
       });
     }
   };
-  
 
   if (isLoading) {
     return <p>Loading withdrawals...</p>;
@@ -241,7 +242,7 @@ const WithdrawlHistory = () => {
                       className="bg-transparent webkit-appearance-none"
                       value={row.status}
                       onChange={(e) =>
-                        handleStatusChange(row._id, e.target.value,row.amount,)
+                        handleStatusChange(row._id, e.target.value, row.amount)
                       }
                       disabled={row.status === "completed"}
                     >

@@ -26,56 +26,56 @@ const platforms = [
   {
     name: "Facebook",
     description: "Submit posts, stories or reels.",
-    reward: "10 CZ",
+    reward: "100 CZ",
     color: "text-blue-500",
     icon: <FaFacebook size={28} />,
   },
   {
     name: "Instagram",
     description: "Submit posts, stories or reels.",
-    reward: "10 CZ",
+    reward: "100 CZ",
     color: "text-pink-500",
     icon: <FaInstagram size={28} />,
   },
   {
     name: "YouTube",
     description: "Submit videos or shorts.",
-    reward: "10 CZ",
+    reward: "100 CZ",
     color: "text-red-500",
     icon: <FaYoutube size={28} />,
   },
   {
     name: "TikTok",
     description: "Submit TikTok videos.",
-    reward: "10 CZ",
+    reward: "100 CZ",
     color: "text-gray-400",
     icon: <FaTiktok size={28} />,
   },
   {
     name: "Snapchat",
     description: "Submit spotlights and more.",
-    reward: "10 CZ",
+    reward: "100 CZ",
     color: "text-yellow-500",
     icon: <FaSnapchatGhost size={28} />,
   },
   {
     name: "Twitter",
     description: "Submit spotlights and more.",
-    reward: "10 CZ",
+    reward: "100 CZ",
     color: "text-blue-400",
     icon: <FaTwitter size={28} />,
   },
   {
     name: "Telegram",
     description: "Submit spotlights and more.",
-    reward: "10 CZ",
+    reward: "100 CZ",
     color: "text-blue-400",
     icon: <FaTelegram size={28} />,
   },
   {
     name: "Pinterest",
     description: "Submit spotlights and more.",
-    reward: "10 CZ",
+    reward: "100 CZ",
     color: "text-blue-400",
     icon: <FaPinterest size={28} />,
   },
@@ -96,7 +96,7 @@ const SocialSubmissions = () => {
   if (token) {
     try {
       user = verifyToken(token);
-      // console.log(user)
+      // //console.log(user)
     } catch (error) {
       console.error("Invalid token:", error);
     }
@@ -110,7 +110,7 @@ const SocialSubmissions = () => {
   } = useGetUserSpecificPostsQuery(user?.objectId, {
     skip: !user?.objectId, // Skip the query if userId is not available
   });
-  // console.log("userCompletedSocialMediaLinks", userCompletedSocialMediaLinks);
+  // //console.log("userCompletedSocialMediaLinks", userCompletedSocialMediaLinks);
 
   // Function to match platforms with posts
   const getMatchedPosts = (platformName) => {
@@ -127,13 +127,15 @@ const SocialSubmissions = () => {
     );
   };
 
-  const skipQuery = !user || !["user", "superAdmin", "admin", "advertiser"].includes(user?.role);
+  const skipQuery =
+    !user ||
+    !["user", "superAdmin", "admin", "advertiser"].includes(user?.role);
   const {
     data: userData,
     isLoading: isUserLoading,
     error: userError,
   } = useSingleNormalUserQuery(user?.objectId, { skip: skipQuery });
-  console.log(userData);
+  //console.log(userData);
   useEffect(() => {
     if (userData?.data?.id) {
       // Dynamically set the referral link when userData is available
@@ -143,12 +145,12 @@ const SocialSubmissions = () => {
     }
   }, [userData]);
   if (referralLink) {
-    console.log(referralLink);
+    //console.log(referralLink);
   }
   // Open modal with the selected platform's data
   const handleCardClick = (platform) => {
     // setSelectedPlatform(platform);
-    // // console.log(selectedPlatform)
+    // // //console.log(selectedPlatform)
     // setIsModalOpen(true);
     if (!isCardDisabled(platform.name)) {
       setSelectedPlatform(platform);
@@ -203,10 +205,10 @@ ${selectedPlatform.name}!  #Cashooz #workfromhome #earnmoney #makemoney #easymon
       status: "pending",
     };
 
-    console.log(postDetails);
+    //console.log(postDetails);
     try {
       const response = await createSocialMediaPost(postDetails).unwrap();
-      console.log(response);
+      //console.log(response);
       if (response.message) {
         CustomSwal.fire({
           icon: "success",
@@ -222,7 +224,7 @@ ${selectedPlatform.name}!  #Cashooz #workfromhome #earnmoney #makemoney #easymon
             htmlContainer: "text-blue-400", // Ensure content text matches
           },
         });
-        
+
         closeModal();
       } else {
         throw new Error(response.message || "Submission failed");
@@ -238,7 +240,7 @@ ${selectedPlatform.name}!  #Cashooz #workfromhome #earnmoney #makemoney #easymon
     }
   };
   // const sharePost = (platform) => {
-  //   console.log(platform)
+  //   //console.log(platform)
   //   const postUrl = `https://cashooz-838b0.web.app/register?refId=`; // Replace with the URL of the post you want to share
   //   const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
   //     postUrl
@@ -281,12 +283,12 @@ ${selectedPlatform.name}!  #Cashooz #workfromhome #earnmoney #makemoney #easymon
     const shareUrl = platformShareUrls[platformName];
 
     if (shareUrl) {
-      console.log(`Sharing on ${platformName}: ${shareUrl}`);
+      //console.log(`Sharing on ${platformName}: ${shareUrl}`);
       // Optionally open the share URL in a new tab
       // window.open(shareUrl, "_blank");
       window.open(shareUrl, "_blank", "width=600,height=400");
     } else {
-      console.log(`Platform "${platformName}" is not supported for sharing.`);
+      //console.log(`Platform "${platformName}" is not supported for sharing.`);
     }
   };
 
@@ -305,58 +307,61 @@ ${selectedPlatform.name}!  #Cashooz #workfromhome #earnmoney #makemoney #easymon
 
         {/* Cards Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-  {platforms.map((platform) => {
-    const matchedPosts = getMatchedPosts(platform.name);
-    const status = matchedPosts.find(
-      (post) => post.status === "completed" || post.status === "pending"
-    )?.status;
+          {platforms.map((platform) => {
+            const matchedPosts = getMatchedPosts(platform.name);
+            const status = matchedPosts.find(
+              (post) => post.status === "completed" || post.status === "pending"
+            )?.status;
 
-    const buttonText =
-      status === "completed"
-        ? "Completed"
-        : status === "pending"
-        ? "Pending"
-        : `Earn ${platform.reward}`;
+            const buttonText =
+              status === "completed"
+                ? "Completed"
+                : status === "pending"
+                ? "Pending"
+                : `Earn ${platform.reward}`;
 
-    const disabled = status === "completed" || status === "pending";
+            const disabled = status === "completed" || status === "pending";
 
-    return (
-      <div
-        key={platform.name}
-        className={`flex flex-col justify-between items-start p-6 rounded-lg shadow-lg ${
-          disabled
-            ? "bg-gray-600 cursor-not-allowed opacity-50"
-            : "bg-[#374151] bg-opacity-50 hover:shadow-2xl hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer"
-        }`}
-        onClick={() => !disabled && handleCardClick(platform)} // Handle card click if not disabled
-      >
-        {/* Platform Icon and Details */}
-        <div className="flex items-center gap-6 mb-4">
-          <div
-            className={`w-14 h-14 rounded-full flex items-center justify-center shadow-md bg-gray-800 ${platform.color}`}
-          >
-            {platform.icon}
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold text-white">
-              {platform.name}
-            </h3>
-            <p className="text-sm text-gray-400">{platform.description}</p>
-          </div>
+            return (
+              <div
+                key={platform.name}
+                className={`flex flex-col justify-between items-start p-6 rounded-lg shadow-lg ${
+                  disabled
+                    ? "bg-gray-600 cursor-not-allowed opacity-50"
+                    : "bg-[#374151] bg-opacity-50 hover:shadow-2xl hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer"
+                }`}
+                onClick={() => !disabled && handleCardClick(platform)} // Handle card click if not disabled
+              >
+                {/* Platform Icon and Details */}
+                <div className="flex items-center gap-6 mb-4">
+                  <div
+                    className={`w-14 h-14 rounded-full flex items-center justify-center shadow-md bg-gray-800 ${platform.color}`}
+                  >
+                    {platform.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-white">
+                      {platform.name}
+                    </h3>
+                    <p className="text-sm text-gray-400">
+                      {platform.description}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  className={`w-1/2 text-sm font-semibold text-white px-2 py-3 rounded-lg shadow-md mx-auto ${
+                    disabled
+                      ? "bg-gray-500 cursor-not-allowed"
+                      : "bg-[#01D676] hover:bg-green-600"
+                  }`}
+                  disabled={disabled} // Disable button if status is completed or pending
+                >
+                  {buttonText} {/* Dynamically display the button text */}
+                </button>
+              </div>
+            );
+          })}
         </div>
-        <button
-          className={`w-1/2 text-sm font-semibold text-white px-2 py-3 rounded-lg shadow-md mx-auto ${
-            disabled ? "bg-gray-500 cursor-not-allowed" : "bg-[#01D676] hover:bg-green-600"
-          }`}
-          disabled={disabled} // Disable button if status is completed or pending
-        >
-          {buttonText} {/* Dynamically display the button text */}
-        </button>
-      </div>
-    );
-  })}
-</div>
-
       </div>
 
       {/* Modal Section */}
@@ -378,8 +383,8 @@ ${selectedPlatform.name}!  #Cashooz #workfromhome #earnmoney #makemoney #easymon
 
             {/* Step 1: Copy Caption Instructions */}
             <p className="text-sm text-gray-400 mb-4">
-              <strong>Step 1:</strong> Use this caption for your post on 
-               {' '+selectedPlatform.name} platform.
+              <strong>Step 1:</strong> Use this caption for your post on
+              {" " + selectedPlatform.name} platform.
             </p>
             <div className="mb-4">
               <textarea

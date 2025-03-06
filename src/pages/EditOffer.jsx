@@ -64,7 +64,7 @@ const EditOffer = () => {
           });
         } catch (error) {
           toast.error("Something went wrong", { id: toastId, duration: 2000 });
-          // console.log("Error:", error);
+          // //console.log("Error:", error);
         }
       }
     });

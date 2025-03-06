@@ -48,7 +48,7 @@ const ViewCategory = () => {
             id: toastId,
             duration: 2000,
           });
-          // console.log("Error:", error);d
+          // //console.log("Error:", error);d
         }
       }
     });

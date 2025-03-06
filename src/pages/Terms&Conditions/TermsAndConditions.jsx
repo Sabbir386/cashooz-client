@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const TermsAndConditions = () => {
   return (
     <div className="px-6 py-10 lg:px-24 max-w-4xl mx-auto text-gray-800 mt-5">
-      <h1 className="text-3xl font-semibold text-center text-blue-600 mb-6">
+      <h1 className="text-3xl font-semibold text-center text-blue-600 my-6">
         Terms and Conditions
       </h1>
 

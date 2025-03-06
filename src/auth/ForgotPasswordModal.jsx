@@ -18,7 +18,7 @@ const ForgotPasswordModal = ({ onClose }) => {
     try {
       // Call the forgetPassword mutation
       const response = await forgetPassword({ email }).unwrap();
-      console.log("API Response:", response);
+      //console.log("API Response:", response);
 
       // Handle success response
       if (response?.success) {

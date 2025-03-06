@@ -1,6 +1,7 @@
 import React from "react";
 
 const PartnersModal = ({ isOpen, onClose, modalContentUrl, modalTitle }) => {
+  //console.log(modalContentUrl);
   if (!isOpen) return null;
 
   return (

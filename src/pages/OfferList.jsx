@@ -17,7 +17,7 @@ import { verifyToken } from "../utils/verifyToken";
 import { useAppSelector } from "../redux/features/hooks";
 import { useCurrentToken } from "../redux/features/auth/authSlice";
 import ReactModal from "react-modal";
-import "./modal/ModalStyles.css";
+
 import OfferView from "./OfferView/OfferView";
 import Loader from "../components/Loader";
 import CustomSwal from "../customSwal/customSwal";
@@ -41,8 +41,8 @@ const OfferList = () => {
   const offset = currentPage * pageSize;
 
   const handleToggle = async (id) => {
-    console.log(id, "id");
-    console.log(offerStatus, "offerStatus");
+    //console.log(id, "id");
+    //console.log(offerStatus, "offerStatus");
 
     try {
       await toggleOfferStatus({ id });
@@ -61,7 +61,7 @@ const OfferList = () => {
     },
     { skip: !(userRole === "superAdmin" || userRole === "admin") }
   );
-  // // console.log(data);
+  // // //console.log(data);
   const {
     data: offers,
     isLoading,
@@ -77,14 +77,14 @@ const OfferList = () => {
     { skip: !(userRole === "user" || userRole === "advertiser") }
   );
   if (offersForAdmin) {
-    console.log(offersForAdmin);
+    //console.log(offersForAdmin);
   }
   useEffect(() => {
     if (token) {
       const user = verifyToken(token);
-      // console.log(user);
+      // //console.log(user);
       setUserRole(user?.role);
-      // console.log("offerlist", user?.role);
+      // //console.log("offerlist", user?.role);
     }
 
     const getDeviceInfo = async () => {
@@ -138,7 +138,7 @@ const OfferList = () => {
 
   // const [createCompletedOffer] = useCreateCompletedOfferMutation();
   const handleDeleteOffer = async (_id) => {
-    // console.log(_id);
+    // //console.log(_id);
     CustomSwal.fire({
       title: "Are you sure you want to delete this offer?",
       icon: "warning",
@@ -160,7 +160,7 @@ const OfferList = () => {
             id: toastId,
             duration: 2000,
           });
-          // console.log("Error:", error);
+          // //console.log("Error:", error);
         }
       }
     });
@@ -188,10 +188,10 @@ const OfferList = () => {
 
   useEffect(() => {
     if (singleOffer) {
-      // console.log("Single Offer Data:", singleOffer);
+      // //console.log("Single Offer Data:", singleOffer);
     }
   }, [singleOffer]);
-  // console.log(deviceInfo);
+  // //console.log(deviceInfo);
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
@@ -199,15 +199,15 @@ const OfferList = () => {
 
   const handleStatusChange = (event) => {
     setOfferStatus(event.target.value);
-    console.log(event.target.value)
+    //console.log(event.target.value)
     // refetch(); // Manually refetch data when status changes
   };
 
   const paginatedData = data.slice(offset, offset + pageSize);
 
-  if (isLoading || isFetching) {
-    return <Loader></Loader>; // Show loading state
-  }
+  // if (isLoading || isFetching) {
+  //   return <Loader></Loader>; // Show loading state
+  // }
   if (isLoadingOffersForAdmin || isFetchingOffersForAdmin) {
     return <Loader></Loader>; // Show loading state
   }

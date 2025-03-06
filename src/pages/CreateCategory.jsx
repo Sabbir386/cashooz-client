@@ -18,7 +18,7 @@ const CreateCategory = () => {
       const categoryInfo = {
         categoryName: data.categoryName,
       };
-      // console.log(categoryInfo);
+      // //console.log(categoryInfo);
       await CreateCategory(categoryInfo);
       // reset();
       toast.success("Successfully Category Created", {
@@ -29,7 +29,7 @@ const CreateCategory = () => {
       // navigate("/dashboard");
     } catch (error) {
       toast.error("Something went wrong", { id: toastId, duration: 2000 });
-      // console.log("err-", error);
+      // //console.log("err-", error);
     }
   };
 

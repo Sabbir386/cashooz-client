@@ -2,22 +2,43 @@ import { baseApi } from "../redux/api/baseApi";
 
 export const surveyWallApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    // getFilteredSurveys: builder.query({
+    //   query: ({ networkName, userId, userOS, userCountryCode }) => {
+    //     const params = new URLSearchParams();
+    
+    //     if (networkName) params.append('networkName', networkName);
+    //     if (userId) params.append('userId', userId); // Append userId to query params
+    //     if (userOS) params.append('userOS', userOS);  // Append userOS to query params
+    //     if (userCountryCode) params.append('userCountryCode', userCountryCode);  // Append userCountryCode to query params
+    
+    //     return {
+    //       url: `/offer/surveyWall/networks-offers-filter-by-survey-wall?${params.toString()}`,
+    //       method: "GET",
+    //     };
+    //   },
+    //   providesTags: ['SurveyWall'],
+    // }),
+
     getFilteredSurveys: builder.query({
-      query: ({ networkName, userId, userOS, userCountryCode }) => {
+      query: ({ userId, userOS, userCountryCode }) => {
         const params = new URLSearchParams();
     
-        if (networkName) params.append('networkName', networkName);
-        if (userId) params.append('userId', userId); // Append userId to query params
-        if (userOS) params.append('userOS', userOS);  // Append userOS to query params
-        if (userCountryCode) params.append('userCountryCode', userCountryCode);  // Append userCountryCode to query params
+        // Pass both network names in a single query
+        params.append("networkName", "Survey Wall");
+        params.append("networkName", "Survey Partners");
+    
+        if (userId) params.append("userId", userId);
+        if (userOS) params.append("userOS", userOS);
+        if (userCountryCode) params.append("userCountryCode", userCountryCode);
     
         return {
           url: `/offer/surveyWall/networks-offers-filter-by-survey-wall?${params.toString()}`,
           method: "GET",
         };
       },
-      providesTags: ['SurveyWall'],
+      providesTags: ["SurveyWall"],
     }),
+    
     
     
     createSurveyCompleted: builder.mutation({

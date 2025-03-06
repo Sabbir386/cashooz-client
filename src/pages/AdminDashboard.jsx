@@ -66,7 +66,7 @@ const AdminDashboard = () => {
     isLoading,
   } = useViewWithdrawalsQuery();
   const paymentsData = paymentsResponse?.data || [];
-  console.log(paymentsData);
+  //console.log(paymentsData);
 
   useEffect(() => {
     const fetchOffers = async () => {
@@ -75,7 +75,7 @@ const AdminDashboard = () => {
           "https://www.cpalead.com/api/offers?id=2184269&limit=15"
         );
         const data = await response.json();
-        console.log("Fetched data:", data);
+        //console.log("Fetched data:", data);
         setCpaOffers(data.offers ? data.offers.slice(0, 15) : []); // Adjust according to the actual data structure
       } catch (error) {
         console.error("Error fetching the offers:", error);
@@ -93,7 +93,7 @@ const AdminDashboard = () => {
     user = verifyToken(token);
     userRole = user.role;
   }
-  // console.log(user);
+  // //console.log(user);
   const [countTotalOffer, setCountTotalOffer] = useState(null);
   const {
     data: totalOffer,
@@ -220,25 +220,25 @@ const AdminDashboard = () => {
       setCountTotalAdvertiser(totalAdvertisers.meta.total);
     }
     if (regularCompletedOffer) {
-      console.log(regularCompletedOffer);
+      //console.log(regularCompletedOffer);
       setCountPerDayCompletedOffer(regularCompletedOffer);
     }
     if (dateWiseCompletedOffer) {
-      console.log(dateWiseCompletedOffer);
+      //console.log(dateWiseCompletedOffer);
       setCountDateWiseCompletedOffer(dateWiseCompletedOffer);
     }
     if (dateAndOfferAnduserWiseCompletedOffer) {
-      console.log(dateAndOfferAnduserWiseCompletedOffer);
+      //console.log(dateAndOfferAnduserWiseCompletedOffer);
       setCountDateandOfferandUserWiseCompletedOffer(
         dateAndOfferAnduserWiseCompletedOffer
       );
     }
     if (specificUserWiseCompletedOffer) {
-      console.log(specificUserWiseCompletedOffer);
+      //console.log(specificUserWiseCompletedOffer);
       setCountSpecificUserWiseCompletedOffer(specificUserWiseCompletedOffer);
     }
     if (specificOfferWiseCompletedOffer) {
-      console.log(specificOfferWiseCompletedOffer);
+      //console.log(specificOfferWiseCompletedOffer);
       setCountSpecificOfferWiseCompletedOffer(specificOfferWiseCompletedOffer);
     }
   }, [
@@ -258,7 +258,7 @@ const AdminDashboard = () => {
   let LoggedData = [];
   // if (userRole === "user" || userRole === "advertiser") {
   //   LoggedData = CountLoggedUserTotalCompletedOffer?.data ?? [];
-  //   console.log("loged", LoggedData);
+  //   //console.log("loged", LoggedData);
   // }
   const transformedData = LoggedData.flatMap((entry) =>
     entry.offerInfo.map((info) => ({
@@ -283,7 +283,7 @@ const AdminDashboard = () => {
   // if (userRole === "user" || userRole === "advertiser") {
   //   LoggedDatawithNameAndCount =
   //     CountLoggedInUserOfferNameandTotalCounts?.data ?? [];
-  //   console.log("logedwithNameData", LoggedDatawithNameAndCount);
+  //   //console.log("logedwithNameData", LoggedDatawithNameAndCount);
   // }
 
   // Check if LoggedDatawithNameAndCount.data exists and is an array
@@ -296,7 +296,7 @@ const AdminDashboard = () => {
         }))
       : [];
   if (LoggedDatawithNameAndCount) {
-    // console.log("daa", transformedLoggedDatawithNameAndCount);
+    // //console.log("daa", transformedLoggedDatawithNameAndCount);
   }
   const data02 = [
     { name: "A1", value: 100 },
@@ -370,7 +370,7 @@ const AdminDashboard = () => {
                       <FaBitcoin />
                     ) : payment.method === "Ethereum" ? (
                       <FaEthereum />
-                    ): payment.method === "Litecoin " ? (
+                    ) : payment.method === "Litecoin " ? (
                       <FaLitecoinSign />
                     ) : payment.method ? (
                       payment.method.charAt(0)
@@ -397,12 +397,12 @@ const AdminDashboard = () => {
                   $
                   {
                     payment.networkType === "btc"
-                      ? ((payment.amount )/1000).toFixed(2) // Convert BTC to USD (example rate)
+                      ? (payment.amount / 1000).toFixed(2) // Convert BTC to USD (example rate)
                       : payment.networkType === "ethereum"
-                      ? ((payment.amount )/1000).toFixed(2) // Convert ETH to USD (example rate)
+                      ? (payment.amount / 1000).toFixed(2) // Convert ETH to USD (example rate)
                       : payment.networkType === "litecoin"
-                      ? ((payment.amount )/1000).toFixed(2) // Convert LTC to USD (example rate)
-                      : ((payment.amount)/1000).toFixed(2) // Default for PayPal or already in USD
+                      ? (payment.amount / 1000).toFixed(2) // Convert LTC to USD (example rate)
+                      : (payment.amount / 1000).toFixed(2) // Default for PayPal or already in USD
                   }
                 </span>
               </div>

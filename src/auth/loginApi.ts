@@ -6,8 +6,8 @@ export const loginApi = baseApi.injectEndpoints({
         forgetPassword: builder.mutation({
             query: ({ email }) => {
                 // Directly construct the body with the email field
-                const body = { email }; 
-                console.log("Request body:", body); // This should log { email: "example@gmail.com" }
+                const body = { email };
+                //console.log("Request body:", body); // This should log { email: "example@gmail.com" }
                 return {
                     url: "/auth/forget-password",
                     method: "POST",
@@ -20,7 +20,7 @@ export const loginApi = baseApi.injectEndpoints({
         resetPassword: builder.mutation({
             query: ({ token, email, newPassword }) => {
                 const body = { email, newPassword };
-                console.log("Reset request body:", body);
+                //console.log("Reset request body:", body);
                 return {
                     url: `/auth/reset-password?token=${token}`, // Token is passed in query params
                     method: "POST",

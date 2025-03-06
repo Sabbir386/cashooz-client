@@ -25,7 +25,7 @@ const Reward = () => {
 
   const { data: rewardData, refetch: refetchRewardData } =
     useGetUserRewardQuery();
-  console.log("rewardData", rewardData);
+  //console.log("rewardData", rewardData);
   const [claimBonus] = useClaimBonusMutation();
   const token = useAppSelector(useCurrentToken);
   const [taskCompleted] = useTaskCompletedMutation();
@@ -42,13 +42,15 @@ const Reward = () => {
   }
 
   const userId = user?.objectId || "";
-  const skipQuery = !user || !["user", "superAdmin", "admin", "advertiser"].includes(user?.role);
+  const skipQuery =
+    !user ||
+    !["user", "superAdmin", "admin", "advertiser"].includes(user?.role);
   const {
     data: userData,
     isLoading: isUserLoading,
     error: userError,
   } = useSingleNormalUserQuery(user?.objectId, { skip: skipQuery });
-  console.log(userData);
+  //console.log(userData);
   const referralBonusTiers = [
     { referrals: 10, bonus: 100 },
     { referrals: 25, bonus: 150 },
@@ -110,7 +112,7 @@ const Reward = () => {
   } = useViewCompletedOfferQuery(userId, {
     skip: !userId,
   });
-  // console.log(completedOfferData)
+  // //console.log(completedOfferData)
 
   useEffect(() => {
     if (completedOfferData) {
@@ -128,7 +130,7 @@ const Reward = () => {
       setIsLoading(false);
     }
   }, [rewardData]);
-  console.log(rewardData);
+  //console.log(rewardData);
   const handleClaimBonus = async (day) => {
     try {
       setIsClaiming(true); // Set loading state
@@ -270,7 +272,7 @@ const Reward = () => {
   const renderTaskBonuses = () => {
     // Ensure claimedTasks is an array (default to an empty array if undefined)
     const validClaimedTasks = Array.isArray(claimedTasks) ? claimedTasks : [];
-  
+
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {[
@@ -295,9 +297,11 @@ const Reward = () => {
               <div className="text-lg font-bold text-yellow-400 mb-2">
                 {task.requiredTasks}-Task Bonus
               </div>
-              <div className="text-white text-2xl">Reward: {task.reward} CZ</div>
+              <div className="text-white text-2xl">
+                Reward: {task.reward} CZ
+              </div>
             </div>
-  
+
             {/* Task Progress */}
             <div className="flex justify-center items-center mt-4 mb-4">
               <div className="grid grid-cols-10 gap-2">
@@ -335,7 +339,7 @@ const Reward = () => {
                 })}
               </div>
             </div>
-  
+
             {/* Tasks Completed and Claim Button */}
             <div className="w-full text-center mt-auto">
               <div className="text-sm text-gray-400">
@@ -377,7 +381,6 @@ const Reward = () => {
       </div>
     );
   };
-  
 
   const renderAffiliatedBonus = () => (
     <div className="flex justify-start items-center">
