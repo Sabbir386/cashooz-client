@@ -49,6 +49,7 @@ import SocialMediaPage from "../pages/SocialMedia/SocialMedia";
 import LandingLayout from "../layouts/LandingLayout";
 import ViewAllNetworkOffers from "../pages/OfferView/ViewAllNetworkOffers";
 import VerifyEmail from "../pages/registrationVerification/VerifyEmail";
+import Faq from "../pages/Landing/component/Faq";
 
 export const router = createBrowserRouter([
   {
@@ -95,6 +96,10 @@ export const router = createBrowserRouter([
       {
         path: "/aboutus",
         element: <Aboutus></Aboutus>,
+      },
+      {
+        path: "/faq",
+        element: <Faq></Faq>,
       },
       {
         path: "/termsncondition",

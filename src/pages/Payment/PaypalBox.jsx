@@ -49,12 +49,12 @@ const PaypalBox = () => {
       return;
     }
 
-    if (myCurrentBalance < 10) {
+    if (myCurrentBalance < .50) {
       CustomSwal.fire({
         title:
           totalRewards?.totalWithdrawal > 0
-            ? "You need to earn $10 to make your withdrawal"
-            : "You need to earn $20 to make your first withdrawal",
+            ? "You need to earn $.50 to make your withdrawal"
+            : "You need to earn $5 to make your first withdrawal",
       });
       return;
     }
@@ -68,9 +68,9 @@ const PaypalBox = () => {
         return;
       }
     } else {
-      if (myCurrentBalance < 20) {
+      if (myCurrentBalance < .50) {
         CustomSwal.fire({
-          title: "You need to earn $20 to make your first withdrawal",
+          title: "You need to earn $5 to make your first withdrawal",
         });
         return;
       }

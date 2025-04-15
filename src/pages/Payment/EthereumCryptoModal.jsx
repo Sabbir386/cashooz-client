@@ -4,7 +4,7 @@ const EthereumCryptoModal = ({ onClose, onSubmit }) => {
   const [ethereumAddress, setEthereumAddress] = useState("");
   const [amountUSD, setAmountUSD] = useState(0);
   const ETH_RATE = 1800.45; // Example ETH rate
-  const MIN_WITHDRAWAL = 10;
+  const MIN_WITHDRAWAL = .50;
   const FEE = 0.00; // Example fee for Ethereum
   const BONUS = 0;
 
@@ -44,7 +44,7 @@ const EthereumCryptoModal = ({ onClose, onSubmit }) => {
 
         {/* Notice Section */}
         <div className="bg-blue-600  text-center text-sm rounded-md p-3 mb-6">
-        New users have to earn 20000 CZ to make their first withdrawal.Afer this the minimum will be 10000 CZ.
+        New users have to earn $5 to make their first withdrawal.Afer this the minimum will be $0.50
         </div>
 
         {/* Ethereum Address Input */}
@@ -84,7 +84,7 @@ const EthereumCryptoModal = ({ onClose, onSubmit }) => {
               Max amount
             </button>
           </div>
-          <small className="text-gray-400">Minimum $10.00</small>
+          <small className="text-gray-400">Minimum $0.50</small>
         </div>
 
         {/* ETH Rate and Fee Section */}

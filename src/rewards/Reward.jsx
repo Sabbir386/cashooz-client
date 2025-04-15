@@ -145,7 +145,7 @@ const Reward = () => {
       CustomSwal.fire({
         icon: "success",
         title: "Bonus Claimed!",
-        text: response.message,
+        html: `<p class="custom-swal-text">${response.message}</p>`,
       });
 
       // Update the state after claiming the reward
@@ -155,7 +155,7 @@ const Reward = () => {
       CustomSwal.fire({
         icon: "error",
         title: "Oops...",
-        text: error.message || "Failed to claim bonus! Try Again Tomorrow",
+        html: `<p class="custom-swal-text">${error.message || "Failed to claim bonus! Try Again Tomorrow"}</p>`,
       });
     } finally {
       setIsClaiming(false); // Reset loading state
@@ -167,7 +167,7 @@ const Reward = () => {
       CustomSwal.fire({
         icon: "error",
         title: "User ID Not Found",
-        text: "Unable to claim task bonus. Please try logging in again.",
+        html: `<p>Unable to claim task bonus. Please try logging in again.</p>`,
       });
       return; // Exit the function if userId is not available
     }
@@ -185,7 +185,7 @@ const Reward = () => {
       CustomSwal.fire({
         icon: "success",
         title: "Bonus Claimed!",
-        text: response.message,
+        html: `<p>${response.message} </p>`,
       });
 
       // Update claimed tasks state to include the newly claimed task
@@ -199,7 +199,7 @@ const Reward = () => {
       CustomSwal.fire({
         icon: "error",
         title: "Oops...",
-        text: error.message || "Failed to claim task reward!",
+        html: `<p>${error.message} || "Failed to claim task reward!"</p>`,
       });
     } finally {
       setIsClaiming(false); // Reset loading state

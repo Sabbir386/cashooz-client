@@ -71,6 +71,15 @@ const LandingLayout = () => {
                   About
                 </Link>
               </li>
+              <li className="text-center md:text-left px-5 my-3 md:my-0">
+                <Link
+                  onClick={() => setOpen(false)}
+                  to="/faq"
+                  className="text-lg font-medium hover:text-buttonBackground text-cardBackground"
+                >
+                  FAQ
+                </Link>
+              </li>
               <Link
               onClick={() => setOpen(false)}
                 className="inline-block md:hidden px-8 py-2 rounded-md bg-green-500 text-white"

@@ -219,7 +219,8 @@ const SurveyList = () => {
     return <p className="text-red-500">Failed to load surveys</p>;
   }
   return (
-    <div className="min-h-screen bg-[#212134] p-4 md:p-6 lg:p-10 text-center rounded mt-5">
+    <div className="min-h-screen bg-[#212134] p-4 md:p-6 lg:p-10 text-center rounded mt-5 relative">
+      {/* {surveyOffers?.length === 0 && <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  text-emerald-600 p-4 animate-pulse">Surveys might be Available soon.Come Back Tomorrow..</p> } */}
       {surveyOffers?.length > 0 &&
       <div className="flex flex-col md:flex-row justify-between items-center mb-6">
         <div className="flex items-center mb-4 md:mb-0">

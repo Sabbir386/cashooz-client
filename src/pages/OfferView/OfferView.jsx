@@ -220,7 +220,7 @@ const OfferView = () => {
     <>
       <div>
         <div
-          className={`${networkOffers.length > 0 ? "min-h-screen" : "auto"}`}
+          className={`${networkOffers.length > 0 ? "auto" : "auto"}`}
         >
           {isNetworkPresent ? (
             networkOffers?.length > 0 ? (

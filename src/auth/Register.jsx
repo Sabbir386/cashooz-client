@@ -8,7 +8,12 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { FaExclamationCircle, FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
+import {
+  FaExclamationCircle,
+  FaEye,
+  FaEyeSlash,
+  FaGoogle,
+} from "react-icons/fa";
 
 import { useSearchParams } from "react-router-dom";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
@@ -18,9 +23,11 @@ import { setUser } from "../redux/features/auth/authSlice";
 import { verifyToken } from "../utils/verifyToken";
 import { useAppDispatch } from "../redux/features/hooks";
 import { UAParser } from "ua-parser-js";
+import ReCAPTCHA from "react-google-recaptcha";
 const Register = () => {
   const navigate = useNavigate();
   const [registration] = useRegistrationMutation();
+  const [captchaVerified, setCaptchaVerified] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [error, setError] = useState(false);
@@ -136,13 +143,17 @@ const Register = () => {
       setError(true); // Show error if checkbox is not checked
       return;
     }
+    if (!captchaVerified) {
+      toast.error("Please complete the CAPTCHA verification");
+      return;
+    }
     setError(false);
     if (!deviceFingerprint) {
       toast.error("Device fingerprint generation failed.");
       return;
     }
     //console.log("deviceFingerprint", deviceFingerprint);
-    const toastId = toast.loading("User Registering...");
+    const toastId = toast.loading("You're  Registering, please wait......");
     const normalUser = {
       password: data.password,
       normalUser: {
@@ -196,7 +207,7 @@ const Register = () => {
       }
     } catch (error) {
       // Handle unexpected errors from the registration process
-      toast.error("Something went wrong. Please try again later.", {
+      toast.error("Network issue. Please try again later.", {
         id: toastId,
         duration: 2000,
       });
@@ -210,7 +221,7 @@ const Register = () => {
       //console.log(firebaseUser)
       if (!firebaseUser) return;
       //console.log(firebaseUser)
-      const toastId = toast.loading("Checking user existence...");
+      const toastId = toast.loading("Verifying your details, please wait...");
       try {
         // Check if the user exists
         const refreshedUser = await refetchUser();
@@ -236,7 +247,7 @@ const Register = () => {
             if (user) {
               //console.log(res.data?.accessToken)
               dispatch(setUser({ user, token: res.data.accessToken }));
-              toast.success("User logged in successfully", { id: toastId });
+              toast.success("You're logged in", { id: toastId });
               navigate("/dashboard");
               return;
             } else {
@@ -298,7 +309,7 @@ const Register = () => {
 
                 if (user) {
                   dispatch(setUser({ user, token: res.data.accessToken }));
-                  toast.success("User registered and logged in successfully", {
+                  toast.success("You're logged in", {
                     id: toastId,
                   });
                   navigate("/dashboard");
@@ -324,7 +335,7 @@ const Register = () => {
         }
       } catch (error) {
         //console.log(error)
-        toast.error("Something went wrong during login/registration", {
+        toast.error("Network issue. Please try again later", {
           id: toastId,
         });
         console.error("Error during login/registration:", error);
@@ -503,7 +514,12 @@ const Register = () => {
            `}
               />
             </div>
-
+            <div className="mb-4 flex justify-center">
+              <ReCAPTCHA
+                sitekey="6LdGkfIqAAAAACg0K0iX_BJYjLEjW0M9WZ9xVCia"
+                onChange={() => setCaptchaVerified(true)}
+              />
+            </div>
             <button
               // disabled={!isChecked}
               className={`font-bold text-white uppercase focus:outline-none rounded p-3 bg-buttonBackground`}
@@ -511,8 +527,8 @@ const Register = () => {
               Register
             </button>
           </form>
-           {/* Error message if checkbox is not checked */}
-           {error && (
+          {/* Error message if checkbox is not checked */}
+          {error && (
             <p className="text-red-600 text-sm bg-red-100 border border-red-400 rounded-md p-2 mt-6 flex items-center gap-2">
               <FaExclamationCircle className="text-red-500" />
               <span>Please accept the Terms & Conditions to continue.</span>
@@ -527,7 +543,6 @@ const Register = () => {
               <span>Continue with Google</span>
             </div>
           </button>
-         
 
           <div className="w-full flex justify-between my-5">
             <Link to={"/"} className="text-primaryColor font-semibold text-sm">

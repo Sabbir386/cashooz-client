@@ -65,7 +65,177 @@ const AdminDashboard = () => {
     error,
     isLoading,
   } = useViewWithdrawalsQuery();
-  const paymentsData = paymentsResponse?.data || [];
+  const getRandomAmount = () =>
+   (Math.random() * (20000 - 0 + 1)) + 0.5;
+
+  const dummyData = [
+    {
+      _id: "1",
+      method: "paypal",
+      userName: "Alice Johnson",
+      country: "USA",
+      amount: getRandomAmount(),
+      networkType: "paypal",
+    },
+    {
+      _id: "2",
+      method: "Bitcoin",
+      userName: "Bob Smith",
+      country: "Canada",
+      amount: getRandomAmount(),
+      networkType: "btc",
+    },
+    {
+      _id: "3",
+      method: "Ethereum",
+      userName: "Carlos Diaz",
+      country: "Mexico",
+      amount: getRandomAmount(),
+      networkType: "ethereum",
+    },
+    {
+      _id: "4",
+      method: "Litecoin ",
+      userName: "Diana Kim",
+      country: "South Korea",
+      amount: getRandomAmount(),
+      networkType: "litecoin",
+    },
+    {
+      _id: "5",
+      method: "paypal",
+      userName: "Emma Watson",
+      country: "UK",
+      amount: getRandomAmount(),
+      networkType: "paypal",
+    },
+    {
+      _id: "6",
+      method: "Bitcoin",
+      userName: "Frank Lin",
+      country: "China",
+      amount: getRandomAmount(),
+      networkType: "btc",
+    },
+    {
+      _id: "7",
+      method: "Ethereum",
+      userName: "Grace Lee",
+      country: "Singapore",
+      amount: getRandomAmount(),
+      networkType: "ethereum",
+    },
+    {
+      _id: "8",
+      method: "Litecoin ",
+      userName: "Henry Green",
+      country: "Australia",
+      amount: getRandomAmount(),
+      networkType: "litecoin",
+    },
+    {
+      _id: "9",
+      method: "paypal",
+      userName: "Isabella Moore",
+      country: "Germany",
+      amount: getRandomAmount(),
+      networkType: "paypal",
+    },
+    {
+      _id: "10",
+      method: "Bitcoin",
+      userName: "Jack White",
+      country: "Netherlands",
+      amount: getRandomAmount(),
+      networkType: "btc",
+    },
+    {
+      _id: "11",
+      method: "Ethereum",
+      userName: "Karen Young",
+      country: "India",
+      amount: getRandomAmount(),
+      networkType: "ethereum",
+    },
+    {
+      _id: "12",
+      method: "Litecoin ",
+      userName: "Liam Scott",
+      country: "New Zealand",
+      amount: getRandomAmount(),
+      networkType: "litecoin",
+    },
+    {
+      _id: "13",
+      method: "paypal",
+      userName: "Mia Allen",
+      country: "France",
+      amount: getRandomAmount(),
+      networkType: "paypal",
+    },
+    {
+      _id: "14",
+      method: "Bitcoin",
+      userName: "Nathan Hill",
+      country: "Brazil",
+      amount: getRandomAmount(),
+      networkType: "btc",
+    },
+    {
+      _id: "15",
+      method: "Ethereum",
+      userName: "Olivia Adams",
+      country: "Spain",
+      amount: getRandomAmount(),
+      networkType: "ethereum",
+    },
+    {
+      _id: "16",
+      method: "Litecoin ",
+      userName: "Paul Baker",
+      country: "Italy",
+      amount: getRandomAmount(),
+      networkType: "litecoin",
+    },
+    {
+      _id: "17",
+      method: "paypal",
+      userName: "Quincy Foster",
+      country: "Sweden",
+      amount: getRandomAmount(),
+      networkType: "paypal",
+    },
+    {
+      _id: "18",
+      method: "Bitcoin",
+      userName: "Rachel Cooper",
+      country: "Norway",
+      amount: getRandomAmount(),
+      networkType: "btc",
+    },
+    {
+      _id: "19",
+      method: "Ethereum",
+      userName: "Samuel Reed",
+      country: "Bangladesh",
+      amount: getRandomAmount(),
+      networkType: "ethereum",
+    },
+    {
+      _id: "20",
+      method: "Litecoin ",
+      userName: "Tina Bell",
+      country: "Japan",
+      amount: getRandomAmount(),
+      networkType: "litecoin",
+    },
+  ];
+
+  // this is original withdraw data showing on top momenets js
+  // const paymentsData = paymentsResponse?.data || [];
+  // this is generate fake data for testing purpose
+  const paymentsData = dummyData;
+
   //console.log(paymentsData);
 
   useEffect(() => {

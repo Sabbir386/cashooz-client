@@ -93,13 +93,24 @@ function RootLayout() {
   }, [isOpen]);
   const setLogout = () => {
     CustomSwal.fire({
-      title: "Are you sure you want to log out?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, log out!",
-    }).then((result) => {
+  title: "Are you sure you want to log out?",
+  icon: "warning",
+  iconColor: "#ffcc00", // Gold color for warning
+  showCancelButton: true,
+  confirmButtonColor: "#1e3a8a", // Deep Blue for confirm
+  cancelButtonColor: "#d90429", // Red for cancel
+  confirmButtonText: "Yes, log out!",
+  cancelButtonText: "Cancel",
+  background: "linear-gradient(135deg, #1e293b, #3b82f6)", // Cool gradient background
+  color: "#fff",
+  buttonsStyling: false, // Important: Disables default styles so we can apply custom styles
+  customClass: {
+    popup: "custom-swal-popup",
+    title: "custom-swal-title",
+    confirmButton: "custom-swal-confirm",
+    cancelButton: "custom-swal-cancel",
+  },
+}).then((result) => {
       if (result.isConfirmed) {
         dispatch(logOut());
         navigate("/login");
@@ -194,7 +205,7 @@ function RootLayout() {
             )}
           </div>
         </div>
-        <div className="min-h-screen mt-16 pb-10 relative">
+        <div className="min-h-[60vh] mt-16 pb-10 relative">
           <Outlet></Outlet>
         </div>
         <DashboardFooter></DashboardFooter>
