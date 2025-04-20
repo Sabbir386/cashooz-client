@@ -101,7 +101,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         title: "You don't have enough balance",
       });
     } else {
-      if (myCurrentBalance >= 10) {
+      if (myCurrentBalance >= .50) {
         const amount = parseFloat(data?.amountUSD);
         if (totalRewards?.totalWithdrawal > 0) {
           if (amount <= myCurrentBalance) {
@@ -155,7 +155,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           }
         } else {
           if (totalRewards?.totalWithdrawal < 1) {
-            if (myCurrentBalance >= 20) {
+            if (myCurrentBalance >= 5) {
               if (amount <= myCurrentBalance) {
                 // Close the modal and save the data
                 setEthereumModalOpen(false);
@@ -215,11 +215,11 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
       } else {
         if (totalRewards?.totalWithdrawal > 0) {
           CustomSwal.fire({
-            title: "You need to earn $10 to make your withdrawal",
+            title: "You need to earn $0.50 to make your withdrawal",
           });
         } else {
           CustomSwal.fire({
-            title: "You need to earn $20 to make your first withdrawal",
+            title: "You need to earn $5 to make your first withdrawal",
           });
         }
       }
@@ -243,7 +243,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         title: "You don't have enough balance",
       });
     } else {
-      if (myCurrentBalance >= 10) {
+      if (myCurrentBalance >= .50) {
         const amount = parseFloat(data?.amountUSD);
         if (totalRewards?.totalWithdrawal > 0) {
           if (amount <= myCurrentBalance) {
@@ -297,7 +297,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           }
         } else {
           if (totalRewards?.totalWithdrawal < 1) {
-            if (myCurrentBalance >= 20) {
+            if (myCurrentBalance >= 5) {
               if (amount <= myCurrentBalance) {
                 // Close the modal and save the data
                 setLitecoinModalOpen(false);
@@ -386,7 +386,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         title: "You don't have enough balance",
       });
     } else {
-      if (myCurrentBalance >= 10) {
+      if (myCurrentBalance >= .50) {
         const amount = parseFloat(data?.amountUSD);
         if (totalRewards?.totalWithdrawal > 0) {
           if (amount <= myCurrentBalance) {
@@ -441,7 +441,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
           }
         } else {
           if (totalRewards?.totalWithdrawal < 1) {
-            if (myCurrentBalance >= 20) {
+            if (myCurrentBalance >= 5) {
               if (amount <= myCurrentBalance) {
                 // Close the modal and save the data
                 setCryptoModalOpen(false);
@@ -687,8 +687,8 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
         </p> */}
 
         <div className="bg-blue-600 text-center text-sm rounded-md p-3 mb-6 mt-3">
-          New users have to earn $20 to make their first withdrawal.Afer this
-          the minimum will be $10.
+          New users have to earn $5 to make their first withdrawal.Afer this
+          the minimum will be $0.50
         </div>
       </div>
       <div className="bg-gray-700 py-[1px] px-4 mt-3 mb-3 rounded-lg flex items-center justify-between">
@@ -903,7 +903,7 @@ const CheckOutForm = ({ price, userName, userEmail }) => {
             Select PayPal Amount
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 overflow-y-auto">
-            {[10, 15, 20, 30, 40, 60, 80, 100].map((amount, index) => (
+            {[5, 10, 15, 20, 40, 60, 80, 100].map((amount, index) => (
               <div
                 key={index}
                 className={`p-6 bg-gradient-to-r from-[#263b80] to-[#25bcff] rounded-lg cursor-pointer text-center flex flex-col items-center justify-center gap-3 border-2 transition duration-300 ease-in-out ${

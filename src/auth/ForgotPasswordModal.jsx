@@ -24,9 +24,12 @@ const ForgotPasswordModal = ({ onClose }) => {
       if (response?.success) {
         CustomSwal.fire({
           title: "Success!",
-          text: response.message || "Password reset email has been sent.",
+          html: `<p class="custom-swal-text">${response.message || "Password reset email has been sent."}</p>`,
           icon: "success",
           confirmButtonText: "OK",
+          didOpen: () => {
+            document.querySelector(".swal2-html-container")?.classList.add("custom-swal-text");
+          },
         }).then(() => {
           // Redirect to reset link
           navigate("/auth/forgot-password");

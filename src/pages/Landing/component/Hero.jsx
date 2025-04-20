@@ -172,7 +172,8 @@ const Hero = () => {
           />
         </h1>
         <p className="w-full md:w-1/3 mx-auto text-center text-sm text-gray-500 mt-4">
-          {swiperSlides.map((slide) => slide.description + " ")}
+          {/* {swiperSlides.map((slide) => slide.description + " ")} */}
+          Turn everyday activities into earning opportunities! Earn rewards and cash by installing apps, answering surveys, playing games and completing simple tasks like data entry. Watch videos and get paid for your time, enjoy content, and earn extra money. Access online offers for free rewards and cashback on purchases. The more you do, the more you earn across different platforms.
         </p>
         <Link
           className="w-56 mx-auto flex justify-center items-center gap-6 text-white font-medium  bg-green-500 py-3 rounded-xl mt-8 "
@@ -195,7 +196,7 @@ const Hero = () => {
       <div ref={leftCardRef} className="mt-6 md:mt-0 max-w-sm mx-auto p-4 bg-white rounded-2xl shadow-sm border border-gray-100 relative md:absolute md:left-[7%] lg:left-[15%] bottom-[10%]">
         <div className="flex flex-col items-center">
           <div className="w-full px-7">
-            <h2 className="text-lg text-left font-semibold text-green-500">
+            <h2 className="text-lg font-semibold text-gray-900 text-left">
               Top User
             </h2>
           </div>
@@ -217,8 +218,8 @@ const Hero = () => {
                 <p className="text-gray-500 text-xs">Offer</p>
               </div>
               <div>
-                <p className="text-gray-900 font-semibold">2.648</p>
-                <p className="text-gray-500 text-xs">conversion</p>
+                <p className="text-gray-900 font-semibold">$2648</p>
+                <p className="text-gray-500 text-xs">Earn</p>
               </div>
               <div>
                 <p className="text-gray-900 font-semibold">768</p>
@@ -242,11 +243,14 @@ const Hero = () => {
           </span>
         </div>
         <h2 className="text-lg font-semibold text-gray-900">Weekly Insight</h2>
-        <div className="flex justify-between items-center mt-1">
+        <div className="flex justify-between items-center mt-1 gap-2">
           <p className="text-gray-500 text-sm">Mar 01 - Mar 07</p>
-          <select className="bg-gray-100 text-gray-900 text-sm p-1 rounded-lg">
+          {/* <select className="bg-gray-100 text-gray-900 text-sm p-1 rounded-lg">
             <option>Week 1</option>
-          </select>
+          </select> */}
+          <span className="text-xs text-green-600 font-light bg-green-100 px-3 py-1 rounded-full inline-block">
+              This Week
+            </span>
         </div>
         <div className="">
           <div className="w-full flex justify-between items-end mt-4">

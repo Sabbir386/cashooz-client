@@ -29,7 +29,7 @@ const faqs = [
   {
     question: "What is the minimum withdrawal limit on Cashooz?  ",
     answer:
-      "For new users, the payout threshold is $20. After receiving their first payout, it decreases to $10. Active users generally reach this threshold within a few days.",
+      "For new users, the payout threshold is $5. After receiving their first payout, it decreases to $0.50. Active users generally reach this threshold within a few days.",
   },
   {
     question: "Does Cashooz have a referral program?   ",

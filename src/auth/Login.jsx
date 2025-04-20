@@ -3,6 +3,7 @@ import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
+import ReCAPTCHA from "react-google-recaptcha";
 import {
   useLoginMutation,
   useRegistrationMutation,
@@ -32,7 +33,7 @@ const Login = () => {
   const [CountryCode, setCountryCode] = useState("");
   const [refId, setrefId] = useState("");
   const [searchParams] = useSearchParams();
-
+  const [captchaVerified, setCaptchaVerified] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const {
@@ -90,7 +91,7 @@ const Login = () => {
             throw new Error("Failed to fetch location data");
 
           const locationData = await locationResponse.json();
-          const country = locationData.country_name || "Unknown";
+          const country = locationData.country || "Unknown";
           const countryCode = locationData.country_code || "Unknown";
 
           deviceInfo += `, IP: ${ip}, Country: ${country}, CountryCode: ${countryCode}`;
@@ -126,7 +127,7 @@ const Login = () => {
     const handleFirebaseLogin = async () => {
       if (!firebaseUser) return;
       //console.log(firebaseUser)
-      const toastId = toast.loading("Checking user existence...");
+      const toastId = toast.loading("Verifying your details, please wait...");
       try {
         // Check if the user exists
         const refreshedUser = await refetchUser();
@@ -150,7 +151,7 @@ const Login = () => {
 
             if (user) {
               dispatch(setUser({ user, token: res.data.accessToken }));
-              toast.success("User logged in successfully", { id: toastId });
+              toast.success("You're logged in", { id: toastId });
               navigate("/dashboard");
               return;
             } else {
@@ -172,12 +173,20 @@ const Login = () => {
               gender: "male",
               email: firebaseUser.email,
               contactNo: "..........",
-              presentAddress: "madhupur",
               ip: ip || "",
               device: deviceInfo || "",
               deviceFingerprint: deviceFingerprint || "",
               referredBy: refId || "self",
               profileImg: firebaseUser.photoURL || "",
+              country: country || "USA",
+              designation: "user",
+              username: firebaseUser.displayName || "Unknown",
+              dateOfBirth: "1985-07-15",
+              emergencyContactNo: "1234567890",
+              bloodGroup: "A+",
+              presentAddress: "456 Elm Street, Cityville, Country",
+              permanentAddress: "789 Maple Avenue, Townsville, Country",
+              isDeleted: false,
             },
           };
 
@@ -212,7 +221,7 @@ const Login = () => {
 
                 if (user) {
                   dispatch(setUser({ user, token: res.data.accessToken }));
-                  toast.success("User registered and logged in successfully", {
+                  toast.success("You're logged in", {
                     id: toastId,
                   });
                   navigate("/dashboard");
@@ -237,7 +246,7 @@ const Login = () => {
           }
         }
       } catch (error) {
-        toast.error("Something went wrong during login/registration", {
+        toast.error("Network issue. Please try again later", {
           id: toastId,
         });
         console.error("Error during login/registration:", error);
@@ -266,13 +275,16 @@ const Login = () => {
         setFirebaseUser(loggedUser);
       })
       .catch((error) => {
-        console.error("Google Sign-In error:", error.message);
+        // console.error("Google Sign-In error:", error.message);
       });
   };
 
   const onSubmit = async (data) => {
     const toastId = toast.loading("Logging in");
-
+    if (!captchaVerified) {
+      toast.error("Please complete the CAPTCHA verification");
+      return;
+    }
     try {
       const userInfo = {
         email: data.email,
@@ -283,11 +295,12 @@ const Login = () => {
       const user = verifyToken(res.data.accessToken);
       //console.log("user", user);
       dispatch(setUser({ user, token: res.data.accessToken }));
-      toast.success("Logged in", { id: toastId, duration: 2000 });
+      toast.success("You're Logged in", { id: toastId, duration: 2000 });
       navigate("/dashboard");
     } catch (error) {
-      //console.log(error);
-      const errorMessage = error?.data?.message || "Something went wrong";
+      // console.log(error);
+      const errorMessage = error?.data?.message || "No account found with this email. Please try again or sign up.";
+
       toast.error(errorMessage, { id: toastId, duration: 2000 });
       console.error("Login error:", error);
       console.error("Login error:", error);
@@ -341,6 +354,12 @@ const Login = () => {
                   {errors.password.message}
                 </p>
               )}
+            </div>
+            <div className="mb-4 flex justify-center">
+              <ReCAPTCHA
+                sitekey="6LdGkfIqAAAAACg0K0iX_BJYjLEjW0M9WZ9xVCia"
+                onChange={() => setCaptchaVerified(true)}
+              />
             </div>
             <button className="bg-buttonBackground font-bold text-white focus:outline-none rounded p-3">
               Login

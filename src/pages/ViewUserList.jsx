@@ -74,6 +74,7 @@ const ViewUserList = () => {
 
   // Paginated data
   const paginatedData = data.slice(offset, offset + pageSize);
+  console.log(paginatedData)
 
   return (
     <div className="container mx-auto overflow-aut min-h-screen">
@@ -87,10 +88,10 @@ const ViewUserList = () => {
               Name
             </th>
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-              Gender
+              Country
             </th>
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
-              ContactNo
+              Email
             </th>
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300 text-center">
               Actions
@@ -104,28 +105,28 @@ const ViewUserList = () => {
                 {i + 1}
               </td>
               <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
-                <div className="flex">
+                <div className="flex items-center">
                   <div className="flex-shrink-0 w-10 h-10">
                     <img
                       className="w-full h-full rounded-lg object-cover"
-                      src={Product}
+                      src={row?.profileImg || "https://i.ibb.co.com/ckfZGJD/avatar.jpg"}
                       alt=""
                     />
                   </div>
                   <div className="ml-3">
-                    <p className="text-white font-medium whitespace-no-wrap">
-                      {row.fullName}
+                    <p className="text-white font-medium whitespace-no-wrap ">
+                      {row?.name || row?.username || "N/A"}
                     </p>
                     <p className="text-gray-600 whitespace-no-wrap"></p>
                   </div>
                 </div>
               </td>
               <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
-                {row.gender}
+                {row?.country || "N/A"}
               </td>
 
               <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
-                {row.contactNo}
+                {row?.email || "N/A"}
               </td>
 
               <td className="px-1 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
