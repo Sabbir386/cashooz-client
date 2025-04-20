@@ -88,11 +88,13 @@ const Register = () => {
 
         const locationResponse = await fetch(`https://ipwhois.app/json/${ip}`);
         const locationData = await locationResponse.json();
-        const country = locationData.country_name;
-        const countryCode = locationData.country_code;
+        const country = locationData.country;
+        // console.log(locationData)
+        const countryCode = locationData.country;
 
         deviceInfo += `, IP: ${ip}, Country: ${country}, CountryCode: ${countryCode}`;
         setCountry(country);
+        // console.log(deviceInfo)
         setCountryCode(countryCode);
       } catch (error) {
         console.error("Error fetching IP information:", error);
@@ -177,7 +179,7 @@ const Register = () => {
         isDeleted: false,
       },
     };
-
+    // console.log(normalUser);
     try {
       const user = await registration(normalUser);
       // Check if response contains an error status
@@ -269,12 +271,20 @@ const Register = () => {
               gender: "male",
               email: firebaseUser.email,
               contactNo: "..........",
-              presentAddress: "madhupur",
               ip: ip || "",
               device: deviceInfo || "",
               deviceFingerprint: deviceFingerprint || "",
               referredBy: refId || "self",
               profileImg: firebaseUser.photoURL || "",
+              country: country || "USA",
+              designation: "user",
+              username: firebaseUser.displayName || "Unknown",
+              dateOfBirth: "1985-07-15",
+              emergencyContactNo: "1234567890",
+              bloodGroup: "A+",
+              presentAddress: "456 Elm Street, Cityville, Country",
+              permanentAddress: "789 Maple Avenue, Townsville, Country",
+              isDeleted: false,
             },
           };
 

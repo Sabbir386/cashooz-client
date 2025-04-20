@@ -86,12 +86,14 @@ const Login = () => {
         setIP(ip);
 
         try {
-          const locationResponse = await fetch(`https://ipwhois.app/json/${ip}`);
+          const locationResponse = await fetch(
+            `https://ipwhois.app/json/${ip}`
+          );
           if (!locationResponse.ok)
             throw new Error("Failed to fetch location data");
 
           const locationData = await locationResponse.json();
-          const country = locationData.country_name || "Unknown";
+          const country = locationData.country || "Unknown";
           const countryCode = locationData.country_code || "Unknown";
 
           deviceInfo += `, IP: ${ip}, Country: ${country}, CountryCode: ${countryCode}`;
@@ -173,12 +175,20 @@ const Login = () => {
               gender: "male",
               email: firebaseUser.email,
               contactNo: "..........",
-              presentAddress: "madhupur",
               ip: ip || "",
               device: deviceInfo || "",
               deviceFingerprint: deviceFingerprint || "",
               referredBy: refId || "self",
               profileImg: firebaseUser.photoURL || "",
+              country: country || "USA",
+              designation: "user",
+              username: firebaseUser.displayName || "Unknown",
+              dateOfBirth: "1985-07-15",
+              emergencyContactNo: "1234567890",
+              bloodGroup: "A+",
+              presentAddress: "456 Elm Street, Cityville, Country",
+              permanentAddress: "789 Maple Avenue, Townsville, Country",
+              isDeleted: false,
             },
           };
 
@@ -267,7 +277,7 @@ const Login = () => {
         setFirebaseUser(loggedUser);
       })
       .catch((error) => {
-        console.error("Google Sign-In error:", error.message);
+        // console.error("Google Sign-In error:", error.message);
       });
   };
 
@@ -291,7 +301,9 @@ const Login = () => {
       navigate("/dashboard");
     } catch (error) {
       // console.log(error);
-      const errorMessage = error?.data?.message || "No account found with this email. Please try again or sign up.";
+      const errorMessage =
+        error?.data?.message ||
+        "No account found with this email. Please try again or sign up.";
 
       toast.error(errorMessage, { id: toastId, duration: 2000 });
       console.error("Login error:", error);
