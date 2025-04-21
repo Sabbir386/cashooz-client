@@ -77,8 +77,8 @@ const ViewUserList = () => {
   // console.log(paginatedData)
 
   return (
-    <div className="container mx-auto overflow-auto min-h-screen">
-      <table className="min-w-full bg-secondaryColor border-collapse border border-gray-300 rounded-lg overflow-hidden">
+    <div className="container mx-auto overflow-x-scroll min-h-screen">
+      <table className="min-w-full bg-secondaryColor border-collapse border border-gray-300 rounded-lg">
         <thead className="bg-secondaryColor text-buttonBackground">
           <tr className="text-left">
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
