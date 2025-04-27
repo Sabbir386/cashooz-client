@@ -58,6 +58,7 @@ import BlogCategoryList from "../pages/BlogCategoryList";
 import BlogList from "../pages/BlogList";
 import CreateBlog from "../pages/CreateBlog";
 import FaqDetails from "../pages/Landing/component/FaqDetails";
+import CreateBlogCategory from "../pages/CreateBlogCategory";
 
 
 export const router = createBrowserRouter([
@@ -166,6 +167,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoutes>
             <CreateFaq></CreateFaq>
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/dashboard/create-blog-category",
+        element: (
+          <ProtectedRoutes>
+            <CreateBlogCategory></CreateBlogCategory>
           </ProtectedRoutes>
         ),
       },
