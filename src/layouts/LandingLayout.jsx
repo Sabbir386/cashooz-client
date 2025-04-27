@@ -74,6 +74,7 @@ const LandingLayout = () => {
               <li className="text-center md:text-left px-5 my-3 md:my-0">
                 <Link
                   onClick={() => setOpen(false)}
+<<<<<<< HEAD
                   to="/blog"
                   className="text-lg font-medium hover:text-buttonBackground text-cardBackground"
                 >
@@ -83,6 +84,8 @@ const LandingLayout = () => {
               <li className="text-center md:text-left px-5 my-3 md:my-0">
                 <Link
                   onClick={() => setOpen(false)}
+=======
+>>>>>>> e8e53f16d6ca357932f34c8f5015c5ac91e1b6a5
                   to="/faq"
                   className="text-lg font-medium hover:text-buttonBackground text-cardBackground"
                 >

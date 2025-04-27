@@ -50,6 +50,7 @@ import LandingLayout from "../layouts/LandingLayout";
 import ViewAllNetworkOffers from "../pages/OfferView/ViewAllNetworkOffers";
 import VerifyEmail from "../pages/registrationVerification/VerifyEmail";
 import Faq from "../pages/Landing/component/Faq";
+<<<<<<< HEAD
 import Blog from "../pages/Blog/Blog";
 import SingleBlog from "../pages/Blog/SingleBlog";
 import CreateFaq from "../pages/CreateFaq";
@@ -58,6 +59,8 @@ import BlogCategoryList from "../pages/BlogCategoryList";
 import BlogList from "../pages/BlogList";
 import CreateBlog from "../pages/CreateBlog";
 import FaqDetails from "../pages/Landing/component/FaqDetails";
+=======
+>>>>>>> e8e53f16d6ca357932f34c8f5015c5ac91e1b6a5
 
 export const router = createBrowserRouter([
   {
@@ -106,6 +109,7 @@ export const router = createBrowserRouter([
         element: <Aboutus></Aboutus>,
       },
       {
+<<<<<<< HEAD
         path: "/blog",
         element: <Blog></Blog>,
       },
@@ -114,14 +118,19 @@ export const router = createBrowserRouter([
         element: <SingleBlog></SingleBlog>,
       },
       {
+=======
+>>>>>>> e8e53f16d6ca357932f34c8f5015c5ac91e1b6a5
         path: "/faq",
         element: <Faq></Faq>,
       },
       {
+<<<<<<< HEAD
         path: "/faq/:id",
         element: <FaqDetails></FaqDetails>,
       },
       {
+=======
+>>>>>>> e8e53f16d6ca357932f34c8f5015c5ac91e1b6a5
         path: "/termsncondition",
         element: <TermsAndConditions></TermsAndConditions>,
       },
