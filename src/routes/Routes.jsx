@@ -50,6 +50,14 @@ import LandingLayout from "../layouts/LandingLayout";
 import ViewAllNetworkOffers from "../pages/OfferView/ViewAllNetworkOffers";
 import VerifyEmail from "../pages/registrationVerification/VerifyEmail";
 import Faq from "../pages/Landing/component/Faq";
+import Blog from "../pages/Blog/Blog";
+import SingleBlog from "../pages/Blog/SingleBlog";
+import CreateFaq from "../pages/CreateFaq";
+import FaqList from "../pages/FaqList";
+import BlogCategoryList from "../pages/BlogCategoryList";
+import BlogList from "../pages/BlogList";
+import CreateBlog from "../pages/CreateBlog";
+import FaqDetails from "../pages/Landing/component/FaqDetails";
 
 export const router = createBrowserRouter([
   {
@@ -98,8 +106,20 @@ export const router = createBrowserRouter([
         element: <Aboutus></Aboutus>,
       },
       {
+        path: "/blog",
+        element: <Blog></Blog>,
+      },
+      {
+        path: "/blog/:id",
+        element: <SingleBlog></SingleBlog>,
+      },
+      {
         path: "/faq",
         element: <Faq></Faq>,
+      },
+      {
+        path: "/faq/:id",
+        element: <FaqDetails></FaqDetails>,
       },
       {
         path: "/termsncondition",
@@ -133,6 +153,30 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoutes>
             <CreateOffer></CreateOffer>
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/dashboard/create-faq",
+        element: (
+          <ProtectedRoutes>
+            <CreateFaq></CreateFaq>
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/dashboard/create-blog",
+        element: (
+          <ProtectedRoutes>
+            <CreateBlog></CreateBlog>
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/dashboard/create-faq",
+        element: (
+          <ProtectedRoutes>
+            <CreateFaq></CreateFaq>
           </ProtectedRoutes>
         ),
       },
@@ -330,6 +374,30 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoutes>
             <OfferList></OfferList>
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/dashboard/faq-list",
+        element: (
+          <ProtectedRoutes>
+            <FaqList></FaqList>
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/dashboard/blog-category-list",
+        element: (
+          <ProtectedRoutes>
+            < BlogCategoryList/>
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/dashboard/blog-list",
+        element: (
+          <ProtectedRoutes>
+            <BlogList/>
           </ProtectedRoutes>
         ),
       },

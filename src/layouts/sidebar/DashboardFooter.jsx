@@ -47,7 +47,9 @@ const DashboardFooter = () => {
           <div className="text-right">
             <h2 className="text-sm font-semibold mb-4">COMPANY</h2>
             <ul className="space-y-2 text-sm flex flex-col">
-            <a href="mailto:support@cashooz.com?subject=Inquiry&body=Hello,%0D%0A%0D%0AI would like to know more about...">Contact Us</a>
+              <a href="mailto:support@cashooz.com?subject=Inquiry&body=Hello,%0D%0A%0D%0AI would like to know more about...">
+                Contact Us
+              </a>
               <Link to={"/aboutus"}>About Us</Link>
               <Link to={"/termsncondition"}>Terms of Service</Link>
               <Link to={"/privecy-policy"}>Privacy</Link>
@@ -87,7 +89,7 @@ const DashboardFooter = () => {
             </a>
             {/* Pinterest */}
             <a
-              href="https://www.pinterest.com/cashooz_com/"
+              href="https://www.pinterest.com/cashooz/"
               target="_blank"
               rel="noopener noreferrer"
               className="w-8 h-8 bg-red-600 rounded flex items-center justify-center"

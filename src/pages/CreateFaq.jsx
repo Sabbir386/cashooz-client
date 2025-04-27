@@ -8,12 +8,26 @@ import { useViewNetworkQuery } from "./NetworkApi";
 import { useViewCategoryQuery } from "./CategoryApi";
 import Select from "react-select";
 
-const CreateOffer = () => {
+const CreateFaq = () => {
   const [inputValue, setInputValue] = useState("");
   const [image, setImage] = useState("https://avatar.iran.liara.run/public");
   const editor = useRef(null);
   const [content, setContent] = useState("");
+  const [slug, setSlug] = useState("");
+  const [title, setTitle] = useState("");
   const [CreateOffer] = useCreateOfferMutation();
+  const handleTitleKeyUp = (e) => {
+    const value = e.target.value;
+    setTitle(value);
+    setSlug(
+      value
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, '')  // Remove invalid chars
+        .replace(/\s+/g, '-')          // Replace spaces with -
+        .replace(/-+/g, '-')            // Replace multiple - with single -
+    );
+  };
   const [tags, setTags] = useState([
     { value: "all", label: "all" },
     { value: "AD", label: "AD" },
@@ -383,313 +397,44 @@ const CreateOffer = () => {
                 htmlFor="name"
                 className="block mb-2 text-sm font-medium text-white"
               >
-                Offer Name
+                FAQ Question
               </label>
               <input
                 type="text"
                 id="name"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="Name"
+                placeholder="Question "
                 required
-                {...register("name", { required: "Name is required" })}
+                onKeyUp={handleTitleKeyUp}
+                {...register("name", { required: "Question is required" })}
               />
             </div>
-            {/* <div>
-              <label
-                htmlFor="offerStatus"
+            <div>
+            <label
+                htmlFor="name"
                 className="block mb-2 text-sm font-medium text-white"
               >
-                Offer Status
+                FAQ Slug
               </label>
               <input
                 type="text"
-                id="offerStatus"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="Offer Status"
+                id="name"
+                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm read-only:"
+                placeholder="Post Slug"
+                value={slug}
                 required
-                {...register("offerStatus", {
-                  required: "Offer Status is required",
-                })}
-              />
-            </div> */}
-            <div>
-              <label
-                htmlFor="category"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Category
-              </label>
-              <select
-                defaultValue={""}
-                {...register("category", { required: "Category is required" })}
-                id="category"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-              >
-                <option value="" disabled>
-                  Choose a Category
-                </option>
-                {!categoriesLoading &&
-                  !categoriesError &&
-                  Array.isArray(categories?.data) &&
-                  categories.data.map((category) => (
-                    <option key={category._id} value={category._id}>
-                      {category.categoryName}
-                    </option>
-                  ))}
-                {categoriesLoading && <option>Loading...</option>}
-                {categoriesError && <option>Error loading categories</option>}
-              </select>
-            </div>
-            <div>
-              <label
-                htmlFor="network"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Select Network
-              </label>
-              <select
-                defaultValue={""}
-                id="network"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                {...register("network", { required: "Network is required" })}
-              >
-                <option value="" disabled>
-                  Choose a Network
-                </option>
-                {!networksLoading &&
-                  !networksError &&
-                  Array.isArray(networks?.data) &&
-                  networks.data.map((network) => (
-                    <option key={network._id} value={network._id}>
-                      {network.networkName}
-                    </option>
-                  ))}
-                {networksLoading && <option>Loading...</option>}
-                {networksError && <option>Error loading networks</option>}
-              </select>
-            </div>
-
-            <div>
-              <label
-                htmlFor="contactNo"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Phone number
-              </label>
-              <input
-                type="tel"
-                id="contactNo"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="+880167904546"
-                required
-                {...register("contactNo", {
-                  required: "Contact number is required",
-                })}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="points"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Points
-              </label>
-              <input
-                type="text"
-                id="points"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="123 or 123.45"
-                required
-                inputMode="decimal" // Helps mobile keyboards show a decimal option
-                {...register("points", {
-                  required: "Points is required",
-                  pattern: {
-                    value: /^-?\d*\.?\d+$/,
-                    message: "Enter a valid number",
-                  },
-                })}
-                onInput={(e) => {
-                  e.target.value = e.target.value.replace(/[^0-9.]/g, ""); // Restrict non-numeric input except '.'
-                  if ((e.target.value.match(/\./g) || []).length > 1) {
-                    e.target.value = e.target.value.slice(0, -1); // Prevent multiple dots
-                  }
-                }}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="unique"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Offer Link
-              </label>
-              <input
-                type="text"
-                id="unique"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder=""
-                required
-                {...register("offerLink", {
-                  required: "OfferLink is required",
-                })}
-                defaultValue={"https://offer.com?clickId=&offerId=&userId="}
-              />
-            </div>
-            <div className="mb-6">
-              <label
-                htmlFor="tags"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Country
-              </label>
-              <Controller
-                name="country"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    defaultValue={[{ value: "all", label: "all" }]}
-                    isMulti
-                    options={tags}
-                    className="basic-multi-select"
-                    classNamePrefix="select"
-                    {...field}
-                  />
-                )}
-              />
-              {/* <Select
-                defaultValue={[tags[0], tags[1]]}
-                isMulti
-                options={tags}
-                className="basic-multi-select"
-                classNamePrefix="select"
-                {...register("country")}
-              /> */}
-                        
-            </div>
-            <div className="mb-6">
-              <label
-                htmlFor="tags"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Device
-              </label>
-              <Controller
-                name="devices"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    defaultValue={[{ value: "all", label: "all" }]}
-                    isMulti
-                    options={devices}
-                    className="basic-multi-select"
-                    classNamePrefix="select"
-                    {...field}
-                  />
-                )}
-              />
-              {/* <Select
-                defaultValue={[tags[0], tags[1]]}
-                isMulti
-                options={tags}
-                className="basic-multi-select"
-                classNamePrefix="select"
-                {...register("country")}
-              /> */}
-                        
-            </div>
-            <div className="mb-6">
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Daily Limit
-              </label>
-              <input
-                type="number"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="5"
-                required
-                {...register("dailyLimit", {
-                  required: "Daily Limit is required",
-                })}
-              />
-            </div>
-            <div className="mb-6">
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Total Limit
-              </label>
-              <input
-                type="number"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="50"
-                required
-                {...register("totalLimt", {
-                  required: "Total Limit is required",
-                })}
-              />
-            </div>
-            <div className="mb-6">
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Email address
-              </label>
-              <input
-                type="email"
-                id="email"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="john.doe@company.com"
-                required
-                {...register("email", { required: "Email is required" })}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="terms"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Terms
-              </label>
-              <textarea
-                rows={3}
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="Terms"
-                required
-                {...register("terms", { required: "Terms is required" })}
-              ></textarea>
-            </div>
-
-            <div className="mb-6">
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Image
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                {...register("image", {
-                  required: "Photo is Required",
-                })}
-                className="border-0 bg-transparent border-b-2 border-b-blue-500 w-full text-black focus:outline-none"
-                onChange={handleImage}
-              />
-            </div>
-            <div className="mb-6">
-              <img
-                src={image}
-                alt=""
-                className="w-24 h-24 mx-auto  rounded-md shadow-md object-cover"
+                {...register("slug", { required: "Name is required" })}
               />
             </div>
           </div>
 
-          <div className="flex items-start mb-6">
+          <div className="flex flex-col items-start mb-6">
+            <label
+              htmlFor="name"
+              className="block mb-2 text-sm font-medium text-white"
+            >
+              FAQ Answer
+            </label>
             <JoditEditor
               ref={editor}
               value={content}
@@ -698,35 +443,12 @@ const CreateOffer = () => {
               onChange={(newContent) => {}}
             />
           </div>
-          <div className="flex items-start mb-6">
-            <div className="flex items-center h-5">
-              <input
-                id="remember"
-                type="checkbox"
-                value=""
-                className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                required
-              />
-            </div>
-            <label
-              htmlFor="remember"
-              className="block mb-2 ml-2 text-sm font-medium text-white"
-            >
-              I agree with the{" "}
-              <a
-                href="#"
-                className="text-blue-600 hover:underline dark:text-blue-500"
-              >
-                terms and conditions
-              </a>
-              .
-            </label>
-          </div>
+         
           <button
             type="submit"
             className="text-white bg-buttonBackground hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-buttonBackground dark:hover:bg-green-500 dark:focus:ring-blue-800"
           >
-            Submit
+            Add FAQ
           </button>
         </form>
       </div>
@@ -734,4 +456,4 @@ const CreateOffer = () => {
   );
 };
 
-export default CreateOffer;
+export default CreateFaq;

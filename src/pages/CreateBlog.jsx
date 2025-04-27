@@ -8,10 +8,12 @@ import { useViewNetworkQuery } from "./NetworkApi";
 import { useViewCategoryQuery } from "./CategoryApi";
 import Select from "react-select";
 
-const CreateOffer = () => {
+const CreateBlog = () => {
   const [inputValue, setInputValue] = useState("");
-  const [image, setImage] = useState("https://avatar.iran.liara.run/public");
+  const [image, setImage] = useState("https://gigapress.net/wp-content/uploads/2022/02/get-featured-image-url.jpg");
   const editor = useRef(null);
+  const [slug, setSlug] = useState("");
+  const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [CreateOffer] = useCreateOfferMutation();
   const [tags, setTags] = useState([
@@ -270,6 +272,18 @@ const CreateOffer = () => {
     { value: "Mac OS", label: "Mac OS" },
     { value: "Windows", label: "Windows" },
   ]);
+  const handleTitleKeyUp = (e) => {
+    const value = e.target.value;
+    setTitle(value);
+    setSlug(
+      value
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, '')  // Remove invalid chars
+        .replace(/\s+/g, '-')          // Replace spaces with -
+        .replace(/-+/g, '-')            // Replace multiple - with single -
+    );
+  };
   const {
     register,
     handleSubmit,
@@ -383,41 +397,41 @@ const CreateOffer = () => {
                 htmlFor="name"
                 className="block mb-2 text-sm font-medium text-white"
               >
-                Offer Name
+                Post Title
               </label>
               <input
                 type="text"
                 id="name"
                 className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="Name"
+                placeholder="Post title"
+                onKeyUp={handleTitleKeyUp}
+                onChange={(e) => setTitle(e.target.value)}
                 required
                 {...register("name", { required: "Name is required" })}
               />
-            </div>
-            {/* <div>
-              <label
-                htmlFor="offerStatus"
-                className="block mb-2 text-sm font-medium text-white"
+               <label
+                htmlFor="name"
+                className="block mb-2 text-sm font-medium text-white mt-4"
               >
-                Offer Status
+                Post Slug
               </label>
               <input
                 type="text"
-                id="offerStatus"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="Offer Status"
+                id="name"
+                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm read-only:"
+                placeholder="Post Slug"
+                value={slug}
                 required
-                {...register("offerStatus", {
-                  required: "Offer Status is required",
-                })}
+                {...register("slug", { required: "Name is required" })}
               />
-            </div> */}
+            </div>
+          
             <div>
               <label
                 htmlFor="category"
                 className="block mb-2 text-sm font-medium text-white"
               >
-                Category
+                Blog Category
               </label>
               <select
                 defaultValue={""}
@@ -440,235 +454,14 @@ const CreateOffer = () => {
                 {categoriesError && <option>Error loading categories</option>}
               </select>
             </div>
-            <div>
-              <label
-                htmlFor="network"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Select Network
-              </label>
-              <select
-                defaultValue={""}
-                id="network"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                {...register("network", { required: "Network is required" })}
-              >
-                <option value="" disabled>
-                  Choose a Network
-                </option>
-                {!networksLoading &&
-                  !networksError &&
-                  Array.isArray(networks?.data) &&
-                  networks.data.map((network) => (
-                    <option key={network._id} value={network._id}>
-                      {network.networkName}
-                    </option>
-                  ))}
-                {networksLoading && <option>Loading...</option>}
-                {networksError && <option>Error loading networks</option>}
-              </select>
-            </div>
-
-            <div>
-              <label
-                htmlFor="contactNo"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Phone number
-              </label>
-              <input
-                type="tel"
-                id="contactNo"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="+880167904546"
-                required
-                {...register("contactNo", {
-                  required: "Contact number is required",
-                })}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="points"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Points
-              </label>
-              <input
-                type="text"
-                id="points"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="123 or 123.45"
-                required
-                inputMode="decimal" // Helps mobile keyboards show a decimal option
-                {...register("points", {
-                  required: "Points is required",
-                  pattern: {
-                    value: /^-?\d*\.?\d+$/,
-                    message: "Enter a valid number",
-                  },
-                })}
-                onInput={(e) => {
-                  e.target.value = e.target.value.replace(/[^0-9.]/g, ""); // Restrict non-numeric input except '.'
-                  if ((e.target.value.match(/\./g) || []).length > 1) {
-                    e.target.value = e.target.value.slice(0, -1); // Prevent multiple dots
-                  }
-                }}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="unique"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Offer Link
-              </label>
-              <input
-                type="text"
-                id="unique"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder=""
-                required
-                {...register("offerLink", {
-                  required: "OfferLink is required",
-                })}
-                defaultValue={"https://offer.com?clickId=&offerId=&userId="}
-              />
-            </div>
-            <div className="mb-6">
-              <label
-                htmlFor="tags"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Country
-              </label>
-              <Controller
-                name="country"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    defaultValue={[{ value: "all", label: "all" }]}
-                    isMulti
-                    options={tags}
-                    className="basic-multi-select"
-                    classNamePrefix="select"
-                    {...field}
-                  />
-                )}
-              />
-              {/* <Select
-                defaultValue={[tags[0], tags[1]]}
-                isMulti
-                options={tags}
-                className="basic-multi-select"
-                classNamePrefix="select"
-                {...register("country")}
-              /> */}
-                        
-            </div>
-            <div className="mb-6">
-              <label
-                htmlFor="tags"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Device
-              </label>
-              <Controller
-                name="devices"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    defaultValue={[{ value: "all", label: "all" }]}
-                    isMulti
-                    options={devices}
-                    className="basic-multi-select"
-                    classNamePrefix="select"
-                    {...field}
-                  />
-                )}
-              />
-              {/* <Select
-                defaultValue={[tags[0], tags[1]]}
-                isMulti
-                options={tags}
-                className="basic-multi-select"
-                classNamePrefix="select"
-                {...register("country")}
-              /> */}
-                        
-            </div>
-            <div className="mb-6">
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Daily Limit
-              </label>
-              <input
-                type="number"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="5"
-                required
-                {...register("dailyLimit", {
-                  required: "Daily Limit is required",
-                })}
-              />
-            </div>
-            <div className="mb-6">
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Total Limit
-              </label>
-              <input
-                type="number"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="50"
-                required
-                {...register("totalLimt", {
-                  required: "Total Limit is required",
-                })}
-              />
-            </div>
-            <div className="mb-6">
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Email address
-              </label>
-              <input
-                type="email"
-                id="email"
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="john.doe@company.com"
-                required
-                {...register("email", { required: "Email is required" })}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="terms"
-                className="block mb-2 text-sm font-medium text-white"
-              >
-                Terms
-              </label>
-              <textarea
-                rows={3}
-                className="border border-gray-400 outline-none p-2.5 rounded-md w-full focus:border-blue-700 text-sm"
-                placeholder="Terms"
-                required
-                {...register("terms", { required: "Terms is required" })}
-              ></textarea>
-            </div>
+           
 
             <div className="mb-6">
               <label
                 htmlFor="email"
                 className="block mb-2 text-sm font-medium text-white"
               >
-                Image
+                Post Thumbnail
               </label>
               <input
                 type="file"
@@ -684,12 +477,18 @@ const CreateOffer = () => {
               <img
                 src={image}
                 alt=""
-                className="w-24 h-24 mx-auto  rounded-md shadow-md object-cover"
+                className="w-full h-80 rounded-md mx-auto object-cover"
               />
             </div>
           </div>
 
-          <div className="flex items-start mb-6">
+          <div className="flex flex-col items-start mb-6">
+          <label
+                htmlFor="email"
+                className="block mb-2 text-sm font-medium text-white"
+              >
+                Post Details
+              </label>
             <JoditEditor
               ref={editor}
               value={content}
@@ -734,4 +533,4 @@ const CreateOffer = () => {
   );
 };
 
-export default CreateOffer;
+export default CreateBlog;

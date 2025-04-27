@@ -74,11 +74,11 @@ const ViewUserList = () => {
 
   // Paginated data
   const paginatedData = data.slice(offset, offset + pageSize);
-  console.log(paginatedData)
+  // console.log(paginatedData)
 
   return (
-    <div className="container mx-auto overflow-aut min-h-screen">
-      <table className="min-w-full bg-secondaryColor border-collapse border border-gray-300 rounded-lg overflow-hidden">
+    <div className="container mx-auto overflow-x-scroll min-h-screen">
+      <table className="min-w-full bg-secondaryColor border-collapse border border-gray-300 rounded-lg">
         <thead className="bg-secondaryColor text-buttonBackground">
           <tr className="text-left">
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
@@ -92,6 +92,9 @@ const ViewUserList = () => {
             </th>
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
               Email
+            </th>
+            <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300">
+              Device-Info
             </th>
             <th className="py-3 px-4 uppercase font-semibold text-sm border-b border-gray-300 text-center">
               Actions
@@ -127,6 +130,9 @@ const ViewUserList = () => {
 
               <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
                 {row?.email || "N/A"}
+              </td>
+              <td className="px-5 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">
+                {row?.device || "N/A"}
               </td>
 
               <td className="px-1 py-2 border-b border-gray-200 bg-secondaryColor text-white text-sm">

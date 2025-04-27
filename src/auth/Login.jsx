@@ -86,7 +86,9 @@ const Login = () => {
         setIP(ip);
 
         try {
-          const locationResponse = await fetch(`https://ipwhois.app/json/${ip}`);
+          const locationResponse = await fetch(
+            `https://ipwhois.app/json/${ip}`
+          );
           if (!locationResponse.ok)
             throw new Error("Failed to fetch location data");
 
@@ -299,7 +301,9 @@ const Login = () => {
       navigate("/dashboard");
     } catch (error) {
       // console.log(error);
-      const errorMessage = error?.data?.message || "No account found with this email. Please try again or sign up.";
+      const errorMessage =
+        error?.data?.message ||
+        "No account found with this email. Please try again or sign up.";
 
       toast.error(errorMessage, { id: toastId, duration: 2000 });
       console.error("Login error:", error);

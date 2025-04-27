@@ -249,6 +249,58 @@ const Sidebar = () => {
         ],
       },
       {
+        id: "Faq",
+        name: "Faq's",
+        icon: HiOutlineUsers,
+        menus: [
+          {
+            id: "superadmin-create-faq",
+            path: "create-faq",
+            name: "- Create New FAQ",
+          },
+          {
+            id: "superadmin-faq-list",
+            path: "faq-list",
+            name: "- All FAQ List",
+          },
+        ],
+      },
+      {
+        id: "Blog Category",
+        name: "Blog Category's",
+        icon: HiOutlineUsers,
+        menus: [
+          {
+            id: "superadmin-create-blog-category",
+            path: "create-blog-category",
+            name: "- Create New Blog Category",
+          },
+          {
+            id: "superadmin-blog--category-list",
+            path: "blog-category-list",
+            name: "- All Blog Category List",
+          }
+        ],
+      },
+      {
+        id: "Blog",
+        name: "Blog's",
+        icon: HiOutlineUsers,
+        menus: [
+         
+          {
+            id: "superadmin-create-blog",
+            path: "create-blog",
+            name: "- Create New blog",
+          },
+          {
+            id: "superadmin-blog-list",
+            path: "blog-list",
+            name: "- All Blog List",
+          },
+        ],
+      },
+      {
         id: "superadmin-admins",
         name: "Admin's",
         icon: BsPerson,
