@@ -179,7 +179,7 @@ const Hero = () => {
           className="w-56 mx-auto flex justify-center items-center gap-6 text-white font-medium  bg-green-500 py-3 rounded-xl mt-8 "
           to="/login"
         >
-          <span> Start Free Trial</span>{" "}
+          <span> Start Earning Now</span>{" "}
           <div className="w-7 h-7 bg-white shadow-md rounded-md grid items-center justify-center">
             {/* <FaAirbnb className="text-white" /> */}
             <img src="https://i.ibb.co.com/bg28g6LM/cashooz-logo-ico.png" alt="" className="w-4 h-4"/>
