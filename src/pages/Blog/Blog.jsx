@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { blogPosts, categories } from "../../constants";
 
 
-
 const Blog = () => {
   const [selected, setSelected] = useState("All");
   return (

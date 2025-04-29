@@ -1,9 +1,10 @@
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useCreateBlogCategoryMutation } from "./blogCategory/BlogCategoryApi";
 
 
 const CreateBlogCategory = () => {
-//   const [createBlogCategory] = useCreateBlogCategoryMutation();
+  const [createBlogCategory] = useCreateBlogCategoryMutation();
 
   const {
     register,
@@ -17,9 +18,9 @@ const CreateBlogCategory = () => {
 
     try {
       const blogCategoryInfo = {
-        categoryName: data.categoryName,
+        blogCategoryName: data.categoryName,
       };
-    //   await createBlogCategory(blogCategoryInfo);
+      await createBlogCategory(blogCategoryInfo);
 
       toast.success("Blog Category created successfully!", {
         id: toastId,
