@@ -15,7 +15,7 @@ const CreateBlog = () => {
   const editor = useRef(null);
   const [slug, setSlug] = useState("");
   const [imagePreview, setImagePreview] = useState(
-    "https://gigapress.net/wp-content/uploads/2022/02/get-featured-image-url.jpg"
+    "https://i.ibb.co.com/KjDNBbg8/Blog-Thumbnail.png"
   );
   const [content, setContent] = useState("");
 
@@ -107,7 +107,7 @@ const CreateBlog = () => {
         reset();
         setContent("");
         setImagePreview(
-          "https://gigapress.net/wp-content/uploads/2022/02/get-featured-image-url.jpg"
+          "https://i.ibb.co.com/KjDNBbg8/Blog-Thumbnail.png"
         );
       } else {
         throw new Error("Image upload failed");

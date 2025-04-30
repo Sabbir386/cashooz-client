@@ -65,6 +65,7 @@ const BlogCategoryList = () => {
   
   const blogCategories = data?.data || []; // Extract actual array
 
+
 const totalPages = Math.ceil(blogCategories.length / itemsPerPage);
 
 const paginatedData = blogCategories.slice(
@@ -83,7 +84,7 @@ const paginatedData = blogCategories.slice(
           <thead>
             <tr className="text-green-500 text-left border-b border-gray-600">
               <th className="p-3">SL.</th>
-              <th className="p-3">OFFER</th>
+              <th className="p-3">CategoryName</th>
               <th className="p-3">ACTION</th>
             </tr>
           </thead>
