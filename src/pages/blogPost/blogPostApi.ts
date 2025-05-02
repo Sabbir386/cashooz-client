@@ -1,6 +1,5 @@
 import { baseApi } from "../../redux/api/baseApi";
 
-
 export const blogPostApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Create Blog Post
@@ -22,10 +21,19 @@ export const blogPostApi = baseApi.injectEndpoints({
       providesTags: ["blogPost"],
     }),
 
-    // Get Single Blog Post
-    singleBlogPost: builder.query({
-      query: (id: string) => ({
-        url: `/blogPosts/${id}`,
+    // ✅ Get Single Blog Post by Slug
+    singleBlogPostBySlug: builder.query({
+      query: (slug) => ({
+        url: `/blogPosts/slug/${slug}`,
+        method: "GET",
+      }),
+      providesTags: ["blogPost"],
+    }),
+
+    // ✅ Get Blog Posts by Category ID
+    blogPostsByCategory: builder.query({
+      query: (categoryId) => ({
+        url: `/blogPosts/category/${categoryId}`,
         method: "GET",
       }),
       providesTags: ["blogPost"],
@@ -55,7 +63,8 @@ export const blogPostApi = baseApi.injectEndpoints({
 export const {
   useCreateBlogPostMutation,
   useViewBlogPostQuery,
-  useSingleBlogPostQuery,
+  useSingleBlogPostBySlugQuery,    // 👈 new hook
+  useBlogPostsByCategoryQuery,     // 👈 new hook
   useUpdateBlogPostMutation,
   useDeleteBlogPostMutation,
 } = blogPostApi;
