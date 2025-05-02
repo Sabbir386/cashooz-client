@@ -10,10 +10,21 @@ import {
 } from "react-icons/fa";
 import { blogPosts } from "../../constants";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
-const SingleBlog = () => {
+const SingleBlog = ({postTitle,descrption}) => {
   return (
     <div className="bg-white md:pt-24 pt-16 px-4">
+      <Helmet>
+        <title>
+        Cashooz
+        </title>
+        <meta
+          name="description"
+          content={descrption}
+        />
+        <link rel="canonical" href={`https://www.cashooz.com/blog/${postTitle}`} />
+      </Helmet>
       {/* section header  */}
       <div className="bg-[#072B5A] text-white p-6 md:p-16">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between">

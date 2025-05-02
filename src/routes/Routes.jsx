@@ -59,6 +59,7 @@ import BlogList from "../pages/BlogList";
 import CreateBlog from "../pages/CreateBlog";
 import FaqDetails from "../pages/Landing/component/FaqDetails";
 import CreateBlogCategory from "../pages/CreateBlogCategory";
+import CategoryBlog from "../pages/Blog/CategoryBlog";
 
 
 export const router = createBrowserRouter([
@@ -110,6 +111,10 @@ export const router = createBrowserRouter([
       {
         path: "/blog",
         element: <Blog></Blog>,
+      },
+      {
+        path: "/blog/category/:id",
+        element: <CategoryBlog></CategoryBlog>,
       },
       {
         path: "/blog/:id",

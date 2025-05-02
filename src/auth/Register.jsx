@@ -386,7 +386,7 @@ const Register = () => {
 
   // //console.log(refId)
   return (
-    <div className="bg-secondaryColor min-h-screen w-full flex justify-center items-center mt-20">
+    <div className="bg-[#F9FAFB] min-h-screen w-full flex justify-center items-center mt-20">
       <div className="bg-cardBackground w-full sm:w-1/2 md:w-9/12 lg:w-1/2 shadow-md flex flex-col md:flex-row items-center mx-5 sm:m-0 rounded-md">
         <div className="w-full md:w-1/2 hidden md:flex flex-col justify-center items-center text-white">
           <h1 className="text-3xl">Hello</h1>

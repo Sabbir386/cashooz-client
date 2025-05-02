@@ -1,15 +1,21 @@
 import React from "react";
+import { Helmet } from "react-helmet-async";
 
 function Aboutus() {
   return (
-    <div className="bg-secondaryColor text-white py-10 px-6 md:px-20 mt-5">
-      <div className="max-w-4xl mx-auto bg-primaryColor text-gray-800 rounded-lg shadow-lg p-6 md:p-10">
+    <div className="bg-[#F9FAFB] text-primaryColor py-10 px-6 md:px-20 mt-5">
+      <Helmet>
+              <title>About | Cashooz</title>
+              <meta name="description" content="Describe this page content" />
+              <link rel="canonical" href="https://www.cashooz.com/aboutus" />
+            </Helmet>
+      <div className="max-w-4xl mx-auto bg-white text-gray-800 rounded-lg shadow-lg p-6 md:p-10">
         <h1 className="text-3xl md:text-4xl font-bold mb-4 text-buttonBackground">
           About Us
         </h1>
 
         <section className="mt-6">
-          <p className="text-gray-400 leading-relaxed mb-4">
+          <p className="text-gray-600 text-sm leading-relaxed mb-4">
             Cashooz.com is the web's most popular rewards program and a thriving
             community that is growing daily. It’s a free rewards program where
             you can earn real cash for performing various tasks and activities
@@ -23,10 +29,10 @@ function Aboutus() {
         <section className="mt-8">
           {/* main points  */}
           <div>
-            <h2 className="text-xl md:text-2xl font-semibold mb-2 text-white">
+            <h2 className="text-xl md:text-2xl font-semibold mb-2 text-primaryColor">
               Join for free
             </h2>
-            <p className="text-gray-400 leading-relaxed mb-4">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4">
               Cashooz is designed to enable its members to generate additional
               income throughout the year. There are no membership fees or
               concealed charges. You retain all the earnings that are confirmed
@@ -36,10 +42,10 @@ function Aboutus() {
           {/* main points  */}
           {/* main points  */}
           <div>
-            <h2 className="text-xl md:text-2xl font-semibold mb-2 text-white">
+            <h2 className="text-xl md:text-2xl font-semibold mb-2 text-primaryColor">
               Earn
             </h2>
-            <p className="text-gray-400 leading-relaxed mb-4">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4">
               Earn CZ Points by getting paid for things that you are already
               doing online, be it taking surveys, watching videos, voting,
               testing website, installing apps, signing up, playing games,
@@ -54,10 +60,10 @@ function Aboutus() {
           {/* main points  */}
           {/* main points  */}
           <div>
-            <h2 className="text-xl md:text-2xl font-semibold mb-2 text-white">
+            <h2 className="text-xl md:text-2xl font-semibold mb-2 text-primaryColor">
               Affiliate
             </h2>
-            <p className="text-gray-400 leading-relaxed mb-4">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4">
               When you introduce a friend to Cashooz and they begin accumulating
               points, you will receive a lifetime commission of 15% on their
               point’s earnings. Referring friends is a fantastic way to increase
@@ -75,7 +81,7 @@ function Aboutus() {
               parties will reap the rewards. By referring friends, you will
               receive a commission based on the points they accumulate.
             </p>
-            <p className="text-gray-400 leading-relaxed mb-4">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4">
               The act of sharing this information is uncomplicated. You will be
               provided with a unique referral link that can be distributed
               through email or social media platforms. Simply inform your
@@ -90,10 +96,10 @@ function Aboutus() {
           {/* main points  */}
           {/* main points  */}
           <div>
-            <h2 className="text-xl md:text-2xl font-semibold mb-2 text-white">
+            <h2 className="text-xl md:text-2xl font-semibold mb-2 text-primaryColor">
               Rewards
             </h2>
-            <p className="text-gray-400 leading-relaxed mb-4">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4">
               Cashooz offers three distinct types of rewards: a daily bonus, a
               task completion bonus, and an affiliate bonus, which are not
               provided by other companies globally.
@@ -102,20 +108,20 @@ function Aboutus() {
           {/* main points  */}
           {/* small points  */}
           <div className="pl-4">
-            <h3 className="text-sm font-semibold mb-2 text-white">
+            <h3 className="text-sm font-semibold mb-2 text-primaryColor">
               Daily Bonus
             </h3>
-            <p className="text-gray-400 leading-relaxed mb-4 text-xs">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4 text-xs">
               {" "}
               The daily bonus must be claimed each day following registration.
               After claiming it today, you will need to make another claim after
               a 24-hour period. This process requires you to claim the bonus on
               a daily basis.
             </p>
-            <h3 className="text-sm font-semibold mb-2 text-white">
+            <h3 className="text-sm font-semibold mb-2 text-primaryColor">
               Task Completion Bonus
             </h3>
-            <p className="text-gray-400 leading-relaxed mb-4 text-xs">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4 text-xs">
               {" "}
               Completing 10 tasks will earn you a bonus. If you reach 15 tasks,
               an additional bonus will be awarded. Furthermore, upon completing
@@ -124,11 +130,11 @@ function Aboutus() {
               to complete more tasks to maximize your bonuses.
             </p>
 
-            <h3 className="text-sm font-semibold mb-2 text-white">
+            <h3 className="text-sm font-semibold mb-2 text-primaryColor">
               {" "}
               Affiliate Bonus
             </h3>
-            <p className="text-gray-400 leading-relaxed mb-4 text-xs">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4 text-xs">
               {" "}
               Referring friends is a great way to earn. The more you refer the
               more you earn. But those who sign up with the referral link but do
@@ -145,10 +151,10 @@ function Aboutus() {
           {/* small points  */}
           {/* main point */}
           <div>
-            <h2 className="text-xl md:text-2xl font-semibold mb-2 text-white">
+            <h2 className="text-xl md:text-2xl font-semibold mb-2 text-primaryColor">
               Leaderboard
             </h2>
-            <p className="text-gray-400 leading-relaxed mb-4">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4">
               Leaderboards Points are used to compete on specific user
               leaderboard to earn exclusive rewards and fan experiences. The
               more points you earn, the higher your rank on the leaderboards!
@@ -164,20 +170,20 @@ function Aboutus() {
           {/* main point */}
           {/* small points  */}
           <div className="pl-4">
-            <h3 className="text-sm font-semibold mb-2 text-white">
+            <h3 className="text-sm font-semibold mb-2 text-primaryColor">
               Task completion prize{" "}
             </h3>
-            <p className="text-gray-400 leading-relaxed mb-4 text-xs">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4 text-xs">
               {" "}
               Task completion prize will be awarded to the person who completes
               the highest amount of work in the month. You can win the prize
               cashooz is giving every month. So don't waste your time, start to
               earn. Join for free. Here
             </p>
-            <h3 className="text-sm font-semibold mb-2 text-white">
+            <h3 className="text-sm font-semibold mb-2 text-primaryColor">
               Affiliate prize
             </h3>
-            <p className="text-gray-400 leading-relaxed mb-4 text-xs">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4 text-xs">
               {" "}
               The affiliate prize will be granted to the individual who
               successfully refers the highest number of participants within the
@@ -189,10 +195,10 @@ function Aboutus() {
           {/* small points  */}
           {/* main point */}
           <div>
-            <h2 className="text-xl md:text-2xl font-semibold mb-2 text-white">
+            <h2 className="text-xl md:text-2xl font-semibold mb-2 text-primaryColor">
               Advertiser
             </h2>
-            <p className="text-gray-400 leading-relaxed mb-4">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4">
               We offer advertising solutions suitable for both large and small
               financial plans. For those with a budget under $1000 per month,
               you can establish a Cashooz account and take advantage of our
@@ -210,10 +216,10 @@ function Aboutus() {
           {/* main point */}
           {/* small points  */}
           <div className="pl-4">
-            <h3 className="text-sm font-semibold mb-2 text-white">
+            <h3 className="text-sm font-semibold mb-2 text-primaryColor">
               What to Anticipate
             </h3>
-            <p className="text-gray-400 leading-relaxed mb-4 text-xs">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4 text-xs">
               {" "}
               A member of our business management team will respond to you
               within 24 to 48 hours, typically sooner. We will review your
@@ -227,10 +233,10 @@ function Aboutus() {
           {/* small points  */}
           {/* main point */}
           <div>
-            <h2 className="text-xl md:text-2xl font-semibold mb-2 text-white">
+            <h2 className="text-xl md:text-2xl font-semibold mb-2 text-primaryColor">
               Customer Service
             </h2>
-            <p className="text-gray-400 leading-relaxed mb-4">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4">
               With Cashooz, you get your own dedicated account manager to help
               you earn as much cash as possible! <br />
               <strong>Email:</strong> support@cashooz.com
@@ -239,65 +245,65 @@ function Aboutus() {
           {/* main point */}
           {/* main point */}
           <div>
-            <h2 className="text-xl md:text-2xl font-semibold mb-2 text-white">
+            <h2 className="text-xl md:text-2xl font-semibold mb-2 text-primaryColor">
               Why Choose Us
             </h2>
           </div>
           {/* main point */}
           {/* small points  */}
           <div className="pl-4">
-            <h3 className="text-sm font-semibold mb-2 text-white">
+            <h3 className="text-sm font-semibold mb-2 text-primaryColor">
               High Pay Surveys
             </h3>
-            <p className="text-gray-400 leading-relaxed mb-4 text-xs">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4 text-xs">
               {" "}
               Every day we provide unlimited surveys to complete, earns no limit
               to complete High Paying Surveys one day.
             </p>
-            <h3 className="text-sm font-semibold mb-2 text-white">
+            <h3 className="text-sm font-semibold mb-2 text-primaryColor">
               Play Games & Earn Coins
             </h3>
-            <p className="text-gray-400 leading-relaxed mb-4 text-xs">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4 text-xs">
               Play mobile & desktop games to earn coin rewards.
             </p>
-            <h3 className="text-sm font-semibold mb-2 text-white">
+            <h3 className="text-sm font-semibold mb-2 text-primaryColor">
               Multiple tasks
             </h3>
-            <p className="text-gray-400 leading-relaxed mb-4 text-xs">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4 text-xs">
               Get paid to complete multiple tasks without leaving your home. All
               in one solution provided by Cashooz.
             </p>
-            <h3 className="text-sm font-semibold mb-2 text-white">
+            <h3 className="text-sm font-semibold mb-2 text-primaryColor">
               Affiliate Commission
             </h3>
-            <p className="text-gray-400 leading-relaxed mb-4 text-xs">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4 text-xs">
               Get 15% of all your referrals earnings. Invite more & earn more
               from your traffic.
             </p>
-            <h3 className="text-sm font-semibold mb-2 text-white">
+            <h3 className="text-sm font-semibold mb-2 text-primaryColor">
               Watch Videos
             </h3>
-            <p className="text-gray-400 leading-relaxed mb-4 text-xs">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4 text-xs">
               Get paid to watch videos & earn coins that are not offered by
               other companies globally.
             </p>
-            <h3 className="text-sm font-semibold mb-2 text-white">Rewards </h3>
-            <p className="text-gray-400 leading-relaxed mb-4 text-xs">
+            <h3 className="text-sm font-semibold mb-2 text-primaryColor">Rewards </h3>
+            <p className="text-gray-600 text-sm leading-relaxed mb-4 text-xs">
               We pay multiple rewards which are not provided by other companies
               around the world.
             </p>
-            <h3 className="text-sm font-semibold mb-2 text-white">
+            <h3 className="text-sm font-semibold mb-2 text-primaryColor">
               Withdraw Instantly
             </h3>
-            <p className="text-gray-400 leading-relaxed mb-4 text-xs">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4 text-xs">
               We pay everyone instantly with different payment methods. Withdraw
               your coin any time to your wallet with our supported payment
               method.
             </p>
-            <h3 className="text-sm font-semibold mb-2 text-white">
+            <h3 className="text-sm font-semibold mb-2 text-primaryColor">
               Expert Support{" "}
             </h3>
-            <p className="text-gray-400 leading-relaxed mb-4 text-xs">
+            <p className="text-gray-600 text-sm leading-relaxed mb-4 text-xs">
               Customer support available 24/7 to help you with any questions or
               issues.
             </p>

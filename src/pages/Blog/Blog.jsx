@@ -3,21 +3,29 @@ import React, { useState } from "react";
 import { FaLongArrowAltRight, FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { blogPosts, categories } from "../../constants";
-
+import { Helmet } from "react-helmet-async";
 
 const Blog = () => {
   const [selected, setSelected] = useState("All");
   return (
     <div className="bg-white md:pt-24 pt-16 px-4">
+      <Helmet>
+        <title>Blog | Cashooz</title>
+        <meta name="description" content="Describe this page content" />
+        <link rel="canonical" href="https://www.cashooz.com/blog" />
+      </Helmet>
       <div className="w-full flex flex-col items-center ">
         {/* Header */}
         <div className="w-full bg-[#8b3dff] rounded-[40px] py-12 px-4 flex flex-col items-center relative">
           <h1 className="text-white text-4xl font-bold relative z-10">Blog</h1>
-          <div className="absolute top-12 left-1/2 transform -translate-x-1/2 w-6 h-6 border-4 border-cyan-300 rounded-full" />
-          <div className="absolute top-12 right-16 w-6 h-6 border-4 border-cyan-300 rounded-full" />
-          <div className="absolute top-16 right-1/2 translate-x-1/2 text-cyan-300 text-3xl">
+          <div className="animate-bounce duration-1000 absolute top-12 left-1/4 transform -translate-x-1/2 w-6 h-6 border-4 border-cyan-300 rounded-full" />
+          <div className="animate-bounce duration-1000 absolute top-16 left-10 transform -translate-x-1/2 w-2 rotate-12 h-6 border-4 border-cyan-300 rounded-full" />
+          <div className="animate-bounce duration-1000 absolute top-12 right-16 w-6 h-2 rotate-[80deg] border-4 border-cyan-300 rounded-full" />
+          <div className="animate-bounce duration-1000 absolute top-12 right-[25%] w-6 h-6 border-4 border-cyan-300 rounded-full" />
+          <div className="animate-bounce duration-1000 absolute top-4 right-1/2 translate-x-1/2 text-cyan-300 text-3xl">
             ~
           </div>
+       
         </div>
 
         {/* Search Bar */}
@@ -35,7 +43,8 @@ const Blog = () => {
         {/* Category Tabs */}
         <div className="my-6 flex flex-wrap justify-center gap-4">
           {categories.map((cat) => (
-            <button
+            <Link
+              to={`/blog/category/${cat}`}
               key={cat}
               onClick={() => setSelected(cat)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
@@ -43,12 +52,15 @@ const Blog = () => {
               }`}
             >
               {cat}
-            </button>
+            </Link>
           ))}
         </div>
         {/*Featured Blog*/}
         <div className="w-full max-w-6xl mx-auto p-4">
-          <Link to={"/blog/1"} className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col md:flex-row items-stretch">
+          <Link
+            to={"/blog/1"}
+            className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col md:flex-row items-stretch"
+          >
             {/* Blog Image */}
             <div className="md:w-1/2 w-full">
               <img

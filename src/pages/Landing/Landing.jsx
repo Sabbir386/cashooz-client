@@ -161,7 +161,7 @@ const Landing = () => {
       {/* earning section  */}
      <Earning/>
       {/* all points section  */}
-      <Faq/>
+     
     </div>
   );
 };

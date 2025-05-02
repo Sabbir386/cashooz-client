@@ -1,92 +1,145 @@
 import React, { useState } from "react";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { MdOutlineQuestionAnswer } from "react-icons/md";
+import { Link } from "react-router-dom";
 
-const faqs = [
-  {
-    question: "How to Make Money on Cashooz?",
-    answer:
-      `
-      <p>Cashooz.com partners with companies looking to promote their apps, surveys, and products. Tasks on the site can include actions like downloading an app and reaching a certain level, such as level 5, within a day to earn 2000 CZ.</p>
-      <p> To get started, simply choose an offer or survey. We recommend checking out the featured offers at the top of the offer page—these tasks are easy to complete, and many users have successfully finished them in the past.</p>
-      <p> Once you complete a task, you’ll earn CZ. (1000 CZ equals $1.00). You can then cash out your CZ for rewards like PayPal, Bitcoin, Litecoin, Ethereum and various other gift card options.</p>
-      `,
-  },
-  {
-    question: "How much can you actually earn on Cashooz?  ",
-    answer:
-      "Earning over $200 per month on cashooz is definitely achievable, and some users even make $1000+ monthly. You can take a look at the leaderboard to see how much the most active users are making.",
-  },
-  {
-    question: "How long does it take to withdraw your earnings?",
-    answer:
-      "At Cashooz.com, we provide live support 24/7. Our team is always available, and you can reach us anytime through the Contact Us section. Once you submit a withdrawal request, it is reviewed by our team. After verification, it is usually approved and processed within an hour.",
-  },
-  {
-    question: "Is Cashooz free to use? ",
-    answer:
-      "Yes, it is completely free to use. While some high-reward tasks or games may require purchases to participate, these are completely optional.",
-  },
-  {
-    question: "What is the minimum withdrawal limit on Cashooz?  ",
-    answer:
-      "For new users, the payout threshold is $5. After receiving their first payout, it decreases to $0.50. Active users generally reach this threshold within a few days.",
-  },
-  {
-    question: "Does Cashooz have a referral program?   ",
-    answer:
-      "Yes, Cashooz has a referral program that allows users to earn commissions based on the earnings of those they refer. With a 15% referral commission, you can earn rewards from both the people you refer and any advertising deposits they make. However, users are not allowed to sign up through their own referral link to earn commissions from their own activities.",
-  },
-  {
-    question: "How does Cashooz pay its users?",
-    answer: `
-      <ul>
-        <li><strong>Users complete tasks from advertisers:</strong> Advertisers offer a variety of tasks for users, such as downloading apps, signing up for websites, watching videos, reaching certain levels in games, and more.</li>
-        <li><strong>Advertisers pay Cashooz for promotions:</strong> For each completed task, advertisers pay Cashooz a commission.</li>
-        <li><strong>Cashooz sends payouts to users:</strong> Once all task requirements are met, Cashooz processes and sends the user their payout.</li>
-      </ul>
-    `,
-  }
+const categories = [
+  { label: "General Inquiries", icon: "🟠" },
+  { label: "ZenHub Features", icon: "🔵" },
+  { label: "Permissions & Privacy", icon: "🟣" },
+  { label: "Pricing & Plans", icon: "🟢" },
+  { label: "ZenHub Enterprise", icon: "⚫" },
 ];
 
-const Faq = () => {
+const faqs = {
+  "General Inquiries": [
+    {
+      question: "What is ZenHub?",
+      answer: "ZenHub is a project management tool for GitHub.",
+    },
+    {
+      question: "Is ZenHub available on browsers other than Chrome?",
+      answer: "Yes, it supports Firefox too.",
+    },
+    {
+      question: "How do I know that ZenHub is installed?",
+      answer: "You'll see the ZenHub icon in your browser.",
+    },
+    {
+      question:
+        "If I use Chrome and Firefox, do I have to download ZenHub twice?",
+      answer: "Yes, you need to install it on each browser.",
+    },
+    {
+      question: "How do I know if I have the latest version?",
+      answer: "Check the extension settings and enable auto-update.",
+    },
+    {
+      question: "What happens if I am on a computer without ZenHub installed?",
+      answer: "You won't see the ZenHub features in GitHub.",
+    },
+    {
+      question: "How do I invite others to use ZenHub on my repo?",
+      answer: "You can invite them through the ZenHub dashboard.",
+    },
+  ],
+  "ZenHub Features": [
+    {
+      question: "What is ZenHub?",
+      answer: "ZenHub is a project management tool for GitHub.",
+    },
+    {
+      question: "Is ZenHub available on browsers other than Chrome?",
+      answer: "Yes, it supports Firefox too.",
+    },
+    {
+      question: "How do I know that ZenHub is installed?",
+      answer: "You'll see the ZenHub icon in your browser.",
+    },
+    {
+      question:
+        "If I use Chrome and Firefox, do I have to download ZenHub twice?",
+      answer: "Yes, you need to install it on each browser.",
+    },
+    {
+      question: "How do I know if I have the latest version?",
+      answer: "Check the extension settings and enable auto-update.",
+    },
+    {
+      question: "What happens if I am on a computer without ZenHub installed?",
+      answer: "You won't see the ZenHub features in GitHub.",
+    },
+    {
+      question: "How do I invite others to use ZenHub on my repo?",
+      answer: "You can invite them through the ZenHub dashboard.",
+    },
+  ],
+
+  // Other categories can be filled similarly...
+};
+
+export default function Faq() {
+  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const [openIndex, setOpenIndex] = useState(null);
 
-  const toggleFAQ = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
   return (
-    <div className="bg-primaryColor">
-      <div className="max-w-2xl mx-auto py-10 px-5 sm:px-10">
-        <h2 className="text-3xl font-bold text-center text-white mb-8">
+    <div className="bg-white">
+      <div className="max-w-7xl mx-auto min-h-screen mt-16">
+        <h1 className="text-2xl font-semibold py-6 text-center">
           Frequently Asked Questions
-        </h2>
-        <div className="space-y-4">
-          {faqs.map((faq, index) => (
-            <div
-              key={index}
-              className="border border-gray-200 rounded-lg shadow-md"
-            >
+        </h1>
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Sidebar */}
+          <div className="w-full md:w-64 bg-white rounded-xl shadow p-4">
+            {categories.map((cat) => (
               <button
-                className="w-full flex justify-between items-center p-4 bg-secondaryColor hover:bg-buttonBackground text-white font-medium text-left transition duration-300"
-                onClick={() => toggleFAQ(index)}
-              >
-                {faq.question}
-                {openIndex === index ? <FaChevronUp /> : <FaChevronDown />}
-              </button>
-              <div
-                className={`transition-all overflow-y-auto ${
-                  openIndex === index ? "max-h-40 p-4" : "max-h-0"
+                key={cat.label}
+                onClick={() => {
+                  setSelectedCategory(cat);
+                  setOpenIndex(null);
+                }}
+                className={`flex items-center gap-2 w-full text-left px-3 py-2 rounded-lg mb-2 text-sm font-medium ${
+                  selectedCategory === cat
+                    ? "bg-orange-100 text-orange-700"
+                    : "hover:bg-gray-100"
                 }`}
               >
-               <div className="text-white " />
-               <p dangerouslySetInnerHTML={{ __html: faq.answer }} className="text-white"></p>
+                <span>{cat.icon}</span>
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
+          {/* FAQ Section */}
+          <div className="flex-1 bg-white rounded-xl shadow p-6">
+            <h2 className="text-xl font-semibold mb-4 text-green-600 flex items-center gap-2">
+              {/* <MdOutlineQuestionAnswer /> */}
+              {selectedCategory.icon}
+              {selectedCategory.label}
+            </h2>
+            {faqs[selectedCategory.label]?.map((item, index) => (
+              <div key={index} className="border-b last:border-none py-3">
+                <button
+                  onClick={() =>
+                    setOpenIndex(openIndex === index ? null : index)
+                  }
+                  className="flex justify-between items-center w-full text-left font-medium text-gray-800"
+                >
+                  {item.question}
+                  <span>{openIndex === index ? "−" : "+"}</span>
+                </button>
+                {openIndex === index && (
+                  <>
+                    <p className="text-sm text-gray-600 mt-2">{item.answer} <Link to="faq/" className="text-sm text-blue-600 mt-2">
+                      Read More..
+                    </Link></p>
+                   
+                  </>
+                )}
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default Faq;
+}
